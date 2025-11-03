@@ -65,7 +65,7 @@
 "settings.display.video.duration" = "再生時間";
 "settings.display.video.resolution" = "解像度";
 "settings.display.video.codec" = "コーデック";
-"settings.display.video.framerate" = "フレームレート";
+"settings.display.video.framerate" = "フレーム数";
 "settings.display.video.bitrate" = "ビットレート";
 "settings.display.video.hint" = "動画メタデータは動画ファイルにのみ表示されます";
 
@@ -133,7 +133,7 @@
 "hover.video.duration" = "再生時間";
 "hover.video.resolution" = "解像度";
 "hover.video.codec" = "コーデック";
-"hover.video.framerate" = "フレームレート";
+"hover.video.framerate" = "フレーム数";
 "hover.video.bitrate" = "ビットレート";
 
 /* Audio Information */

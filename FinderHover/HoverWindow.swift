@@ -435,7 +435,8 @@ struct HoverContentView: View {
                         Text("hover.label.location".localized + ":")
                             .font(.system(size: settings.fontSize))
                             .foregroundColor(.secondary)
-                            .frame(width: 65, alignment: .trailing)
+                            .lineLimit(1)
+                            .frame(minWidth: 65, alignment: .trailing)
 
                         Text(fileInfo.path)
                             .font(.system(size: settings.fontSize, design: .monospaced))
@@ -544,7 +545,8 @@ struct DetailRow: View {
             Text(label + ":")
                 .font(.system(size: fontSize))
                 .foregroundColor(.secondary)
-                .frame(width: 65, alignment: .trailing)
+                .lineLimit(1)
+                .frame(minWidth: 65, alignment: .trailing)
 
             Text(value)
                 .font(.system(size: fontSize))
