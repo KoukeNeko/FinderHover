@@ -70,13 +70,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             keyEquivalent: ","
         ))
 
-        // About
-        menu.addItem(NSMenuItem(
-            title: "About FinderHover",
-            action: #selector(showAbout),
-            keyEquivalent: "a"
-        ))
-
         menu.addItem(NSMenuItem.separator())
 
         // Quit
@@ -122,29 +115,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         settingsWindow?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
-    }
-
-    @objc func showAbout() {
-        let alert = NSAlert()
-        alert.messageText = "FinderHover"
-        alert.informativeText = """
-        Version 1.0
-
-        Displays file information when hovering over files in Finder.
-
-        To use:
-        1. Grant Accessibility permissions in System Settings
-        2. Hover over any file in Finder to see its details
-
-        Features:
-        - Customizable hover delay
-        - Adjustable window appearance
-        - Toggle information display
-        - Smart positioning
-
-        Created with SwiftUI
-        """
-        alert.alertStyle = .informational
-        alert.runModal()
     }
 }

@@ -11,6 +11,7 @@ enum SettingsPage: String, CaseIterable, Identifiable {
     case behavior = "Behavior"
     case appearance = "Appearance"
     case display = "Display"
+    case about = "About"
 
     var id: String { rawValue }
 
@@ -19,6 +20,7 @@ enum SettingsPage: String, CaseIterable, Identifiable {
         case .behavior: return "hand.point.up.left.fill"
         case .appearance: return "paintbrush.fill"
         case .display: return "list.bullet"
+        case .about: return "info.circle.fill"
         }
     }
 }
@@ -55,6 +57,8 @@ struct SettingsView: View {
                     AppearanceSettingsView(settings: settings)
                 case .display:
                     DisplaySettingsView(settings: settings)
+                case .about:
+                    AboutSettingsView()
                 }
             }
             .frame(minWidth: 450, minHeight: 400)
@@ -385,6 +389,127 @@ struct DisplaySettingsView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+// MARK: - About Settings
+struct AboutSettingsView: View {
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                // Header
+                Text("About")
+                    .font(.system(size: 20, weight: .semibold))
+                    .padding(.horizontal, 20)
+                    .padding(.top, 20)
+                    .padding(.bottom, 8)
+
+                Divider()
+                    .padding(.bottom, 20)
+
+                VStack(alignment: .center, spacing: 24) {
+                    // App Icon
+                    Image(systemName: "eye.fill")
+                        .font(.system(size: 64))
+                        .foregroundColor(.accentColor)
+                        .padding(.top, 20)
+
+                    // App Name and Version
+                    VStack(spacing: 8) {
+                        Text("FinderHover")
+                            .font(.system(size: 24, weight: .bold))
+                        Text("Version 1.0")
+                            .font(.system(size: 13))
+                            .foregroundColor(.secondary)
+                    }
+
+                    // Description
+                    Text("Displays file information when hovering over files in Finder.")
+                        .font(.system(size: 13))
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 40)
+
+                    Divider()
+                        .padding(.vertical, 8)
+
+                    // Usage Instructions
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("To use:")
+                            .font(.system(size: 13, weight: .semibold))
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack(alignment: .top, spacing: 8) {
+                                Text("1.")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.secondary)
+                                Text("Grant Accessibility permissions in System Settings")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.secondary)
+                            }
+
+                            HStack(alignment: .top, spacing: 8) {
+                                Text("2.")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.secondary)
+                                Text("Hover over any file in Finder to see its details")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: 360)
+
+                    Divider()
+                        .padding(.vertical, 8)
+
+                    // Features
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("Features:")
+                            .font(.system(size: 13, weight: .semibold))
+
+                        VStack(alignment: .leading, spacing: 6) {
+                            FeatureRow(icon: "timer", text: "Customizable hover delay")
+                            FeatureRow(icon: "paintbrush", text: "Adjustable window appearance")
+                            FeatureRow(icon: "eye.slash", text: "Toggle information display")
+                            FeatureRow(icon: "location", text: "Smart positioning")
+                        }
+                    }
+                    .frame(maxWidth: 360)
+
+                    Divider()
+                        .padding(.vertical, 8)
+
+                    // Credits
+                    Text("Created with SwiftUI")
+                        .font(.system(size: 11))
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 20)
+
+                Spacer(minLength: 40)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+// MARK: - About Feature Row
+struct FeatureRow: View {
+    let icon: String
+    let text: String
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.system(size: 12))
+                .foregroundColor(.accentColor)
+                .frame(width: 16)
+            Text(text)
+                .font(.system(size: 12))
+                .foregroundColor(.secondary)
+        }
     }
 }
 
