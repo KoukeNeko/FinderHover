@@ -21,7 +21,9 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
 
 ### 📊 Rich Information Display
 - **Full filename** with automatic wrapping for long names
-- **Large file icon** (48x48) for easy recognition
+- **QuickLook thumbnails** - Shows actual file previews for PDFs, images, documents
+  - Async loading for instant window display
+  - Falls back to standard icons if preview unavailable
 - **Smart file type descriptions** (recognizes 50+ file types)
   - "PDF Document", "PowerPoint Presentation", "Photoshop Document", etc.
 - **File size** in human-readable format (KB, MB, GB)
@@ -29,10 +31,14 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
 - **Modification date** with date and time
 - **Complete file path** with text selection support (no truncation)
 - **Perfect icon alignment** across all information rows
+- **Dynamic window height** - Automatically adjusts to content length
 
 ### 🎨 Modern & Customizable Design
-- Beautiful gradient border with subtle shadow
-- Adjustable window opacity (70% - 100%)
+- **Native blur effect** - macOS-style background blur (toggleable)
+  - Professional HUD window appearance
+  - Smooth rounded corners
+- **Adjustable transparency** - Window opacity (70% - 100%)
+  - Note: Only available when blur effect is disabled
 - Customizable window size (300px - 600px)
 - Adjustable font size (9pt - 14pt)
 - Toggle individual information fields on/off
@@ -42,9 +48,10 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
 - **macOS-native sidebar navigation** (like System Settings)
 - Three organized setting pages:
   - **Behavior**: Hover delay, auto-hide, window positioning
-  - **Appearance**: Opacity, window size, font size
+  - **Appearance**: Blur effect, opacity, window size, font size
   - **Display**: Toggle which information to show
 - Real-time preview of all changes
+- Contextual hints (e.g., opacity setting availability)
 - One-click reset to defaults
 - Keyboard shortcut: `Cmd+,`
 
@@ -120,7 +127,9 @@ Open **Settings** (`Cmd+,`) to customize:
 - **Window Position**: Adjust horizontal/vertical offset from cursor (0-50px)
 
 #### Appearance Tab
+- **Blur Effect**: Enable/disable native macOS background blur
 - **Window Opacity**: 70% - 100% (transparency level)
+  - Only available when blur effect is disabled
 - **Maximum Width**: 300px - 600px (window size)
 - **Font Size**: 9pt - 14pt (all text scales proportionally)
 
@@ -140,8 +149,10 @@ Toggle what information to show:
 The app uses modern macOS technologies:
 
 - **Accessibility API**: Monitors mouse position globally and retrieves file information from Finder
+- **QuickLook API**: Generates thumbnail previews for files asynchronously
 - **SwiftUI**: Renders the beautiful hover window with adaptive sizing and reactive updates
 - **AppKit**: Manages window positioning, screen boundary detection, and visual effects
+- **NSVisualEffectView**: Native blur effects with HUD window material
 - **Combine**: Reactive updates for settings and mouse tracking
 - **UserDefaults**: Persistent settings storage
 - **Menu Bar Integration**: Runs as a lightweight background app (LSUIElement)
@@ -193,6 +204,8 @@ FinderHover is designed with privacy in mind:
 - **Swift 5.0** - Modern, safe programming language
 - **SwiftUI** - Declarative UI framework with reactive updates
 - **AppKit** - Native window management and visual effects
+- **QuickLookThumbnailing** - File preview thumbnail generation
+- **NSVisualEffectView** - Native blur and vibrancy effects
 - **Accessibility Framework** - File detection and mouse tracking
 - **Combine** - Reactive programming for settings and events
 - **UserDefaults** - Persistent settings storage
@@ -378,13 +391,19 @@ Contributions are welcome! Please feel free to:
 - ✨ Initial release
 - 🎯 Smart hover preview with adjustable delay (default: 0.1s)
 - 📊 Rich file information display with 50+ file type recognition
-- 🎨 Modern design with gradient borders and shadows
+- 🖼️ QuickLook thumbnail previews for files (PDFs, images, documents)
+  - Asynchronous loading for instant window display
+  - Falls back to standard icons if preview unavailable
+- 🎨 Native macOS blur effect (toggleable)
+  - HUD-style background blur
+  - Smooth rounded corners
+- 📐 Dynamic window height - Automatically adjusts to content
 - ⚙️ Comprehensive settings with sidebar navigation
+- 🎛️ Contextual UI hints (e.g., opacity availability)
 - 🔒 Privacy-first: Accessibility API only (no AppleScript)
 - ⚡ Instant auto-hide when mouse moves away
 - 📏 Perfect icon and text alignment
 - 📄 Complete file path display (no truncation)
-- 🎛️ Toggle individual information fields
 - 💾 Persistent settings with UserDefaults
 - 🚀 Lightweight and efficient
 - 🌐 Full Unicode support for international file names
