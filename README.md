@@ -10,8 +10,6 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
 
 ## ✨ Features
 
-<img width="944" height="517" alt="image" src="https://github.com/user-attachments/assets/a2c34d3b-d45c-49c3-bfd4-d1b2491f7be8" />
-
 
 ### 🎯 Smart Hover Preview
 - **Instant response**: Adjustable hover delay (0.1s - 2.0s, default: 0.1s)
@@ -419,15 +417,16 @@ Contributions are welcome! Please feel free to:
 ## 📸 Screenshots
 
 ### Hover Preview Window
-![Hover Window](screenshots/hover-window.png)
+<img width="942" height="454" alt="image" src="https://github.com/user-attachments/assets/fe969256-a07d-4db6-8715-a3bb3226782b" />
+<img width="938" height="513" alt="image" src="https://github.com/user-attachments/assets/f492dc51-9fd8-49f2-b854-d9fc4ac026a6" />
 *Beautiful preview with complete file information*
 
 ### Settings - Sidebar Navigation
-![Settings](screenshots/settings-sidebar.png)
+<img width="762" height="644" alt="image" src="https://github.com/user-attachments/assets/7978cc15-cf16-455b-856b-683a5fc82b19" />
 *Professional macOS-native settings interface*
 
 ### Settings Tabs
-![Behavior](screenshots/settings-behavior.png) ![Appearance](screenshots/settings-appearance.png) ![Display](screenshots/settings-display.png)
+<img width="762" height="644" alt="image" src="https://github.com/user-attachments/assets/33bbc116-ded6-481c-876b-32ee35199845" />
 *Customize every aspect of the app*
 
 ## 📝 Changelog
