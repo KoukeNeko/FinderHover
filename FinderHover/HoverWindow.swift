@@ -134,22 +134,24 @@ struct HoverContentView: View {
 
             // File path section
             if settings.showFilePath {
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        Image(systemName: "folder")
-                            .font(.system(size: settings.fontSize - 1))
-                            .foregroundColor(.secondary)
-                        Text("Location:")
-                            .font(.system(size: settings.fontSize - 1, weight: .medium))
-                            .foregroundColor(.secondary)
-                    }
+                HStack(alignment: .top, spacing: 8) {
+                    Image(systemName: "folder")
+                        .font(.system(size: settings.fontSize))
+                        .foregroundColor(.secondary)
+                        .frame(width: 14, alignment: .center)
+
+                    Text("Location:")
+                        .font(.system(size: settings.fontSize))
+                        .foregroundColor(.secondary)
+                        .frame(width: 65, alignment: .trailing)
 
                     Text(fileInfo.path)
-                        .font(.system(size: settings.fontSize - 2, design: .monospaced))
-                        .foregroundColor(.secondary)
-                        .lineLimit(3)
-                        .truncationMode(.middle)
+                        .font(.system(size: settings.fontSize, design: .monospaced))
+                        .fontWeight(.medium)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
                         .textSelection(.enabled)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding(.top, 4)
             }

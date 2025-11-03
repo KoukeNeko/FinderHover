@@ -64,7 +64,7 @@ class AppSettings: ObservableObject {
 
     private init() {
         // Load values from UserDefaults
-        self.hoverDelay = UserDefaults.standard.object(forKey: "hoverDelay") as? Double ?? 0.8
+        self.hoverDelay = UserDefaults.standard.object(forKey: "hoverDelay") as? Double ?? 0.1
         self.autoHideEnabled = UserDefaults.standard.object(forKey: "autoHideEnabled") as? Bool ?? true
         self.windowOpacity = UserDefaults.standard.object(forKey: "windowOpacity") as? Double ?? 0.98
         self.windowMaxWidth = UserDefaults.standard.object(forKey: "windowMaxWidth") as? Double ?? 400
@@ -81,7 +81,7 @@ class AppSettings: ObservableObject {
     }
 
     func resetToDefaults() {
-        hoverDelay = 0.8
+        hoverDelay = 0.1
         autoHideEnabled = true
         windowOpacity = 0.98
         windowMaxWidth = 400
