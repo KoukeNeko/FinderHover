@@ -43,6 +43,20 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
   - Image dimensions (width × height)
   - GPS location data (optional, privacy-aware)
   - Supports: JPEG, PNG, TIFF, HEIC, RAW formats (CR2, NEF, ARW, DNG, etc.)
+- **Video Metadata** - Comprehensive information for video files:
+  - Duration (formatted as hours:minutes:seconds)
+  - Resolution (width × height in pixels)
+  - Video codec (e.g., "avc1", "hvc1")
+  - Frame rate (e.g., "30 fps", "60 fps")
+  - Bitrate (Mbps or kbps)
+  - Supports: MP4, MOV, M4V, AVI, MKV, FLV, WMV, WebM, MPEG, MPG, 3GP, MTS, M2TS
+- **Audio Metadata** - Detailed information for audio files:
+  - Song title, artist, album, genre, year
+  - Duration (formatted as minutes:seconds)
+  - Bitrate (kbps)
+  - Sample rate (kHz or Hz)
+  - Channel configuration (Mono, Stereo, multi-channel)
+  - Supports: MP3, M4A, AAC, WAV, FLAC, AIFF, AIF, WMA, OGG, Opus, ALAC
 - **Complete file path** with text selection support (no truncation)
 - **Perfect icon alignment** across all information rows
 - **Dynamic window height** - Automatically adjusts to content length
@@ -182,6 +196,21 @@ Toggle what information to show:
   - Date Taken
   - Image Dimensions
   - GPS Location
+- ☑️ **Video Information** - for video files
+  - Duration
+  - Resolution
+  - Codec
+  - Frame Rate
+  - Bitrate
+- ☑️ **Audio Information** - for audio files
+  - Song Title
+  - Artist
+  - Album
+  - Genre
+  - Year
+  - Duration
+  - Bitrate
+  - Sample Rate
 
 **Display Order Customization:**
 
@@ -198,6 +227,7 @@ The app uses modern macOS technologies:
 - **Accessibility API**: Monitors mouse position globally and retrieves file information from Finder
 - **QuickLook API**: Generates thumbnail previews for files asynchronously
 - **ImageIO**: Extracts EXIF metadata from image files (camera, lens, settings, GPS)
+- **AVFoundation**: Extracts video and audio metadata (duration, codec, bitrate, ID3 tags)
 - **SwiftUI**: Renders the beautiful hover window with adaptive sizing and reactive updates
 - **AppKit**: Manages window positioning, screen boundary detection, and visual effects
 - **NSVisualEffectView**: Native blur effects with HUD window material
@@ -254,6 +284,7 @@ FinderHover is designed with privacy in mind:
 - **AppKit** - Native window management and visual effects
 - **QuickLookThumbnailing** - File preview thumbnail generation
 - **ImageIO** - EXIF metadata extraction from image files
+- **AVFoundation** - Video and audio metadata extraction (duration, codec, bitrate, ID3 tags)
 - **NSVisualEffectView** - Native blur and vibrancy effects
 - **Accessibility Framework** - File detection and mouse tracking
 - **Combine** - Reactive programming for settings and events
@@ -475,7 +506,32 @@ Contributions are welcome! Please feel free to:
 
 ## 📝 Changelog
 
-### Version 1.1.1 (Current)
+### Version 1.1.2 (Current)
+
+- 🎬 **NEW: Video Metadata Support**
+  - Duration formatted as hours:minutes:seconds
+  - Resolution (width × height in pixels)
+  - Video codec information
+  - Frame rate (fps)
+  - Bitrate (Mbps or kbps)
+  - Supports 13 video formats: MP4, MOV, M4V, AVI, MKV, FLV, WMV, WebM, MPEG, MPG, 3GP, MTS, M2TS
+  - Individual toggles for each video metadata field
+- 🎵 **NEW: Audio Metadata Support**
+  - Song title, artist, album, genre, year from ID3 tags
+  - Duration formatted as minutes:seconds
+  - Bitrate (kbps)
+  - Sample rate (kHz or Hz)
+  - Channel configuration (Mono, Stereo, multi-channel)
+  - Supports 11 audio formats: MP3, M4A, AAC, WAV, FLAC, AIFF, AIF, WMA, OGG, Opus, ALAC
+  - Individual toggles for each audio metadata field
+- 🎨 **UI Improvements**
+  - Optimized label width for Japanese localization
+  - Improved icon visibility for resolution field
+  - Consistent text wrapping prevention across all languages
+- 🌐 **Localization Updates**
+  - Refined Japanese translations for better readability
+
+### Version 1.1.1
 
 - 🌐 **NEW: Multi-Language Support**
   - Three languages fully supported: English, 繁體中文 (Traditional Chinese), 日本語 (Japanese)

@@ -60,6 +60,27 @@
 "settings.display.exif.gps" = "GPS 位置";
 "settings.display.exif.hint" = "EXIF 資料僅顯示於包含中繼資料的影像檔案";
 
+"settings.display.video" = "影片資訊";
+"settings.display.video.show" = "顯示影片中繼資料";
+"settings.display.video.duration" = "時長";
+"settings.display.video.resolution" = "解析度";
+"settings.display.video.codec" = "編碼";
+"settings.display.video.framerate" = "影格率";
+"settings.display.video.bitrate" = "位元率";
+"settings.display.video.hint" = "影片中繼資料僅顯示於影片檔案";
+
+"settings.display.audio" = "音訊資訊";
+"settings.display.audio.show" = "顯示音訊中繼資料";
+"settings.display.audio.title" = "標題";
+"settings.display.audio.artist" = "演出者";
+"settings.display.audio.album" = "專輯";
+"settings.display.audio.genre" = "類型";
+"settings.display.audio.year" = "年份";
+"settings.display.audio.duration" = "時長";
+"settings.display.audio.bitrate" = "位元率";
+"settings.display.audio.samplerate" = "取樣率";
+"settings.display.audio.hint" = "音訊中繼資料僅顯示於包含 ID3 標籤的音訊檔案";
+
 "settings.display.order" = "顯示順序";
 "settings.display.order.hint" = "拖曳項目以重新排序。EXIF 作為群組移動。";
 
@@ -83,6 +104,8 @@
 "displayItem.permissions" = "權限";
 "displayItem.owner" = "擁有者";
 "displayItem.exif" = "照片資訊（EXIF）";
+"displayItem.video" = "影片資訊";
+"displayItem.audio" = "音訊資訊";
 "displayItem.filePath" = "檔案路徑";
 
 /* Hover Window */
@@ -104,6 +127,26 @@
 "hover.exif.taken" = "拍攝";
 "hover.exif.dimensions" = "尺寸";
 "hover.exif.gps" = "位置";
+
+/* Video Information */
+"hover.video.title" = "影片資訊";
+"hover.video.duration" = "時長";
+"hover.video.resolution" = "解析度";
+"hover.video.codec" = "編碼";
+"hover.video.framerate" = "影格率";
+"hover.video.bitrate" = "位元率";
+
+/* Audio Information */
+"hover.audio.title" = "音訊資訊";
+"hover.audio.songTitle" = "標題";
+"hover.audio.artist" = "演出者";
+"hover.audio.album" = "專輯";
+"hover.audio.genre" = "類型";
+"hover.audio.year" = "年份";
+"hover.audio.duration" = "時長";
+"hover.audio.bitrate" = "位元率";
+"hover.audio.samplerate" = "取樣率";
+"hover.audio.channels" = "聲道";
 
 /* Common */
 "common.reset" = "重設為預設值";
