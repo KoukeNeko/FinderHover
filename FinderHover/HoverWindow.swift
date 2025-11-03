@@ -228,6 +228,9 @@ struct HoverContentView: View {
             ForEach(settings.displayOrder) { item in
                 displayItemView(for: item)
             }
+            .onAppear {
+                print("Display order: \(settings.displayOrder.map { $0.rawValue })")
+            }
         }
         .padding(settings.compactMode ? 10 : 14)
         .frame(minWidth: 320, maxWidth: settings.windowMaxWidth)
@@ -350,7 +353,7 @@ struct HoverContentView: View {
                             .foregroundColor(.secondary)
                             .frame(width: 14, alignment: .center)
 
-                        Text("Location:")
+                        Text("File Path:")
                             .font(.system(size: settings.fontSize))
                             .foregroundColor(.secondary)
                             .frame(width: 65, alignment: .trailing)

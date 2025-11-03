@@ -689,6 +689,11 @@ struct DisplayItemDropDelegate: DropDelegate {
             withAnimation(.default) {
                 items.move(fromOffsets: IndexSet(integer: fromIndex), toOffset: toIndex > fromIndex ? toIndex + 1 : toIndex)
             }
+
+            // Manually save to UserDefaults since move() doesn't trigger didSet
+            if let encoded = try? JSONEncoder().encode(items) {
+                UserDefaults.standard.set(encoded, forKey: "displayOrder")
+            }
         }
     }
 
