@@ -35,9 +35,18 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
   - **Item count** for folders (optional)
   - **File permissions** in octal format with rwx notation (optional)
   - **Owner information** (optional)
+- **Photo EXIF Information** - Detailed metadata for image files:
+  - Camera model (e.g., "Canon EOS R5")
+  - Lens information (e.g., "RF 24-70mm F2.8 L IS USM")
+  - Camera settings (focal length, aperture, shutter speed, ISO)
+  - Date taken with original timestamp
+  - Image dimensions (width × height)
+  - GPS location data (optional, privacy-aware)
+  - Supports: JPEG, PNG, TIFF, HEIC, RAW formats (CR2, NEF, ARW, DNG, etc.)
 - **Complete file path** with text selection support (no truncation)
 - **Perfect icon alignment** across all information rows
 - **Dynamic window height** - Automatically adjusts to content length
+- **Customizable display order** - Drag and drop to reorder information fields
 
 ### 🎨 Modern & Customizable Design
 - **Native blur effect** - macOS-style background blur (toggleable)
@@ -154,6 +163,19 @@ Toggle what information to show:
 - ☑️ Permissions (file mode)
 - ☑️ Owner
 - ☑️ File Path
+- ☑️ **Photo Information (EXIF)** - for image files
+  - Camera Model
+  - Lens Model
+  - Camera Settings (focal length, aperture, shutter speed, ISO)
+  - Date Taken
+  - Image Dimensions
+  - GPS Location
+
+**Display Order Customization:**
+
+- Drag and drop items to reorder them in the hover window
+- EXIF information moves as a complete group
+- Changes save automatically and apply in real-time
 
 > **💡 Tip**: All settings apply **instantly** - no need to restart!
 
@@ -163,11 +185,12 @@ The app uses modern macOS technologies:
 
 - **Accessibility API**: Monitors mouse position globally and retrieves file information from Finder
 - **QuickLook API**: Generates thumbnail previews for files asynchronously
+- **ImageIO**: Extracts EXIF metadata from image files (camera, lens, settings, GPS)
 - **SwiftUI**: Renders the beautiful hover window with adaptive sizing and reactive updates
 - **AppKit**: Manages window positioning, screen boundary detection, and visual effects
 - **NSVisualEffectView**: Native blur effects with HUD window material
 - **Combine**: Reactive updates for settings and mouse tracking
-- **UserDefaults**: Persistent settings storage
+- **UserDefaults**: Persistent settings storage with JSON encoding for complex data
 - **Menu Bar Integration**: Runs as a lightweight background app (LSUIElement)
 
 ### Technical Architecture
@@ -218,10 +241,11 @@ FinderHover is designed with privacy in mind:
 - **SwiftUI** - Declarative UI framework with reactive updates
 - **AppKit** - Native window management and visual effects
 - **QuickLookThumbnailing** - File preview thumbnail generation
+- **ImageIO** - EXIF metadata extraction from image files
 - **NSVisualEffectView** - Native blur and vibrancy effects
 - **Accessibility Framework** - File detection and mouse tracking
 - **Combine** - Reactive programming for settings and events
-- **UserDefaults** - Persistent settings storage
+- **UserDefaults** - Persistent settings storage with Codable support
 
 ### Project Structure
 ```
@@ -432,7 +456,26 @@ Contributions are welcome! Please feel free to:
 
 ## 📝 Changelog
 
-### Version 1.0 (Current)
+### Version 1.1 (Current)
+
+- 📸 **NEW: Photo EXIF Information**
+  - Camera model and lens information
+  - Camera settings (focal length, aperture, shutter speed, ISO)
+  - Date taken with original timestamp
+  - Image dimensions (width × height)
+  - GPS location data (optional)
+  - Supports JPEG, PNG, TIFF, HEIC, RAW (CR2, NEF, ARW, DNG, etc.)
+  - Individual toggles for each EXIF field
+- 🎨 **NEW: Customizable Display Order**
+  - Drag and drop to reorder information fields
+  - EXIF moves as a complete group
+  - Changes save automatically and apply in real-time
+- 🐛 Bug fixes:
+  - Fixed display order not persisting to UserDefaults
+  - Improved compatibility with older macOS versions (pre-11.0) for blur effects
+
+### Version 1.0
+
 - ✨ Initial release
 - 🎯 Smart hover preview with adjustable delay (default: 0.1s)
 - 📊 Rich file information display with 50+ file type recognition
