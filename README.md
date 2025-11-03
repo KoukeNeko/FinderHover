@@ -8,6 +8,20 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
   <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License MIT">
 </p>
 
+## 📑 Table of Contents
+- [Features](#-features)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [How It Works](#-how-it-works)
+- [Settings](#-settings)
+- [Development](#-development)
+- [Troubleshooting](#-troubleshooting)
+- [Privacy](#-privacy)
+- [Screenshots](#-screenshots)
+- [Changelog](#-changelog)
+- [Contributing](#-contributing)
+- [License](#-license)
+
 ## ✨ Features
 ![A6700471](https://github.com/user-attachments/assets/455d868a-7e7d-4e8c-84bb-e032a6feffbf)
 
