@@ -63,13 +63,23 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
 ### ⚙️ Professional Settings Interface
 - **macOS-native sidebar navigation** (like System Settings)
 - Three organized setting pages:
-  - **Behavior**: Hover delay, auto-hide, launch at login, window positioning
+  - **Behavior**: Hover delay, auto-hide, launch at login, window positioning, language selection
   - **Appearance**: Blur effect, opacity, compact mode, window size, font size
   - **Display**: Toggle which information to show (10+ options)
 - Real-time preview of all changes
 - Contextual hints (e.g., opacity setting availability)
 - One-click reset to defaults
 - Keyboard shortcut: `Cmd+,`
+
+### 🌐 Multi-Language Support
+- **Three languages fully supported**:
+  - 🇺🇸 English
+  - 🇹🇼 繁體中文 (Traditional Chinese)
+  - 🇯🇵 日本語 (Japanese)
+- **System Default option** - Automatically follows your macOS language settings
+- **In-app language switcher** - Change language without leaving the app
+- **One-click restart** - Apply language changes instantly
+- **Complete localization** - All UI elements, settings, and menus translated
 
 ### ⚡ Performance & Privacy
 - **Lightweight**: Minimal CPU and memory usage
@@ -142,6 +152,8 @@ Open **Settings** (`Cmd+,`) to customize:
 - **Auto-hide**: Instantly hide window when mouse moves away
 - **Launch at Login**: Automatically start FinderHover when you log in
 - **Window Position**: Adjust horizontal/vertical offset from cursor (0-50px)
+- **Language**: Choose app language (English, 繁體中文, 日本語, or System Default)
+  - One-click restart button appears when language is changed
 
 #### Appearance Tab
 - **Blur Effect**: Enable/disable native macOS background blur
@@ -251,14 +263,21 @@ FinderHover is designed with privacy in mind:
 ```
 FinderHover/
 ├── FinderHoverApp.swift      # Main app & menu bar
-├── AppSettings.swift          # Settings model with UserDefaults
+├── AppSettings.swift          # Settings model with UserDefaults & language
 ├── SettingsView.swift         # Settings UI (sidebar navigation)
 ├── HoverWindow.swift          # Preview window with SwiftUI
 ├── HoverManager.swift         # Coordination layer
 ├── MouseTracker.swift         # Global mouse events
 ├── FinderInteraction.swift   # Accessibility API integration
 ├── FileInfo.swift             # File metadata model
-└── Info.plist                # App permissions
+├── Info.plist                 # App permissions
+└── Resources/                 # Localization files
+    ├── en.lproj/
+    │   └── Localizable.strings      # English
+    ├── zh-Hant.lproj/
+    │   └── Localizable.strings      # Traditional Chinese
+    └── ja.lproj/
+        └── Localizable.strings      # Japanese
 ```
 
 ### Key Components
@@ -456,7 +475,16 @@ Contributions are welcome! Please feel free to:
 
 ## 📝 Changelog
 
-### Version 1.1 (Current)
+### Version 1.1.1 (Current)
+
+- 🌐 **NEW: Multi-Language Support**
+  - Three languages fully supported: English, 繁體中文 (Traditional Chinese), 日本語 (Japanese)
+  - System Default option automatically follows macOS language settings
+  - In-app language switcher with one-click restart
+  - Complete localization of all UI elements, settings, and menus
+  - Consistent vertical slider layouts across all settings pages
+
+### Version 1.1
 
 - 📸 **NEW: Photo EXIF Information**
   - Camera model and lens information
