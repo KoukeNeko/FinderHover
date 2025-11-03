@@ -39,12 +39,29 @@ class HoverWindowController: NSWindowController {
 
         // Set a width constraint for proper height calculation
         let maxWidth = settings.windowMaxWidth
-        hostingView.frame = NSRect(x: 0, y: 0, width: maxWidth, height: 2000)
 
-        // Force layout and get fitting size
-        hostingView.invalidateIntrinsicContentSize()
-        hostingView.layoutSubtreeIfNeeded()
+        // Use intrinsicContentSize with proper width constraint
+        hostingView.frame = NSRect(x: 0, y: 0, width: maxWidth, height: 0)
+        hostingView.translatesAutoresizingMaskIntoConstraints = false
+
+        // Create temporary container to calculate size
+        let tempContainer = NSView(frame: NSRect(x: 0, y: 0, width: maxWidth, height: 5000))
+        tempContainer.addSubview(hostingView)
+        NSLayoutConstraint.activate([
+            hostingView.leadingAnchor.constraint(equalTo: tempContainer.leadingAnchor),
+            hostingView.trailingAnchor.constraint(equalTo: tempContainer.trailingAnchor),
+            hostingView.topAnchor.constraint(equalTo: tempContainer.topAnchor)
+        ])
+
+        // Force layout
+        tempContainer.layoutSubtreeIfNeeded()
+
+        // Get the calculated size
         let fittingSize = hostingView.fittingSize
+
+        // Remove from temp container and reset
+        hostingView.removeFromSuperview()
+        hostingView.translatesAutoresizingMaskIntoConstraints = true
 
         // Check if blur is enabled
         if settings.enableBlur {
