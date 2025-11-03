@@ -120,14 +120,57 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
 ## 📦 Installation
 
 ### Option 1: Build from Source
-1. Clone this repository
+
+1. **Clone the repository**
    ```bash
    git clone https://github.com/yourusername/FinderHover.git
    cd FinderHover
    ```
-2. Open `FinderHover.xcodeproj` in Xcode
-3. Build and run the app (`Cmd+R`)
-4. The app will appear in your menu bar with an eye icon
+
+2. **Open in Xcode**
+   ```bash
+   open FinderHover.xcodeproj
+   ```
+
+3. **Configure signing**
+   - Select your development team in project settings
+   - Update bundle identifier if needed
+
+4. **Build and run**
+   - Press `Cmd+R` or click the Run button
+   - App will launch with Xcode's entitlements
+   - The app will appear in your menu bar with an eye icon
+
+#### Building from Command Line
+
+For command line builds without opening Xcode:
+
+1. **Build the app (Debug)**
+   ```bash
+   xcodebuild -project FinderHover.xcodeproj -scheme FinderHover -configuration Debug build
+   ```
+
+2. **Find the built .app file**
+   ```bash
+   # The .app is located in DerivedData:
+   find ~/Library/Developer/Xcode/DerivedData/FinderHover-* -name "FinderHover.app" -type d
+   ```
+
+3. **Copy to Applications or Desktop**
+   ```bash
+   # Copy to Desktop
+   cp -r ~/Library/Developer/Xcode/DerivedData/FinderHover-*/Build/Products/Debug/FinderHover.app ~/Desktop/
+
+   # Or copy to Applications
+   cp -r ~/Library/Developer/Xcode/DerivedData/FinderHover-*/Build/Products/Debug/FinderHover.app /Applications/
+   ```
+
+4. **Build for Release**
+   ```bash
+   xcodebuild -project FinderHover.xcodeproj -scheme FinderHover -configuration Release build
+   ```
+
+> **Note**: Debug builds can be run locally without an Apple Developer Program membership. Release builds for distribution require signing with a valid developer certificate.
 
 ### Option 2: Download Release
 - Download the latest `.app` from [Releases](../../releases)
@@ -382,59 +425,7 @@ The app recognizes and provides smart descriptions for:
 - Applications (.app)
 - And any file type with extension
 
-### Building from Source
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/FinderHover.git
-   cd FinderHover
-   ```
-
-2. **Open in Xcode**
-   ```bash
-   open FinderHover.xcodeproj
-   ```
-
-3. **Configure signing**
-   - Select your development team in project settings
-   - Update bundle identifier if needed
-
-4. **Build and run**
-   - Press `Cmd+R` or click the Run button
-   - App will launch with Xcode's entitlements
-
-### Building from Command Line
-
-For command line builds without opening Xcode:
-
-1. **Build the app (Debug)**
-   ```bash
-   xcodebuild -project FinderHover.xcodeproj -scheme FinderHover -configuration Debug build
-   ```
-
-2. **Find the built .app file**
-   ```bash
-   # The .app is located in DerivedData:
-   find ~/Library/Developer/Xcode/DerivedData/FinderHover-* -name "FinderHover.app" -type d
-   ```
-
-3. **Copy to Applications or Desktop**
-   ```bash
-   # Copy to Desktop
-   cp -r ~/Library/Developer/Xcode/DerivedData/FinderHover-*/Build/Products/Debug/FinderHover.app ~/Desktop/
-
-   # Or copy to Applications
-   cp -r ~/Library/Developer/Xcode/DerivedData/FinderHover-*/Build/Products/Debug/FinderHover.app /Applications/
-   ```
-
-4. **Build for Release**
-   ```bash
-   xcodebuild -project FinderHover.xcodeproj -scheme FinderHover -configuration Release build
-   ```
-
-> **Note**: Debug builds can be run locally without an Apple Developer Program membership. Release builds for distribution require signing with a valid developer certificate.
-
-### Contributing
+## 🤝 Contributing
 
 Contributions are welcome! Please feel free to:
 - Report bugs via [Issues](../../issues)
