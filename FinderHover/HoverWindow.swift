@@ -251,11 +251,11 @@ struct DetailRow: View {
             Image(systemName: icon)
                 .font(.system(size: 11))
                 .foregroundColor(.secondary)
-                .frame(width: 16)
+                .frame(width: 14, alignment: .center)
 
             Text(label + ":")
                 .foregroundColor(.secondary)
-                .frame(width: 60, alignment: .leading)
+                .frame(width: 65, alignment: .trailing)
 
             Text(value)
                 .fontWeight(.medium)

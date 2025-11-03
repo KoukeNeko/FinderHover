@@ -26,6 +26,8 @@ class HoverManager: ObservableObject {
     private var hoverWindow: HoverWindowController?
     private var cancellables = Set<AnyCancellable>()
     private var displayTimer: Timer?
+    private var hideCheckTimer: Timer?
+    private var lastMouseLocation: CGPoint = .zero
 
     init() {
         setupSubscriptions()
@@ -33,7 +35,15 @@ class HoverManager: ObservableObject {
     }
 
     private func setupSubscriptions() {
-        // Monitor mouse location changes
+        // Monitor mouse location changes with immediate hide check
+        mouseTracker.$mouseLocation
+            .sink { [weak self] location in
+                self?.lastMouseLocation = location
+                self?.checkIfShouldHide(at: location)
+            }
+            .store(in: &cancellables)
+
+        // Monitor mouse location changes with debounce for showing
         mouseTracker.$mouseLocation
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .sink { [weak self] location in
@@ -50,6 +60,28 @@ class HoverManager: ObservableObject {
     func stopMonitoring() {
         mouseTracker.stopTracking()
         hideHoverWindow()
+        hideCheckTimer?.invalidate()
+        displayTimer?.invalidate()
+    }
+
+    private func checkIfShouldHide(at location: CGPoint) {
+        // If window is showing and we have current file info
+        guard let currentInfo = currentFileInfo else { return }
+
+        // Check if mouse has moved significantly or if we can't find the same file
+        if let currentPath = FinderInteraction.getFileAtMousePosition(location) {
+            // If different file or no file, hide immediately
+            if currentPath != currentInfo.path {
+                hideHoverWindow()
+                currentFileInfo = nil
+                displayTimer?.invalidate()
+            }
+        } else {
+            // No file under cursor, hide immediately
+            hideHoverWindow()
+            currentFileInfo = nil
+            displayTimer?.invalidate()
+        }
     }
 
     private func handleMouseLocation(_ location: CGPoint) {
@@ -118,5 +150,6 @@ class HoverManager: ObservableObject {
 
     deinit {
         stopMonitoring()
+        cancellables.removeAll()
     }
 }
