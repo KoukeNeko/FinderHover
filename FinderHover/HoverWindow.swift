@@ -148,14 +148,14 @@ struct HoverContentView: View {
     @ObservedObject var settings = AppSettings.shared
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: settings.compactMode ? 6 : 10) {
             // File icon and name
-            HStack(spacing: 12) {
+            HStack(spacing: settings.compactMode ? 8 : 12) {
                 if settings.showIcon {
                     Image(nsImage: thumbnail ?? fileInfo.icon)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 48, height: 48)
+                        .frame(width: settings.compactMode ? 32 : 48, height: settings.compactMode ? 32 : 48)
                         .onAppear {
                             // Load thumbnail asynchronously
                             fileInfo.generateThumbnailAsync { image in
@@ -166,9 +166,9 @@ struct HoverContentView: View {
                         }
                 }
 
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 2 : 4) {
                     Text(fileInfo.name)
-                        .font(.system(size: settings.fontSize + 2, weight: .semibold))
+                        .font(.system(size: settings.compactMode ? settings.fontSize : settings.fontSize + 2, weight: .semibold))
                         .lineLimit(nil)
                         .multilineTextAlignment(.leading)
                         .fixedSize(horizontal: false, vertical: true)
@@ -184,7 +184,7 @@ struct HoverContentView: View {
                 .background(Color.gray.opacity(0.3))
 
             // File details in a grid
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
                 if settings.showFileType {
                     DetailRow(icon: "doc.text", label: "Type", value: getFileTypeDescription(), fontSize: settings.fontSize)
                 }
@@ -236,7 +236,7 @@ struct HoverContentView: View {
                 }
             }
         }
-        .padding(14)
+        .padding(settings.compactMode ? 10 : 14)
         .frame(minWidth: 320, maxWidth: settings.windowMaxWidth)
         .fixedSize(horizontal: false, vertical: true)
         .background(Color.clear)

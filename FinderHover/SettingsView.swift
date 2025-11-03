@@ -275,6 +275,18 @@ struct AppearanceSettingsView: View {
                             .labelsHidden()
                             .toggleStyle(.switch)
                     }
+
+                    Divider()
+
+                    // Compact Mode
+                    SettingRow(
+                        title: "Compact Mode",
+                        description: "Reduce spacing and padding for a more compact layout"
+                    ) {
+                        Toggle("", isOn: $settings.compactMode)
+                            .labelsHidden()
+                            .toggleStyle(.switch)
+                    }
                 }
                 .padding(.horizontal, 20)
 

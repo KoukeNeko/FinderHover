@@ -40,6 +40,9 @@ class AppSettings: ObservableObject {
     @Published var enableBlur: Bool {
         didSet { UserDefaults.standard.set(enableBlur, forKey: "enableBlur") }
     }
+    @Published var compactMode: Bool {
+        didSet { UserDefaults.standard.set(compactMode, forKey: "compactMode") }
+    }
 
     // Information display
     @Published var showCreationDate: Bool {
@@ -95,6 +98,7 @@ class AppSettings: ObservableObject {
         self.windowMaxWidth = UserDefaults.standard.object(forKey: "windowMaxWidth") as? Double ?? 400
         self.fontSize = UserDefaults.standard.object(forKey: "fontSize") as? Double ?? 11
         self.enableBlur = UserDefaults.standard.object(forKey: "enableBlur") as? Bool ?? true
+        self.compactMode = UserDefaults.standard.object(forKey: "compactMode") as? Bool ?? false
         self.showCreationDate = UserDefaults.standard.object(forKey: "showCreationDate") as? Bool ?? true
         self.showModificationDate = UserDefaults.standard.object(forKey: "showModificationDate") as? Bool ?? true
         self.showFileSize = UserDefaults.standard.object(forKey: "showFileSize") as? Bool ?? true
@@ -118,6 +122,7 @@ class AppSettings: ObservableObject {
         windowMaxWidth = 400
         fontSize = 11
         enableBlur = true
+        compactMode = false
         showCreationDate = true
         showModificationDate = true
         showFileSize = true
