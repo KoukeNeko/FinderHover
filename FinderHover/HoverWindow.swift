@@ -9,6 +9,8 @@ import SwiftUI
 import AppKit
 
 class HoverWindowController: NSWindowController {
+    private var visualEffectView: NSVisualEffectView?
+
     convenience init() {
         let window = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 400, height: 250),
@@ -32,14 +34,31 @@ class HoverWindowController: NSWindowController {
 
         let settings = AppSettings.shared
 
+        // Create visual effect view for blur
+        let effectView = NSVisualEffectView()
+        effectView.material = .hudWindow
+        effectView.state = .active
+        effectView.blendingMode = .behindWindow
+        effectView.wantsLayer = true
+        effectView.layer?.cornerRadius = 10
+        effectView.layer?.masksToBounds = true
+
         // Update content
         let hostingView = NSHostingView(rootView: HoverContentView(fileInfo: fileInfo))
-        window.contentView = hostingView
+        hostingView.frame = effectView.bounds
+        hostingView.autoresizingMask = [.width, .height]
+
+        // Add hosting view to effect view
+        effectView.addSubview(hostingView)
+        window.contentView = effectView
+
+        self.visualEffectView = effectView
 
         // Calculate proper window size from content
         hostingView.invalidateIntrinsicContentSize()
         let fittingSize = hostingView.fittingSize
         window.setContentSize(fittingSize)
+        effectView.frame = NSRect(origin: .zero, size: fittingSize)
 
         // Position window near mouse cursor with smart positioning
         let offsetX: CGFloat = settings.windowOffsetX
@@ -158,25 +177,23 @@ struct HoverContentView: View {
         }
         .padding(14)
         .frame(minWidth: 320, maxWidth: settings.windowMaxWidth)
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color(NSColor.controlBackgroundColor).opacity(settings.windowOpacity))
-        )
+        .fixedSize(horizontal: false, vertical: true)
+        .background(Color.clear)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
                 .stroke(
                     LinearGradient(
                         gradient: Gradient(colors: [
-                            Color.white.opacity(0.2),
-                            Color.gray.opacity(0.15)
+                            Color.white.opacity(0.3),
+                            Color.gray.opacity(0.2)
                         ]),
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ),
-                    lineWidth: 0.5
+                    lineWidth: 1.0
                 )
         )
-        .shadow(color: .black.opacity(0.25), radius: 12, x: 0, y: 4)
+        .shadow(color: .black.opacity(0.3), radius: 15, x: 0, y: 5)
     }
 
     private func getFileTypeDescription() -> String {
