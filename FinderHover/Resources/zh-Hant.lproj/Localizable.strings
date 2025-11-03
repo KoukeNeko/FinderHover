@@ -122,6 +122,7 @@
 /* Language Settings */
 "settings.language" = "語言";
 "settings.language.description" = "變更應用程式語言（需要重新啟動）";
+"settings.language.restart" = "重新啟動";
 "settings.language.system" = "系統預設";
 "settings.language.english" = "English";
 "settings.language.chinese" = "繁體中文";
