@@ -25,6 +25,21 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
+    var localizedName: String {
+        switch self {
+        case .fileType: return "displayItem.fileType".localized
+        case .fileSize: return "displayItem.fileSize".localized
+        case .itemCount: return "displayItem.itemCount".localized
+        case .creationDate: return "displayItem.creationDate".localized
+        case .modificationDate: return "displayItem.modificationDate".localized
+        case .lastAccessDate: return "displayItem.lastAccessDate".localized
+        case .permissions: return "displayItem.permissions".localized
+        case .owner: return "displayItem.owner".localized
+        case .exif: return "displayItem.exif".localized
+        case .filePath: return "displayItem.filePath".localized
+        }
+    }
+
     var icon: String {
         switch self {
         case .fileType: return "doc.text"
