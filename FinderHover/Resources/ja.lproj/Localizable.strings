@@ -108,3 +108,20 @@
 "common.reset" = "デフォルトに戻す";
 "common.item" = "項目";
 "common.items" = "項目";
+
+/* Settings Descriptions */
+"settings.behavior.hoverDelay.description" = "プレビューウィンドウを表示するまでの待機時間";
+"settings.behavior.autoHide.description" = "マウスがファイルから離れたら即座にウィンドウを隠す";
+"settings.behavior.launchAtLogin.description" = "ログイン時に FinderHover を自動的に起動";
+"settings.behavior.windowPosition.description" = "カーソルとプレビューウィンドウ間の距離";
+"settings.appearance.opacity.description" = "プレビューウィンドウの透明度";
+"settings.appearance.maxWidth.description" = "プレビューウィンドウの最大幅";
+"settings.appearance.fontSize.description" = "プレビューウィンドウ内のテキストのサイズ";
+
+/* Language Settings */
+"settings.language" = "言語";
+"settings.language.description" = "アプリの言語を変更（再起動が必要）";
+"settings.language.system" = "システムのデフォルト";
+"settings.language.english" = "English";
+"settings.language.chinese" = "繁體中文";
+"settings.language.japanese" = "日本語";
