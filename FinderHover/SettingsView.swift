@@ -684,7 +684,7 @@ struct AboutSettingsView: View {
                     VStack(spacing: 8) {
                         Text("FinderHover")
                             .font(.system(size: 24, weight: .bold))
-                        Text("settings.about.version".localized("1.1.1"))
+                        Text(String(format: "settings.about.version".localized, Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"))
                             .font(.system(size: 13))
                             .foregroundColor(.secondary)
                     }
