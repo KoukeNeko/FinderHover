@@ -252,7 +252,26 @@ class AppSettings: ObservableObject {
     private init() {
         // Load display order or use default
         if let data = UserDefaults.standard.data(forKey: "displayOrder"),
-           let decoded = try? JSONDecoder().decode([DisplayItem].self, from: data) {
+           var decoded = try? JSONDecoder().decode([DisplayItem].self, from: data) {
+            // Migration: Add new items if they don't exist
+            if !decoded.contains(.video) {
+                if let exifIndex = decoded.firstIndex(of: .exif) {
+                    decoded.insert(.video, at: exifIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.video, at: filePathIndex)
+                } else {
+                    decoded.append(.video)
+                }
+            }
+            if !decoded.contains(.audio) {
+                if let videoIndex = decoded.firstIndex(of: .video) {
+                    decoded.insert(.audio, at: videoIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.audio, at: filePathIndex)
+                } else {
+                    decoded.append(.audio)
+                }
+            }
             self.displayOrder = decoded
         } else {
             // Default order
