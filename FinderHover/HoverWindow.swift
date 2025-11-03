@@ -206,7 +206,7 @@ struct HoverContentView: View {
                     DetailRow(icon: "eye", label: "Accessed", value: fileInfo.formattedLastAccessDate, fontSize: settings.fontSize)
                 }
                 if settings.showPermissions {
-                    DetailRow(icon: "lock.shield", label: "Permissions", value: fileInfo.formattedPermissions, fontSize: settings.fontSize)
+                    DetailRow(icon: "lock.shield", label: "Mode", value: fileInfo.formattedPermissions, fontSize: settings.fontSize)
                 }
                 if settings.showOwner {
                     DetailRow(icon: "person", label: "Owner", value: fileInfo.owner, fontSize: settings.fontSize)
