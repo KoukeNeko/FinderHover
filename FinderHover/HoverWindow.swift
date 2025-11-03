@@ -220,7 +220,6 @@ struct HoverContentView: View {
                         .textSelection(.enabled)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .padding(.top, 4)
             }
         }
         .padding(14)
