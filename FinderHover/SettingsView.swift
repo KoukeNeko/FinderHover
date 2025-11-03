@@ -515,7 +515,7 @@ struct AboutSettingsView: View {
                     VStack(spacing: 8) {
                         Text("FinderHover")
                             .font(.system(size: 24, weight: .bold))
-                        Text("Version 1.0")
+                        Text("version 1.1")
                             .font(.system(size: 13))
                             .foregroundColor(.secondary)
                     }
