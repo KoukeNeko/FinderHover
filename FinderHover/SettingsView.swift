@@ -9,12 +9,21 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 enum SettingsPage: String, CaseIterable, Identifiable {
-    case behavior = "Behavior"
-    case appearance = "Appearance"
-    case display = "Display"
-    case about = "About"
+    case behavior
+    case appearance
+    case display
+    case about
 
     var id: String { rawValue }
+
+    var localizedName: String {
+        switch self {
+        case .behavior: return "settings.tab.behavior".localized
+        case .appearance: return "settings.tab.appearance".localized
+        case .display: return "settings.tab.display".localized
+        case .about: return "settings.tab.about".localized
+        }
+    }
 
     var icon: String {
         switch self {
@@ -36,7 +45,7 @@ struct SettingsView: View {
             List(SettingsPage.allCases, selection: $selectedPage) { page in
                 NavigationLink(value: page) {
                     Label {
-                        Text(page.rawValue)
+                        Text(page.localizedName)
                             .font(.system(size: 13))
                     } icon: {
                         Image(systemName: page.icon)
@@ -75,7 +84,7 @@ struct BehaviorSettingsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 // Header
-                Text("Behavior")
+                Text("settings.behavior.title".localized)
                     .font(.system(size: 20, weight: .semibold))
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
@@ -87,13 +96,13 @@ struct BehaviorSettingsView: View {
                 VStack(spacing: 24) {
                     // Hover Delay
                     SettingRow(
-                        title: "Hover Delay",
+                        title: "settings.behavior.hoverDelay".localized,
                         description: "Time to wait before showing preview window"
                     ) {
                         HStack(spacing: 12) {
                             Slider(value: $settings.hoverDelay, in: 0.1...2.0, step: 0.1)
                                 .frame(maxWidth: 200)
-                            Text(String(format: "%.1fs", settings.hoverDelay))
+                            Text("settings.behavior.hoverDelay.seconds".localized(settings.hoverDelay))
                                 .font(.system(size: 13, design: .monospaced))
                                 .foregroundColor(.secondary)
                                 .frame(width: 45, alignment: .trailing)
@@ -104,7 +113,7 @@ struct BehaviorSettingsView: View {
 
                     // Auto-hide
                     SettingRow(
-                        title: "Auto-hide",
+                        title: "settings.behavior.autoHide".localized,
                         description: "Immediately hide window when mouse moves away from file"
                     ) {
                         Toggle("", isOn: $settings.autoHideEnabled)
@@ -116,7 +125,7 @@ struct BehaviorSettingsView: View {
 
                     // Launch at Login
                     SettingRow(
-                        title: "Launch at Login",
+                        title: "settings.behavior.launchAtLogin".localized,
                         description: "Automatically start FinderHover when you log in"
                     ) {
                         Toggle("", isOn: $settings.launchAtLogin)
@@ -128,7 +137,7 @@ struct BehaviorSettingsView: View {
 
                     // Window Position
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Window Position")
+                        Text("settings.behavior.windowPosition".localized)
                             .font(.system(size: 13, weight: .semibold))
 
                         Text("Distance from cursor to preview window")
@@ -137,26 +146,26 @@ struct BehaviorSettingsView: View {
 
                         VStack(spacing: 12) {
                             HStack {
-                                Text("Horizontal:")
+                                Text("settings.behavior.horizontalOffset".localized)
                                     .frame(width: 80, alignment: .trailing)
                                     .font(.system(size: 12))
                                     .foregroundColor(.secondary)
                                 Slider(value: $settings.windowOffsetX, in: 0...50, step: 5)
                                     .frame(maxWidth: 180)
-                                Text("\(Int(settings.windowOffsetX))px")
+                                Text("settings.behavior.pixels".localized(Int(settings.windowOffsetX)))
                                     .font(.system(size: 12, design: .monospaced))
                                     .foregroundColor(.secondary)
                                     .frame(width: 40, alignment: .trailing)
                             }
 
                             HStack {
-                                Text("Vertical:")
+                                Text("settings.behavior.verticalOffset".localized)
                                     .frame(width: 80, alignment: .trailing)
                                     .font(.system(size: 12))
                                     .foregroundColor(.secondary)
                                 Slider(value: $settings.windowOffsetY, in: 0...50, step: 5)
                                     .frame(maxWidth: 180)
-                                Text("\(Int(settings.windowOffsetY))px")
+                                Text("settings.behavior.pixels".localized(Int(settings.windowOffsetY)))
                                     .font(.system(size: 12, design: .monospaced))
                                     .foregroundColor(.secondary)
                                     .frame(width: 40, alignment: .trailing)
@@ -173,7 +182,7 @@ struct BehaviorSettingsView: View {
                 // Reset Button
                 HStack {
                     Spacer()
-                    Button("Reset to Defaults") {
+                    Button("common.reset".localized) {
                         withAnimation {
                             settings.resetToDefaults()
                         }
@@ -196,7 +205,7 @@ struct AppearanceSettingsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 // Header
-                Text("Appearance")
+                Text("settings.appearance.title".localized)
                     .font(.system(size: 20, weight: .semibold))
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
@@ -209,14 +218,14 @@ struct AppearanceSettingsView: View {
                     // Window Opacity
                     VStack(alignment: .leading, spacing: 8) {
                         SettingRow(
-                            title: "Window Opacity",
+                            title: "settings.appearance.opacity".localized,
                             description: "Transparency level of the preview window"
                         ) {
                             HStack(spacing: 12) {
                                 Slider(value: $settings.windowOpacity, in: 0.7...1.0, step: 0.05)
                                     .frame(maxWidth: 200)
                                     .disabled(settings.enableBlur)
-                                Text("\(Int(settings.windowOpacity * 100))%")
+                                Text("settings.appearance.opacity.percent".localized(Int(settings.windowOpacity * 100)))
                                     .font(.system(size: 13, design: .monospaced))
                                     .foregroundColor(.secondary)
                                     .frame(width: 45, alignment: .trailing)
@@ -227,7 +236,7 @@ struct AppearanceSettingsView: View {
                             HStack(spacing: 6) {
                                 Image(systemName: "info.circle")
                                     .font(.system(size: 11))
-                                Text("Only available when Blur Effect is disabled")
+                                Text("settings.appearance.opacity.hint".localized)
                                     .font(.system(size: 11))
                             }
                             .foregroundColor(.secondary)
@@ -239,13 +248,13 @@ struct AppearanceSettingsView: View {
 
                     // Maximum Width
                     SettingRow(
-                        title: "Maximum Width",
+                        title: "settings.appearance.maxWidth".localized,
                         description: "Maximum width of the preview window"
                     ) {
                         HStack(spacing: 12) {
                             Slider(value: $settings.windowMaxWidth, in: 300...600, step: 20)
                                 .frame(maxWidth: 200)
-                            Text("\(Int(settings.windowMaxWidth))px")
+                            Text("settings.appearance.maxWidth.pixels".localized(Int(settings.windowMaxWidth)))
                                 .font(.system(size: 13, design: .monospaced))
                                 .foregroundColor(.secondary)
                                 .frame(width: 45, alignment: .trailing)
@@ -256,13 +265,13 @@ struct AppearanceSettingsView: View {
 
                     // Font Size
                     SettingRow(
-                        title: "Font Size",
+                        title: "settings.appearance.fontSize".localized,
                         description: "Size of text in the preview window"
                     ) {
                         HStack(spacing: 12) {
                             Slider(value: $settings.fontSize, in: 9...14, step: 1)
                                 .frame(maxWidth: 200)
-                            Text("\(Int(settings.fontSize))pt")
+                            Text("settings.appearance.fontSize.points".localized(settings.fontSize))
                                 .font(.system(size: 13, design: .monospaced))
                                 .foregroundColor(.secondary)
                                 .frame(width: 45, alignment: .trailing)
@@ -273,8 +282,8 @@ struct AppearanceSettingsView: View {
 
                     // Blur Effect
                     SettingRow(
-                        title: "Blur Effect",
-                        description: "Enable background blur for the preview window"
+                        title: "settings.appearance.blur".localized,
+                        description: "settings.appearance.blur.hint".localized
                     ) {
                         Toggle("", isOn: $settings.enableBlur)
                             .labelsHidden()
@@ -285,8 +294,8 @@ struct AppearanceSettingsView: View {
 
                     // Compact Mode
                     SettingRow(
-                        title: "Compact Mode",
-                        description: "Reduce spacing and padding for a more compact layout"
+                        title: "settings.appearance.compactMode".localized,
+                        description: "settings.appearance.compactMode.hint".localized
                     ) {
                         Toggle("", isOn: $settings.compactMode)
                             .labelsHidden()
@@ -300,7 +309,7 @@ struct AppearanceSettingsView: View {
                 // Reset Button
                 HStack {
                     Spacer()
-                    Button("Reset to Defaults") {
+                    Button("common.reset".localized) {
                         withAnimation {
                             settings.resetToDefaults()
                         }
@@ -324,7 +333,7 @@ struct DisplaySettingsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 // Header
-                Text("Display")
+                Text("settings.display.title".localized)
                     .font(.system(size: 20, weight: .semibold))
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
@@ -334,65 +343,65 @@ struct DisplaySettingsView: View {
                     .padding(.bottom, 20)
 
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Show in Preview Window")
+                    Text("settings.display.basicInfo".localized)
                         .font(.system(size: 13, weight: .semibold))
                         .padding(.horizontal, 20)
 
                     VStack(spacing: 0) {
-                        DisplayToggleRow(title: "File Icon", icon: "photo", isOn: $settings.showIcon)
+                        DisplayToggleRow(title: "settings.display.showIcon".localized, icon: "photo", isOn: $settings.showIcon)
                         Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "File Type", icon: "doc.text", isOn: $settings.showFileType)
+                        DisplayToggleRow(title: "settings.display.showFileType".localized, icon: "doc.text", isOn: $settings.showFileType)
                         Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "File Size", icon: "archivebox", isOn: $settings.showFileSize)
+                        DisplayToggleRow(title: "settings.display.showFileSize".localized, icon: "archivebox", isOn: $settings.showFileSize)
                         Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "Item Count (folders)", icon: "number", isOn: $settings.showItemCount)
+                        DisplayToggleRow(title: "settings.display.showItemCount".localized, icon: "number", isOn: $settings.showItemCount)
                         Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "Creation Date", icon: "calendar", isOn: $settings.showCreationDate)
+                        DisplayToggleRow(title: "settings.display.showCreationDate".localized, icon: "calendar", isOn: $settings.showCreationDate)
                         Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "Modification Date", icon: "clock", isOn: $settings.showModificationDate)
+                        DisplayToggleRow(title: "settings.display.showModificationDate".localized, icon: "clock", isOn: $settings.showModificationDate)
                         Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "Last Access Date", icon: "eye", isOn: $settings.showLastAccessDate)
+                        DisplayToggleRow(title: "settings.display.showLastAccessDate".localized, icon: "eye", isOn: $settings.showLastAccessDate)
                         Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "Permissions", icon: "lock.shield", isOn: $settings.showPermissions)
+                        DisplayToggleRow(title: "settings.display.showPermissions".localized, icon: "lock.shield", isOn: $settings.showPermissions)
                         Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "Owner", icon: "person", isOn: $settings.showOwner)
+                        DisplayToggleRow(title: "settings.display.showOwner".localized, icon: "person", isOn: $settings.showOwner)
                         Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "File Path", icon: "folder", isOn: $settings.showFilePath)
+                        DisplayToggleRow(title: "settings.display.showFilePath".localized, icon: "folder", isOn: $settings.showFilePath)
                     }
                     .background(Color(NSColor.controlBackgroundColor))
                     .cornerRadius(8)
                     .padding(.horizontal, 20)
 
                     // EXIF Section
-                    Text("Photo Information (EXIF)")
+                    Text("settings.display.exif".localized)
                         .font(.system(size: 13, weight: .semibold))
                         .padding(.horizontal, 20)
                         .padding(.top, 8)
 
                     VStack(spacing: 0) {
-                        DisplayToggleRow(title: "Show EXIF Data", icon: "camera.fill", isOn: $settings.showEXIF)
+                        DisplayToggleRow(title: "settings.display.exif.show".localized, icon: "camera.fill", isOn: $settings.showEXIF)
                         Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "Camera Model", icon: "camera", isOn: $settings.showEXIFCamera)
+                        DisplayToggleRow(title: "settings.display.exif.camera".localized, icon: "camera", isOn: $settings.showEXIFCamera)
                             .disabled(!settings.showEXIF)
                             .opacity(settings.showEXIF ? 1.0 : 0.5)
                         Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "Lens Model", icon: "camera.aperture", isOn: $settings.showEXIFLens)
+                        DisplayToggleRow(title: "settings.display.exif.lens".localized, icon: "camera.aperture", isOn: $settings.showEXIFLens)
                             .disabled(!settings.showEXIF)
                             .opacity(settings.showEXIF ? 1.0 : 0.5)
                         Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "Camera Settings", icon: "slider.horizontal.3", isOn: $settings.showEXIFSettings)
+                        DisplayToggleRow(title: "settings.display.exif.settings".localized, icon: "slider.horizontal.3", isOn: $settings.showEXIFSettings)
                             .disabled(!settings.showEXIF)
                             .opacity(settings.showEXIF ? 1.0 : 0.5)
                         Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "Date Taken", icon: "calendar.badge.clock", isOn: $settings.showEXIFDateTaken)
+                        DisplayToggleRow(title: "settings.display.exif.dateTaken".localized, icon: "calendar.badge.clock", isOn: $settings.showEXIFDateTaken)
                             .disabled(!settings.showEXIF)
                             .opacity(settings.showEXIF ? 1.0 : 0.5)
                         Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "Image Dimensions", icon: "square.resize", isOn: $settings.showEXIFDimensions)
+                        DisplayToggleRow(title: "settings.display.exif.dimensions".localized, icon: "square.resize", isOn: $settings.showEXIFDimensions)
                             .disabled(!settings.showEXIF)
                             .opacity(settings.showEXIF ? 1.0 : 0.5)
                         Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "GPS Location", icon: "location.fill", isOn: $settings.showEXIFGPS)
+                        DisplayToggleRow(title: "settings.display.exif.gps".localized, icon: "location.fill", isOn: $settings.showEXIFGPS)
                             .disabled(!settings.showEXIF)
                             .opacity(settings.showEXIF ? 1.0 : 0.5)
                     }
@@ -403,7 +412,7 @@ struct DisplaySettingsView: View {
                     HStack(spacing: 6) {
                         Image(systemName: "info.circle")
                             .font(.system(size: 11))
-                        Text("EXIF data only appears for image files with metadata")
+                        Text("settings.display.exif.hint".localized)
                             .font(.system(size: 11))
                     }
                     .foregroundColor(.secondary)
@@ -411,7 +420,7 @@ struct DisplaySettingsView: View {
                     .padding(.top, 8)
 
                     // Display Order Section
-                    Text("Display Order")
+                    Text("settings.display.order".localized)
                         .font(.system(size: 13, weight: .semibold))
                         .padding(.horizontal, 20)
                         .padding(.top, 16)
@@ -429,7 +438,7 @@ struct DisplaySettingsView: View {
                                     .foregroundColor(.accentColor)
                                     .frame(width: 20)
 
-                                Text(item.rawValue)
+                                Text(item.localizedName)
                                     .font(.system(size: 13))
 
                                 Spacer()
@@ -461,7 +470,7 @@ struct DisplaySettingsView: View {
                     HStack(spacing: 6) {
                         Image(systemName: "info.circle")
                             .font(.system(size: 11))
-                        Text("Drag items to reorder. EXIF moves as a group.")
+                        Text("settings.display.order.hint".localized)
                             .font(.system(size: 11))
                     }
                     .foregroundColor(.secondary)
@@ -474,7 +483,7 @@ struct DisplaySettingsView: View {
                 // Reset Button
                 HStack {
                     Spacer()
-                    Button("Reset to Defaults") {
+                    Button("common.reset".localized) {
                         withAnimation {
                             settings.resetToDefaults()
                         }
@@ -495,7 +504,7 @@ struct AboutSettingsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 // Header
-                Text("About")
+                Text("settings.tab.about".localized)
                     .font(.system(size: 20, weight: .semibold))
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
@@ -515,13 +524,13 @@ struct AboutSettingsView: View {
                     VStack(spacing: 8) {
                         Text("FinderHover")
                             .font(.system(size: 24, weight: .bold))
-                        Text("version 1.1")
+                        Text("settings.about.version".localized("1.1"))
                             .font(.system(size: 13))
                             .foregroundColor(.secondary)
                     }
 
                     // Description
-                    Text("Displays file information when hovering over files in Finder.")
+                    Text("settings.about.description".localized)
                         .font(.system(size: 13))
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
@@ -532,7 +541,7 @@ struct AboutSettingsView: View {
 
                     // Usage Instructions
                     VStack(alignment: .leading, spacing: 16) {
-                        Text("To use:")
+                        Text("settings.about.usage".localized)
                             .font(.system(size: 13, weight: .semibold))
 
                         VStack(alignment: .leading, spacing: 8) {
@@ -540,7 +549,7 @@ struct AboutSettingsView: View {
                                 Text("1.")
                                     .font(.system(size: 12))
                                     .foregroundColor(.secondary)
-                                Text("Grant Accessibility permissions in System Settings")
+                                Text("settings.about.usage.step1".localized)
                                     .font(.system(size: 12))
                                     .foregroundColor(.secondary)
                             }
@@ -549,7 +558,16 @@ struct AboutSettingsView: View {
                                 Text("2.")
                                     .font(.system(size: 12))
                                     .foregroundColor(.secondary)
-                                Text("Hover over any file in Finder to see its details")
+                                Text("settings.about.usage.step2".localized)
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.secondary)
+                            }
+
+                            HStack(alignment: .top, spacing: 8) {
+                                Text("3.")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.secondary)
+                                Text("settings.about.usage.step3".localized)
                                     .font(.system(size: 12))
                                     .foregroundColor(.secondary)
                             }
@@ -560,27 +578,15 @@ struct AboutSettingsView: View {
                     Divider()
                         .padding(.vertical, 8)
 
-                    // Features
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Features:")
-                            .font(.system(size: 13, weight: .semibold))
-
-                        VStack(alignment: .leading, spacing: 6) {
-                            FeatureRow(icon: "timer", text: "Customizable hover delay")
-                            FeatureRow(icon: "paintbrush", text: "Adjustable window appearance")
-                            FeatureRow(icon: "eye.slash", text: "Toggle information display")
-                            FeatureRow(icon: "location", text: "Smart positioning")
-                        }
-                    }
-                    .frame(maxWidth: 360)
-
-                    Divider()
-                        .padding(.vertical, 8)
-
                     // Credits
-                    Text("Created with SwiftUI")
-                        .font(.system(size: 11))
-                        .foregroundColor(.secondary)
+                    VStack(spacing: 8) {
+                        Text("settings.about.copyright".localized)
+                            .font(.system(size: 11))
+                            .foregroundColor(.secondary)
+                        Text("settings.about.opensource".localized)
+                            .font(.system(size: 11))
+                            .foregroundColor(.secondary)
+                    }
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal, 20)
