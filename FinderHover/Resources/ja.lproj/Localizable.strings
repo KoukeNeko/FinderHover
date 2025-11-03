@@ -1,5 +1,6 @@
 /* Menu Bar */
 "menu.enable" = "ホバープレビューを有効にする";
+"menu.disable" = "ホバープレビューを無効にする";
 "menu.settings" = "設定...";
 "menu.about" = "FinderHoverについて";
 "menu.quit" = "終了";
