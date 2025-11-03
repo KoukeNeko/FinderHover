@@ -60,6 +60,27 @@
 "settings.display.exif.gps" = "GPS 位置";
 "settings.display.exif.hint" = "EXIF データはメタデータを含む画像ファイルにのみ表示されます";
 
+"settings.display.video" = "動画情報";
+"settings.display.video.show" = "動画メタデータを表示";
+"settings.display.video.duration" = "再生時間";
+"settings.display.video.resolution" = "解像度";
+"settings.display.video.codec" = "コーデック";
+"settings.display.video.framerate" = "フレームレート";
+"settings.display.video.bitrate" = "ビットレート";
+"settings.display.video.hint" = "動画メタデータは動画ファイルにのみ表示されます";
+
+"settings.display.audio" = "オーディオ情報";
+"settings.display.audio.show" = "オーディオメタデータを表示";
+"settings.display.audio.title" = "タイトル";
+"settings.display.audio.artist" = "アーティスト";
+"settings.display.audio.album" = "アルバム";
+"settings.display.audio.genre" = "ジャンル";
+"settings.display.audio.year" = "年";
+"settings.display.audio.duration" = "再生時間";
+"settings.display.audio.bitrate" = "ビットレート";
+"settings.display.audio.samplerate" = "サンプルレート";
+"settings.display.audio.hint" = "オーディオメタデータは ID3 タグを含むオーディオファイルにのみ表示されます";
+
 "settings.display.order" = "表示順序";
 "settings.display.order.hint" = "項目をドラッグして並べ替えます。EXIF はグループとして移動します。";
 

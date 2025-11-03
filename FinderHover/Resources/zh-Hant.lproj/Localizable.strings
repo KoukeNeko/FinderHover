@@ -60,6 +60,27 @@
 "settings.display.exif.gps" = "GPS 位置";
 "settings.display.exif.hint" = "EXIF 資料僅顯示於包含中繼資料的影像檔案";
 
+"settings.display.video" = "影片資訊";
+"settings.display.video.show" = "顯示影片中繼資料";
+"settings.display.video.duration" = "時長";
+"settings.display.video.resolution" = "解析度";
+"settings.display.video.codec" = "編碼";
+"settings.display.video.framerate" = "影格率";
+"settings.display.video.bitrate" = "位元率";
+"settings.display.video.hint" = "影片中繼資料僅顯示於影片檔案";
+
+"settings.display.audio" = "音訊資訊";
+"settings.display.audio.show" = "顯示音訊中繼資料";
+"settings.display.audio.title" = "標題";
+"settings.display.audio.artist" = "演出者";
+"settings.display.audio.album" = "專輯";
+"settings.display.audio.genre" = "類型";
+"settings.display.audio.year" = "年份";
+"settings.display.audio.duration" = "時長";
+"settings.display.audio.bitrate" = "位元率";
+"settings.display.audio.samplerate" = "取樣率";
+"settings.display.audio.hint" = "音訊中繼資料僅顯示於包含 ID3 標籤的音訊檔案";
+
 "settings.display.order" = "顯示順序";
 "settings.display.order.hint" = "拖曳項目以重新排序。EXIF 作為群組移動。";
 
