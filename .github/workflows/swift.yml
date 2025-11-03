@@ -17,6 +17,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build
-      run: swift build -v
+      run: xcodebuild -project FinderHover.xcodeproj -scheme FinderHover -configuration Release build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
     - name: Run tests
-      run: swift test -v
+      run: xcodebuild test -project FinderHover.xcodeproj -scheme FinderHover -destination 'platform=macOS'

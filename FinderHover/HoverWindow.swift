@@ -42,6 +42,8 @@ class HoverWindowController: NSWindowController {
         effectView.wantsLayer = true
         effectView.layer?.cornerRadius = 10
         effectView.layer?.masksToBounds = true
+        effectView.layer?.borderWidth = 0.5
+        effectView.layer?.borderColor = NSColor.white.withAlphaComponent(0.2).cgColor
 
         // Update content
         let hostingView = NSHostingView(rootView: HoverContentView(fileInfo: fileInfo))
@@ -179,21 +181,6 @@ struct HoverContentView: View {
         .frame(minWidth: 320, maxWidth: settings.windowMaxWidth)
         .fixedSize(horizontal: false, vertical: true)
         .background(Color.clear)
-        .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            Color.white.opacity(0.3),
-                            Color.gray.opacity(0.2)
-                        ]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ),
-                    lineWidth: 1.0
-                )
-        )
-        .shadow(color: .black.opacity(0.3), radius: 15, x: 0, y: 5)
     }
 
     private func getFileTypeDescription() -> String {
