@@ -1,5 +1,6 @@
 /* Menu Bar */
 "menu.enable" = "Enable Hover Preview";
+"menu.disable" = "Disable Hover Preview";
 "menu.settings" = "Settings...";
 "menu.about" = "About FinderHover";
 "menu.quit" = "Quit";

@@ -87,7 +87,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else {
             sender.state = .on
             hoverManager?.isEnabled = true
-            sender.title = "menu.enable".localized
+            sender.title = "menu.disable".localized
         }
     }
 
