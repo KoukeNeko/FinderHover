@@ -122,6 +122,7 @@
 /* Language Settings */
 "settings.language" = "言語";
 "settings.language.description" = "アプリの言語を変更（再起動が必要）";
+"settings.language.restart" = "再起動";
 "settings.language.system" = "システムのデフォルト";
 "settings.language.english" = "English";
 "settings.language.chinese" = "繁體中文";

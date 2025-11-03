@@ -122,6 +122,7 @@
 /* Language Settings */
 "settings.language" = "Language";
 "settings.language.description" = "Change app language (requires restart)";
+"settings.language.restart" = "Restart App";
 "settings.language.system" = "System Default";
 "settings.language.english" = "English";
 "settings.language.chinese" = "繁體中文";
