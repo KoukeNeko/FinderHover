@@ -34,33 +34,46 @@ class HoverWindowController: NSWindowController {
 
         let settings = AppSettings.shared
 
-        // Create visual effect view for blur
-        let effectView = NSVisualEffectView()
-        effectView.material = .hudWindow
-        effectView.state = .active
-        effectView.blendingMode = .behindWindow
-        effectView.wantsLayer = true
-        effectView.layer?.cornerRadius = 10
-        effectView.layer?.masksToBounds = true
-        effectView.layer?.borderWidth = 0.5
-        effectView.layer?.borderColor = NSColor.white.withAlphaComponent(0.2).cgColor
-
-        // Update content
+        // Create content view
         let hostingView = NSHostingView(rootView: HoverContentView(fileInfo: fileInfo))
-        hostingView.frame = effectView.bounds
-        hostingView.autoresizingMask = [.width, .height]
 
-        // Add hosting view to effect view
-        effectView.addSubview(hostingView)
-        window.contentView = effectView
+        // Check if blur is enabled
+        if let material = settings.blurMaterial.material {
+            // Create visual effect view for blur
+            let effectView = NSVisualEffectView()
+            effectView.material = material
+            effectView.state = .active
+            effectView.blendingMode = .behindWindow
+            effectView.wantsLayer = true
+            effectView.layer?.cornerRadius = 10
+            effectView.layer?.masksToBounds = true
+            effectView.layer?.borderWidth = 0.5
+            effectView.layer?.borderColor = NSColor.white.withAlphaComponent(0.2).cgColor
 
-        self.visualEffectView = effectView
+            hostingView.frame = effectView.bounds
+            hostingView.autoresizingMask = [.width, .height]
 
-        // Calculate proper window size from content
-        hostingView.invalidateIntrinsicContentSize()
-        let fittingSize = hostingView.fittingSize
-        window.setContentSize(fittingSize)
-        effectView.frame = NSRect(origin: .zero, size: fittingSize)
+            // Add hosting view to effect view
+            effectView.addSubview(hostingView)
+            window.contentView = effectView
+            self.visualEffectView = effectView
+
+            // Calculate proper window size from content
+            hostingView.invalidateIntrinsicContentSize()
+            let fittingSize = hostingView.fittingSize
+            window.setContentSize(fittingSize)
+            effectView.frame = NSRect(origin: .zero, size: fittingSize)
+        } else {
+            // No blur - use solid background
+            window.contentView = hostingView
+            window.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(settings.windowOpacity)
+            window.isOpaque = false
+
+            // Calculate proper window size from content
+            hostingView.invalidateIntrinsicContentSize()
+            let fittingSize = hostingView.fittingSize
+            window.setContentSize(fittingSize)
+        }
 
         // Position window near mouse cursor with smart positioning
         let offsetX: CGFloat = settings.windowOffsetX
@@ -180,7 +193,20 @@ struct HoverContentView: View {
         .padding(14)
         .frame(minWidth: 320, maxWidth: settings.windowMaxWidth)
         .fixedSize(horizontal: false, vertical: true)
-        .background(Color.clear)
+        .background(
+            Group {
+                if settings.blurMaterial.material == nil {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color(NSColor.controlBackgroundColor).opacity(settings.windowOpacity))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.white.opacity(0.2), lineWidth: 0.5)
+                        )
+                } else {
+                    Color.clear
+                }
+            }
+        )
     }
 
     private func getFileTypeDescription() -> String {

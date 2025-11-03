@@ -237,6 +237,22 @@ struct AppearanceSettingsView: View {
                                 .frame(width: 45, alignment: .trailing)
                         }
                     }
+
+                    Divider()
+
+                    // Blur Material
+                    SettingRow(
+                        title: "Blur Effect",
+                        description: "Background blur style for the preview window"
+                    ) {
+                        Picker("", selection: $settings.blurMaterial) {
+                            ForEach(BlurMaterial.allCases, id: \.self) { material in
+                                Text(material.rawValue).tag(material)
+                            }
+                        }
+                        .labelsHidden()
+                        .frame(width: 140)
+                    }
                 }
                 .padding(.horizontal, 20)
 
