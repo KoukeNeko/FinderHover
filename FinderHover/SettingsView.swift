@@ -109,6 +109,18 @@ struct BehaviorSettingsView: View {
 
                     Divider()
 
+                    // Launch at Login
+                    SettingRow(
+                        title: "Launch at Login",
+                        description: "Automatically start FinderHover when you log in"
+                    ) {
+                        Toggle("", isOn: $settings.launchAtLogin)
+                            .labelsHidden()
+                            .toggleStyle(.switch)
+                    }
+
+                    Divider()
+
                     // Window Position
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Window Position")

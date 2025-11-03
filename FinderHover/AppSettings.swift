@@ -20,6 +20,12 @@ class AppSettings: ObservableObject {
     @Published var autoHideEnabled: Bool {
         didSet { UserDefaults.standard.set(autoHideEnabled, forKey: "autoHideEnabled") }
     }
+    @Published var launchAtLogin: Bool {
+        didSet {
+            UserDefaults.standard.set(launchAtLogin, forKey: "launchAtLogin")
+            LaunchAtLogin.setEnabled(launchAtLogin)
+        }
+    }
 
     // Appearance
     @Published var windowOpacity: Double {
@@ -70,6 +76,7 @@ class AppSettings: ObservableObject {
         // Load values from UserDefaults
         self.hoverDelay = UserDefaults.standard.object(forKey: "hoverDelay") as? Double ?? 0.1
         self.autoHideEnabled = UserDefaults.standard.object(forKey: "autoHideEnabled") as? Bool ?? true
+        self.launchAtLogin = UserDefaults.standard.object(forKey: "launchAtLogin") as? Bool ?? false
         self.windowOpacity = UserDefaults.standard.object(forKey: "windowOpacity") as? Double ?? 0.98
         self.windowMaxWidth = UserDefaults.standard.object(forKey: "windowMaxWidth") as? Double ?? 400
         self.fontSize = UserDefaults.standard.object(forKey: "fontSize") as? Double ?? 11
@@ -88,6 +95,7 @@ class AppSettings: ObservableObject {
     func resetToDefaults() {
         hoverDelay = 0.1
         autoHideEnabled = true
+        launchAtLogin = false
         windowOpacity = 0.98
         windowMaxWidth = 400
         fontSize = 11
