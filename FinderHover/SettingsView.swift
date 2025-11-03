@@ -361,10 +361,47 @@ struct DisplaySettingsView: View {
                     .cornerRadius(8)
                     .padding(.horizontal, 20)
 
+                    // EXIF Section
+                    Text("Photo Information (EXIF)")
+                        .font(.system(size: 13, weight: .semibold))
+                        .padding(.horizontal, 20)
+                        .padding(.top, 8)
+
+                    VStack(spacing: 0) {
+                        DisplayToggleRow(title: "Show EXIF Data", icon: "camera.fill", isOn: $settings.showEXIF)
+                        Divider().padding(.leading, 60)
+                        DisplayToggleRow(title: "Camera Model", icon: "camera", isOn: $settings.showEXIFCamera)
+                            .disabled(!settings.showEXIF)
+                            .opacity(settings.showEXIF ? 1.0 : 0.5)
+                        Divider().padding(.leading, 60)
+                        DisplayToggleRow(title: "Lens Model", icon: "camera.aperture", isOn: $settings.showEXIFLens)
+                            .disabled(!settings.showEXIF)
+                            .opacity(settings.showEXIF ? 1.0 : 0.5)
+                        Divider().padding(.leading, 60)
+                        DisplayToggleRow(title: "Camera Settings", icon: "slider.horizontal.3", isOn: $settings.showEXIFSettings)
+                            .disabled(!settings.showEXIF)
+                            .opacity(settings.showEXIF ? 1.0 : 0.5)
+                        Divider().padding(.leading, 60)
+                        DisplayToggleRow(title: "Date Taken", icon: "calendar.badge.clock", isOn: $settings.showEXIFDateTaken)
+                            .disabled(!settings.showEXIF)
+                            .opacity(settings.showEXIF ? 1.0 : 0.5)
+                        Divider().padding(.leading, 60)
+                        DisplayToggleRow(title: "Image Dimensions", icon: "square.resize", isOn: $settings.showEXIFDimensions)
+                            .disabled(!settings.showEXIF)
+                            .opacity(settings.showEXIF ? 1.0 : 0.5)
+                        Divider().padding(.leading, 60)
+                        DisplayToggleRow(title: "GPS Location", icon: "location.fill", isOn: $settings.showEXIFGPS)
+                            .disabled(!settings.showEXIF)
+                            .opacity(settings.showEXIF ? 1.0 : 0.5)
+                    }
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(8)
+                    .padding(.horizontal, 20)
+
                     HStack(spacing: 6) {
                         Image(systemName: "info.circle")
                             .font(.system(size: 11))
-                        Text("At least one item must be enabled")
+                        Text("EXIF data only appears for image files with metadata")
                             .font(.system(size: 11))
                     }
                     .foregroundColor(.secondary)

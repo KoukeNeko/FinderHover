@@ -254,6 +254,51 @@ struct HoverContentView: View {
                 }
             }
 
+            // EXIF information section (only for images with EXIF data)
+            if settings.showEXIF, let exif = fileInfo.exifData {
+                Divider()
+                    .background(Color.gray.opacity(0.3))
+                    .padding(.top, settings.compactMode ? 2 : 4)
+
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "camera.fill")
+                            .font(.system(size: settings.fontSize))
+                            .foregroundColor(.accentColor)
+                        Text("Photo Information")
+                            .font(.system(size: settings.fontSize, weight: .semibold))
+                    }
+
+                    if settings.showEXIFCamera, let camera = exif.camera {
+                        DetailRow(icon: "camera", label: "Camera", value: camera, fontSize: settings.fontSize)
+                    }
+                    if settings.showEXIFLens, let lens = exif.lens {
+                        DetailRow(icon: "camera.aperture", label: "Lens", value: lens, fontSize: settings.fontSize)
+                    }
+                    if settings.showEXIFSettings {
+                        let settingsComponents = [
+                            exif.focalLength,
+                            exif.aperture,
+                            exif.shutterSpeed,
+                            exif.iso
+                        ].compactMap { $0 }
+
+                        if !settingsComponents.isEmpty {
+                            DetailRow(icon: "slider.horizontal.3", label: "Settings", value: settingsComponents.joined(separator: "  "), fontSize: settings.fontSize)
+                        }
+                    }
+                    if settings.showEXIFDateTaken, let date = exif.dateTaken {
+                        DetailRow(icon: "calendar.badge.clock", label: "Taken", value: date, fontSize: settings.fontSize)
+                    }
+                    if settings.showEXIFDimensions, let size = exif.imageSize {
+                        DetailRow(icon: "square.resize", label: "Dimensions", value: size, fontSize: settings.fontSize)
+                    }
+                    if settings.showEXIFGPS, let gps = exif.gpsLocation {
+                        DetailRow(icon: "location.fill", label: "Location", value: gps, fontSize: settings.fontSize)
+                    }
+                }
+            }
+
             // File path section
             if settings.showFilePath {
                 HStack(alignment: .top, spacing: 8) {

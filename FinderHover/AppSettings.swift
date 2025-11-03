@@ -78,6 +78,29 @@ class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(showItemCount, forKey: "showItemCount") }
     }
 
+    // EXIF information display
+    @Published var showEXIF: Bool {
+        didSet { UserDefaults.standard.set(showEXIF, forKey: "showEXIF") }
+    }
+    @Published var showEXIFCamera: Bool {
+        didSet { UserDefaults.standard.set(showEXIFCamera, forKey: "showEXIFCamera") }
+    }
+    @Published var showEXIFLens: Bool {
+        didSet { UserDefaults.standard.set(showEXIFLens, forKey: "showEXIFLens") }
+    }
+    @Published var showEXIFSettings: Bool {
+        didSet { UserDefaults.standard.set(showEXIFSettings, forKey: "showEXIFSettings") }
+    }
+    @Published var showEXIFDateTaken: Bool {
+        didSet { UserDefaults.standard.set(showEXIFDateTaken, forKey: "showEXIFDateTaken") }
+    }
+    @Published var showEXIFDimensions: Bool {
+        didSet { UserDefaults.standard.set(showEXIFDimensions, forKey: "showEXIFDimensions") }
+    }
+    @Published var showEXIFGPS: Bool {
+        didSet { UserDefaults.standard.set(showEXIFGPS, forKey: "showEXIFGPS") }
+    }
+
     // Window behavior
     @Published var followCursor: Bool {
         didSet { UserDefaults.standard.set(followCursor, forKey: "followCursor") }
@@ -109,6 +132,13 @@ class AppSettings: ObservableObject {
         self.showPermissions = UserDefaults.standard.object(forKey: "showPermissions") as? Bool ?? false
         self.showOwner = UserDefaults.standard.object(forKey: "showOwner") as? Bool ?? false
         self.showItemCount = UserDefaults.standard.object(forKey: "showItemCount") as? Bool ?? true
+        self.showEXIF = UserDefaults.standard.object(forKey: "showEXIF") as? Bool ?? true
+        self.showEXIFCamera = UserDefaults.standard.object(forKey: "showEXIFCamera") as? Bool ?? true
+        self.showEXIFLens = UserDefaults.standard.object(forKey: "showEXIFLens") as? Bool ?? true
+        self.showEXIFSettings = UserDefaults.standard.object(forKey: "showEXIFSettings") as? Bool ?? true
+        self.showEXIFDateTaken = UserDefaults.standard.object(forKey: "showEXIFDateTaken") as? Bool ?? true
+        self.showEXIFDimensions = UserDefaults.standard.object(forKey: "showEXIFDimensions") as? Bool ?? true
+        self.showEXIFGPS = UserDefaults.standard.object(forKey: "showEXIFGPS") as? Bool ?? false
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? true
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? 15
         self.windowOffsetY = UserDefaults.standard.object(forKey: "windowOffsetY") as? Double ?? 15
@@ -133,6 +163,13 @@ class AppSettings: ObservableObject {
         showPermissions = false
         showOwner = false
         showItemCount = true
+        showEXIF = true
+        showEXIFCamera = true
+        showEXIFLens = true
+        showEXIFSettings = true
+        showEXIFDateTaken = true
+        showEXIFDimensions = true
+        showEXIFGPS = false
         followCursor = true
         windowOffsetX = 15
         windowOffsetY = 15
