@@ -9,6 +9,7 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
 </p>
 
 ## ✨ Features
+![A6700471](https://github.com/user-attachments/assets/455d868a-7e7d-4e8c-84bb-e032a6feffbf)
 
 
 ### 🎯 Smart Hover Preview
