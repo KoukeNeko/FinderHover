@@ -44,16 +44,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func setupMenuBar() {
         let menu = NSMenu()
 
-        // Status display
-        let statusMenuItem = NSMenuItem(title: "FinderHover Active", action: nil, keyEquivalent: "")
-        statusMenuItem.isEnabled = false
-        menu.addItem(statusMenuItem)
-
         menu.addItem(NSMenuItem.separator())
 
         // Toggle enable/disable
         let toggleItem = NSMenuItem(
-            title: "Enable Hover Preview",
+            title: "menu.enable".localized,
             action: #selector(toggleHover),
             keyEquivalent: "e"
         )
@@ -65,7 +60,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Settings
         menu.addItem(NSMenuItem(
-            title: "Settings...",
+            title: "menu.settings".localized,
             action: #selector(showSettings),
             keyEquivalent: ","
         ))
@@ -74,7 +69,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Quit
         menu.addItem(NSMenuItem(
-            title: "Quit",
+            title: "menu.quit".localized,
             action: #selector(NSApplication.terminate(_:)),
             keyEquivalent: "q"
         ))
@@ -88,11 +83,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if sender.state == .on {
             sender.state = .off
             hoverManager?.isEnabled = false
-            sender.title = "Enable Hover Preview"
+            sender.title = "menu.enable".localized
         } else {
             sender.state = .on
             hoverManager?.isEnabled = true
-            sender.title = "Disable Hover Preview"
+            sender.title = "menu.disable".localized
         }
     }
 

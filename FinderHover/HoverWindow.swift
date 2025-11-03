@@ -215,7 +215,7 @@ struct HoverContentView: View {
                         .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
-                    Text(fileInfo.isDirectory ? "Folder" : (fileInfo.fileExtension?.uppercased() ?? "File"))
+                    Text(fileInfo.isDirectory ? "hover.fileType.folder".localized : (fileInfo.fileExtension?.uppercased() ?? "hover.fileType.file".localized))
                         .font(.system(size: settings.fontSize - 1))
                         .foregroundColor(.secondary)
                 }
@@ -244,22 +244,23 @@ struct HoverContentView: View {
         case .fileType:
             if settings.showFileType {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
-                    DetailRow(icon: "doc.text", label: "Type", value: getFileTypeDescription(), fontSize: settings.fontSize)
+                    DetailRow(icon: "doc.text", label: "hover.label.type".localized, value: getFileTypeDescription(), fontSize: settings.fontSize)
                 }
             }
 
         case .fileSize:
             if settings.showFileSize {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
-                    DetailRow(icon: "archivebox", label: "Size", value: fileInfo.formattedSize, fontSize: settings.fontSize)
+                    DetailRow(icon: "archivebox", label: "hover.label.size".localized, value: fileInfo.formattedSize, fontSize: settings.fontSize)
                 }
             }
 
         case .itemCount:
             if settings.showItemCount && fileInfo.isDirectory {
                 if let count = fileInfo.itemCount {
+                    let itemText = count == 1 ? "common.item".localized : "common.items".localized
                     VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
-                        DetailRow(icon: "number", label: "Items", value: "\(count) item\(count == 1 ? "" : "s")", fontSize: settings.fontSize)
+                        DetailRow(icon: "number", label: "hover.label.items".localized, value: "\(count) \(itemText)", fontSize: settings.fontSize)
                     }
                 }
             }
@@ -267,35 +268,35 @@ struct HoverContentView: View {
         case .creationDate:
             if settings.showCreationDate {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
-                    DetailRow(icon: "calendar", label: "Created", value: fileInfo.formattedCreationDate, fontSize: settings.fontSize)
+                    DetailRow(icon: "calendar", label: "hover.label.created".localized, value: fileInfo.formattedCreationDate, fontSize: settings.fontSize)
                 }
             }
 
         case .modificationDate:
             if settings.showModificationDate {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
-                    DetailRow(icon: "clock", label: "Modified", value: fileInfo.formattedModificationDate, fontSize: settings.fontSize)
+                    DetailRow(icon: "clock", label: "hover.label.modified".localized, value: fileInfo.formattedModificationDate, fontSize: settings.fontSize)
                 }
             }
 
         case .lastAccessDate:
             if settings.showLastAccessDate {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
-                    DetailRow(icon: "eye", label: "Accessed", value: fileInfo.formattedLastAccessDate, fontSize: settings.fontSize)
+                    DetailRow(icon: "eye", label: "hover.label.accessed".localized, value: fileInfo.formattedLastAccessDate, fontSize: settings.fontSize)
                 }
             }
 
         case .permissions:
             if settings.showPermissions {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
-                    DetailRow(icon: "lock.shield", label: "Mode", value: fileInfo.formattedPermissions, fontSize: settings.fontSize)
+                    DetailRow(icon: "lock.shield", label: "hover.label.mode".localized, value: fileInfo.formattedPermissions, fontSize: settings.fontSize)
                 }
             }
 
         case .owner:
             if settings.showOwner {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
-                    DetailRow(icon: "person", label: "Owner", value: fileInfo.owner, fontSize: settings.fontSize)
+                    DetailRow(icon: "person", label: "hover.label.owner".localized, value: fileInfo.owner, fontSize: settings.fontSize)
                 }
             }
 
@@ -307,14 +308,14 @@ struct HoverContentView: View {
                         .padding(.top, settings.compactMode ? 2 : 4)
                         .padding(.bottom, settings.compactMode ? 2 : 4)
 
-                    Text("Photo Information")
+                    Text("hover.exif.title".localized)
                         .font(.system(size: settings.fontSize, weight: .semibold))
 
                     if settings.showEXIFCamera, let camera = exif.camera {
-                        DetailRow(icon: "camera", label: "Camera", value: camera, fontSize: settings.fontSize)
+                        DetailRow(icon: "camera", label: "hover.exif.camera".localized, value: camera, fontSize: settings.fontSize)
                     }
                     if settings.showEXIFLens, let lens = exif.lens {
-                        DetailRow(icon: "camera.aperture", label: "Lens", value: lens, fontSize: settings.fontSize)
+                        DetailRow(icon: "camera.aperture", label: "hover.exif.lens".localized, value: lens, fontSize: settings.fontSize)
                     }
                     if settings.showEXIFSettings {
                         let settingsComponents = [
@@ -325,17 +326,17 @@ struct HoverContentView: View {
                         ].compactMap { $0 }
 
                         if !settingsComponents.isEmpty {
-                            DetailRow(icon: "slider.horizontal.3", label: "Settings", value: settingsComponents.joined(separator: "  "), fontSize: settings.fontSize)
+                            DetailRow(icon: "slider.horizontal.3", label: "hover.exif.settings".localized, value: settingsComponents.joined(separator: "  "), fontSize: settings.fontSize)
                         }
                     }
                     if settings.showEXIFDateTaken, let date = exif.dateTaken {
-                        DetailRow(icon: "calendar.badge.clock", label: "Taken", value: date, fontSize: settings.fontSize)
+                        DetailRow(icon: "calendar.badge.clock", label: "hover.exif.taken".localized, value: date, fontSize: settings.fontSize)
                     }
                     if settings.showEXIFDimensions, let size = exif.imageSize {
-                        DetailRow(icon: "square.resize", label: "Dimensions", value: size, fontSize: settings.fontSize)
+                        DetailRow(icon: "square.resize", label: "hover.exif.dimensions".localized, value: size, fontSize: settings.fontSize)
                     }
                     if settings.showEXIFGPS, let gps = exif.gpsLocation {
-                        DetailRow(icon: "location.fill", label: "Location", value: gps, fontSize: settings.fontSize)
+                        DetailRow(icon: "location.fill", label: "hover.exif.gps".localized, value: gps, fontSize: settings.fontSize)
                     }
 
                     Divider()
@@ -353,7 +354,7 @@ struct HoverContentView: View {
                             .foregroundColor(.secondary)
                             .frame(width: 14, alignment: .center)
 
-                        Text("File Path:")
+                        Text("hover.label.location".localized + ":")
                             .font(.system(size: settings.fontSize))
                             .foregroundColor(.secondary)
                             .frame(width: 65, alignment: .trailing)

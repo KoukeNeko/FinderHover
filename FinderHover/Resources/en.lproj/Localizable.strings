@@ -1,0 +1,129 @@
+/* Menu Bar */
+"menu.enable" = "Enable Hover Preview";
+"menu.disable" = "Disable Hover Preview";
+"menu.settings" = "Settings...";
+"menu.about" = "About FinderHover";
+"menu.quit" = "Quit";
+
+/* Settings - Tabs */
+"settings.tab.behavior" = "Behavior";
+"settings.tab.appearance" = "Appearance";
+"settings.tab.display" = "Display";
+"settings.tab.about" = "About";
+
+/* Settings - Behavior */
+"settings.behavior.title" = "Behavior";
+"settings.behavior.hoverDelay" = "Hover Delay";
+"settings.behavior.hoverDelay.seconds" = "%.1f seconds";
+"settings.behavior.autoHide" = "Auto-hide when mouse moves away";
+"settings.behavior.launchAtLogin" = "Launch at login";
+"settings.behavior.windowPosition" = "Window Position";
+"settings.behavior.horizontalOffset" = "Horizontal Offset";
+"settings.behavior.verticalOffset" = "Vertical Offset";
+"settings.behavior.pixels" = "%d pixels";
+
+/* Settings - Appearance */
+"settings.appearance.title" = "Appearance";
+"settings.appearance.blur" = "Enable blur effect";
+"settings.appearance.blur.hint" = "Native macOS background blur";
+"settings.appearance.opacity" = "Window Opacity";
+"settings.appearance.opacity.hint" = "Only available when blur is disabled";
+"settings.appearance.opacity.percent" = "%d%%";
+"settings.appearance.compactMode" = "Compact mode";
+"settings.appearance.compactMode.hint" = "Reduced spacing and padding";
+"settings.appearance.maxWidth" = "Maximum Width";
+"settings.appearance.maxWidth.pixels" = "%d pixels";
+"settings.appearance.fontSize" = "Font Size";
+"settings.appearance.fontSize.points" = "%.0f points";
+
+/* Settings - Display */
+"settings.display.title" = "Display";
+"settings.display.basicInfo" = "Basic Information";
+"settings.display.showIcon" = "File Icon";
+"settings.display.showFileType" = "File Type";
+"settings.display.showFileSize" = "File Size";
+"settings.display.showItemCount" = "Item Count (for folders)";
+"settings.display.showCreationDate" = "Creation Date";
+"settings.display.showModificationDate" = "Modification Date";
+"settings.display.showLastAccessDate" = "Last Access Date";
+"settings.display.showPermissions" = "Permissions";
+"settings.display.showOwner" = "Owner";
+"settings.display.showFilePath" = "File Path";
+
+"settings.display.exif" = "Photo Information (EXIF)";
+"settings.display.exif.show" = "Show EXIF Data";
+"settings.display.exif.camera" = "Camera Model";
+"settings.display.exif.lens" = "Lens Model";
+"settings.display.exif.settings" = "Camera Settings";
+"settings.display.exif.dateTaken" = "Date Taken";
+"settings.display.exif.dimensions" = "Image Dimensions";
+"settings.display.exif.gps" = "GPS Location";
+"settings.display.exif.hint" = "EXIF data only appears for image files with metadata";
+
+"settings.display.order" = "Display Order";
+"settings.display.order.hint" = "Drag items to reorder. EXIF moves as a group.";
+
+/* Settings - About */
+"settings.about.version" = "version %@";
+"settings.about.description" = "Displays file information when hovering over files in Finder.";
+"settings.about.usage" = "To use:";
+"settings.about.usage.step1" = "Select a file in Finder (click on it)";
+"settings.about.usage.step2" = "Hover your mouse over the selected file";
+"settings.about.usage.step3" = "A preview window appears with file details";
+"settings.about.copyright" = "© 2024 FinderHover";
+"settings.about.opensource" = "Open Source Project";
+
+/* Display Items */
+"displayItem.fileType" = "File Type";
+"displayItem.fileSize" = "File Size";
+"displayItem.itemCount" = "Item Count";
+"displayItem.creationDate" = "Creation Date";
+"displayItem.modificationDate" = "Modification Date";
+"displayItem.lastAccessDate" = "Last Access Date";
+"displayItem.permissions" = "Permissions";
+"displayItem.owner" = "Owner";
+"displayItem.exif" = "Photo Information (EXIF)";
+"displayItem.filePath" = "File Path";
+
+/* Hover Window */
+"hover.fileType.folder" = "Folder";
+"hover.fileType.file" = "File";
+"hover.label.type" = "Type";
+"hover.label.size" = "Size";
+"hover.label.items" = "Items";
+"hover.label.created" = "Created";
+"hover.label.modified" = "Modified";
+"hover.label.accessed" = "Accessed";
+"hover.label.mode" = "Mode";
+"hover.label.owner" = "Owner";
+"hover.label.location" = "File Path";
+"hover.exif.title" = "Photo Information";
+"hover.exif.camera" = "Camera";
+"hover.exif.lens" = "Lens";
+"hover.exif.settings" = "Settings";
+"hover.exif.taken" = "Taken";
+"hover.exif.dimensions" = "Dimensions";
+"hover.exif.gps" = "Location";
+
+/* Common */
+"common.reset" = "Reset to Defaults";
+"common.item" = "item";
+"common.items" = "items";
+
+/* Settings Descriptions */
+"settings.behavior.hoverDelay.description" = "Time to wait before showing preview window";
+"settings.behavior.autoHide.description" = "Immediately hide window when mouse moves away from file";
+"settings.behavior.launchAtLogin.description" = "Automatically start FinderHover when you log in";
+"settings.behavior.windowPosition.description" = "Distance from cursor to preview window";
+"settings.appearance.opacity.description" = "Transparency level of the preview window";
+"settings.appearance.maxWidth.description" = "Maximum width of the preview window";
+"settings.appearance.fontSize.description" = "Size of text in the preview window";
+
+/* Language Settings */
+"settings.language" = "Language";
+"settings.language.description" = "Change app language (requires restart)";
+"settings.language.restart" = "Restart App";
+"settings.language.system" = "System Default";
+"settings.language.english" = "English";
+"settings.language.chinese" = "繁體中文";
+"settings.language.japanese" = "日本語";

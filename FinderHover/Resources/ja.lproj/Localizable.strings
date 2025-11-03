@@ -1,0 +1,129 @@
+/* Menu Bar */
+"menu.enable" = "ホバープレビューを有効にする";
+"menu.disable" = "ホバープレビューを無効にする";
+"menu.settings" = "設定...";
+"menu.about" = "FinderHoverについて";
+"menu.quit" = "終了";
+
+/* Settings - Tabs */
+"settings.tab.behavior" = "動作";
+"settings.tab.appearance" = "外観";
+"settings.tab.display" = "表示";
+"settings.tab.about" = "情報";
+
+/* Settings - Behavior */
+"settings.behavior.title" = "動作";
+"settings.behavior.hoverDelay" = "ホバー遅延";
+"settings.behavior.hoverDelay.seconds" = "%.1f 秒";
+"settings.behavior.autoHide" = "マウスが離れたら自動的に隠す";
+"settings.behavior.launchAtLogin" = "ログイン時に起動";
+"settings.behavior.windowPosition" = "ウィンドウ位置";
+"settings.behavior.horizontalOffset" = "水平オフセット";
+"settings.behavior.verticalOffset" = "垂直オフセット";
+"settings.behavior.pixels" = "%d ピクセル";
+
+/* Settings - Appearance */
+"settings.appearance.title" = "外観";
+"settings.appearance.blur" = "ぼかし効果を有効にする";
+"settings.appearance.blur.hint" = "ネイティブ macOS 背景ぼかし";
+"settings.appearance.opacity" = "ウィンドウの不透明度";
+"settings.appearance.opacity.hint" = "ぼかしが無効の場合のみ利用可能";
+"settings.appearance.opacity.percent" = "%d%%";
+"settings.appearance.compactMode" = "コンパクトモード";
+"settings.appearance.compactMode.hint" = "間隔と余白を縮小";
+"settings.appearance.maxWidth" = "最大幅";
+"settings.appearance.maxWidth.pixels" = "%d ピクセル";
+"settings.appearance.fontSize" = "フォントサイズ";
+"settings.appearance.fontSize.points" = "%.0f ポイント";
+
+/* Settings - Display */
+"settings.display.title" = "表示";
+"settings.display.basicInfo" = "基本情報";
+"settings.display.showIcon" = "ファイルアイコン";
+"settings.display.showFileType" = "ファイルタイプ";
+"settings.display.showFileSize" = "ファイルサイズ";
+"settings.display.showItemCount" = "項目数（フォルダ）";
+"settings.display.showCreationDate" = "作成日";
+"settings.display.showModificationDate" = "変更日";
+"settings.display.showLastAccessDate" = "最終アクセス日";
+"settings.display.showPermissions" = "アクセス権";
+"settings.display.showOwner" = "所有者";
+"settings.display.showFilePath" = "ファイルパス";
+
+"settings.display.exif" = "写真情報（EXIF）";
+"settings.display.exif.show" = "EXIF データを表示";
+"settings.display.exif.camera" = "カメラモデル";
+"settings.display.exif.lens" = "レンズモデル";
+"settings.display.exif.settings" = "カメラ設定";
+"settings.display.exif.dateTaken" = "撮影日時";
+"settings.display.exif.dimensions" = "画像サイズ";
+"settings.display.exif.gps" = "GPS 位置";
+"settings.display.exif.hint" = "EXIF データはメタデータを含む画像ファイルにのみ表示されます";
+
+"settings.display.order" = "表示順序";
+"settings.display.order.hint" = "項目をドラッグして並べ替えます。EXIF はグループとして移動します。";
+
+/* Settings - About */
+"settings.about.version" = "バージョン %@";
+"settings.about.description" = "Finder でファイルにホバーするとファイル情報を表示します。";
+"settings.about.usage" = "使用方法：";
+"settings.about.usage.step1" = "Finder でファイルを選択（クリック）";
+"settings.about.usage.step2" = "選択したファイルにマウスをホバー";
+"settings.about.usage.step3" = "プレビューウィンドウにファイル詳細が表示されます";
+"settings.about.copyright" = "© 2024 FinderHover";
+"settings.about.opensource" = "オープンソースプロジェクト";
+
+/* Display Items */
+"displayItem.fileType" = "ファイルタイプ";
+"displayItem.fileSize" = "ファイルサイズ";
+"displayItem.itemCount" = "項目数";
+"displayItem.creationDate" = "作成日";
+"displayItem.modificationDate" = "変更日";
+"displayItem.lastAccessDate" = "最終アクセス日";
+"displayItem.permissions" = "アクセス権";
+"displayItem.owner" = "所有者";
+"displayItem.exif" = "写真情報（EXIF）";
+"displayItem.filePath" = "ファイルパス";
+
+/* Hover Window */
+"hover.fileType.folder" = "フォルダ";
+"hover.fileType.file" = "ファイル";
+"hover.label.type" = "タイプ";
+"hover.label.size" = "サイズ";
+"hover.label.items" = "項目";
+"hover.label.created" = "作成";
+"hover.label.modified" = "変更";
+"hover.label.accessed" = "アクセス";
+"hover.label.mode" = "モード";
+"hover.label.owner" = "所有者";
+"hover.label.location" = "ファイルパス";
+"hover.exif.title" = "写真情報";
+"hover.exif.camera" = "カメラ";
+"hover.exif.lens" = "レンズ";
+"hover.exif.settings" = "設定";
+"hover.exif.taken" = "撮影";
+"hover.exif.dimensions" = "サイズ";
+"hover.exif.gps" = "位置";
+
+/* Common */
+"common.reset" = "デフォルトに戻す";
+"common.item" = "項目";
+"common.items" = "項目";
+
+/* Settings Descriptions */
+"settings.behavior.hoverDelay.description" = "プレビューウィンドウを表示するまでの待機時間";
+"settings.behavior.autoHide.description" = "マウスがファイルから離れたら即座にウィンドウを隠す";
+"settings.behavior.launchAtLogin.description" = "ログイン時に FinderHover を自動的に起動";
+"settings.behavior.windowPosition.description" = "カーソルとプレビューウィンドウ間の距離";
+"settings.appearance.opacity.description" = "プレビューウィンドウの透明度";
+"settings.appearance.maxWidth.description" = "プレビューウィンドウの最大幅";
+"settings.appearance.fontSize.description" = "プレビューウィンドウ内のテキストのサイズ";
+
+/* Language Settings */
+"settings.language" = "言語";
+"settings.language.description" = "アプリの言語を変更（再起動が必要）";
+"settings.language.restart" = "再起動";
+"settings.language.system" = "システムのデフォルト";
+"settings.language.english" = "English";
+"settings.language.chinese" = "繁體中文";
+"settings.language.japanese" = "日本語";

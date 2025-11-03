@@ -10,6 +10,25 @@ import SwiftUI
 import Combine
 import AppKit
 
+// MARK: - Language Selection
+enum AppLanguage: String, Codable, CaseIterable, Identifiable {
+    case system = "system"
+    case english = "en"
+    case chinese = "zh-Hant"
+    case japanese = "ja"
+
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .system: return "settings.language.system".localized
+        case .english: return "settings.language.english".localized
+        case .chinese: return "settings.language.chinese".localized
+        case .japanese: return "settings.language.japanese".localized
+        }
+    }
+}
+
 // MARK: - Display Item Types
 enum DisplayItem: String, Codable, CaseIterable, Identifiable {
     case fileType = "File Type"
@@ -24,6 +43,21 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
     case filePath = "File Path"
 
     var id: String { rawValue }
+
+    var localizedName: String {
+        switch self {
+        case .fileType: return "displayItem.fileType".localized
+        case .fileSize: return "displayItem.fileSize".localized
+        case .itemCount: return "displayItem.itemCount".localized
+        case .creationDate: return "displayItem.creationDate".localized
+        case .modificationDate: return "displayItem.modificationDate".localized
+        case .lastAccessDate: return "displayItem.lastAccessDate".localized
+        case .permissions: return "displayItem.permissions".localized
+        case .owner: return "displayItem.owner".localized
+        case .exif: return "displayItem.exif".localized
+        case .filePath: return "displayItem.filePath".localized
+        }
+    }
 
     var icon: String {
         switch self {
@@ -152,6 +186,14 @@ class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(windowOffsetY, forKey: "windowOffsetY") }
     }
 
+    // Language preference
+    @Published var preferredLanguage: AppLanguage {
+        didSet {
+            UserDefaults.standard.set(preferredLanguage.rawValue, forKey: "preferredLanguage")
+            applyLanguagePreference()
+        }
+    }
+
     private init() {
         // Load display order or use default
         if let data = UserDefaults.standard.data(forKey: "displayOrder"),
@@ -202,6 +244,26 @@ class AppSettings: ObservableObject {
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? true
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? 15
         self.windowOffsetY = UserDefaults.standard.object(forKey: "windowOffsetY") as? Double ?? 15
+
+        // Load language preference
+        if let langString = UserDefaults.standard.string(forKey: "preferredLanguage"),
+           let language = AppLanguage(rawValue: langString) {
+            self.preferredLanguage = language
+        } else {
+            self.preferredLanguage = .system
+        }
+
+        // Apply language preference on launch
+        applyLanguagePreference()
+    }
+
+    private func applyLanguagePreference() {
+        if preferredLanguage == .system {
+            UserDefaults.standard.removeObject(forKey: "AppleLanguages")
+        } else {
+            UserDefaults.standard.set([preferredLanguage.rawValue], forKey: "AppleLanguages")
+        }
+        UserDefaults.standard.synchronize()
     }
 
     func resetToDefaults() {
@@ -245,5 +307,6 @@ class AppSettings: ObservableObject {
         followCursor = true
         windowOffsetX = 15
         windowOffsetY = 15
+        preferredLanguage = .system
     }
 }

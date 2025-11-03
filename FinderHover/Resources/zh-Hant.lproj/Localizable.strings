@@ -1,0 +1,129 @@
+/* Menu Bar */
+"menu.enable" = "啟用懸停預覽";
+"menu.disable" = "停用懸停預覽";
+"menu.settings" = "設定...";
+"menu.about" = "關於 FinderHover";
+"menu.quit" = "結束";
+
+/* Settings - Tabs */
+"settings.tab.behavior" = "行為";
+"settings.tab.appearance" = "外觀";
+"settings.tab.display" = "顯示";
+"settings.tab.about" = "關於";
+
+/* Settings - Behavior */
+"settings.behavior.title" = "行為";
+"settings.behavior.hoverDelay" = "懸停延遲";
+"settings.behavior.hoverDelay.seconds" = "%.1f 秒";
+"settings.behavior.autoHide" = "滑鼠移開時自動隱藏";
+"settings.behavior.launchAtLogin" = "登入時啟動";
+"settings.behavior.windowPosition" = "視窗位置";
+"settings.behavior.horizontalOffset" = "水平偏移";
+"settings.behavior.verticalOffset" = "垂直偏移";
+"settings.behavior.pixels" = "%d 像素";
+
+/* Settings - Appearance */
+"settings.appearance.title" = "外觀";
+"settings.appearance.blur" = "啟用模糊效果";
+"settings.appearance.blur.hint" = "原生 macOS 背景模糊";
+"settings.appearance.opacity" = "視窗不透明度";
+"settings.appearance.opacity.hint" = "僅在停用模糊時可用";
+"settings.appearance.opacity.percent" = "%d%%";
+"settings.appearance.compactMode" = "緊湊模式";
+"settings.appearance.compactMode.hint" = "減少間距和內距";
+"settings.appearance.maxWidth" = "最大寬度";
+"settings.appearance.maxWidth.pixels" = "%d 像素";
+"settings.appearance.fontSize" = "字型大小";
+"settings.appearance.fontSize.points" = "%.0f 點";
+
+/* Settings - Display */
+"settings.display.title" = "顯示";
+"settings.display.basicInfo" = "基本資訊";
+"settings.display.showIcon" = "檔案圖示";
+"settings.display.showFileType" = "檔案類型";
+"settings.display.showFileSize" = "檔案大小";
+"settings.display.showItemCount" = "項目數量（資料夾）";
+"settings.display.showCreationDate" = "建立日期";
+"settings.display.showModificationDate" = "修改日期";
+"settings.display.showLastAccessDate" = "最後存取日期";
+"settings.display.showPermissions" = "權限";
+"settings.display.showOwner" = "擁有者";
+"settings.display.showFilePath" = "檔案路徑";
+
+"settings.display.exif" = "照片資訊（EXIF）";
+"settings.display.exif.show" = "顯示 EXIF 資料";
+"settings.display.exif.camera" = "相機型號";
+"settings.display.exif.lens" = "鏡頭型號";
+"settings.display.exif.settings" = "相機設定";
+"settings.display.exif.dateTaken" = "拍攝日期";
+"settings.display.exif.dimensions" = "影像尺寸";
+"settings.display.exif.gps" = "GPS 位置";
+"settings.display.exif.hint" = "EXIF 資料僅顯示於包含中繼資料的影像檔案";
+
+"settings.display.order" = "顯示順序";
+"settings.display.order.hint" = "拖曳項目以重新排序。EXIF 作為群組移動。";
+
+/* Settings - About */
+"settings.about.version" = "版本 %@";
+"settings.about.description" = "在 Finder 中懸停於檔案時顯示檔案資訊。";
+"settings.about.usage" = "使用方式：";
+"settings.about.usage.step1" = "在 Finder 中選取檔案（點擊）";
+"settings.about.usage.step2" = "將滑鼠懸停在選取的檔案上";
+"settings.about.usage.step3" = "預覽視窗將顯示檔案詳細資訊";
+"settings.about.copyright" = "© 2024 FinderHover";
+"settings.about.opensource" = "開放原始碼專案";
+
+/* Display Items */
+"displayItem.fileType" = "檔案類型";
+"displayItem.fileSize" = "檔案大小";
+"displayItem.itemCount" = "項目數量";
+"displayItem.creationDate" = "建立日期";
+"displayItem.modificationDate" = "修改日期";
+"displayItem.lastAccessDate" = "最後存取日期";
+"displayItem.permissions" = "權限";
+"displayItem.owner" = "擁有者";
+"displayItem.exif" = "照片資訊（EXIF）";
+"displayItem.filePath" = "檔案路徑";
+
+/* Hover Window */
+"hover.fileType.folder" = "資料夾";
+"hover.fileType.file" = "檔案";
+"hover.label.type" = "類型";
+"hover.label.size" = "大小";
+"hover.label.items" = "項目";
+"hover.label.created" = "建立";
+"hover.label.modified" = "修改";
+"hover.label.accessed" = "存取";
+"hover.label.mode" = "模式";
+"hover.label.owner" = "擁有者";
+"hover.label.location" = "檔案路徑";
+"hover.exif.title" = "照片資訊";
+"hover.exif.camera" = "相機";
+"hover.exif.lens" = "鏡頭";
+"hover.exif.settings" = "設定";
+"hover.exif.taken" = "拍攝";
+"hover.exif.dimensions" = "尺寸";
+"hover.exif.gps" = "位置";
+
+/* Common */
+"common.reset" = "重設為預設值";
+"common.item" = "個項目";
+"common.items" = "個項目";
+
+/* Settings Descriptions */
+"settings.behavior.hoverDelay.description" = "顯示預覽視窗前的等待時間";
+"settings.behavior.autoHide.description" = "滑鼠離開檔案時立即隱藏視窗";
+"settings.behavior.launchAtLogin.description" = "登入時自動啟動 FinderHover";
+"settings.behavior.windowPosition.description" = "游標與預覽視窗之間的距離";
+"settings.appearance.opacity.description" = "預覽視窗的透明度";
+"settings.appearance.maxWidth.description" = "預覽視窗的最大寬度";
+"settings.appearance.fontSize.description" = "預覽視窗中文字的大小";
+
+/* Language Settings */
+"settings.language" = "語言";
+"settings.language.description" = "變更應用程式語言（需要重新啟動）";
+"settings.language.restart" = "重新啟動";
+"settings.language.system" = "系統預設";
+"settings.language.english" = "English";
+"settings.language.chinese" = "繁體中文";
+"settings.language.japanese" = "日本語";
