@@ -75,23 +75,54 @@ class HoverWindowController: NSWindowController {
 
         // Check if blur is enabled
         if settings.enableBlur {
+            let osVersion = ProcessInfo.processInfo.operatingSystemVersion
+            let useLegacyBlurLayout = osVersion.majorVersion < 11
+
             // Create visual effect view for blur
             let effectView = NSVisualEffectView()
-            effectView.material = .hudWindow
             effectView.state = .active
-            effectView.blendingMode = .behindWindow
-            effectView.wantsLayer = true
-            effectView.layer?.cornerRadius = 10
-            effectView.layer?.masksToBounds = true
 
-            // Set frame to match content size
-            effectView.frame = NSRect(origin: .zero, size: fittingSize)
-            hostingView.frame = effectView.bounds
-            hostingView.autoresizingMask = [.width, .height]
+            if useLegacyBlurLayout {
+                // Older macOS builds (pre-11.0) have rendering artifacts when rounding the effect view layer directly.
+                effectView.material = .dark
+                effectView.blendingMode = .withinWindow
 
-            // Add hosting view to effect view
-            effectView.addSubview(hostingView)
-            window.contentView = effectView
+                let containerView = NSView(frame: NSRect(origin: .zero, size: fittingSize))
+                containerView.wantsLayer = true
+                containerView.layer?.cornerRadius = 10
+                containerView.layer?.masksToBounds = true
+                containerView.layer?.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(settings.windowOpacity).cgColor
+
+                effectView.frame = containerView.bounds
+                effectView.autoresizingMask = [.width, .height]
+
+                hostingView.frame = effectView.bounds
+                hostingView.autoresizingMask = [.width, .height]
+                effectView.addSubview(hostingView)
+
+                containerView.addSubview(effectView)
+                window.contentView = containerView
+            } else {
+                effectView.material = .hudWindow
+                effectView.blendingMode = .behindWindow
+                effectView.wantsLayer = true
+                effectView.layer?.cornerRadius = 10
+                effectView.layer?.masksToBounds = true
+
+                // Remove any borders from the visual effect view
+                effectView.layer?.borderWidth = 0
+                effectView.layer?.borderColor = nil
+
+                // Set frame to match content size
+                effectView.frame = NSRect(origin: .zero, size: fittingSize)
+                hostingView.frame = effectView.bounds
+                hostingView.autoresizingMask = [.width, .height]
+
+                // Add hosting view to effect view
+                effectView.addSubview(hostingView)
+                window.contentView = effectView
+            }
+
             self.visualEffectView = effectView
         } else {
             // No blur - use solid background with rounded corners
@@ -355,4 +386,3 @@ struct DetailRow: View {
         }
     }
 }
-
