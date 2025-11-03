@@ -10,24 +10,6 @@ import SwiftUI
 import Combine
 import AppKit
 
-enum BlurMaterial: String, CaseIterable {
-    case hudWindow = "HUD Window"
-    case popover = "Popover"
-    case menu = "Menu"
-    case sidebar = "Sidebar"
-    case none = "None"
-
-    var material: NSVisualEffectView.Material? {
-        switch self {
-        case .hudWindow: return .hudWindow
-        case .popover: return .popover
-        case .menu: return .menu
-        case .sidebar: return .sidebar
-        case .none: return nil
-        }
-    }
-}
-
 class AppSettings: ObservableObject {
     static let shared = AppSettings()
 
@@ -49,8 +31,8 @@ class AppSettings: ObservableObject {
     @Published var fontSize: Double {
         didSet { UserDefaults.standard.set(fontSize, forKey: "fontSize") }
     }
-    @Published var blurMaterial: BlurMaterial {
-        didSet { UserDefaults.standard.set(blurMaterial.rawValue, forKey: "blurMaterial") }
+    @Published var enableBlur: Bool {
+        didSet { UserDefaults.standard.set(enableBlur, forKey: "enableBlur") }
     }
 
     // Information display
@@ -91,10 +73,7 @@ class AppSettings: ObservableObject {
         self.windowOpacity = UserDefaults.standard.object(forKey: "windowOpacity") as? Double ?? 0.98
         self.windowMaxWidth = UserDefaults.standard.object(forKey: "windowMaxWidth") as? Double ?? 400
         self.fontSize = UserDefaults.standard.object(forKey: "fontSize") as? Double ?? 11
-
-        let blurMaterialString = UserDefaults.standard.string(forKey: "blurMaterial") ?? "HUD Window"
-        self.blurMaterial = BlurMaterial(rawValue: blurMaterialString) ?? .hudWindow
-
+        self.enableBlur = UserDefaults.standard.object(forKey: "enableBlur") as? Bool ?? true
         self.showCreationDate = UserDefaults.standard.object(forKey: "showCreationDate") as? Bool ?? true
         self.showModificationDate = UserDefaults.standard.object(forKey: "showModificationDate") as? Bool ?? true
         self.showFileSize = UserDefaults.standard.object(forKey: "showFileSize") as? Bool ?? true
@@ -112,7 +91,7 @@ class AppSettings: ObservableObject {
         windowOpacity = 0.98
         windowMaxWidth = 400
         fontSize = 11
-        blurMaterial = .hudWindow
+        enableBlur = true
         showCreationDate = true
         showModificationDate = true
         showFileSize = true

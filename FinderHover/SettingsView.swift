@@ -240,18 +240,14 @@ struct AppearanceSettingsView: View {
 
                     Divider()
 
-                    // Blur Material
+                    // Blur Effect
                     SettingRow(
                         title: "Blur Effect",
-                        description: "Background blur style for the preview window"
+                        description: "Enable background blur for the preview window"
                     ) {
-                        Picker("", selection: $settings.blurMaterial) {
-                            ForEach(BlurMaterial.allCases, id: \.self) { material in
-                                Text(material.rawValue).tag(material)
-                            }
-                        }
-                        .labelsHidden()
-                        .frame(width: 140)
+                        Toggle("", isOn: $settings.enableBlur)
+                            .labelsHidden()
+                            .toggleStyle(.switch)
                     }
                 }
                 .padding(.horizontal, 20)

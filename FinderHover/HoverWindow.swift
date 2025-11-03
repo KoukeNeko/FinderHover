@@ -37,19 +37,28 @@ class HoverWindowController: NSWindowController {
         // Create content view
         let hostingView = NSHostingView(rootView: HoverContentView(fileInfo: fileInfo))
 
+        // Set a width constraint for proper height calculation
+        let maxWidth = settings.windowMaxWidth
+        hostingView.frame = NSRect(x: 0, y: 0, width: maxWidth, height: 2000)
+
+        // Force layout and get fitting size
+        hostingView.invalidateIntrinsicContentSize()
+        hostingView.layoutSubtreeIfNeeded()
+        let fittingSize = hostingView.fittingSize
+
         // Check if blur is enabled
-        if let material = settings.blurMaterial.material {
+        if settings.enableBlur {
             // Create visual effect view for blur
             let effectView = NSVisualEffectView()
-            effectView.material = material
+            effectView.material = .hudWindow
             effectView.state = .active
             effectView.blendingMode = .behindWindow
             effectView.wantsLayer = true
             effectView.layer?.cornerRadius = 10
             effectView.layer?.masksToBounds = true
-            effectView.layer?.borderWidth = 0.5
-            effectView.layer?.borderColor = NSColor.white.withAlphaComponent(0.2).cgColor
 
+            // Set frame to match content size
+            effectView.frame = NSRect(origin: .zero, size: fittingSize)
             hostingView.frame = effectView.bounds
             hostingView.autoresizingMask = [.width, .height]
 
@@ -57,23 +66,21 @@ class HoverWindowController: NSWindowController {
             effectView.addSubview(hostingView)
             window.contentView = effectView
             self.visualEffectView = effectView
-
-            // Calculate proper window size from content
-            hostingView.invalidateIntrinsicContentSize()
-            let fittingSize = hostingView.fittingSize
-            window.setContentSize(fittingSize)
-            effectView.frame = NSRect(origin: .zero, size: fittingSize)
         } else {
-            // No blur - use solid background
-            window.contentView = hostingView
-            window.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(settings.windowOpacity)
-            window.isOpaque = false
+            // No blur - use solid background with rounded corners
+            let containerView = NSView(frame: NSRect(origin: .zero, size: fittingSize))
+            containerView.wantsLayer = true
+            containerView.layer?.cornerRadius = 10
+            containerView.layer?.masksToBounds = true
+            containerView.layer?.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(settings.windowOpacity).cgColor
 
-            // Calculate proper window size from content
-            hostingView.invalidateIntrinsicContentSize()
-            let fittingSize = hostingView.fittingSize
-            window.setContentSize(fittingSize)
+            hostingView.frame = containerView.bounds
+            containerView.addSubview(hostingView)
+            window.contentView = containerView
         }
+
+        // Set window size
+        window.setContentSize(fittingSize)
 
         // Position window near mouse cursor with smart positioning
         let offsetX: CGFloat = settings.windowOffsetX
@@ -193,20 +200,7 @@ struct HoverContentView: View {
         .padding(14)
         .frame(minWidth: 320, maxWidth: settings.windowMaxWidth)
         .fixedSize(horizontal: false, vertical: true)
-        .background(
-            Group {
-                if settings.blurMaterial.material == nil {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color(NSColor.controlBackgroundColor).opacity(settings.windowOpacity))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.white.opacity(0.2), lineWidth: 0.5)
-                        )
-                } else {
-                    Color.clear
-                }
-            }
-        )
+        .background(Color.clear)
     }
 
     private func getFileTypeDescription() -> String {
