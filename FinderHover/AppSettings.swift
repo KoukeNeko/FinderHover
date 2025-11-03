@@ -10,6 +10,37 @@ import SwiftUI
 import Combine
 import AppKit
 
+// MARK: - Display Item Types
+enum DisplayItem: String, Codable, CaseIterable, Identifiable {
+    case fileType = "File Type"
+    case fileSize = "File Size"
+    case itemCount = "Item Count"
+    case creationDate = "Creation Date"
+    case modificationDate = "Modification Date"
+    case lastAccessDate = "Last Access Date"
+    case permissions = "Permissions"
+    case owner = "Owner"
+    case exif = "Photo Information (EXIF)"
+    case filePath = "File Path"
+
+    var id: String { rawValue }
+
+    var icon: String {
+        switch self {
+        case .fileType: return "doc.text"
+        case .fileSize: return "archivebox"
+        case .itemCount: return "number"
+        case .creationDate: return "calendar"
+        case .modificationDate: return "clock"
+        case .lastAccessDate: return "eye"
+        case .permissions: return "lock.shield"
+        case .owner: return "person"
+        case .exif: return "camera.fill"
+        case .filePath: return "folder"
+        }
+    }
+}
+
 class AppSettings: ObservableObject {
     static let shared = AppSettings()
 
@@ -101,6 +132,15 @@ class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(showEXIFGPS, forKey: "showEXIFGPS") }
     }
 
+    // Display order
+    @Published var displayOrder: [DisplayItem] {
+        didSet {
+            if let encoded = try? JSONEncoder().encode(displayOrder) {
+                UserDefaults.standard.set(encoded, forKey: "displayOrder")
+            }
+        }
+    }
+
     // Window behavior
     @Published var followCursor: Bool {
         didSet { UserDefaults.standard.set(followCursor, forKey: "followCursor") }
@@ -113,6 +153,26 @@ class AppSettings: ObservableObject {
     }
 
     private init() {
+        // Load display order or use default
+        if let data = UserDefaults.standard.data(forKey: "displayOrder"),
+           let decoded = try? JSONDecoder().decode([DisplayItem].self, from: data) {
+            self.displayOrder = decoded
+        } else {
+            // Default order
+            self.displayOrder = [
+                .fileType,
+                .fileSize,
+                .itemCount,
+                .creationDate,
+                .modificationDate,
+                .lastAccessDate,
+                .permissions,
+                .owner,
+                .exif,
+                .filePath
+            ]
+        }
+
         // Load values from UserDefaults
         self.hoverDelay = UserDefaults.standard.object(forKey: "hoverDelay") as? Double ?? 0.1
         self.autoHideEnabled = UserDefaults.standard.object(forKey: "autoHideEnabled") as? Bool ?? true
@@ -170,6 +230,18 @@ class AppSettings: ObservableObject {
         showEXIFDateTaken = true
         showEXIFDimensions = true
         showEXIFGPS = false
+        displayOrder = [
+            .fileType,
+            .fileSize,
+            .itemCount,
+            .creationDate,
+            .modificationDate,
+            .lastAccessDate,
+            .permissions,
+            .owner,
+            .exif,
+            .filePath
+        ]
         followCursor = true
         windowOffsetX = 15
         windowOffsetY = 15

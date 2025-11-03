@@ -224,47 +224,113 @@ struct HoverContentView: View {
             Divider()
                 .background(Color.gray.opacity(0.3))
 
-            // File details in a grid
-            VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
-                if settings.showFileType {
+            // File details - displayed in order based on settings
+            ForEach(settings.displayOrder) { item in
+                displayItemView(for: item)
+            }
+
+            // File path section - always at the bottom when enabled
+            if settings.showFilePath {
+                HStack(alignment: .top, spacing: 8) {
+                    Image(systemName: "folder")
+                        .font(.system(size: settings.fontSize))
+                        .foregroundColor(.secondary)
+                        .frame(width: 14, alignment: .center)
+
+                    Text("Location:")
+                        .font(.system(size: settings.fontSize))
+                        .foregroundColor(.secondary)
+                        .frame(width: 65, alignment: .trailing)
+
+                    Text(fileInfo.path)
+                        .font(.system(size: settings.fontSize, design: .monospaced))
+                        .fontWeight(.medium)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .textSelection(.enabled)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+        }
+        .padding(settings.compactMode ? 10 : 14)
+        .frame(minWidth: 320, maxWidth: settings.windowMaxWidth)
+        .fixedSize(horizontal: false, vertical: true)
+        .background(Color.clear)
+    }
+
+    @ViewBuilder
+    private func displayItemView(for item: DisplayItem) -> some View {
+        switch item {
+        case .fileType:
+            if settings.showFileType {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
                     DetailRow(icon: "doc.text", label: "Type", value: getFileTypeDescription(), fontSize: settings.fontSize)
                 }
-                if settings.showFileSize {
+            }
+
+        case .fileSize:
+            if settings.showFileSize {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
                     DetailRow(icon: "archivebox", label: "Size", value: fileInfo.formattedSize, fontSize: settings.fontSize)
                 }
-                if settings.showItemCount && fileInfo.isDirectory {
-                    if let count = fileInfo.itemCount {
+            }
+
+        case .itemCount:
+            if settings.showItemCount && fileInfo.isDirectory {
+                if let count = fileInfo.itemCount {
+                    VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
                         DetailRow(icon: "number", label: "Items", value: "\(count) item\(count == 1 ? "" : "s")", fontSize: settings.fontSize)
                     }
                 }
-                if settings.showCreationDate {
+            }
+
+        case .creationDate:
+            if settings.showCreationDate {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
                     DetailRow(icon: "calendar", label: "Created", value: fileInfo.formattedCreationDate, fontSize: settings.fontSize)
                 }
-                if settings.showModificationDate {
+            }
+
+        case .modificationDate:
+            if settings.showModificationDate {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
                     DetailRow(icon: "clock", label: "Modified", value: fileInfo.formattedModificationDate, fontSize: settings.fontSize)
                 }
-                if settings.showLastAccessDate {
+            }
+
+        case .lastAccessDate:
+            if settings.showLastAccessDate {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
                     DetailRow(icon: "eye", label: "Accessed", value: fileInfo.formattedLastAccessDate, fontSize: settings.fontSize)
                 }
-                if settings.showPermissions {
+            }
+
+        case .permissions:
+            if settings.showPermissions {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
                     DetailRow(icon: "lock.shield", label: "Mode", value: fileInfo.formattedPermissions, fontSize: settings.fontSize)
                 }
-                if settings.showOwner {
+            }
+
+        case .owner:
+            if settings.showOwner {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
                     DetailRow(icon: "person", label: "Owner", value: fileInfo.owner, fontSize: settings.fontSize)
                 }
             }
 
-            // EXIF information section (only for images with EXIF data)
+        case .exif:
             if settings.showEXIF, let exif = fileInfo.exifData {
-                Divider()
-                    .background(Color.gray.opacity(0.3))
-                    .padding(.top, settings.compactMode ? 2 : 4)
-
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
                     HStack(spacing: 8) {
                         Image(systemName: "camera.fill")
                             .font(.system(size: settings.fontSize))
-                            .foregroundColor(.accentColor)
+                            .foregroundColor(.secondary)
                         Text("Photo Information")
                             .font(.system(size: settings.fontSize, weight: .semibold))
                     }
@@ -296,36 +362,16 @@ struct HoverContentView: View {
                     if settings.showEXIFGPS, let gps = exif.gpsLocation {
                         DetailRow(icon: "location.fill", label: "Location", value: gps, fontSize: settings.fontSize)
                     }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
-            // File path section
-            if settings.showFilePath {
-                HStack(alignment: .top, spacing: 8) {
-                    Image(systemName: "folder")
-                        .font(.system(size: settings.fontSize))
-                        .foregroundColor(.secondary)
-                        .frame(width: 14, alignment: .center)
-
-                    Text("Location:")
-                        .font(.system(size: settings.fontSize))
-                        .foregroundColor(.secondary)
-                        .frame(width: 65, alignment: .trailing)
-
-                    Text(fileInfo.path)
-                        .font(.system(size: settings.fontSize, design: .monospaced))
-                        .fontWeight(.medium)
-                        .lineLimit(nil)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .textSelection(.enabled)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-            }
+        case .filePath:
+            EmptyView() // File path is handled separately at the bottom
         }
-        .padding(settings.compactMode ? 10 : 14)
-        .frame(minWidth: 320, maxWidth: settings.windowMaxWidth)
-        .fixedSize(horizontal: false, vertical: true)
-        .background(Color.clear)
     }
 
     private func getFileTypeDescription() -> String {

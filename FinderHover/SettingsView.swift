@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 enum SettingsPage: String, CaseIterable, Identifiable {
     case behavior = "Behavior"
@@ -407,6 +408,61 @@ struct DisplaySettingsView: View {
                     .foregroundColor(.secondary)
                     .padding(.horizontal, 20)
                     .padding(.top, 8)
+
+                    // Display Order Section
+                    Text("Display Order")
+                        .font(.system(size: 13, weight: .semibold))
+                        .padding(.horizontal, 20)
+                        .padding(.top, 16)
+
+                    VStack(spacing: 0) {
+                        ForEach(settings.displayOrder) { item in
+                            HStack(spacing: 12) {
+                                Image(systemName: "line.3.horizontal")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.secondary)
+                                    .frame(width: 20)
+
+                                Image(systemName: item.icon)
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.accentColor)
+                                    .frame(width: 20)
+
+                                Text(item.rawValue)
+                                    .font(.system(size: 13))
+
+                                Spacer()
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 12)
+                            .contentShape(Rectangle())
+                            .background(Color(NSColor.controlBackgroundColor))
+                            .onDrag {
+                                NSItemProvider(object: item.rawValue as NSString)
+                            }
+                            .onDrop(of: [.text], delegate: DisplayItemDropDelegate(
+                                item: item,
+                                items: $settings.displayOrder
+                            ))
+
+                            if item != settings.displayOrder.last {
+                                Divider().padding(.leading, 60)
+                            }
+                        }
+                    }
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(8)
+                    .padding(.horizontal, 20)
+
+                    HStack(spacing: 6) {
+                        Image(systemName: "info.circle")
+                            .font(.system(size: 11))
+                        Text("Drag items to reorder. EXIF moves as a group.")
+                            .font(.system(size: 11))
+                    }
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
                 }
 
                 Spacer(minLength: 40)
@@ -605,6 +661,39 @@ struct DisplayToggleRow: View {
         .padding(.horizontal, 20)
         .padding(.vertical, 12)
         .contentShape(Rectangle())
+    }
+}
+
+// MARK: - Drag and Drop Delegate
+struct DisplayItemDropDelegate: DropDelegate {
+    let item: DisplayItem
+    @Binding var items: [DisplayItem]
+
+    func performDrop(info: DropInfo) -> Bool {
+        return true
+    }
+
+    func dropEntered(info: DropInfo) {
+        guard let fromIndex = items.firstIndex(of: item) else { return }
+
+        // Get the dragged item from pasteboard
+        if let itemProviders = info.itemProviders(for: [.text]).first {
+            itemProviders.loadItem(forTypeIdentifier: "public.text", options: nil) { (data, error) in
+                if let data = data as? Data,
+                   let string = String(data: data, encoding: .utf8),
+                   let draggedItem = DisplayItem.allCases.first(where: { $0.rawValue == string }),
+                   let toIndex = items.firstIndex(of: draggedItem) {
+
+                    if fromIndex != toIndex {
+                        DispatchQueue.main.async {
+                            withAnimation {
+                                items.move(fromOffsets: IndexSet(integer: toIndex), toOffset: fromIndex > toIndex ? fromIndex + 1 : fromIndex)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
