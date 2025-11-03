@@ -75,23 +75,54 @@ class HoverWindowController: NSWindowController {
 
         // Check if blur is enabled
         if settings.enableBlur {
+            let osVersion = ProcessInfo.processInfo.operatingSystemVersion
+            let useLegacyBlurLayout = osVersion.majorVersion < 11
+
             // Create visual effect view for blur
             let effectView = NSVisualEffectView()
-            effectView.material = .hudWindow
             effectView.state = .active
-            effectView.blendingMode = .behindWindow
-            effectView.wantsLayer = true
-            effectView.layer?.cornerRadius = 10
-            effectView.layer?.masksToBounds = true
 
-            // Set frame to match content size
-            effectView.frame = NSRect(origin: .zero, size: fittingSize)
-            hostingView.frame = effectView.bounds
-            hostingView.autoresizingMask = [.width, .height]
+            if useLegacyBlurLayout {
+                // Older macOS builds (pre-11.0) have rendering artifacts when rounding the effect view layer directly.
+                effectView.material = .dark
+                effectView.blendingMode = .withinWindow
 
-            // Add hosting view to effect view
-            effectView.addSubview(hostingView)
-            window.contentView = effectView
+                let containerView = NSView(frame: NSRect(origin: .zero, size: fittingSize))
+                containerView.wantsLayer = true
+                containerView.layer?.cornerRadius = 10
+                containerView.layer?.masksToBounds = true
+                containerView.layer?.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(settings.windowOpacity).cgColor
+
+                effectView.frame = containerView.bounds
+                effectView.autoresizingMask = [.width, .height]
+
+                hostingView.frame = effectView.bounds
+                hostingView.autoresizingMask = [.width, .height]
+                effectView.addSubview(hostingView)
+
+                containerView.addSubview(effectView)
+                window.contentView = containerView
+            } else {
+                effectView.material = .hudWindow
+                effectView.blendingMode = .behindWindow
+                effectView.wantsLayer = true
+                effectView.layer?.cornerRadius = 10
+                effectView.layer?.masksToBounds = true
+
+                // Remove any borders from the visual effect view
+                effectView.layer?.borderWidth = 0
+                effectView.layer?.borderColor = nil
+
+                // Set frame to match content size
+                effectView.frame = NSRect(origin: .zero, size: fittingSize)
+                hostingView.frame = effectView.bounds
+                hostingView.autoresizingMask = [.width, .height]
+
+                // Add hosting view to effect view
+                effectView.addSubview(hostingView)
+                window.contentView = effectView
+            }
+
             self.visualEffectView = effectView
         } else {
             // No blur - use solid background with rounded corners
@@ -193,63 +224,151 @@ struct HoverContentView: View {
             Divider()
                 .background(Color.gray.opacity(0.3))
 
-            // File details in a grid
-            VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
-                if settings.showFileType {
-                    DetailRow(icon: "doc.text", label: "Type", value: getFileTypeDescription(), fontSize: settings.fontSize)
-                }
-                if settings.showFileSize {
-                    DetailRow(icon: "archivebox", label: "Size", value: fileInfo.formattedSize, fontSize: settings.fontSize)
-                }
-                if settings.showItemCount && fileInfo.isDirectory {
-                    if let count = fileInfo.itemCount {
-                        DetailRow(icon: "number", label: "Items", value: "\(count) item\(count == 1 ? "" : "s")", fontSize: settings.fontSize)
-                    }
-                }
-                if settings.showCreationDate {
-                    DetailRow(icon: "calendar", label: "Created", value: fileInfo.formattedCreationDate, fontSize: settings.fontSize)
-                }
-                if settings.showModificationDate {
-                    DetailRow(icon: "clock", label: "Modified", value: fileInfo.formattedModificationDate, fontSize: settings.fontSize)
-                }
-                if settings.showLastAccessDate {
-                    DetailRow(icon: "eye", label: "Accessed", value: fileInfo.formattedLastAccessDate, fontSize: settings.fontSize)
-                }
-                if settings.showPermissions {
-                    DetailRow(icon: "lock.shield", label: "Mode", value: fileInfo.formattedPermissions, fontSize: settings.fontSize)
-                }
-                if settings.showOwner {
-                    DetailRow(icon: "person", label: "Owner", value: fileInfo.owner, fontSize: settings.fontSize)
-                }
+            // File details - displayed in order based on settings
+            ForEach(settings.displayOrder) { item in
+                displayItemView(for: item)
             }
-
-            // File path section
-            if settings.showFilePath {
-                HStack(alignment: .top, spacing: 8) {
-                    Image(systemName: "folder")
-                        .font(.system(size: settings.fontSize))
-                        .foregroundColor(.secondary)
-                        .frame(width: 14, alignment: .center)
-
-                    Text("Location:")
-                        .font(.system(size: settings.fontSize))
-                        .foregroundColor(.secondary)
-                        .frame(width: 65, alignment: .trailing)
-
-                    Text(fileInfo.path)
-                        .font(.system(size: settings.fontSize, design: .monospaced))
-                        .fontWeight(.medium)
-                        .lineLimit(nil)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .textSelection(.enabled)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
+            .onAppear {
+                print("Display order: \(settings.displayOrder.map { $0.rawValue })")
             }
         }
         .padding(settings.compactMode ? 10 : 14)
         .frame(minWidth: 320, maxWidth: settings.windowMaxWidth)
         .fixedSize(horizontal: false, vertical: true)
         .background(Color.clear)
+    }
+
+    @ViewBuilder
+    private func displayItemView(for item: DisplayItem) -> some View {
+        switch item {
+        case .fileType:
+            if settings.showFileType {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    DetailRow(icon: "doc.text", label: "Type", value: getFileTypeDescription(), fontSize: settings.fontSize)
+                }
+            }
+
+        case .fileSize:
+            if settings.showFileSize {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    DetailRow(icon: "archivebox", label: "Size", value: fileInfo.formattedSize, fontSize: settings.fontSize)
+                }
+            }
+
+        case .itemCount:
+            if settings.showItemCount && fileInfo.isDirectory {
+                if let count = fileInfo.itemCount {
+                    VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                        DetailRow(icon: "number", label: "Items", value: "\(count) item\(count == 1 ? "" : "s")", fontSize: settings.fontSize)
+                    }
+                }
+            }
+
+        case .creationDate:
+            if settings.showCreationDate {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    DetailRow(icon: "calendar", label: "Created", value: fileInfo.formattedCreationDate, fontSize: settings.fontSize)
+                }
+            }
+
+        case .modificationDate:
+            if settings.showModificationDate {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    DetailRow(icon: "clock", label: "Modified", value: fileInfo.formattedModificationDate, fontSize: settings.fontSize)
+                }
+            }
+
+        case .lastAccessDate:
+            if settings.showLastAccessDate {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    DetailRow(icon: "eye", label: "Accessed", value: fileInfo.formattedLastAccessDate, fontSize: settings.fontSize)
+                }
+            }
+
+        case .permissions:
+            if settings.showPermissions {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    DetailRow(icon: "lock.shield", label: "Mode", value: fileInfo.formattedPermissions, fontSize: settings.fontSize)
+                }
+            }
+
+        case .owner:
+            if settings.showOwner {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    DetailRow(icon: "person", label: "Owner", value: fileInfo.owner, fontSize: settings.fontSize)
+                }
+            }
+
+        case .exif:
+            if settings.showEXIF, let exif = fileInfo.exifData {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("Photo Information")
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showEXIFCamera, let camera = exif.camera {
+                        DetailRow(icon: "camera", label: "Camera", value: camera, fontSize: settings.fontSize)
+                    }
+                    if settings.showEXIFLens, let lens = exif.lens {
+                        DetailRow(icon: "camera.aperture", label: "Lens", value: lens, fontSize: settings.fontSize)
+                    }
+                    if settings.showEXIFSettings {
+                        let settingsComponents = [
+                            exif.focalLength,
+                            exif.aperture,
+                            exif.shutterSpeed,
+                            exif.iso
+                        ].compactMap { $0 }
+
+                        if !settingsComponents.isEmpty {
+                            DetailRow(icon: "slider.horizontal.3", label: "Settings", value: settingsComponents.joined(separator: "  "), fontSize: settings.fontSize)
+                        }
+                    }
+                    if settings.showEXIFDateTaken, let date = exif.dateTaken {
+                        DetailRow(icon: "calendar.badge.clock", label: "Taken", value: date, fontSize: settings.fontSize)
+                    }
+                    if settings.showEXIFDimensions, let size = exif.imageSize {
+                        DetailRow(icon: "square.resize", label: "Dimensions", value: size, fontSize: settings.fontSize)
+                    }
+                    if settings.showEXIFGPS, let gps = exif.gpsLocation {
+                        DetailRow(icon: "location.fill", label: "Location", value: gps, fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
+
+        case .filePath:
+            if settings.showFilePath {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    HStack(alignment: .top, spacing: 8) {
+                        Image(systemName: "folder")
+                            .font(.system(size: settings.fontSize))
+                            .foregroundColor(.secondary)
+                            .frame(width: 14, alignment: .center)
+
+                        Text("File Path:")
+                            .font(.system(size: settings.fontSize))
+                            .foregroundColor(.secondary)
+                            .frame(width: 65, alignment: .trailing)
+
+                        Text(fileInfo.path)
+                            .font(.system(size: settings.fontSize, design: .monospaced))
+                            .fontWeight(.medium)
+                            .lineLimit(nil)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .textSelection(.enabled)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+            }
+        }
     }
 
     private func getFileTypeDescription() -> String {
@@ -355,4 +474,3 @@ struct DetailRow: View {
         }
     }
 }
-

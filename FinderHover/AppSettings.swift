@@ -10,6 +10,37 @@ import SwiftUI
 import Combine
 import AppKit
 
+// MARK: - Display Item Types
+enum DisplayItem: String, Codable, CaseIterable, Identifiable {
+    case fileType = "File Type"
+    case fileSize = "File Size"
+    case itemCount = "Item Count"
+    case creationDate = "Creation Date"
+    case modificationDate = "Modification Date"
+    case lastAccessDate = "Last Access Date"
+    case permissions = "Permissions"
+    case owner = "Owner"
+    case exif = "Photo Information (EXIF)"
+    case filePath = "File Path"
+
+    var id: String { rawValue }
+
+    var icon: String {
+        switch self {
+        case .fileType: return "doc.text"
+        case .fileSize: return "archivebox"
+        case .itemCount: return "number"
+        case .creationDate: return "calendar"
+        case .modificationDate: return "clock"
+        case .lastAccessDate: return "eye"
+        case .permissions: return "lock.shield"
+        case .owner: return "person"
+        case .exif: return "camera.fill"
+        case .filePath: return "folder"
+        }
+    }
+}
+
 class AppSettings: ObservableObject {
     static let shared = AppSettings()
 
@@ -78,6 +109,38 @@ class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(showItemCount, forKey: "showItemCount") }
     }
 
+    // EXIF information display
+    @Published var showEXIF: Bool {
+        didSet { UserDefaults.standard.set(showEXIF, forKey: "showEXIF") }
+    }
+    @Published var showEXIFCamera: Bool {
+        didSet { UserDefaults.standard.set(showEXIFCamera, forKey: "showEXIFCamera") }
+    }
+    @Published var showEXIFLens: Bool {
+        didSet { UserDefaults.standard.set(showEXIFLens, forKey: "showEXIFLens") }
+    }
+    @Published var showEXIFSettings: Bool {
+        didSet { UserDefaults.standard.set(showEXIFSettings, forKey: "showEXIFSettings") }
+    }
+    @Published var showEXIFDateTaken: Bool {
+        didSet { UserDefaults.standard.set(showEXIFDateTaken, forKey: "showEXIFDateTaken") }
+    }
+    @Published var showEXIFDimensions: Bool {
+        didSet { UserDefaults.standard.set(showEXIFDimensions, forKey: "showEXIFDimensions") }
+    }
+    @Published var showEXIFGPS: Bool {
+        didSet { UserDefaults.standard.set(showEXIFGPS, forKey: "showEXIFGPS") }
+    }
+
+    // Display order
+    @Published var displayOrder: [DisplayItem] {
+        didSet {
+            if let encoded = try? JSONEncoder().encode(displayOrder) {
+                UserDefaults.standard.set(encoded, forKey: "displayOrder")
+            }
+        }
+    }
+
     // Window behavior
     @Published var followCursor: Bool {
         didSet { UserDefaults.standard.set(followCursor, forKey: "followCursor") }
@@ -90,6 +153,26 @@ class AppSettings: ObservableObject {
     }
 
     private init() {
+        // Load display order or use default
+        if let data = UserDefaults.standard.data(forKey: "displayOrder"),
+           let decoded = try? JSONDecoder().decode([DisplayItem].self, from: data) {
+            self.displayOrder = decoded
+        } else {
+            // Default order
+            self.displayOrder = [
+                .fileType,
+                .fileSize,
+                .itemCount,
+                .creationDate,
+                .modificationDate,
+                .lastAccessDate,
+                .permissions,
+                .owner,
+                .exif,
+                .filePath
+            ]
+        }
+
         // Load values from UserDefaults
         self.hoverDelay = UserDefaults.standard.object(forKey: "hoverDelay") as? Double ?? 0.1
         self.autoHideEnabled = UserDefaults.standard.object(forKey: "autoHideEnabled") as? Bool ?? true
@@ -109,6 +192,13 @@ class AppSettings: ObservableObject {
         self.showPermissions = UserDefaults.standard.object(forKey: "showPermissions") as? Bool ?? false
         self.showOwner = UserDefaults.standard.object(forKey: "showOwner") as? Bool ?? false
         self.showItemCount = UserDefaults.standard.object(forKey: "showItemCount") as? Bool ?? true
+        self.showEXIF = UserDefaults.standard.object(forKey: "showEXIF") as? Bool ?? true
+        self.showEXIFCamera = UserDefaults.standard.object(forKey: "showEXIFCamera") as? Bool ?? true
+        self.showEXIFLens = UserDefaults.standard.object(forKey: "showEXIFLens") as? Bool ?? true
+        self.showEXIFSettings = UserDefaults.standard.object(forKey: "showEXIFSettings") as? Bool ?? true
+        self.showEXIFDateTaken = UserDefaults.standard.object(forKey: "showEXIFDateTaken") as? Bool ?? true
+        self.showEXIFDimensions = UserDefaults.standard.object(forKey: "showEXIFDimensions") as? Bool ?? true
+        self.showEXIFGPS = UserDefaults.standard.object(forKey: "showEXIFGPS") as? Bool ?? false
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? true
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? 15
         self.windowOffsetY = UserDefaults.standard.object(forKey: "windowOffsetY") as? Double ?? 15
@@ -133,6 +223,25 @@ class AppSettings: ObservableObject {
         showPermissions = false
         showOwner = false
         showItemCount = true
+        showEXIF = true
+        showEXIFCamera = true
+        showEXIFLens = true
+        showEXIFSettings = true
+        showEXIFDateTaken = true
+        showEXIFDimensions = true
+        showEXIFGPS = false
+        displayOrder = [
+            .fileType,
+            .fileSize,
+            .itemCount,
+            .creationDate,
+            .modificationDate,
+            .lastAccessDate,
+            .permissions,
+            .owner,
+            .exif,
+            .filePath
+        ]
         followCursor = true
         windowOffsetX = 15
         windowOffsetY = 15
