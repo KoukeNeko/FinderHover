@@ -9,6 +9,7 @@ import Foundation
 import AppKit
 import QuickLookThumbnailing
 import ImageIO
+import AVFoundation
 
 // MARK: - EXIF Data Structure
 struct EXIFData {
@@ -28,6 +29,44 @@ struct EXIFData {
                aperture != nil || shutterSpeed != nil || iso != nil ||
                dateTaken != nil || imageSize != nil || colorSpace != nil ||
                gpsLocation != nil
+    }
+}
+
+// MARK: - Video Metadata Structure
+struct VideoMetadata {
+    let duration: String?
+    let resolution: String?
+    let codec: String?
+    let frameRate: String?
+    let bitrate: String?
+    let videoTracks: Int?
+    let audioTracks: Int?
+
+    var hasData: Bool {
+        return duration != nil || resolution != nil || codec != nil ||
+               frameRate != nil || bitrate != nil || videoTracks != nil ||
+               audioTracks != nil
+    }
+}
+
+// MARK: - Audio Metadata Structure
+struct AudioMetadata {
+    let title: String?
+    let artist: String?
+    let album: String?
+    let albumArtist: String?
+    let genre: String?
+    let year: String?
+    let duration: String?
+    let bitrate: String?
+    let sampleRate: String?
+    let channels: String?
+
+    var hasData: Bool {
+        return title != nil || artist != nil || album != nil ||
+               albumArtist != nil || genre != nil || year != nil ||
+               duration != nil || bitrate != nil || sampleRate != nil ||
+               channels != nil
     }
 }
 
@@ -53,6 +92,12 @@ struct FileInfo {
 
     // EXIF data for images
     let exifData: EXIFData?
+
+    // Video metadata
+    let videoMetadata: VideoMetadata?
+
+    // Audio metadata
+    let audioMetadata: AudioMetadata?
 
     var formattedSize: String {
         ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
@@ -157,6 +202,12 @@ struct FileInfo {
             // Extract EXIF data for image files
             let exifData = extractEXIFData(from: url)
 
+            // Extract video metadata for video files
+            let videoMetadata = extractVideoMetadata(from: url)
+
+            // Extract audio metadata for audio files
+            let audioMetadata = extractAudioMetadata(from: url)
+
             return FileInfo(
                 name: url.lastPathComponent,
                 path: path,
@@ -174,7 +225,9 @@ struct FileInfo {
                 isExecutable: isExecutable,
                 itemCount: itemCount,
                 isHidden: isHidden,
-                exifData: exifData
+                exifData: exifData,
+                videoMetadata: videoMetadata,
+                audioMetadata: audioMetadata
             )
         } catch {
             return nil
@@ -297,5 +350,242 @@ struct FileInfo {
         )
 
         return exifData.hasData ? exifData : nil
+    }
+
+    // MARK: - Video Metadata Extraction
+    private static func extractVideoMetadata(from url: URL) -> VideoMetadata? {
+        // Check if file is a video by extension
+        let videoExtensions = ["mp4", "mov", "m4v", "avi", "mkv", "flv", "wmv", "webm", "mpeg", "mpg", "3gp", "mts", "m2ts"]
+        guard let ext = url.pathExtension.lowercased() as String?,
+              videoExtensions.contains(ext) else {
+            return nil
+        }
+
+        let asset = AVURLAsset(url: url)
+
+        // Extract duration
+        var duration: String? = nil
+        let durationSeconds = CMTimeGetSeconds(asset.duration)
+        if durationSeconds.isFinite && durationSeconds > 0 {
+            let hours = Int(durationSeconds) / 3600
+            let minutes = Int(durationSeconds) % 3600 / 60
+            let seconds = Int(durationSeconds) % 60
+
+            if hours > 0 {
+                duration = String(format: "%d:%02d:%02d", hours, minutes, seconds)
+            } else {
+                duration = String(format: "%d:%02d", minutes, seconds)
+            }
+        }
+
+        // Extract video track information
+        var resolution: String? = nil
+        var codec: String? = nil
+        var frameRate: String? = nil
+        var videoTrackCount = 0
+        var audioTrackCount = 0
+
+        let videoTracks = asset.tracks(withMediaType: .video)
+        videoTrackCount = videoTracks.count
+
+        if let videoTrack = videoTracks.first {
+            // Get resolution
+            let size = videoTrack.naturalSize.applying(videoTrack.preferredTransform)
+            let width = abs(Int(size.width))
+            let height = abs(Int(size.height))
+            resolution = "\(width) × \(height)"
+
+            // Get frame rate
+            let fps = videoTrack.nominalFrameRate
+            if fps > 0 {
+                frameRate = String(format: "%.0f fps", fps)
+            }
+
+            // Get codec
+            if let formatDescriptions = videoTrack.formatDescriptions as? [CMFormatDescription],
+               let formatDescription = formatDescriptions.first {
+                let codecType = CMFormatDescriptionGetMediaSubType(formatDescription)
+                let codecString = fourCCToString(codecType)
+                codec = codecString
+            }
+        }
+
+        // Count audio tracks
+        let audioTracks = asset.tracks(withMediaType: .audio)
+        audioTrackCount = audioTracks.count
+
+        // Extract bitrate
+        var bitrate: String? = nil
+        if let estimatedDataRate = videoTracks.first?.estimatedDataRate {
+            let bitrateKbps = estimatedDataRate / 1000
+            if bitrateKbps >= 1000 {
+                bitrate = String(format: "%.1f Mbps", bitrateKbps / 1000)
+            } else {
+                bitrate = String(format: "%.0f kbps", bitrateKbps)
+            }
+        }
+
+        let metadata = VideoMetadata(
+            duration: duration,
+            resolution: resolution,
+            codec: codec,
+            frameRate: frameRate,
+            bitrate: bitrate,
+            videoTracks: videoTrackCount > 0 ? videoTrackCount : nil,
+            audioTracks: audioTrackCount > 0 ? audioTrackCount : nil
+        )
+
+        return metadata.hasData ? metadata : nil
+    }
+
+    // MARK: - Audio Metadata Extraction
+    private static func extractAudioMetadata(from url: URL) -> AudioMetadata? {
+        // Check if file is an audio by extension
+        let audioExtensions = ["mp3", "m4a", "aac", "wav", "flac", "aiff", "aif", "wma", "ogg", "opus", "alac"]
+        guard let ext = url.pathExtension.lowercased() as String?,
+              audioExtensions.contains(ext) else {
+            return nil
+        }
+
+        let asset = AVURLAsset(url: url)
+
+        // Extract common metadata
+        var title: String? = nil
+        var artist: String? = nil
+        var album: String? = nil
+        var albumArtist: String? = nil
+        var genre: String? = nil
+        var year: String? = nil
+
+        for item in asset.commonMetadata {
+            guard let key = item.commonKey?.rawValue,
+                  let value = item.stringValue else { continue }
+
+            switch key {
+            case "title":
+                title = value
+            case "artist":
+                artist = value
+            case "albumName":
+                album = value
+            case "type":
+                genre = value
+            case "creator":
+                if artist == nil {
+                    artist = value
+                }
+            default:
+                break
+            }
+        }
+
+        // Try to extract album artist and year from format-specific metadata
+        for format in asset.availableMetadataFormats {
+            let metadata = asset.metadata(forFormat: format)
+
+            for item in metadata {
+                if let key = item.commonKey?.rawValue {
+                    switch key {
+                    case "artist":
+                        if albumArtist == nil, let value = item.stringValue {
+                            albumArtist = value
+                        }
+                    default:
+                        break
+                    }
+                }
+
+                // Try to get year from creation date
+                if item.identifier?.rawValue.contains("creationDate") == true ||
+                   item.identifier?.rawValue.contains("year") == true {
+                    if let value = item.stringValue, year == nil {
+                        // Extract year from date string
+                        let yearRegex = try? NSRegularExpression(pattern: "\\b(19|20)\\d{2}\\b")
+                        if let match = yearRegex?.firstMatch(in: value, range: NSRange(value.startIndex..., in: value)) {
+                            if let range = Range(match.range, in: value) {
+                                year = String(value[range])
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Extract duration
+        var duration: String? = nil
+        let durationSeconds = CMTimeGetSeconds(asset.duration)
+        if durationSeconds.isFinite && durationSeconds > 0 {
+            let minutes = Int(durationSeconds) / 60
+            let seconds = Int(durationSeconds) % 60
+            duration = String(format: "%d:%02d", minutes, seconds)
+        }
+
+        // Extract audio track information
+        var bitrate: String? = nil
+        var sampleRate: String? = nil
+        var channels: String? = nil
+
+        let audioTracks = asset.tracks(withMediaType: .audio)
+        if let audioTrack = audioTracks.first {
+            // Get bitrate
+            let estimatedDataRate = audioTrack.estimatedDataRate
+            if estimatedDataRate > 0 {
+                bitrate = String(format: "%.0f kbps", estimatedDataRate / 1000)
+            }
+
+            // Get format descriptions for sample rate and channels
+            if let formatDescriptions = audioTrack.formatDescriptions as? [CMFormatDescription],
+               let formatDescription = formatDescriptions.first {
+                if let streamBasicDescription = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription) {
+                    let sampleRateHz = streamBasicDescription.pointee.mSampleRate
+                    if sampleRateHz > 0 {
+                        if sampleRateHz >= 1000 {
+                            sampleRate = String(format: "%.1f kHz", sampleRateHz / 1000)
+                        } else {
+                            sampleRate = String(format: "%.0f Hz", sampleRateHz)
+                        }
+                    }
+
+                    let channelCount = streamBasicDescription.pointee.mChannelsPerFrame
+                    switch channelCount {
+                    case 1:
+                        channels = "Mono"
+                    case 2:
+                        channels = "Stereo"
+                    default:
+                        if channelCount > 0 {
+                            channels = "\(channelCount) channels"
+                        }
+                    }
+                }
+            }
+        }
+
+        let metadata = AudioMetadata(
+            title: title,
+            artist: artist,
+            album: album,
+            albumArtist: albumArtist,
+            genre: genre,
+            year: year,
+            duration: duration,
+            bitrate: bitrate,
+            sampleRate: sampleRate,
+            channels: channels
+        )
+
+        return metadata.hasData ? metadata : nil
+    }
+
+    // MARK: - Helper Functions
+    private static func fourCCToString(_ value: FourCharCode) -> String {
+        let bytes: [CChar] = [
+            CChar((value >> 24) & 0xFF),
+            CChar((value >> 16) & 0xFF),
+            CChar((value >> 8) & 0xFF),
+            CChar(value & 0xFF),
+            0
+        ]
+        return String(cString: bytes)
     }
 }

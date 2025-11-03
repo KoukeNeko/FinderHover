@@ -40,6 +40,8 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
     case permissions = "Permissions"
     case owner = "Owner"
     case exif = "Photo Information (EXIF)"
+    case video = "Video Information"
+    case audio = "Audio Information"
     case filePath = "File Path"
 
     var id: String { rawValue }
@@ -55,6 +57,8 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .permissions: return "displayItem.permissions".localized
         case .owner: return "displayItem.owner".localized
         case .exif: return "displayItem.exif".localized
+        case .video: return "displayItem.video".localized
+        case .audio: return "displayItem.audio".localized
         case .filePath: return "displayItem.filePath".localized
         }
     }
@@ -70,6 +74,8 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .permissions: return "lock.shield"
         case .owner: return "person"
         case .exif: return "camera.fill"
+        case .video: return "video.fill"
+        case .audio: return "music.note"
         case .filePath: return "folder"
         }
     }
@@ -166,6 +172,55 @@ class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(showEXIFGPS, forKey: "showEXIFGPS") }
     }
 
+    // Video information display
+    @Published var showVideo: Bool {
+        didSet { UserDefaults.standard.set(showVideo, forKey: "showVideo") }
+    }
+    @Published var showVideoDuration: Bool {
+        didSet { UserDefaults.standard.set(showVideoDuration, forKey: "showVideoDuration") }
+    }
+    @Published var showVideoResolution: Bool {
+        didSet { UserDefaults.standard.set(showVideoResolution, forKey: "showVideoResolution") }
+    }
+    @Published var showVideoCodec: Bool {
+        didSet { UserDefaults.standard.set(showVideoCodec, forKey: "showVideoCodec") }
+    }
+    @Published var showVideoFrameRate: Bool {
+        didSet { UserDefaults.standard.set(showVideoFrameRate, forKey: "showVideoFrameRate") }
+    }
+    @Published var showVideoBitrate: Bool {
+        didSet { UserDefaults.standard.set(showVideoBitrate, forKey: "showVideoBitrate") }
+    }
+
+    // Audio information display
+    @Published var showAudio: Bool {
+        didSet { UserDefaults.standard.set(showAudio, forKey: "showAudio") }
+    }
+    @Published var showAudioTitle: Bool {
+        didSet { UserDefaults.standard.set(showAudioTitle, forKey: "showAudioTitle") }
+    }
+    @Published var showAudioArtist: Bool {
+        didSet { UserDefaults.standard.set(showAudioArtist, forKey: "showAudioArtist") }
+    }
+    @Published var showAudioAlbum: Bool {
+        didSet { UserDefaults.standard.set(showAudioAlbum, forKey: "showAudioAlbum") }
+    }
+    @Published var showAudioGenre: Bool {
+        didSet { UserDefaults.standard.set(showAudioGenre, forKey: "showAudioGenre") }
+    }
+    @Published var showAudioYear: Bool {
+        didSet { UserDefaults.standard.set(showAudioYear, forKey: "showAudioYear") }
+    }
+    @Published var showAudioDuration: Bool {
+        didSet { UserDefaults.standard.set(showAudioDuration, forKey: "showAudioDuration") }
+    }
+    @Published var showAudioBitrate: Bool {
+        didSet { UserDefaults.standard.set(showAudioBitrate, forKey: "showAudioBitrate") }
+    }
+    @Published var showAudioSampleRate: Bool {
+        didSet { UserDefaults.standard.set(showAudioSampleRate, forKey: "showAudioSampleRate") }
+    }
+
     // Display order
     @Published var displayOrder: [DisplayItem] {
         didSet {
@@ -211,6 +266,8 @@ class AppSettings: ObservableObject {
                 .permissions,
                 .owner,
                 .exif,
+                .video,
+                .audio,
                 .filePath
             ]
         }
@@ -241,6 +298,21 @@ class AppSettings: ObservableObject {
         self.showEXIFDateTaken = UserDefaults.standard.object(forKey: "showEXIFDateTaken") as? Bool ?? true
         self.showEXIFDimensions = UserDefaults.standard.object(forKey: "showEXIFDimensions") as? Bool ?? true
         self.showEXIFGPS = UserDefaults.standard.object(forKey: "showEXIFGPS") as? Bool ?? false
+        self.showVideo = UserDefaults.standard.object(forKey: "showVideo") as? Bool ?? true
+        self.showVideoDuration = UserDefaults.standard.object(forKey: "showVideoDuration") as? Bool ?? true
+        self.showVideoResolution = UserDefaults.standard.object(forKey: "showVideoResolution") as? Bool ?? true
+        self.showVideoCodec = UserDefaults.standard.object(forKey: "showVideoCodec") as? Bool ?? true
+        self.showVideoFrameRate = UserDefaults.standard.object(forKey: "showVideoFrameRate") as? Bool ?? true
+        self.showVideoBitrate = UserDefaults.standard.object(forKey: "showVideoBitrate") as? Bool ?? true
+        self.showAudio = UserDefaults.standard.object(forKey: "showAudio") as? Bool ?? true
+        self.showAudioTitle = UserDefaults.standard.object(forKey: "showAudioTitle") as? Bool ?? true
+        self.showAudioArtist = UserDefaults.standard.object(forKey: "showAudioArtist") as? Bool ?? true
+        self.showAudioAlbum = UserDefaults.standard.object(forKey: "showAudioAlbum") as? Bool ?? true
+        self.showAudioGenre = UserDefaults.standard.object(forKey: "showAudioGenre") as? Bool ?? true
+        self.showAudioYear = UserDefaults.standard.object(forKey: "showAudioYear") as? Bool ?? true
+        self.showAudioDuration = UserDefaults.standard.object(forKey: "showAudioDuration") as? Bool ?? true
+        self.showAudioBitrate = UserDefaults.standard.object(forKey: "showAudioBitrate") as? Bool ?? true
+        self.showAudioSampleRate = UserDefaults.standard.object(forKey: "showAudioSampleRate") as? Bool ?? true
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? true
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? 15
         self.windowOffsetY = UserDefaults.standard.object(forKey: "windowOffsetY") as? Double ?? 15
@@ -292,6 +364,21 @@ class AppSettings: ObservableObject {
         showEXIFDateTaken = true
         showEXIFDimensions = true
         showEXIFGPS = false
+        showVideo = true
+        showVideoDuration = true
+        showVideoResolution = true
+        showVideoCodec = true
+        showVideoFrameRate = true
+        showVideoBitrate = true
+        showAudio = true
+        showAudioTitle = true
+        showAudioArtist = true
+        showAudioAlbum = true
+        showAudioGenre = true
+        showAudioYear = true
+        showAudioDuration = true
+        showAudioBitrate = true
+        showAudioSampleRate = true
         displayOrder = [
             .fileType,
             .fileSize,
@@ -302,6 +389,8 @@ class AppSettings: ObservableObject {
             .permissions,
             .owner,
             .exif,
+            .video,
+            .audio,
             .filePath
         ]
         followCursor = true
