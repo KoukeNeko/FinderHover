@@ -144,6 +144,7 @@ class HoverWindowController: NSWindowController {
 struct HoverContentView: View {
     let fileInfo: FileInfo
     @State private var isExpanded = false
+    @State private var thumbnail: NSImage?
     @ObservedObject var settings = AppSettings.shared
 
     var body: some View {
@@ -151,10 +152,18 @@ struct HoverContentView: View {
             // File icon and name
             HStack(spacing: 12) {
                 if settings.showIcon {
-                    Image(nsImage: fileInfo.icon)
+                    Image(nsImage: thumbnail ?? fileInfo.icon)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 48, height: 48)
+                        .onAppear {
+                            // Load thumbnail asynchronously
+                            fileInfo.generateThumbnailAsync { image in
+                                if let image = image {
+                                    thumbnail = image
+                                }
+                            }
+                        }
                 }
 
                 VStack(alignment: .leading, spacing: 4) {

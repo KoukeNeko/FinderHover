@@ -31,15 +31,12 @@ struct FileInfo {
     }
 
     var icon: NSImage {
-        // Try to generate thumbnail first
-        if let thumbnail = generateThumbnail() {
-            return thumbnail
-        }
-        // Fallback to standard icon
+        // Always return standard icon immediately
+        // Thumbnail will be generated asynchronously
         return NSWorkspace.shared.icon(forFile: path)
     }
 
-    private func generateThumbnail() -> NSImage? {
+    func generateThumbnailAsync(completion: @escaping (NSImage?) -> Void) {
         let url = URL(fileURLWithPath: path)
         let size = CGSize(width: 128, height: 128)
         let scale = NSScreen.main?.backingScaleFactor ?? 2.0
@@ -51,20 +48,11 @@ struct FileInfo {
             representationTypes: .thumbnail
         )
 
-        var thumbnailImage: NSImage?
-        let semaphore = DispatchSemaphore(value: 0)
-
         QLThumbnailGenerator.shared.generateRepresentations(for: request) { thumbnail, type, error in
-            if let thumbnail = thumbnail {
-                thumbnailImage = thumbnail.nsImage
+            DispatchQueue.main.async {
+                completion(thumbnail?.nsImage)
             }
-            semaphore.signal()
         }
-
-        // Wait max 0.5 seconds for thumbnail
-        _ = semaphore.wait(timeout: .now() + 0.5)
-
-        return thumbnailImage
     }
 
     static func from(path: String) -> FileInfo? {
