@@ -78,7 +78,7 @@
 "settings.display.audio.year" = "年";
 "settings.display.audio.duration" = "再生時間";
 "settings.display.audio.bitrate" = "ビットレート";
-"settings.display.audio.samplerate" = "サンプルレート";
+"settings.display.audio.samplerate" = "サンプリング";
 "settings.display.audio.hint" = "オーディオメタデータは ID3 タグを含むオーディオファイルにのみ表示されます";
 
 "settings.display.order" = "表示順序";
@@ -145,7 +145,7 @@
 "hover.audio.year" = "年";
 "hover.audio.duration" = "再生時間";
 "hover.audio.bitrate" = "ビットレート";
-"hover.audio.samplerate" = "サンプルレート";
+"hover.audio.samplerate" = "サンプリング";
 "hover.audio.channels" = "チャンネル";
 
 /* Common */
