@@ -11,8 +11,10 @@ import Combine
 class MouseTracker: ObservableObject {
     @Published var mouseLocation: CGPoint = .zero
     @Published var isHoveringOverFinder: Bool = false
+    @Published var isDragging: Bool = false
 
     private var mouseMovedEventMonitor: Any?
+    private var mouseDragEventMonitor: Any?
     private var hoverTimer: Timer?
     private let hoverDelay: TimeInterval = 0.5
 
@@ -27,10 +29,50 @@ class MouseTracker: ObservableObject {
             self?.handleMouseMoved(event)
             return event
         }
+
+        // Monitor drag events (left mouse dragged)
+        mouseDragEventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDragged, .rightMouseDragged]) { [weak self] event in
+            self?.handleMouseDragged(event)
+        }
+
+        NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDragged, .rightMouseDragged]) { [weak self] event in
+            self?.handleMouseDragged(event)
+            return event
+        }
+
+        // Monitor mouse down/up to track drag state
+        NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] event in
+            DispatchQueue.main.async {
+                self?.isDragging = true
+            }
+        }
+
+        NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] event in
+            DispatchQueue.main.async {
+                self?.isDragging = true
+            }
+            return event
+        }
+
+        NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseUp, .rightMouseUp]) { [weak self] event in
+            DispatchQueue.main.async {
+                self?.isDragging = false
+            }
+        }
+
+        NSEvent.addLocalMonitorForEvents(matching: [.leftMouseUp, .rightMouseUp]) { [weak self] event in
+            DispatchQueue.main.async {
+                self?.isDragging = false
+            }
+            return event
+        }
     }
 
     func stopTracking() {
         if let monitor = mouseMovedEventMonitor {
+            NSEvent.removeMonitor(monitor)
+        }
+        if let monitor = mouseDragEventMonitor {
             NSEvent.removeMonitor(monitor)
         }
         hoverTimer?.invalidate()
@@ -49,11 +91,18 @@ class MouseTracker: ObservableObject {
         }
     }
 
+    private func handleMouseDragged(_ event: NSEvent) {
+        let location = NSEvent.mouseLocation
+        DispatchQueue.main.async {
+            self.mouseLocation = location
+            self.isDragging = true
+        }
+    }
+
     private func checkIfHoveringOverFinder() {
         let mouseLocation = NSEvent.mouseLocation
 
         // Get the window under the cursor using accessibility API
-        var element: AXUIElement?
         let systemWideElement = AXUIElementCreateSystemWide()
 
         var elementRef: AXUIElement?

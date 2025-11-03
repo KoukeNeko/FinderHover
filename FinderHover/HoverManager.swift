@@ -51,6 +51,17 @@ class HoverManager: ObservableObject {
                 self?.handleMouseLocation(location)
             }
             .store(in: &cancellables)
+
+        // Monitor dragging state - hide window when dragging starts
+        mouseTracker.$isDragging
+            .sink { [weak self] isDragging in
+                if isDragging {
+                    self?.hideHoverWindow()
+                    self?.currentFileInfo = nil
+                    self?.displayTimer?.invalidate()
+                }
+            }
+            .store(in: &cancellables)
     }
 
     func startMonitoring() {
@@ -91,6 +102,9 @@ class HoverManager: ObservableObject {
     private func handleMouseLocation(_ location: CGPoint) {
         guard isEnabled else { return }
 
+        // Don't show hover window while dragging
+        guard !mouseTracker.isDragging else { return }
+
         // Check if hovering over Finder and get file info
         displayTimer?.invalidate()
         displayTimer = Timer.scheduledTimer(withTimeInterval: settings.hoverDelay, repeats: false) { [weak self] _ in
@@ -99,6 +113,9 @@ class HoverManager: ObservableObject {
     }
 
     private func checkAndDisplayFileInfo(at location: CGPoint) {
+        // Don't show hover window while dragging
+        guard !mouseTracker.isDragging else { return }
+
         // Try to get file path at current location
         if let filePath = FinderInteraction.getFileAtMousePosition(location),
            let fileInfo = FileInfo.from(path: filePath) {
