@@ -61,6 +61,20 @@ class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(showIcon, forKey: "showIcon") }
     }
 
+    // Additional information display
+    @Published var showLastAccessDate: Bool {
+        didSet { UserDefaults.standard.set(showLastAccessDate, forKey: "showLastAccessDate") }
+    }
+    @Published var showPermissions: Bool {
+        didSet { UserDefaults.standard.set(showPermissions, forKey: "showPermissions") }
+    }
+    @Published var showOwner: Bool {
+        didSet { UserDefaults.standard.set(showOwner, forKey: "showOwner") }
+    }
+    @Published var showItemCount: Bool {
+        didSet { UserDefaults.standard.set(showItemCount, forKey: "showItemCount") }
+    }
+
     // Window behavior
     @Published var followCursor: Bool {
         didSet { UserDefaults.standard.set(followCursor, forKey: "followCursor") }
@@ -87,6 +101,10 @@ class AppSettings: ObservableObject {
         self.showFileType = UserDefaults.standard.object(forKey: "showFileType") as? Bool ?? true
         self.showFilePath = UserDefaults.standard.object(forKey: "showFilePath") as? Bool ?? true
         self.showIcon = UserDefaults.standard.object(forKey: "showIcon") as? Bool ?? true
+        self.showLastAccessDate = UserDefaults.standard.object(forKey: "showLastAccessDate") as? Bool ?? false
+        self.showPermissions = UserDefaults.standard.object(forKey: "showPermissions") as? Bool ?? false
+        self.showOwner = UserDefaults.standard.object(forKey: "showOwner") as? Bool ?? false
+        self.showItemCount = UserDefaults.standard.object(forKey: "showItemCount") as? Bool ?? true
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? true
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? 15
         self.windowOffsetY = UserDefaults.standard.object(forKey: "windowOffsetY") as? Double ?? 15
@@ -106,6 +124,10 @@ class AppSettings: ObservableObject {
         showFileType = true
         showFilePath = true
         showIcon = true
+        showLastAccessDate = false
+        showPermissions = false
+        showOwner = false
+        showItemCount = true
         followCursor = true
         windowOffsetX = 15
         windowOffsetY = 15

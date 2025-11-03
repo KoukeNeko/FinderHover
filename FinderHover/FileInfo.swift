@@ -19,6 +19,16 @@ struct FileInfo {
     let isDirectory: Bool
     let fileExtension: String?
 
+    // Additional metadata
+    let lastAccessDate: Date?
+    let permissions: String
+    let owner: String
+    let isReadable: Bool
+    let isWritable: Bool
+    let isExecutable: Bool
+    let itemCount: Int? // For directories
+    let isHidden: Bool
+
     var formattedSize: String {
         ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
     }
@@ -28,6 +38,29 @@ struct FileInfo {
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
         return formatter.string(from: modificationDate)
+    }
+
+    var formattedLastAccessDate: String {
+        guard let date = lastAccessDate else { return "N/A" }
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
+    }
+
+    var formattedCreationDate: String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        return formatter.string(from: creationDate)
+    }
+
+    var formattedPermissions: String {
+        var result = ""
+        result += isReadable ? "r" : "-"
+        result += isWritable ? "w" : "-"
+        result += isExecutable ? "x" : "-"
+        return "\(permissions) (\(result))"
     }
 
     var icon: NSImage {
@@ -65,6 +98,36 @@ struct FileInfo {
         do {
             let attributes = try fileManager.attributesOfItem(atPath: path)
             let url = URL(fileURLWithPath: path)
+            let isDir = (attributes[.type] as? FileAttributeType) == .typeDirectory
+
+            // Get permissions
+            let posixPermissions = attributes[.posixPermissions] as? Int ?? 0
+            let permissionsString = String(format: "%03o", posixPermissions)
+
+            // Get owner name
+            let ownerName = attributes[.ownerAccountName] as? String ?? "Unknown"
+
+            // Check if readable/writable/executable
+            let isReadable = fileManager.isReadableFile(atPath: path)
+            let isWritable = fileManager.isWritableFile(atPath: path)
+            let isExecutable = fileManager.isExecutableFile(atPath: path)
+
+            // Get item count for directories
+            var itemCount: Int? = nil
+            if isDir {
+                do {
+                    let contents = try fileManager.contentsOfDirectory(atPath: path)
+                    itemCount = contents.count
+                } catch {
+                    itemCount = nil
+                }
+            }
+
+            // Check if hidden (starts with .)
+            let isHidden = url.lastPathComponent.hasPrefix(".")
+
+            // Get last access date (may not be available on all file systems)
+            let lastAccessDate = attributes[.modificationDate] as? Date
 
             return FileInfo(
                 name: url.lastPathComponent,
@@ -73,8 +136,16 @@ struct FileInfo {
                 modificationDate: attributes[.modificationDate] as? Date ?? Date(),
                 creationDate: attributes[.creationDate] as? Date ?? Date(),
                 fileType: attributes[.type] as? String ?? "Unknown",
-                isDirectory: (attributes[.type] as? FileAttributeType) == .typeDirectory,
-                fileExtension: url.pathExtension.isEmpty ? nil : url.pathExtension
+                isDirectory: isDir,
+                fileExtension: url.pathExtension.isEmpty ? nil : url.pathExtension,
+                lastAccessDate: lastAccessDate,
+                permissions: permissionsString,
+                owner: ownerName,
+                isReadable: isReadable,
+                isWritable: isWritable,
+                isExecutable: isExecutable,
+                itemCount: itemCount,
+                isHidden: isHidden
             )
         } catch {
             return nil

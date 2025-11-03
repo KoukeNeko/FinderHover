@@ -191,11 +191,25 @@ struct HoverContentView: View {
                 if settings.showFileSize {
                     DetailRow(icon: "archivebox", label: "Size", value: fileInfo.formattedSize, fontSize: settings.fontSize)
                 }
+                if settings.showItemCount && fileInfo.isDirectory {
+                    if let count = fileInfo.itemCount {
+                        DetailRow(icon: "number", label: "Items", value: "\(count) item\(count == 1 ? "" : "s")", fontSize: settings.fontSize)
+                    }
+                }
                 if settings.showCreationDate {
-                    DetailRow(icon: "calendar", label: "Created", value: formattedDate(fileInfo.creationDate), fontSize: settings.fontSize)
+                    DetailRow(icon: "calendar", label: "Created", value: fileInfo.formattedCreationDate, fontSize: settings.fontSize)
                 }
                 if settings.showModificationDate {
                     DetailRow(icon: "clock", label: "Modified", value: fileInfo.formattedModificationDate, fontSize: settings.fontSize)
+                }
+                if settings.showLastAccessDate {
+                    DetailRow(icon: "eye", label: "Accessed", value: fileInfo.formattedLastAccessDate, fontSize: settings.fontSize)
+                }
+                if settings.showPermissions {
+                    DetailRow(icon: "lock.shield", label: "Permissions", value: fileInfo.formattedPermissions, fontSize: settings.fontSize)
+                }
+                if settings.showOwner {
+                    DetailRow(icon: "person", label: "Owner", value: fileInfo.owner, fontSize: settings.fontSize)
                 }
             }
 
