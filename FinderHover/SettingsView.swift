@@ -190,17 +190,31 @@ struct AppearanceSettingsView: View {
 
                 VStack(spacing: 24) {
                     // Window Opacity
-                    SettingRow(
-                        title: "Window Opacity",
-                        description: "Transparency level of the preview window"
-                    ) {
-                        HStack(spacing: 12) {
-                            Slider(value: $settings.windowOpacity, in: 0.7...1.0, step: 0.05)
-                                .frame(maxWidth: 200)
-                            Text("\(Int(settings.windowOpacity * 100))%")
-                                .font(.system(size: 13, design: .monospaced))
-                                .foregroundColor(.secondary)
-                                .frame(width: 45, alignment: .trailing)
+                    VStack(alignment: .leading, spacing: 8) {
+                        SettingRow(
+                            title: "Window Opacity",
+                            description: "Transparency level of the preview window"
+                        ) {
+                            HStack(spacing: 12) {
+                                Slider(value: $settings.windowOpacity, in: 0.7...1.0, step: 0.05)
+                                    .frame(maxWidth: 200)
+                                    .disabled(settings.enableBlur)
+                                Text("\(Int(settings.windowOpacity * 100))%")
+                                    .font(.system(size: 13, design: .monospaced))
+                                    .foregroundColor(.secondary)
+                                    .frame(width: 45, alignment: .trailing)
+                            }
+                        }
+
+                        if settings.enableBlur {
+                            HStack(spacing: 6) {
+                                Image(systemName: "info.circle")
+                                    .font(.system(size: 11))
+                                Text("Only available when Blur Effect is disabled")
+                                    .font(.system(size: 11))
+                            }
+                            .foregroundColor(.secondary)
+                            .padding(.leading, 20)
                         }
                     }
 
