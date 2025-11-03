@@ -10,6 +10,9 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
 
 ## ✨ Features
 
+<img width="944" height="517" alt="image" src="https://github.com/user-attachments/assets/a2c34d3b-d45c-49c3-bfd4-d1b2491f7be8" />
+
+
 ### 🎯 Smart Hover Preview
 - **Instant response**: Adjustable hover delay (0.1s - 2.0s, default: 0.1s)
 - Automatically shows detailed file information when you hover over selected files in Finder
