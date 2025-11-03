@@ -1,13 +1,25 @@
 # FinderHover
 
-A macOS menu bar app that displays file information when hovering over files in Finder, similar to Windows file preview behavior.
+A beautiful macOS menu bar app that displays rich file information when hovering over files in Finder, similar to Windows file preview behavior.
 
 ## Features
 
-- **Hover Preview**: Automatically shows file information when you hover over files in Finder
-- **Detailed Info**: Displays file name, type, size, modification date, and path
-- **Menu Bar App**: Runs quietly in the background from your menu bar
-- **Easy Toggle**: Enable/disable hover preview with a simple menu option
+- **🎯 Hover Preview**: Automatically shows detailed file information when you hover over selected files in Finder
+- **📊 Rich Information Display**:
+  - Full filename (with automatic wrapping for long names)
+  - File type with smart descriptions (recognizes 50+ file types)
+  - File size in human-readable format
+  - Creation and modification dates
+  - Full file path (with text selection support)
+  - Large file icon for easy recognition
+- **🎨 Modern Design**:
+  - Beautiful gradient border
+  - Smooth shadows and transparency
+  - Smart positioning (stays on screen)
+  - Adapts to filename length
+- **⚡ Lightweight**: Runs quietly in the background from your menu bar
+- **🔒 Privacy-First**: Uses only Accessibility APIs (no AppleScript)
+- **🎛️ Easy Control**: Toggle on/off from menu bar
 
 ## Installation
 
@@ -17,14 +29,13 @@ A macOS menu bar app that displays file information when hovering over files in 
 
 ## Setup
 
-On first launch, you'll need to grant the app permissions:
+On first launch, you only need to grant one permission:
 
-1. **Accessibility Permission**: The app will prompt you to enable accessibility access
+1. **Accessibility Permission**: The app will automatically prompt you
+   - Click "Open System Settings" when prompted
    - Go to System Settings > Privacy & Security > Accessibility
-   - Enable FinderHover in the list
-
-2. **AppleEvents Permission**: You may be prompted to allow the app to control Finder
-   - Click "OK" to allow
+   - Enable FinderHover (or Xcode during development) in the list
+   - Restart the app
 
 ## Usage
 
@@ -45,34 +56,57 @@ On first launch, you'll need to grant the app permissions:
 
 ## How It Works
 
-The app uses several macOS technologies:
+The app uses modern macOS technologies:
 
-- **Accessibility API**: Monitors mouse position globally
-- **AppleScript**: Interacts with Finder to get file information
-- **SwiftUI**: Displays the hover window with file details
+- **Accessibility API**: Monitors mouse position globally and retrieves file information from Finder
+- **SwiftUI**: Renders the beautiful hover window with adaptive sizing
+- **AppKit**: Manages window positioning and screen boundary detection
 - **Menu Bar Integration**: Runs as a lightweight background app
+
+**Note**: The app works with **selected files** in Finder. Select a file (click it), then hover your mouse over it to see the preview.
 
 ## Requirements
 
-- macOS 14.0 or later
-- Accessibility permissions
-- AppleEvents permissions for Finder interaction
+- macOS 14.0 or later (compatible with macOS 15+ and future versions)
+- Accessibility permissions only
+- Xcode 15.0+ for building
 
-## Privacy
+## Privacy & Security
 
-FinderHover:
-- Only accesses file metadata (name, size, dates)
-- Does not read file contents
-- Does not send any data over the network
-- Runs entirely locally on your Mac
+FinderHover is designed with privacy in mind:
+- ✅ Only accesses file metadata (name, size, dates, paths)
+- ✅ Does not read file contents
+- ✅ Does not send any data over the network
+- ✅ No analytics or tracking
+- ✅ Runs entirely locally on your Mac
+- ✅ Uses Accessibility API only (no AppleScript automation)
+- ✅ Open source - inspect the code yourself!
 
 ## Development
 
-Built with:
+**Technology Stack:**
 - Swift 5.0
-- SwiftUI
-- AppKit
-- Accessibility Framework
+- SwiftUI for modern UI
+- AppKit for window management
+- Accessibility Framework for file detection
+- Combine for reactive updates
+
+**Project Structure:**
+- `FinderHoverApp.swift` - Main app and menu bar setup
+- `HoverWindow.swift` - Floating preview window UI
+- `HoverManager.swift` - Coordinates mouse tracking and display
+- `MouseTracker.swift` - Global mouse movement monitoring
+- `FinderInteraction.swift` - Accessibility API integration
+- `FileInfo.swift` - File metadata model
+
+**Supported File Types:**
+The app recognizes and provides descriptions for 50+ file types including:
+- Documents: PDF, Word, Excel, PowerPoint, Pages, Numbers, Keynote
+- Images: JPEG, PNG, GIF, SVG, PSD, AI, Sketch
+- Media: MP4, MOV, AVI, MP3, WAV, FLAC
+- Archives: ZIP, RAR, 7Z, DMG, ISO
+- Code: Swift, Python, JavaScript, TypeScript, Java, C/C++, HTML, CSS
+- And many more...
 
 ## Troubleshooting
 
