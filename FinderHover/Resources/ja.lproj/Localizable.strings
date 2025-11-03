@@ -83,6 +83,8 @@
 "displayItem.permissions" = "アクセス権";
 "displayItem.owner" = "所有者";
 "displayItem.exif" = "写真情報（EXIF）";
+"displayItem.video" = "動画情報";
+"displayItem.audio" = "オーディオ情報";
 "displayItem.filePath" = "ファイルパス";
 
 /* Hover Window */
@@ -104,6 +106,26 @@
 "hover.exif.taken" = "撮影";
 "hover.exif.dimensions" = "サイズ";
 "hover.exif.gps" = "位置";
+
+/* Video Information */
+"hover.video.title" = "動画情報";
+"hover.video.duration" = "再生時間";
+"hover.video.resolution" = "解像度";
+"hover.video.codec" = "コーデック";
+"hover.video.framerate" = "フレームレート";
+"hover.video.bitrate" = "ビットレート";
+
+/* Audio Information */
+"hover.audio.title" = "オーディオ情報";
+"hover.audio.songTitle" = "タイトル";
+"hover.audio.artist" = "アーティスト";
+"hover.audio.album" = "アルバム";
+"hover.audio.genre" = "ジャンル";
+"hover.audio.year" = "年";
+"hover.audio.duration" = "再生時間";
+"hover.audio.bitrate" = "ビットレート";
+"hover.audio.samplerate" = "サンプルレート";
+"hover.audio.channels" = "チャンネル";
 
 /* Common */
 "common.reset" = "デフォルトに戻す";

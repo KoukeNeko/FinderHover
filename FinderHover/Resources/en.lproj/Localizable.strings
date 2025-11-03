@@ -83,6 +83,8 @@
 "displayItem.permissions" = "Permissions";
 "displayItem.owner" = "Owner";
 "displayItem.exif" = "Photo Information (EXIF)";
+"displayItem.video" = "Video Information";
+"displayItem.audio" = "Audio Information";
 "displayItem.filePath" = "File Path";
 
 /* Hover Window */
@@ -104,6 +106,26 @@
 "hover.exif.taken" = "Taken";
 "hover.exif.dimensions" = "Dimensions";
 "hover.exif.gps" = "Location";
+
+/* Video Information */
+"hover.video.title" = "Video Information";
+"hover.video.duration" = "Duration";
+"hover.video.resolution" = "Resolution";
+"hover.video.codec" = "Codec";
+"hover.video.framerate" = "Frame Rate";
+"hover.video.bitrate" = "Bitrate";
+
+/* Audio Information */
+"hover.audio.title" = "Audio Information";
+"hover.audio.songTitle" = "Title";
+"hover.audio.artist" = "Artist";
+"hover.audio.album" = "Album";
+"hover.audio.genre" = "Genre";
+"hover.audio.year" = "Year";
+"hover.audio.duration" = "Duration";
+"hover.audio.bitrate" = "Bitrate";
+"hover.audio.samplerate" = "Sample Rate";
+"hover.audio.channels" = "Channels";
 
 /* Common */
 "common.reset" = "Reset to Defaults";

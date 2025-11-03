@@ -345,6 +345,84 @@ struct HoverContentView: View {
                 }
             }
 
+        case .video:
+            if settings.showVideo, let video = fileInfo.videoMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.video.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showVideoDuration, let duration = video.duration {
+                        DetailRow(icon: "clock", label: "hover.video.duration".localized, value: duration, fontSize: settings.fontSize)
+                    }
+                    if settings.showVideoResolution, let resolution = video.resolution {
+                        DetailRow(icon: "rectangle.resize", label: "hover.video.resolution".localized, value: resolution, fontSize: settings.fontSize)
+                    }
+                    if settings.showVideoCodec, let codec = video.codec {
+                        DetailRow(icon: "film", label: "hover.video.codec".localized, value: codec, fontSize: settings.fontSize)
+                    }
+                    if settings.showVideoFrameRate, let frameRate = video.frameRate {
+                        DetailRow(icon: "gauge", label: "hover.video.framerate".localized, value: frameRate, fontSize: settings.fontSize)
+                    }
+                    if settings.showVideoBitrate, let bitrate = video.bitrate {
+                        DetailRow(icon: "speedometer", label: "hover.video.bitrate".localized, value: bitrate, fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
+
+        case .audio:
+            if settings.showAudio, let audio = fileInfo.audioMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.audio.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showAudioTitle, let title = audio.title {
+                        DetailRow(icon: "textformat", label: "hover.audio.songTitle".localized, value: title, fontSize: settings.fontSize)
+                    }
+                    if settings.showAudioArtist, let artist = audio.artist {
+                        DetailRow(icon: "person.fill", label: "hover.audio.artist".localized, value: artist, fontSize: settings.fontSize)
+                    }
+                    if settings.showAudioAlbum, let album = audio.album {
+                        DetailRow(icon: "square.stack", label: "hover.audio.album".localized, value: album, fontSize: settings.fontSize)
+                    }
+                    if settings.showAudioGenre, let genre = audio.genre {
+                        DetailRow(icon: "music.note.list", label: "hover.audio.genre".localized, value: genre, fontSize: settings.fontSize)
+                    }
+                    if settings.showAudioYear, let year = audio.year {
+                        DetailRow(icon: "calendar", label: "hover.audio.year".localized, value: year, fontSize: settings.fontSize)
+                    }
+                    if settings.showAudioDuration, let duration = audio.duration {
+                        DetailRow(icon: "clock", label: "hover.audio.duration".localized, value: duration, fontSize: settings.fontSize)
+                    }
+                    if settings.showAudioBitrate, let bitrate = audio.bitrate {
+                        DetailRow(icon: "speedometer", label: "hover.audio.bitrate".localized, value: bitrate, fontSize: settings.fontSize)
+                    }
+                    if settings.showAudioSampleRate, let sampleRate = audio.sampleRate {
+                        DetailRow(icon: "waveform", label: "hover.audio.samplerate".localized, value: sampleRate, fontSize: settings.fontSize)
+                    }
+                    if let channels = audio.channels {
+                        DetailRow(icon: "speaker.wave.2", label: "hover.audio.channels".localized, value: channels, fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
+
         case .filePath:
             if settings.showFilePath {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
