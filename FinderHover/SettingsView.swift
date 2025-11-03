@@ -318,6 +318,7 @@ struct AppearanceSettingsView: View {
 // MARK: - Display Settings
 struct DisplaySettingsView: View {
     @ObservedObject var settings: AppSettings
+    @State private var draggingItem: DisplayItem?
 
     var body: some View {
         ScrollView {
@@ -437,12 +438,15 @@ struct DisplaySettingsView: View {
                             .padding(.vertical, 12)
                             .contentShape(Rectangle())
                             .background(Color(NSColor.controlBackgroundColor))
+                            .opacity(draggingItem == item ? 0.5 : 1.0)
                             .onDrag {
-                                NSItemProvider(object: item.rawValue as NSString)
+                                self.draggingItem = item
+                                return NSItemProvider(object: item.rawValue as NSString)
                             }
                             .onDrop(of: [.text], delegate: DisplayItemDropDelegate(
                                 item: item,
-                                items: $settings.displayOrder
+                                items: $settings.displayOrder,
+                                draggingItem: $draggingItem
                             ))
 
                             if item != settings.displayOrder.last {
@@ -668,32 +672,28 @@ struct DisplayToggleRow: View {
 struct DisplayItemDropDelegate: DropDelegate {
     let item: DisplayItem
     @Binding var items: [DisplayItem]
+    @Binding var draggingItem: DisplayItem?
 
     func performDrop(info: DropInfo) -> Bool {
+        draggingItem = nil
         return true
     }
 
     func dropEntered(info: DropInfo) {
-        guard let fromIndex = items.firstIndex(of: item) else { return }
+        guard let draggingItem = draggingItem,
+              draggingItem != item,
+              let fromIndex = items.firstIndex(of: draggingItem),
+              let toIndex = items.firstIndex(of: item) else { return }
 
-        // Get the dragged item from pasteboard
-        if let itemProviders = info.itemProviders(for: [.text]).first {
-            itemProviders.loadItem(forTypeIdentifier: "public.text", options: nil) { (data, error) in
-                if let data = data as? Data,
-                   let string = String(data: data, encoding: .utf8),
-                   let draggedItem = DisplayItem.allCases.first(where: { $0.rawValue == string }),
-                   let toIndex = items.firstIndex(of: draggedItem) {
-
-                    if fromIndex != toIndex {
-                        DispatchQueue.main.async {
-                            withAnimation {
-                                items.move(fromOffsets: IndexSet(integer: toIndex), toOffset: fromIndex > toIndex ? fromIndex + 1 : fromIndex)
-                            }
-                        }
-                    }
-                }
+        if items[toIndex] != draggingItem {
+            withAnimation(.default) {
+                items.move(fromOffsets: IndexSet(integer: fromIndex), toOffset: toIndex > fromIndex ? toIndex + 1 : toIndex)
             }
         }
+    }
+
+    func dropUpdated(info: DropInfo) -> DropProposal? {
+        return DropProposal(operation: .move)
     }
 }
 

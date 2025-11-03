@@ -228,29 +228,6 @@ struct HoverContentView: View {
             ForEach(settings.displayOrder) { item in
                 displayItemView(for: item)
             }
-
-            // File path section - always at the bottom when enabled
-            if settings.showFilePath {
-                HStack(alignment: .top, spacing: 8) {
-                    Image(systemName: "folder")
-                        .font(.system(size: settings.fontSize))
-                        .foregroundColor(.secondary)
-                        .frame(width: 14, alignment: .center)
-
-                    Text("Location:")
-                        .font(.system(size: settings.fontSize))
-                        .foregroundColor(.secondary)
-                        .frame(width: 65, alignment: .trailing)
-
-                    Text(fileInfo.path)
-                        .font(.system(size: settings.fontSize, design: .monospaced))
-                        .fontWeight(.medium)
-                        .lineLimit(nil)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .textSelection(.enabled)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-            }
         }
         .padding(settings.compactMode ? 10 : 14)
         .frame(minWidth: 320, maxWidth: settings.windowMaxWidth)
@@ -327,13 +304,8 @@ struct HoverContentView: View {
                         .padding(.top, settings.compactMode ? 2 : 4)
                         .padding(.bottom, settings.compactMode ? 2 : 4)
 
-                    HStack(spacing: 8) {
-                        Image(systemName: "camera.fill")
-                            .font(.system(size: settings.fontSize))
-                            .foregroundColor(.secondary)
-                        Text("Photo Information")
-                            .font(.system(size: settings.fontSize, weight: .semibold))
-                    }
+                    Text("Photo Information")
+                        .font(.system(size: settings.fontSize, weight: .semibold))
 
                     if settings.showEXIFCamera, let camera = exif.camera {
                         DetailRow(icon: "camera", label: "Camera", value: camera, fontSize: settings.fontSize)
@@ -370,7 +342,29 @@ struct HoverContentView: View {
             }
 
         case .filePath:
-            EmptyView() // File path is handled separately at the bottom
+            if settings.showFilePath {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    HStack(alignment: .top, spacing: 8) {
+                        Image(systemName: "folder")
+                            .font(.system(size: settings.fontSize))
+                            .foregroundColor(.secondary)
+                            .frame(width: 14, alignment: .center)
+
+                        Text("Location:")
+                            .font(.system(size: settings.fontSize))
+                            .foregroundColor(.secondary)
+                            .frame(width: 65, alignment: .trailing)
+
+                        Text(fileInfo.path)
+                            .font(.system(size: settings.fontSize, design: .monospaced))
+                            .fontWeight(.medium)
+                            .lineLimit(nil)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .textSelection(.enabled)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+            }
         }
     }
 
