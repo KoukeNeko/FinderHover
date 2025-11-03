@@ -302,6 +302,37 @@ The app recognizes and provides smart descriptions for:
    - Press `Cmd+R` or click the Run button
    - App will launch with Xcode's entitlements
 
+### Building from Command Line
+
+For command line builds without opening Xcode:
+
+1. **Build the app (Debug)**
+   ```bash
+   xcodebuild -project FinderHover.xcodeproj -scheme FinderHover -configuration Debug build
+   ```
+
+2. **Find the built .app file**
+   ```bash
+   # The .app is located in DerivedData:
+   find ~/Library/Developer/Xcode/DerivedData/FinderHover-* -name "FinderHover.app" -type d
+   ```
+
+3. **Copy to Applications or Desktop**
+   ```bash
+   # Copy to Desktop
+   cp -r ~/Library/Developer/Xcode/DerivedData/FinderHover-*/Build/Products/Debug/FinderHover.app ~/Desktop/
+
+   # Or copy to Applications
+   cp -r ~/Library/Developer/Xcode/DerivedData/FinderHover-*/Build/Products/Debug/FinderHover.app /Applications/
+   ```
+
+4. **Build for Release**
+   ```bash
+   xcodebuild -project FinderHover.xcodeproj -scheme FinderHover -configuration Release build
+   ```
+
+> **Note**: Debug builds can be run locally without an Apple Developer Program membership. Release builds for distribution require signing with a valid developer certificate.
+
 ### Contributing
 
 Contributions are welcome! Please feel free to:
