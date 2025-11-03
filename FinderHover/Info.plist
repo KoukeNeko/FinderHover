@@ -18,5 +18,13 @@
     <string>2</string>
     <key>CFBundleShortVersionString</key>
     <string>1.1</string>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+    <key>CFBundleLocalizations</key>
+    <array>
+        <string>en</string>
+        <string>zh-Hant</string>
+        <string>ja</string>
+    </array>
 </dict>
 </plist>
