@@ -26,6 +26,16 @@ class HoverWindowController: NSWindowController {
         window.ignoresMouseEvents = true
         window.hasShadow = true
 
+        // Ensure no title bar or border is drawn
+        window.titlebarAppearsTransparent = true
+        window.titleVisibility = .hidden
+
+        // Additional settings to prevent border artifacts on older macOS
+        window.isMovableByWindowBackground = false
+        window.standardWindowButton(.closeButton)?.isHidden = true
+        window.standardWindowButton(.miniaturizeButton)?.isHidden = true
+        window.standardWindowButton(.zoomButton)?.isHidden = true
+
         self.init(window: window)
     }
 
