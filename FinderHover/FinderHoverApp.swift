@@ -21,6 +21,7 @@ struct FinderHoverApp: App {
 class AppDelegate: NSObject, NSApplicationDelegate {
     var statusItem: NSStatusItem?
     var hoverManager: HoverManager?
+    var settingsWindow: NSWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Hide dock icon to make it a menu bar only app
@@ -62,12 +63,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         menu.addItem(NSMenuItem.separator())
 
+        // Settings
+        menu.addItem(NSMenuItem(
+            title: "Settings...",
+            action: #selector(showSettings),
+            keyEquivalent: ","
+        ))
+
         // About
         menu.addItem(NSMenuItem(
             title: "About FinderHover",
             action: #selector(showAbout),
             keyEquivalent: "a"
         ))
+
+        menu.addItem(NSMenuItem.separator())
 
         // Quit
         menu.addItem(NSMenuItem(
@@ -93,6 +103,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    @objc func showSettings() {
+        if settingsWindow == nil {
+            let settingsView = SettingsView()
+            let hostingController = NSHostingController(rootView: settingsView)
+
+            let window = NSWindow(contentViewController: hostingController)
+            window.title = "Settings"
+            window.styleMask = [.titled, .closable, .resizable]
+            window.minSize = NSSize(width: 650, height: 500)
+            window.setContentSize(NSSize(width: 650, height: 500))
+            window.center()
+            window.setFrameAutosaveName("FinderHoverSettings")
+            window.isReleasedWhenClosed = false
+
+            settingsWindow = window
+        }
+
+        settingsWindow?.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+    }
+
     @objc func showAbout() {
         let alert = NSAlert()
         alert.messageText = "FinderHover"
@@ -104,6 +135,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         To use:
         1. Grant Accessibility permissions in System Settings
         2. Hover over any file in Finder to see its details
+
+        Features:
+        - Customizable hover delay
+        - Adjustable window appearance
+        - Toggle information display
+        - Smart positioning
 
         Created with SwiftUI
         """

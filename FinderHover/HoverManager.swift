@@ -28,6 +28,7 @@ class HoverManager: ObservableObject {
     private var displayTimer: Timer?
     private var hideCheckTimer: Timer?
     private var lastMouseLocation: CGPoint = .zero
+    private let settings = AppSettings.shared
 
     init() {
         setupSubscriptions()
@@ -65,6 +66,9 @@ class HoverManager: ObservableObject {
     }
 
     private func checkIfShouldHide(at location: CGPoint) {
+        // Only auto-hide if enabled in settings
+        guard settings.autoHideEnabled else { return }
+
         // If window is showing and we have current file info
         guard let currentInfo = currentFileInfo else { return }
 
@@ -89,7 +93,7 @@ class HoverManager: ObservableObject {
 
         // Check if hovering over Finder and get file info
         displayTimer?.invalidate()
-        displayTimer = Timer.scheduledTimer(withTimeInterval: 0.8, repeats: false) { [weak self] _ in
+        displayTimer = Timer.scheduledTimer(withTimeInterval: settings.hoverDelay, repeats: false) { [weak self] _ in
             self?.checkAndDisplayFileInfo(at: location)
         }
     }

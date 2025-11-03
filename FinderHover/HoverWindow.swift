@@ -30,6 +30,8 @@ class HoverWindowController: NSWindowController {
     func show(at position: CGPoint, with fileInfo: FileInfo) {
         guard let window = window else { return }
 
+        let settings = AppSettings.shared
+
         // Update content
         let hostingView = NSHostingView(rootView: HoverContentView(fileInfo: fileInfo))
         window.contentView = hostingView
@@ -40,8 +42,8 @@ class HoverWindowController: NSWindowController {
         window.setContentSize(fittingSize)
 
         // Position window near mouse cursor with smart positioning
-        let offsetX: CGFloat = 15
-        let offsetY: CGFloat = 15
+        let offsetX: CGFloat = settings.windowOffsetX
+        let offsetY: CGFloat = settings.windowOffsetY
         var windowOrigin = CGPoint(
             x: position.x + offsetX,
             y: position.y - offsetY - window.frame.height
@@ -84,26 +86,29 @@ class HoverWindowController: NSWindowController {
 struct HoverContentView: View {
     let fileInfo: FileInfo
     @State private var isExpanded = false
+    @ObservedObject var settings = AppSettings.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             // File icon and name
             HStack(spacing: 12) {
-                Image(nsImage: fileInfo.icon)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 48, height: 48)
+                if settings.showIcon {
+                    Image(nsImage: fileInfo.icon)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 48, height: 48)
+                }
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(fileInfo.name)
-                        .font(.system(size: 13, weight: .semibold))
+                        .font(.system(size: settings.fontSize + 2, weight: .semibold))
                         .lineLimit(nil)
                         .multilineTextAlignment(.leading)
                         .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     Text(fileInfo.isDirectory ? "Folder" : (fileInfo.fileExtension?.uppercased() ?? "File"))
-                        .font(.system(size: 10))
+                        .font(.system(size: settings.fontSize - 1))
                         .foregroundColor(.secondary)
                 }
             }
@@ -113,38 +118,47 @@ struct HoverContentView: View {
 
             // File details in a grid
             VStack(alignment: .leading, spacing: 8) {
-                DetailRow(icon: "doc.text", label: "Type", value: getFileTypeDescription())
-                DetailRow(icon: "archivebox", label: "Size", value: fileInfo.formattedSize)
-                DetailRow(icon: "calendar", label: "Created", value: formattedDate(fileInfo.creationDate))
-                DetailRow(icon: "clock", label: "Modified", value: fileInfo.formattedModificationDate)
+                if settings.showFileType {
+                    DetailRow(icon: "doc.text", label: "Type", value: getFileTypeDescription(), fontSize: settings.fontSize)
+                }
+                if settings.showFileSize {
+                    DetailRow(icon: "archivebox", label: "Size", value: fileInfo.formattedSize, fontSize: settings.fontSize)
+                }
+                if settings.showCreationDate {
+                    DetailRow(icon: "calendar", label: "Created", value: formattedDate(fileInfo.creationDate), fontSize: settings.fontSize)
+                }
+                if settings.showModificationDate {
+                    DetailRow(icon: "clock", label: "Modified", value: fileInfo.formattedModificationDate, fontSize: settings.fontSize)
+                }
             }
-            .font(.system(size: 11))
 
             // File path section
-            VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    Image(systemName: "folder")
-                        .font(.system(size: 10))
-                        .foregroundColor(.secondary)
-                    Text("Location:")
-                        .font(.system(size: 10, weight: .medium))
-                        .foregroundColor(.secondary)
-                }
+            if settings.showFilePath {
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Image(systemName: "folder")
+                            .font(.system(size: settings.fontSize - 1))
+                            .foregroundColor(.secondary)
+                        Text("Location:")
+                            .font(.system(size: settings.fontSize - 1, weight: .medium))
+                            .foregroundColor(.secondary)
+                    }
 
-                Text(fileInfo.path)
-                    .font(.system(size: 9, design: .monospaced))
-                    .foregroundColor(.secondary)
-                    .lineLimit(3)
-                    .truncationMode(.middle)
-                    .textSelection(.enabled)
+                    Text(fileInfo.path)
+                        .font(.system(size: settings.fontSize - 2, design: .monospaced))
+                        .foregroundColor(.secondary)
+                        .lineLimit(3)
+                        .truncationMode(.middle)
+                        .textSelection(.enabled)
+                }
+                .padding(.top, 4)
             }
-            .padding(.top, 4)
         }
         .padding(14)
-        .frame(minWidth: 320, maxWidth: 400)
+        .frame(minWidth: 320, maxWidth: settings.windowMaxWidth)
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .fill(Color(NSColor.controlBackgroundColor).opacity(0.98))
+                .fill(Color(NSColor.controlBackgroundColor).opacity(settings.windowOpacity))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 10)
@@ -245,19 +259,22 @@ struct DetailRow: View {
     let icon: String
     let label: String
     let value: String
+    let fontSize: Double
 
     var body: some View {
         HStack(spacing: 8) {
             Image(systemName: icon)
-                .font(.system(size: 11))
+                .font(.system(size: fontSize))
                 .foregroundColor(.secondary)
                 .frame(width: 14, alignment: .center)
 
             Text(label + ":")
+                .font(.system(size: fontSize))
                 .foregroundColor(.secondary)
                 .frame(width: 65, alignment: .trailing)
 
             Text(value)
+                .font(.system(size: fontSize))
                 .fontWeight(.medium)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
