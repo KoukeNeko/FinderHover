@@ -360,7 +360,7 @@ struct HoverContentView: View {
                         DetailRow(icon: "clock", label: "hover.video.duration".localized, value: duration, fontSize: settings.fontSize)
                     }
                     if settings.showVideoResolution, let resolution = video.resolution {
-                        DetailRow(icon: "rectangle.resize", label: "hover.video.resolution".localized, value: resolution, fontSize: settings.fontSize)
+                        DetailRow(icon: "viewfinder", label: "hover.video.resolution".localized, value: resolution, fontSize: settings.fontSize)
                     }
                     if settings.showVideoCodec, let codec = video.codec {
                         DetailRow(icon: "film", label: "hover.video.codec".localized, value: codec, fontSize: settings.fontSize)
@@ -535,7 +535,7 @@ struct DetailRow: View {
     let fontSize: Double
 
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(alignment: .top, spacing: 8) {
             Image(systemName: icon)
                 .font(.system(size: fontSize))
                 .foregroundColor(.secondary)
@@ -549,6 +549,8 @@ struct DetailRow: View {
             Text(value)
                 .font(.system(size: fontSize))
                 .fontWeight(.medium)
+                .lineLimit(nil)
+                .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
