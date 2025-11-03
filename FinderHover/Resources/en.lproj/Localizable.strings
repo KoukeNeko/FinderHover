@@ -60,6 +60,27 @@
 "settings.display.exif.gps" = "GPS Location";
 "settings.display.exif.hint" = "EXIF data only appears for image files with metadata";
 
+"settings.display.video" = "Video Information";
+"settings.display.video.show" = "Show Video Metadata";
+"settings.display.video.duration" = "Duration";
+"settings.display.video.resolution" = "Resolution";
+"settings.display.video.codec" = "Codec";
+"settings.display.video.framerate" = "Frame Rate";
+"settings.display.video.bitrate" = "Bitrate";
+"settings.display.video.hint" = "Video metadata only appears for video files";
+
+"settings.display.audio" = "Audio Information";
+"settings.display.audio.show" = "Show Audio Metadata";
+"settings.display.audio.title" = "Song Title";
+"settings.display.audio.artist" = "Artist";
+"settings.display.audio.album" = "Album";
+"settings.display.audio.genre" = "Genre";
+"settings.display.audio.year" = "Year";
+"settings.display.audio.duration" = "Duration";
+"settings.display.audio.bitrate" = "Bitrate";
+"settings.display.audio.samplerate" = "Sample Rate";
+"settings.display.audio.hint" = "Audio metadata only appears for audio files with ID3 tags";
+
 "settings.display.order" = "Display Order";
 "settings.display.order.hint" = "Drag items to reorder. EXIF moves as a group.";
 
