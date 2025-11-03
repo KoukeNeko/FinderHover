@@ -97,7 +97,7 @@ struct BehaviorSettingsView: View {
                     // Hover Delay
                     SettingRow(
                         title: "settings.behavior.hoverDelay".localized,
-                        description: "Time to wait before showing preview window"
+                        description: "settings.behavior.hoverDelay.description".localized
                     ) {
                         HStack(spacing: 12) {
                             Slider(value: $settings.hoverDelay, in: 0.1...2.0, step: 0.1)
@@ -114,7 +114,7 @@ struct BehaviorSettingsView: View {
                     // Auto-hide
                     SettingRow(
                         title: "settings.behavior.autoHide".localized,
-                        description: "Immediately hide window when mouse moves away from file"
+                        description: "settings.behavior.autoHide.description".localized
                     ) {
                         Toggle("", isOn: $settings.autoHideEnabled)
                             .labelsHidden()
@@ -126,11 +126,27 @@ struct BehaviorSettingsView: View {
                     // Launch at Login
                     SettingRow(
                         title: "settings.behavior.launchAtLogin".localized,
-                        description: "Automatically start FinderHover when you log in"
+                        description: "settings.behavior.launchAtLogin.description".localized
                     ) {
                         Toggle("", isOn: $settings.launchAtLogin)
                             .labelsHidden()
                             .toggleStyle(.switch)
+                    }
+
+                    Divider()
+
+                    // Language Selection
+                    SettingRow(
+                        title: "settings.language".localized,
+                        description: "settings.language.description".localized
+                    ) {
+                        Picker("", selection: $settings.preferredLanguage) {
+                            ForEach(AppLanguage.allCases) { language in
+                                Text(language.displayName).tag(language)
+                            }
+                        }
+                        .labelsHidden()
+                        .frame(width: 150)
                     }
 
                     Divider()
@@ -140,7 +156,7 @@ struct BehaviorSettingsView: View {
                         Text("settings.behavior.windowPosition".localized)
                             .font(.system(size: 13, weight: .semibold))
 
-                        Text("Distance from cursor to preview window")
+                        Text("settings.behavior.windowPosition.description".localized)
                             .font(.system(size: 11))
                             .foregroundColor(.secondary)
 
@@ -219,7 +235,7 @@ struct AppearanceSettingsView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         SettingRow(
                             title: "settings.appearance.opacity".localized,
-                            description: "Transparency level of the preview window"
+                            description: "settings.appearance.opacity.description".localized
                         ) {
                             HStack(spacing: 12) {
                                 Slider(value: $settings.windowOpacity, in: 0.7...1.0, step: 0.05)
@@ -249,7 +265,7 @@ struct AppearanceSettingsView: View {
                     // Maximum Width
                     SettingRow(
                         title: "settings.appearance.maxWidth".localized,
-                        description: "Maximum width of the preview window"
+                        description: "settings.appearance.maxWidth.description".localized
                     ) {
                         HStack(spacing: 12) {
                             Slider(value: $settings.windowMaxWidth, in: 300...600, step: 20)
@@ -266,7 +282,7 @@ struct AppearanceSettingsView: View {
                     // Font Size
                     SettingRow(
                         title: "settings.appearance.fontSize".localized,
-                        description: "Size of text in the preview window"
+                        description: "settings.appearance.fontSize.description".localized
                     ) {
                         HStack(spacing: 12) {
                             Slider(value: $settings.fontSize, in: 9...14, step: 1)

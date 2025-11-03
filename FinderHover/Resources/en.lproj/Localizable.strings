@@ -108,3 +108,20 @@
 "common.reset" = "Reset to Defaults";
 "common.item" = "item";
 "common.items" = "items";
+
+/* Settings Descriptions */
+"settings.behavior.hoverDelay.description" = "Time to wait before showing preview window";
+"settings.behavior.autoHide.description" = "Immediately hide window when mouse moves away from file";
+"settings.behavior.launchAtLogin.description" = "Automatically start FinderHover when you log in";
+"settings.behavior.windowPosition.description" = "Distance from cursor to preview window";
+"settings.appearance.opacity.description" = "Transparency level of the preview window";
+"settings.appearance.maxWidth.description" = "Maximum width of the preview window";
+"settings.appearance.fontSize.description" = "Size of text in the preview window";
+
+/* Language Settings */
+"settings.language" = "Language";
+"settings.language.description" = "Change app language (requires restart)";
+"settings.language.system" = "System Default";
+"settings.language.english" = "English";
+"settings.language.chinese" = "繁體中文";
+"settings.language.japanese" = "日本語";
