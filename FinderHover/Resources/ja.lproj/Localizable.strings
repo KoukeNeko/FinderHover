@@ -95,6 +95,7 @@
 "settings.about.checkingForUpdates" = "アップデートを確認中...";
 "settings.about.updateAvailable" = "アップデート可能: %@";
 "settings.about.upToDate" = "最新バージョンです";
+"settings.about.upToDateWithVersion" = "すでに最新バージョンです (%@)";
 "settings.about.currentVersion" = "現在のバージョン: %@";
 "settings.about.downloadUpdate" = "アップデートをダウンロード";
 "settings.about.retry" = "再試行";

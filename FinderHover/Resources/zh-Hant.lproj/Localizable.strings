@@ -95,6 +95,7 @@
 "settings.about.checkingForUpdates" = "正在檢查更新...";
 "settings.about.updateAvailable" = "有可用更新: %@";
 "settings.about.upToDate" = "已是最新版本";
+"settings.about.upToDateWithVersion" = "已經是最新版本 (%@)";
 "settings.about.currentVersion" = "目前版本: %@";
 "settings.about.downloadUpdate" = "下載更新";
 "settings.about.retry" = "重試";
