@@ -351,10 +351,10 @@ struct HoverContentView: View {
                         DetailRow(icon: "calendar.badge.clock", label: "hover.exif.taken".localized, value: date, fontSize: settings.fontSize)
                     }
                     if settings.showEXIFDimensions, let size = exif.imageSize {
-                        DetailRow(icon: "square.resize", label: "hover.exif.dimensions".localized, value: size, fontSize: settings.fontSize)
+                        DetailRow(icon: "arrow.up.left.and.arrow.down.right", label: "hover.exif.dimensions".localized, value: size, fontSize: settings.fontSize)
                     }
                     if settings.showEXIFGPS, let gps = exif.gpsLocation {
-                        DetailRow(icon: "location.fill", label: "hover.exif.gps".localized, value: gps, fontSize: settings.fontSize)
+                        DetailRow(icon: "location", label: "hover.exif.gps".localized, value: gps, fontSize: settings.fontSize)
                     }
 
                     Divider()
@@ -378,13 +378,13 @@ struct HoverContentView: View {
                         DetailRow(icon: "clock", label: "hover.video.duration".localized, value: duration, fontSize: settings.fontSize)
                     }
                     if settings.showVideoResolution, let resolution = video.resolution {
-                        DetailRow(icon: "viewfinder", label: "hover.video.resolution".localized, value: resolution, fontSize: settings.fontSize)
+                        DetailRow(icon: "arrow.up.left.and.arrow.down.right", label: "hover.video.resolution".localized, value: resolution, fontSize: settings.fontSize)
                     }
                     if settings.showVideoCodec, let codec = video.codec {
                         DetailRow(icon: "film", label: "hover.video.codec".localized, value: codec, fontSize: settings.fontSize)
                     }
                     if settings.showVideoFrameRate, let frameRate = video.frameRate {
-                        DetailRow(icon: "gauge", label: "hover.video.framerate".localized, value: frameRate, fontSize: settings.fontSize)
+                        DetailRow(icon: "speedometer", label: "hover.video.framerate".localized, value: frameRate, fontSize: settings.fontSize)
                     }
                     if settings.showVideoBitrate, let bitrate = video.bitrate {
                         DetailRow(icon: "speedometer", label: "hover.video.bitrate".localized, value: bitrate, fontSize: settings.fontSize)
@@ -411,7 +411,7 @@ struct HoverContentView: View {
                         DetailRow(icon: "textformat", label: "hover.audio.songTitle".localized, value: title, fontSize: settings.fontSize)
                     }
                     if settings.showAudioArtist, let artist = audio.artist {
-                        DetailRow(icon: "person.fill", label: "hover.audio.artist".localized, value: artist, fontSize: settings.fontSize)
+                        DetailRow(icon: "person", label: "hover.audio.artist".localized, value: artist, fontSize: settings.fontSize)
                     }
                     if settings.showAudioAlbum, let album = audio.album {
                         DetailRow(icon: "square.stack", label: "hover.audio.album".localized, value: album, fontSize: settings.fontSize)
