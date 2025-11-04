@@ -262,6 +262,31 @@ struct AppearanceSettingsView: View {
                     .padding(.bottom, 20)
 
                 VStack(spacing: 24) {
+                    // UI Style Selection
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack(alignment: .center) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("settings.style".localized)
+                                    .font(.system(size: 13, weight: .semibold))
+                                Text("settings.style.description".localized)
+                                    .font(.system(size: 11))
+                                    .foregroundColor(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                            Spacer()
+                            Picker("", selection: $settings.uiStyle) {
+                                ForEach(UIStyle.allCases) { style in
+                                    Text(style.displayName).tag(style)
+                                }
+                            }
+                            .labelsHidden()
+                            .fixedSize()
+                        }
+                    }
+                    .padding(.horizontal, 20)
+
+                    Divider()
+
                     // Window Opacity
                     VStack(alignment: .leading, spacing: 12) {
                         Text("settings.appearance.opacity".localized)

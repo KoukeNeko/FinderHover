@@ -44,8 +44,12 @@ class HoverWindowController: NSWindowController {
 
         let settings = AppSettings.shared
 
-        // Create content view
-        let hostingView = NSHostingView(rootView: HoverContentView(fileInfo: fileInfo))
+        // Create content view based on UI style
+        let contentView: any View = settings.uiStyle == .windows
+            ? AnyView(WindowsStyleHoverView(fileInfo: fileInfo))
+            : AnyView(HoverContentView(fileInfo: fileInfo))
+
+        let hostingView = NSHostingView(rootView: AnyView(contentView))
 
         // Set a width constraint for proper height calculation
         let maxWidth = settings.windowMaxWidth
@@ -73,6 +77,9 @@ class HoverWindowController: NSWindowController {
         hostingView.removeFromSuperview()
         hostingView.translatesAutoresizingMaskIntoConstraints = true
 
+        // Determine corner radius based on UI style
+        let cornerRadius: CGFloat = settings.uiStyle == .windows ? 0 : 10
+
         // Check if blur is enabled
         if settings.enableBlur {
             let osVersion = ProcessInfo.processInfo.operatingSystemVersion
@@ -89,7 +96,7 @@ class HoverWindowController: NSWindowController {
 
                 let containerView = NSView(frame: NSRect(origin: .zero, size: fittingSize))
                 containerView.wantsLayer = true
-                containerView.layer?.cornerRadius = 10
+                containerView.layer?.cornerRadius = cornerRadius
                 containerView.layer?.masksToBounds = true
                 containerView.layer?.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(settings.windowOpacity).cgColor
 
@@ -106,7 +113,7 @@ class HoverWindowController: NSWindowController {
                 effectView.material = .hudWindow
                 effectView.blendingMode = .behindWindow
                 effectView.wantsLayer = true
-                effectView.layer?.cornerRadius = 10
+                effectView.layer?.cornerRadius = cornerRadius
                 effectView.layer?.masksToBounds = true
 
                 // Remove any borders from the visual effect view
@@ -125,10 +132,10 @@ class HoverWindowController: NSWindowController {
 
             self.visualEffectView = effectView
         } else {
-            // No blur - use solid background with rounded corners
+            // No blur - use solid background
             let containerView = NSView(frame: NSRect(origin: .zero, size: fittingSize))
             containerView.wantsLayer = true
-            containerView.layer?.cornerRadius = 10
+            containerView.layer?.cornerRadius = cornerRadius
             containerView.layer?.masksToBounds = true
             containerView.layer?.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(settings.windowOpacity).cgColor
 
@@ -555,5 +562,107 @@ struct DetailRow: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
+    }
+}
+
+// MARK: - Windows Style Hover View
+struct WindowsStyleHoverView: View {
+    let fileInfo: FileInfo
+    @ObservedObject var settings = AppSettings.shared
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            // File name only (no icon)
+            Text(fileInfo.name)
+                .font(.system(size: settings.fontSize, weight: .regular))
+                .lineLimit(nil)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.bottom, 4)
+
+            // Windows-style simple info display (no columns, all left-aligned)
+            VStack(alignment: .leading, spacing: 0) {
+                if settings.showFileType {
+                    WindowsDetailRow(
+                        label: "hover.windows.type".localized,
+                        value: getFileTypeDescription(),
+                        fontSize: settings.fontSize
+                    )
+                }
+
+                if settings.showFileSize {
+                    WindowsDetailRow(
+                        label: "hover.windows.size".localized,
+                        value: fileInfo.size == 0 ? "0 bytes" : fileInfo.formattedSize,
+                        fontSize: settings.fontSize
+                    )
+                }
+
+                if settings.showModificationDate {
+                    WindowsDetailRow(
+                        label: "hover.windows.dateModified".localized,
+                        value: fileInfo.formattedModificationDate,
+                        fontSize: settings.fontSize
+                    )
+                }
+            }
+        }
+        .padding(10)
+        .frame(minWidth: 280, maxWidth: settings.windowMaxWidth)
+        .fixedSize(horizontal: false, vertical: true)
+        .background(Color.clear)
+    }
+
+    private func getFileTypeDescription() -> String {
+        if fileInfo.isDirectory {
+            return "Folder"
+        }
+
+        if let ext = fileInfo.fileExtension {
+            let typeMap: [String: String] = [
+                "pdf": "PDF Document",
+                "doc": "Microsoft Word 97 - 2003 Document",
+                "docx": "Microsoft Word Document",
+                "xls": "Microsoft Excel 97 - 2003 Spreadsheet",
+                "xlsx": "Microsoft Excel Spreadsheet",
+                "ppt": "Microsoft PowerPoint 97 - 2003 Presentation",
+                "pptx": "Microsoft PowerPoint Presentation",
+                "txt": "Text Document",
+                "rtf": "Rich Text Document",
+                "jpg": "JPEG Image",
+                "jpeg": "JPEG Image",
+                "png": "PNG Image",
+                "gif": "GIF Image",
+                "bmp": "Bitmap Image",
+                "mp4": "MP4 Video",
+                "mov": "QuickTime Movie",
+                "avi": "AVI Video",
+                "mp3": "MP3 Audio",
+                "wav": "WAV Audio",
+                "zip": "ZIP Archive",
+                "rar": "RAR Archive"
+            ]
+
+            return typeMap[ext.lowercased()] ?? "\(ext.uppercased()) File"
+        }
+
+        return "File"
+    }
+}
+
+// Windows-style detail row (no columns, all text left-aligned)
+struct WindowsDetailRow: View {
+    let label: String
+    let value: String
+    let fontSize: Double
+
+    var body: some View {
+        Text(label + ": " + value)
+            .font(.system(size: fontSize))
+            .foregroundColor(.primary)
+            .lineLimit(nil)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
