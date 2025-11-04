@@ -21,18 +21,16 @@ class FinderInteraction {
         // Get the focused UI element
         var focusedElementRef: CFTypeRef?
         guard AXUIElementCopyAttributeValue(appElement, kAXFocusedUIElementAttribute as CFString, &focusedElementRef) == .success,
-              let focusedElement = focusedElementRef as AXUIElement? else {
+              let focusedElement = focusedElementRef as! AXUIElement? else {
             return false
         }
 
-        // Check if the focused element is a text field (indicates renaming)
+        // Check if the focused element is a text field
         var roleRef: CFTypeRef?
         if AXUIElementCopyAttributeValue(focusedElement, kAXRoleAttribute as CFString, &roleRef) == .success,
            let role = roleRef as? String {
-            // Text fields in Finder are used for renaming files
-            if role == kAXTextFieldRole as String || role == kAXTextAreaRole as String {
-                return true
-            }
+            // Text fields in Finder indicate renaming
+            return role == "AXTextField" || role == kAXTextFieldRole as String
         }
 
         return false
@@ -40,7 +38,7 @@ class FinderInteraction {
 
     /// Gets file at specific position using accessibility API
     static func getFileAtMousePosition(_ position: CGPoint) -> String? {
-        // Don't return file path if user is renaming
+        // Don't show hover if user is renaming
         if isRenamingFile() {
             return nil
         }

@@ -2,7 +2,7 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.2.1 (Current)
+## Version 1.2.2 (Current)
 
 - 🎨 **UI Icon Improvements**
   - Updated display settings icons to match new design specifications
@@ -13,7 +13,16 @@ All notable changes to FinderHover will be documented in this file.
     - Frame rate: `gauge` → `speedometer`
     - GPS location: `location.fill` → `location`
     - Artist: `person.fill` → `person`
-  - Enhanced visual consistency across all settings pages
+  - Enhanced visual consistency across all settings pages and hover window
+- ✨ **NEW: Auto-hide When Renaming**
+  - Hover window automatically hides when renaming files in Finder
+  - Prevents interference with file renaming workflow
+  - Detects text field focus using Accessibility API
+  - Periodic checking (every 0.1s) for instant response
+
+## Version 1.2.1
+
+- Internal testing version
 
 ## Version 1.2.0
 

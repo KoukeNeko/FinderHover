@@ -27,6 +27,7 @@ class HoverManager: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private var displayTimer: Timer?
     private var hideCheckTimer: Timer?
+    private var renamingCheckTimer: Timer?
     private var lastMouseLocation: CGPoint = .zero
     private let settings = AppSettings.shared
 
@@ -74,6 +75,7 @@ class HoverManager: ObservableObject {
         hideHoverWindow()
         hideCheckTimer?.invalidate()
         displayTimer?.invalidate()
+        renamingCheckTimer?.invalidate()
     }
 
     private func checkIfShouldHide(at location: CGPoint) {
@@ -83,7 +85,7 @@ class HoverManager: ObservableObject {
         // If window is showing and we have current file info
         guard let currentInfo = currentFileInfo else { return }
 
-        // Check if user is renaming a file - hide immediately
+        // Check if user is renaming - hide immediately
         if FinderInteraction.isRenamingFile() {
             hideHoverWindow()
             currentFileInfo = nil
@@ -125,6 +127,7 @@ class HoverManager: ObservableObject {
         guard !mouseTracker.isDragging else { return }
 
         // Try to get file path at current location
+        // This will return nil if user is renaming
         if let filePath = FinderInteraction.getFileAtMousePosition(location),
            let fileInfo = FileInfo.from(path: filePath) {
 
@@ -145,10 +148,34 @@ class HoverManager: ObservableObject {
         }
 
         hoverWindow?.show(at: position, with: fileInfo)
+
+        // Start periodic check for renaming
+        startRenamingCheck()
     }
 
     private func hideHoverWindow() {
         hoverWindow?.hide()
+
+        // Stop periodic check
+        stopRenamingCheck()
+    }
+
+    private func startRenamingCheck() {
+        // Stop existing timer
+        renamingCheckTimer?.invalidate()
+
+        // Check every 0.1 seconds if user is renaming
+        renamingCheckTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+            if FinderInteraction.isRenamingFile() {
+                self?.hideHoverWindow()
+                self?.currentFileInfo = nil
+            }
+        }
+    }
+
+    private func stopRenamingCheck() {
+        renamingCheckTimer?.invalidate()
+        renamingCheckTimer = nil
     }
 
     private func checkAccessibilityPermissions() {

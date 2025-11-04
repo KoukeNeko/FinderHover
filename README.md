@@ -522,12 +522,15 @@ Contributions are welcome! Please feel free to:
 <img width="762" height="644" alt="image" src="https://github.com/user-attachments/assets/33bbc116-ded6-481c-876b-32ee35199845" />
 *Customize every aspect of the app*
 
-## 📝 What's New in Version 1.2.1
+## 📝 What's New in Version 1.2.2
 
 - 🎨 **UI Icon Improvements**
   - Updated display settings icons to match new design specifications
   - Replaced filled icons with outlined versions for better visual consistency
   - Enhanced icon clarity and readability across all settings pages
+- ✨ **Auto-hide When Renaming**
+  - Hover window automatically hides when renaming files in Finder
+  - Seamless workflow without window interference
 
 📋 [View Full Changelog](CHANGELOG.md) for complete version history
 
