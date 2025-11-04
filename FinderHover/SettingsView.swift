@@ -791,13 +791,20 @@ struct AboutSettingsView: View {
                                     .buttonStyle(.borderedProminent)
                                 }
                             } else {
-                                HStack(spacing: 6) {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .font(.system(size: 11))
-                                        .foregroundColor(.green)
-                                    Text("settings.about.upToDate".localized)
-                                        .font(.system(size: 12))
-                                        .foregroundColor(.secondary)
+                                VStack(spacing: 4) {
+                                    HStack(spacing: 6) {
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .font(.system(size: 11))
+                                            .foregroundColor(.green)
+                                        Text("settings.about.upToDate".localized)
+                                            .font(.system(size: 12))
+                                            .foregroundColor(.secondary)
+                                    }
+                                    if let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+                                        Text(String(format: "settings.about.currentVersion".localized, currentVersion))
+                                            .font(.system(size: 10))
+                                            .foregroundColor(.secondary.opacity(0.8))
+                                    }
                                 }
                             }
                         } else {

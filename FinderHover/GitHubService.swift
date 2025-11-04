@@ -67,6 +67,8 @@ class GitHubService: ObservableObject {
     private let repoOwner = "KoukeNeko"
     private let repoName = "FinderHover"
     private let cacheKey = "cachedContributors"
+    private var lastUpdateCheckTime: Date?
+    private let updateCheckCooldown: TimeInterval = 5.0 // 5 seconds between checks
 
     init() {
         // Load cached contributors on initialization
@@ -120,9 +122,20 @@ class GitHubService: ObservableObject {
     }
 
     func fetchLatestRelease(includePrereleases: Bool = false) async {
+        // Check cooldown period to prevent rate limiting
+        if let lastCheck = lastUpdateCheckTime {
+            let timeSinceLastCheck = Date().timeIntervalSince(lastCheck)
+            if timeSinceLastCheck < updateCheckCooldown {
+                let remainingTime = Int(ceil(updateCheckCooldown - timeSinceLastCheck))
+                updateCheckError = "Please wait \(remainingTime) seconds before checking again"
+                return
+            }
+        }
+
         isCheckingForUpdates = true
         updateCheckError = nil
         latestRelease = nil
+        lastUpdateCheckTime = Date()
 
         let urlString = "https://api.github.com/repos/\(repoOwner)/\(repoName)/releases/latest"
         guard let url = URL(string: urlString) else {
@@ -157,6 +170,8 @@ class GitHubService: ObservableObject {
                 }
             } else if httpResponse.statusCode == 404 {
                 updateCheckError = "No releases found"
+            } else if httpResponse.statusCode == 403 {
+                updateCheckError = "Rate limit exceeded. Please try again later"
             } else {
                 updateCheckError = "HTTP \(httpResponse.statusCode)"
             }
