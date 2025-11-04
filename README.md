@@ -83,9 +83,12 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
 - **Customizable display order** - Drag and drop to reorder information fields
 
 ### 🎨 Modern & Customizable Design
+- **Two UI Styles** - Choose between macOS and Windows tooltip styles
+  - **macOS Style**: Rich preview with icons, thumbnails, rounded corners, and detailed metadata
+  - **Windows Style**: Clean, minimalist text-only display inspired by Windows File Explorer
 - **Native blur effect** - macOS-style background blur (toggleable)
   - Professional HUD window appearance
-  - Smooth rounded corners
+  - Smooth rounded corners (macOS style only)
 - **Adjustable transparency** - Window opacity (70% - 100%)
   - Note: Only available when blur effect is disabled
 - **Compact mode** - Reduced spacing and padding for a more compact layout
@@ -234,6 +237,9 @@ Open **Settings** (`Cmd+,`) to customize:
   - One-click restart button appears when language is changed
 
 #### Appearance Tab
+- **UI Style**: Choose between macOS or Windows tooltip style
+  - **macOS Style**: Rich preview with icons, thumbnails, and detailed metadata
+  - **Windows Style**: Clean, text-only display with essential information (Type, Size, Date modified)
 - **Blur Effect**: Enable/disable native macOS background blur
 - **Window Opacity**: 70% - 100% (transparency level)
   - Only available when blur effect is disabled
@@ -518,7 +524,30 @@ Contributions are welcome! Please feel free to:
 
 ## 📝 Changelog
 
-### Version 1.1.2 (Current)
+### Version 1.1.3 (Current)
+
+- 🎨 **NEW: Windows Style Tooltip Option**
+  - Added UI style selector in Settings > Appearance tab
+  - Choose between macOS and Windows tooltip styles
+  - **Windows Style features**:
+    - No icons or thumbnails - Pure text-based display
+    - Compact layout with reduced spacing (10px padding)
+    - Left-aligned text in simple `Label: Value` format
+    - Square corners (0px border radius)
+    - Three essential fields: Type, Size, Date modified
+    - Inspired by Windows File Explorer tooltips
+  - **macOS Style features**:
+    - Rich preview with icons and thumbnails
+    - Detailed metadata display
+    - Rounded corners (10px border radius)
+    - Multiple information fields and customization options
+- 🌍 **Enhanced Localization**
+  - Added Windows style translations for all three languages (en, zh-Hant, ja)
+- 🔧 **UI Improvements**
+  - Moved UI Style setting from Behavior to Appearance tab for better organization
+  - Improved settings structure and navigation
+
+### Version 1.1.2
 
 - 🎬 **NEW: Video Metadata Support**
   - Duration formatted as hours:minutes:seconds
