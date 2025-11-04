@@ -83,8 +83,8 @@ class HoverWindowController: NSWindowController {
         // Check if blur is enabled
         if settings.enableBlur {
             let osVersion = ProcessInfo.processInfo.operatingSystemVersion
-            // Use container view approach for macOS < 11 or macOS 15.x (where direct cornerRadius doesn't work)
-            let useLegacyBlurLayout = osVersion.majorVersion < 11 || osVersion.majorVersion == 15
+            // Use container view approach for macOS <= macOS 15.x (where direct cornerRadius doesn't work)
+            let useLegacyBlurLayout = osVersion.majorVersion <= 15
 
             // Create visual effect view for blur
             let effectView = NSVisualEffectView()
@@ -107,18 +107,32 @@ class HoverWindowController: NSWindowController {
                 containerView.layer?.cornerRadius = cornerRadius
                 containerView.layer?.masksToBounds = true
 
+                // Add subtle border like native macOS HUD windows (only for macOS style)
+                if cornerRadius > 0 {
+                    containerView.layer?.borderWidth = 0.5
+                    containerView.layer?.borderColor = NSColor.systemGray.withAlphaComponent(0.5).cgColor
+                }
+
                 effectView.autoresizingMask = [.width, .height]
                 containerView.addSubview(effectView)
                 window.contentView = containerView
             } else {
-                // macOS 11-14 and 26+ support direct cornerRadius on NSVisualEffectView
+                // macOS 26+ support direct cornerRadius on NSVisualEffectView
                 effectView.material = .hudWindow
                 effectView.blendingMode = .behindWindow
                 effectView.wantsLayer = true
                 effectView.layer?.cornerRadius = cornerRadius
                 effectView.layer?.masksToBounds = true
-                effectView.layer?.borderWidth = 0
-                effectView.layer?.borderColor = nil
+
+                // Add subtle border like native macOS HUD windows (only for macOS style)
+                if cornerRadius > 0 {
+                    effectView.layer?.borderWidth = 0.5
+                    effectView.layer?.borderColor = NSColor.black.withAlphaComponent(0.2).cgColor
+                } else {
+                    effectView.layer?.borderWidth = 0
+                    effectView.layer?.borderColor = nil
+                }
+
                 effectView.frame = NSRect(origin: .zero, size: fittingSize)
 
                 hostingView.frame = effectView.bounds
