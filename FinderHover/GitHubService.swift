@@ -137,7 +137,16 @@ class GitHubService: ObservableObject {
         latestRelease = nil
         lastUpdateCheckTime = Date()
 
-        let urlString = "https://api.github.com/repos/\(repoOwner)/\(repoName)/releases/latest"
+        // Use different endpoint based on prerelease preference
+        let urlString: String
+        if includePrereleases {
+            // Get all releases and pick the first one (most recent)
+            urlString = "https://api.github.com/repos/\(repoOwner)/\(repoName)/releases"
+        } else {
+            // Get only the latest stable release
+            urlString = "https://api.github.com/repos/\(repoOwner)/\(repoName)/releases/latest"
+        }
+
         guard let url = URL(string: urlString) else {
             updateCheckError = "Invalid URL"
             isCheckingForUpdates = false
@@ -160,13 +169,23 @@ class GitHubService: ObservableObject {
 
             if httpResponse.statusCode == 200 {
                 let decoder = JSONDecoder()
-                let release = try decoder.decode(Release.self, from: data)
 
-                // Filter out prereleases if not requested
-                if !includePrereleases && release.prerelease {
-                    updateCheckError = "No stable release found"
+                if includePrereleases {
+                    // Parse array and get first non-draft release
+                    let releases = try decoder.decode([Release].self, from: data)
+                    if let firstRelease = releases.first(where: { !$0.draft }) {
+                        self.latestRelease = firstRelease
+                    } else {
+                        updateCheckError = "No releases found"
+                    }
                 } else {
-                    self.latestRelease = release
+                    // Parse single release
+                    let release = try decoder.decode(Release.self, from: data)
+                    if release.draft {
+                        updateCheckError = "No stable release found"
+                    } else {
+                        self.latestRelease = release
+                    }
                 }
             } else if httpResponse.statusCode == 404 {
                 updateCheckError = "No releases found"
