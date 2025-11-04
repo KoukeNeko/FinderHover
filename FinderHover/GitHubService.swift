@@ -37,8 +37,6 @@ class GitHubService: ObservableObject {
     private let repoOwner = "KoukeNeko"
     private let repoName = "FinderHover"
     private let cacheKey = "cachedContributors"
-    private let cacheTimestampKey = "contributorsCacheTimestamp"
-    private let cacheExpirationInterval: TimeInterval = 86400 // 24 hours
 
     init() {
         // Load cached contributors on initialization
@@ -96,7 +94,6 @@ class GitHubService: ObservableObject {
             let encoder = JSONEncoder()
             let data = try encoder.encode(contributors)
             UserDefaults.standard.set(data, forKey: cacheKey)
-            UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: cacheTimestampKey)
         } catch {
             print("Failed to cache contributors: \(error)")
         }
@@ -114,14 +111,6 @@ class GitHubService: ObservableObject {
         } catch {
             print("Failed to load cached contributors: \(error)")
         }
-    }
-
-    private func isCacheValid() -> Bool {
-        guard let timestamp = UserDefaults.standard.object(forKey: cacheTimestampKey) as? TimeInterval else {
-            return false
-        }
-        let cacheAge = Date().timeIntervalSince1970 - timestamp
-        return cacheAge < cacheExpirationInterval
     }
 }
 
