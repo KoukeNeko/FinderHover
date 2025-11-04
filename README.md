@@ -196,7 +196,7 @@ Contributions welcome!
 
 ## 🙏 Acknowledgments
 
-- Inspired by [Windows file preview functionality](https://youtu.be/veum1I6G__g?si=CDWpYV9anOszM6ai&t=375)
+- Inspired by [my final dream ULTIMATE productivity desk setup. (2026)](https://youtu.be/veum1I6G__g?si=CDWpYV9anOszM6ai&t=375)
 - Built with Apple's SwiftUI and Accessibility frameworks
 - Icons from SF Symbols
 
