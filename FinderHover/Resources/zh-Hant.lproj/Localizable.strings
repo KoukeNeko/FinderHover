@@ -88,7 +88,7 @@
 "settings.about.version" = "版本 %@";
 "settings.about.description" = "在 Finder 中懸停於檔案時顯示檔案資訊。";
 "settings.about.usage" = "使用方式：";
-"settings.about.usage.step1" = "在 Finder 中選取檔案（點擊）";
+"settings.about.usage.step1" = "在 Finder 中選取檔案（點選）";
 "settings.about.usage.step2" = "將滑鼠懸停在選取的檔案上";
 "settings.about.usage.step3" = "預覽視窗將顯示檔案詳細資訊";
 "settings.about.copyright" = "© 2024 FinderHover";
