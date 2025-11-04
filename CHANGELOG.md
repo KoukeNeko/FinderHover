@@ -19,6 +19,11 @@ All notable changes to FinderHover will be documented in this file.
   - Prevents interference with file renaming workflow
   - Detects text field focus using Accessibility API
   - Periodic checking (every 0.1s) for instant response
+- 🔧 **Code Quality Improvements**
+  - Introduced centralized `IconManager` for unified SF Symbols management
+  - Organized icons into logical namespaces (Photo, Video, Audio, UI, etc.)
+  - Improved code maintainability and reduced duplication
+  - Easier to update icons across the entire application
 
 ## Version 1.2.1
 

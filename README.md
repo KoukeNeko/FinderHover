@@ -531,6 +531,9 @@ Contributions are welcome! Please feel free to:
 - ✨ **Auto-hide When Renaming**
   - Hover window automatically hides when renaming files in Finder
   - Seamless workflow without window interference
+- 🔧 **Code Quality Improvements**
+  - Centralized icon management system for better maintainability
+  - Organized SF Symbols into logical namespaces
 
 📋 [View Full Changelog](CHANGELOG.md) for complete version history
 
