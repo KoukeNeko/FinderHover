@@ -344,17 +344,17 @@ struct HoverContentView: View {
                         ].compactMap { $0 }
 
                         if !settingsComponents.isEmpty {
-                            DetailRow(icon: "slider.horizontal.3", label: "hover.exif.settings".localized, value: settingsComponents.joined(separator: "  "), fontSize: settings.fontSize)
+                            DetailRow(icon: IconManager.Photo.settings, label: "hover.exif.settings".localized, value: settingsComponents.joined(separator: "  "), fontSize: settings.fontSize)
                         }
                     }
                     if settings.showEXIFDateTaken, let date = exif.dateTaken {
-                        DetailRow(icon: "calendar.badge.clock", label: "hover.exif.taken".localized, value: date, fontSize: settings.fontSize)
+                        DetailRow(icon: IconManager.Photo.calendarClock, label: "hover.exif.taken".localized, value: date, fontSize: settings.fontSize)
                     }
                     if settings.showEXIFDimensions, let size = exif.imageSize {
-                        DetailRow(icon: "arrow.up.left.and.arrow.down.right", label: "hover.exif.dimensions".localized, value: size, fontSize: settings.fontSize)
+                        DetailRow(icon: IconManager.Photo.dimensions, label: "hover.exif.dimensions".localized, value: size, fontSize: settings.fontSize)
                     }
                     if settings.showEXIFGPS, let gps = exif.gpsLocation {
-                        DetailRow(icon: "location", label: "hover.exif.gps".localized, value: gps, fontSize: settings.fontSize)
+                        DetailRow(icon: IconManager.Photo.location, label: "hover.exif.gps".localized, value: gps, fontSize: settings.fontSize)
                     }
 
                     Divider()
@@ -375,19 +375,19 @@ struct HoverContentView: View {
                         .font(.system(size: settings.fontSize, weight: .semibold))
 
                     if settings.showVideoDuration, let duration = video.duration {
-                        DetailRow(icon: "clock", label: "hover.video.duration".localized, value: duration, fontSize: settings.fontSize)
+                        DetailRow(icon: IconManager.Video.duration, label: "hover.video.duration".localized, value: duration, fontSize: settings.fontSize)
                     }
                     if settings.showVideoResolution, let resolution = video.resolution {
-                        DetailRow(icon: "arrow.up.left.and.arrow.down.right", label: "hover.video.resolution".localized, value: resolution, fontSize: settings.fontSize)
+                        DetailRow(icon: IconManager.Video.resolution, label: "hover.video.resolution".localized, value: resolution, fontSize: settings.fontSize)
                     }
                     if settings.showVideoCodec, let codec = video.codec {
-                        DetailRow(icon: "film", label: "hover.video.codec".localized, value: codec, fontSize: settings.fontSize)
+                        DetailRow(icon: IconManager.Video.codec, label: "hover.video.codec".localized, value: codec, fontSize: settings.fontSize)
                     }
                     if settings.showVideoFrameRate, let frameRate = video.frameRate {
-                        DetailRow(icon: "speedometer", label: "hover.video.framerate".localized, value: frameRate, fontSize: settings.fontSize)
+                        DetailRow(icon: IconManager.Video.frameRate, label: "hover.video.framerate".localized, value: frameRate, fontSize: settings.fontSize)
                     }
                     if settings.showVideoBitrate, let bitrate = video.bitrate {
-                        DetailRow(icon: "speedometer", label: "hover.video.bitrate".localized, value: bitrate, fontSize: settings.fontSize)
+                        DetailRow(icon: IconManager.Video.bitrate, label: "hover.video.bitrate".localized, value: bitrate, fontSize: settings.fontSize)
                     }
 
                     Divider()
@@ -408,31 +408,31 @@ struct HoverContentView: View {
                         .font(.system(size: settings.fontSize, weight: .semibold))
 
                     if settings.showAudioTitle, let title = audio.title {
-                        DetailRow(icon: "textformat", label: "hover.audio.songTitle".localized, value: title, fontSize: settings.fontSize)
+                        DetailRow(icon: IconManager.Audio.songTitle, label: "hover.audio.songTitle".localized, value: title, fontSize: settings.fontSize)
                     }
                     if settings.showAudioArtist, let artist = audio.artist {
-                        DetailRow(icon: "person", label: "hover.audio.artist".localized, value: artist, fontSize: settings.fontSize)
+                        DetailRow(icon: IconManager.Audio.artist, label: "hover.audio.artist".localized, value: artist, fontSize: settings.fontSize)
                     }
                     if settings.showAudioAlbum, let album = audio.album {
-                        DetailRow(icon: "square.stack", label: "hover.audio.album".localized, value: album, fontSize: settings.fontSize)
+                        DetailRow(icon: IconManager.Audio.album, label: "hover.audio.album".localized, value: album, fontSize: settings.fontSize)
                     }
                     if settings.showAudioGenre, let genre = audio.genre {
-                        DetailRow(icon: "music.note.list", label: "hover.audio.genre".localized, value: genre, fontSize: settings.fontSize)
+                        DetailRow(icon: IconManager.Audio.genre, label: "hover.audio.genre".localized, value: genre, fontSize: settings.fontSize)
                     }
                     if settings.showAudioYear, let year = audio.year {
-                        DetailRow(icon: "calendar", label: "hover.audio.year".localized, value: year, fontSize: settings.fontSize)
+                        DetailRow(icon: IconManager.Audio.year, label: "hover.audio.year".localized, value: year, fontSize: settings.fontSize)
                     }
                     if settings.showAudioDuration, let duration = audio.duration {
-                        DetailRow(icon: "clock", label: "hover.audio.duration".localized, value: duration, fontSize: settings.fontSize)
+                        DetailRow(icon: IconManager.Audio.duration, label: "hover.audio.duration".localized, value: duration, fontSize: settings.fontSize)
                     }
                     if settings.showAudioBitrate, let bitrate = audio.bitrate {
-                        DetailRow(icon: "speedometer", label: "hover.audio.bitrate".localized, value: bitrate, fontSize: settings.fontSize)
+                        DetailRow(icon: IconManager.Audio.bitrate, label: "hover.audio.bitrate".localized, value: bitrate, fontSize: settings.fontSize)
                     }
                     if settings.showAudioSampleRate, let sampleRate = audio.sampleRate {
-                        DetailRow(icon: "waveform", label: "hover.audio.samplerate".localized, value: sampleRate, fontSize: settings.fontSize)
+                        DetailRow(icon: IconManager.Audio.sampleRate, label: "hover.audio.samplerate".localized, value: sampleRate, fontSize: settings.fontSize)
                     }
                     if let channels = audio.channels {
-                        DetailRow(icon: "speaker.wave.2", label: "hover.audio.channels".localized, value: channels, fontSize: settings.fontSize)
+                        DetailRow(icon: IconManager.Audio.channels, label: "hover.audio.channels".localized, value: channels, fontSize: settings.fontSize)
                     }
 
                     Divider()

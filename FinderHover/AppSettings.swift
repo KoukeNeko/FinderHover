@@ -80,18 +80,18 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
 
     var icon: String {
         switch self {
-        case .fileType: return "doc.text"
+        case .fileType: return IconManager.FileSystem.doc
         case .fileSize: return "archivebox"
         case .itemCount: return "number"
-        case .creationDate: return "calendar"
-        case .modificationDate: return "clock"
-        case .lastAccessDate: return "eye"
+        case .creationDate: return IconManager.Display.calendar
+        case .modificationDate: return IconManager.Display.clock
+        case .lastAccessDate: return IconManager.Display.eye
         case .permissions: return "lock.shield"
-        case .owner: return "person"
-        case .exif: return "camera"
-        case .video: return "video"
-        case .audio: return "music.note"
-        case .filePath: return "folder"
+        case .owner: return IconManager.Display.person
+        case .exif: return IconManager.Photo.camera
+        case .video: return IconManager.Video.video
+        case .audio: return IconManager.Audio.music
+        case .filePath: return IconManager.FileSystem.folder
         }
     }
 }
