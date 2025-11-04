@@ -91,6 +91,11 @@
 "settings.about.usage.step1" = "Open Finder and navigate to any folder";
 "settings.about.usage.step2" = "Hover your mouse over any file name";
 "settings.about.usage.step3" = "A preview window appears with file details";
+"settings.about.github" = "GitHub";
+"settings.about.github.repository" = "Repository";
+"settings.about.github.issues" = "Report Issue";
+"settings.about.github.releases" = "Releases";
+"settings.about.github.contributors" = "Contributors";
 "settings.about.copyright" = "© 2024 FinderHover";
 "settings.about.opensource" = "Open Source Project";
 
