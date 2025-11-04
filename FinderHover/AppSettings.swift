@@ -10,6 +10,21 @@ import SwiftUI
 import Combine
 import AppKit
 
+// MARK: - UI Style Selection
+enum UIStyle: String, Codable, CaseIterable, Identifiable {
+    case macOS = "macOS"
+    case windows = "Windows"
+
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .macOS: return "settings.style.macos".localized
+        case .windows: return "settings.style.windows".localized
+        }
+    }
+}
+
 // MARK: - Language Selection
 enum AppLanguage: String, Codable, CaseIterable, Identifiable {
     case system = "system"
@@ -241,6 +256,13 @@ class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(windowOffsetY, forKey: "windowOffsetY") }
     }
 
+    // UI Style preference
+    @Published var uiStyle: UIStyle {
+        didSet {
+            UserDefaults.standard.set(uiStyle.rawValue, forKey: "uiStyle")
+        }
+    }
+
     // Language preference
     @Published var preferredLanguage: AppLanguage {
         didSet {
@@ -336,6 +358,14 @@ class AppSettings: ObservableObject {
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? 15
         self.windowOffsetY = UserDefaults.standard.object(forKey: "windowOffsetY") as? Double ?? 15
 
+        // Load UI style preference
+        if let styleString = UserDefaults.standard.string(forKey: "uiStyle"),
+           let style = UIStyle(rawValue: styleString) {
+            self.uiStyle = style
+        } else {
+            self.uiStyle = .macOS
+        }
+
         // Load language preference
         if let langString = UserDefaults.standard.string(forKey: "preferredLanguage"),
            let language = AppLanguage(rawValue: langString) {
@@ -415,6 +445,7 @@ class AppSettings: ObservableObject {
         followCursor = true
         windowOffsetX = 15
         windowOffsetY = 15
+        uiStyle = .macOS
         preferredLanguage = .system
     }
 }

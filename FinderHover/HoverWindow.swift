@@ -44,8 +44,12 @@ class HoverWindowController: NSWindowController {
 
         let settings = AppSettings.shared
 
-        // Create content view
-        let hostingView = NSHostingView(rootView: HoverContentView(fileInfo: fileInfo))
+        // Create content view based on UI style
+        let contentView: any View = settings.uiStyle == .windows
+            ? AnyView(WindowsStyleHoverView(fileInfo: fileInfo))
+            : AnyView(HoverContentView(fileInfo: fileInfo))
+
+        let hostingView = NSHostingView(rootView: AnyView(contentView))
 
         // Set a width constraint for proper height calculation
         let maxWidth = settings.windowMaxWidth
@@ -551,6 +555,135 @@ struct DetailRow: View {
             Text(value)
                 .font(.system(size: fontSize))
                 .fontWeight(.medium)
+                .lineLimit(nil)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+}
+
+// MARK: - Windows Style Hover View
+struct WindowsStyleHoverView: View {
+    let fileInfo: FileInfo
+    @State private var thumbnail: NSImage?
+    @ObservedObject var settings = AppSettings.shared
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            // File icon and name (similar to Windows tooltip)
+            HStack(spacing: 12) {
+                if settings.showIcon {
+                    Image(nsImage: thumbnail ?? fileInfo.icon)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 48, height: 48)
+                        .onAppear {
+                            fileInfo.generateThumbnailAsync { image in
+                                if let image = image {
+                                    thumbnail = image
+                                }
+                            }
+                        }
+                }
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(fileInfo.name)
+                        .font(.system(size: settings.fontSize, weight: .regular))
+                        .lineLimit(nil)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+            .padding(.bottom, 8)
+
+            // Windows-style simple info display (no icons, just label: value)
+            VStack(alignment: .leading, spacing: 2) {
+                if settings.showFileType {
+                    WindowsDetailRow(
+                        label: "hover.windows.type".localized,
+                        value: getFileTypeDescription(),
+                        fontSize: settings.fontSize
+                    )
+                }
+
+                if settings.showFileSize {
+                    WindowsDetailRow(
+                        label: "hover.windows.size".localized,
+                        value: fileInfo.size == 0 ? "0 bytes" : fileInfo.formattedSize,
+                        fontSize: settings.fontSize
+                    )
+                }
+
+                if settings.showModificationDate {
+                    WindowsDetailRow(
+                        label: "hover.windows.dateModified".localized,
+                        value: fileInfo.formattedModificationDate,
+                        fontSize: settings.fontSize
+                    )
+                }
+            }
+        }
+        .padding(12)
+        .frame(minWidth: 280, maxWidth: settings.windowMaxWidth)
+        .fixedSize(horizontal: false, vertical: true)
+        .background(Color.clear)
+    }
+
+    private func getFileTypeDescription() -> String {
+        if fileInfo.isDirectory {
+            return "Folder"
+        }
+
+        if let ext = fileInfo.fileExtension {
+            let typeMap: [String: String] = [
+                "pdf": "PDF Document",
+                "doc": "Microsoft Word 97 - 2003 Document",
+                "docx": "Microsoft Word Document",
+                "xls": "Microsoft Excel 97 - 2003 Spreadsheet",
+                "xlsx": "Microsoft Excel Spreadsheet",
+                "ppt": "Microsoft PowerPoint 97 - 2003 Presentation",
+                "pptx": "Microsoft PowerPoint Presentation",
+                "txt": "Text Document",
+                "rtf": "Rich Text Document",
+                "jpg": "JPEG Image",
+                "jpeg": "JPEG Image",
+                "png": "PNG Image",
+                "gif": "GIF Image",
+                "bmp": "Bitmap Image",
+                "mp4": "MP4 Video",
+                "mov": "QuickTime Movie",
+                "avi": "AVI Video",
+                "mp3": "MP3 Audio",
+                "wav": "WAV Audio",
+                "zip": "ZIP Archive",
+                "rar": "RAR Archive"
+            ]
+
+            return typeMap[ext.lowercased()] ?? "\(ext.uppercased()) File"
+        }
+
+        return "File"
+    }
+}
+
+// Windows-style detail row (no icon, simple format)
+struct WindowsDetailRow: View {
+    let label: String
+    let value: String
+    let fontSize: Double
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 4) {
+            Text(label + ":")
+                .font(.system(size: fontSize))
+                .foregroundColor(.primary)
+                .lineLimit(1)
+                .frame(minWidth: 85, alignment: .leading)
+
+            Text(value)
+                .font(.system(size: fontSize))
+                .foregroundColor(.primary)
                 .lineLimit(nil)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)

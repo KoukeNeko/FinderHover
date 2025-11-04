@@ -162,6 +162,17 @@
 "settings.appearance.maxWidth.description" = "プレビューウィンドウの最大幅";
 "settings.appearance.fontSize.description" = "プレビューウィンドウ内のテキストのサイズ";
 
+/* UI Style Settings */
+"settings.style" = "UIスタイル";
+"settings.style.description" = "macOS または Windows のツールチップスタイルを選択";
+"settings.style.macos" = "macOS スタイル";
+"settings.style.windows" = "Windows スタイル";
+
+/* Windows Style Hover Labels */
+"hover.windows.type" = "種類";
+"hover.windows.size" = "サイズ";
+"hover.windows.dateModified" = "更新日時";
+
 /* Language Settings */
 "settings.language" = "言語";
 "settings.language.description" = "アプリの言語を変更（再起動が必要）";

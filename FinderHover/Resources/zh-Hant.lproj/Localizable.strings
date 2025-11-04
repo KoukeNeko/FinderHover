@@ -162,6 +162,17 @@
 "settings.appearance.maxWidth.description" = "預覽視窗的最大寬度";
 "settings.appearance.fontSize.description" = "預覽視窗中文字的大小";
 
+/* UI Style Settings */
+"settings.style" = "介面樣式";
+"settings.style.description" = "選擇 macOS 或 Windows 工具提示樣式";
+"settings.style.macos" = "macOS 樣式";
+"settings.style.windows" = "Windows 樣式";
+
+/* Windows Style Hover Labels */
+"hover.windows.type" = "類型";
+"hover.windows.size" = "大小";
+"hover.windows.dateModified" = "修改日期";
+
 /* Language Settings */
 "settings.language" = "語言";
 "settings.language.description" = "變更應用程式語言（需要重新啟動）";
