@@ -271,6 +271,11 @@ class AppSettings: ObservableObject {
         }
     }
 
+    // Update preferences
+    @Published var includePrereleases: Bool {
+        didSet { UserDefaults.standard.set(includePrereleases, forKey: "includePrereleases") }
+    }
+
     private init() {
         // Load display order or use default
         if let data = UserDefaults.standard.data(forKey: "displayOrder"),
@@ -374,6 +379,9 @@ class AppSettings: ObservableObject {
             self.preferredLanguage = .system
         }
 
+        // Load update preferences
+        self.includePrereleases = UserDefaults.standard.object(forKey: "includePrereleases") as? Bool ?? false
+
         // Apply language preference on launch
         applyLanguagePreference()
     }
@@ -447,5 +455,6 @@ class AppSettings: ObservableObject {
         windowOffsetY = 15
         uiStyle = .macOS
         preferredLanguage = .system
+        includePrereleases = false
     }
 }
