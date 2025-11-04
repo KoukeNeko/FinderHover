@@ -687,6 +687,22 @@ struct DisplaySettingsView: View {
 struct AboutSettingsView: View {
     @StateObject private var githubService = GitHubService()
 
+    private var copyrightYear: String {
+        // Get the app's build date from the bundle
+        if let infoPath = Bundle.main.path(forResource: "Info", ofType: "plist"),
+           let infoDict = NSDictionary(contentsOfFile: infoPath) as? [String: Any],
+           let buildDate = infoDict["CFBundleVersion"] as? String {
+            // Try to get year from build timestamp or use current year
+            if let executableURL = Bundle.main.executableURL,
+               let attributes = try? FileManager.default.attributesOfItem(atPath: executableURL.path),
+               let creationDate = attributes[.creationDate] as? Date {
+                let year = Calendar.current.component(.year, from: creationDate)
+                return String(year)
+            }
+        }
+        return String(Calendar.current.component(.year, from: Date()))
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
@@ -885,7 +901,7 @@ struct AboutSettingsView: View {
 
                     // Credits
                     VStack(spacing: 8) {
-                        Text("settings.about.copyright".localized)
+                        Text("© \(copyrightYear) FinderHover")
                             .font(.system(size: 11))
                             .foregroundColor(.secondary)
                         Text("settings.about.opensource".localized)
