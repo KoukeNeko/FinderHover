@@ -96,6 +96,7 @@
 "settings.about.github.issues" = "回報問題";
 "settings.about.github.releases" = "版本發布";
 "settings.about.github.contributors" = "貢獻者";
+"settings.about.contributors" = "貢獻者";
 "settings.about.copyright" = "© 2024 FinderHover";
 "settings.about.opensource" = "開放原始碼專案";
 
