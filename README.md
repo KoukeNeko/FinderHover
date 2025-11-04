@@ -522,7 +522,7 @@ Contributions are welcome! Please feel free to:
 <img width="762" height="644" alt="image" src="https://github.com/user-attachments/assets/33bbc116-ded6-481c-876b-32ee35199845" />
 *Customize every aspect of the app*
 
-## 📝 What's New in Version 1.2.2.1
+## 📝 What's New in Version 1.2.3
 
 - 🐛 **Bug Fix: Windows Style Border**
   - Fixed inconsistent border styling for Windows tooltip mode on older macOS versions
