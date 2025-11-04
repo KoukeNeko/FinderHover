@@ -162,6 +162,17 @@
 "settings.appearance.maxWidth.description" = "Maximum width of the preview window";
 "settings.appearance.fontSize.description" = "Size of text in the preview window";
 
+/* UI Style Settings */
+"settings.style" = "UI Style";
+"settings.style.description" = "Choose between macOS or Windows tooltip style";
+"settings.style.macos" = "macOS Style";
+"settings.style.windows" = "Windows Style";
+
+/* Windows Style Hover Labels */
+"hover.windows.type" = "Type";
+"hover.windows.size" = "Size";
+"hover.windows.dateModified" = "Date modified";
+
 /* Language Settings */
 "settings.language" = "Language";
 "settings.language.description" = "Change app language (requires restart)";
