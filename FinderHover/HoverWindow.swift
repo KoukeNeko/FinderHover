@@ -83,22 +83,23 @@ class HoverWindowController: NSWindowController {
         // Check if blur is enabled
         if settings.enableBlur {
             let osVersion = ProcessInfo.processInfo.operatingSystemVersion
-            let useLegacyBlurLayout = osVersion.majorVersion < 11
+            // Use container view approach for macOS < 11 or macOS 15.x (where direct cornerRadius doesn't work)
+            let useLegacyBlurLayout = osVersion.majorVersion < 11 || osVersion.majorVersion == 15
 
             // Create visual effect view for blur
             let effectView = NSVisualEffectView()
             effectView.state = .active
 
             if useLegacyBlurLayout {
-                // Older macOS builds (pre-11.0) have rendering artifacts when rounding the effect view layer directly.
-                effectView.material = .dark
-                effectView.blendingMode = .withinWindow
+                // Older macOS builds (pre-11.0) and macOS 15.x have rendering artifacts when rounding the effect view layer directly.
+                // Use container view approach for proper corner radius rendering.
+                effectView.material = .hudWindow
+                effectView.blendingMode = .behindWindow
 
                 let containerView = NSView(frame: NSRect(origin: .zero, size: fittingSize))
                 containerView.wantsLayer = true
                 containerView.layer?.cornerRadius = cornerRadius
                 containerView.layer?.masksToBounds = true
-                containerView.layer?.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(settings.windowOpacity).cgColor
 
                 effectView.frame = containerView.bounds
                 effectView.autoresizingMask = [.width, .height]
@@ -110,6 +111,7 @@ class HoverWindowController: NSWindowController {
                 containerView.addSubview(effectView)
                 window.contentView = containerView
             } else {
+                // macOS 11-14 and 26+ support direct cornerRadius on NSVisualEffectView
                 effectView.material = .hudWindow
                 effectView.blendingMode = .behindWindow
                 effectView.wantsLayer = true
