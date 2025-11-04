@@ -678,7 +678,7 @@ struct AboutSettingsView: View {
                     if let appIcon = NSImage(named: "AppIcon") {
                         Image(nsImage: appIcon)
                             .resizable()
-                            .frame(width: 256, height: 256)
+                            .frame(width: 128, height: 128)
                             .padding(.top, 20)
                     }
 
