@@ -88,8 +88,8 @@
 "settings.about.version" = "version %@";
 "settings.about.description" = "Displays file information when hovering over files in Finder.";
 "settings.about.usage" = "To use:";
-"settings.about.usage.step1" = "Select a file in Finder (click on it)";
-"settings.about.usage.step2" = "Hover your mouse over the selected file";
+"settings.about.usage.step1" = "Open Finder and navigate to any folder";
+"settings.about.usage.step2" = "Hover your mouse over any file name";
 "settings.about.usage.step3" = "A preview window appears with file details";
 "settings.about.copyright" = "© 2024 FinderHover";
 "settings.about.opensource" = "Open Source Project";
