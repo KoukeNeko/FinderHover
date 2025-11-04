@@ -94,6 +94,8 @@
 "settings.about.checkForUpdates" = "アップデートを確認";
 "settings.about.checkingForUpdates" = "アップデートを確認中...";
 "settings.about.updateAvailable" = "アップデート可能: %@";
+"settings.about.updateAvailable.title" = "アップデートが利用可能";
+"settings.about.updateAvailable.message" = "新しいバージョンが利用可能です！\n\n現在: %@\n最新: %@\n\nアップデートはダウンロードフォルダに保存されます。";
 "settings.about.upToDate" = "最新バージョンです";
 "settings.about.upToDateWithVersion" = "すでに最新バージョンです (%@)";
 "settings.about.currentVersion" = "現在のバージョン: %@";
@@ -170,6 +172,7 @@
 
 /* Common */
 "common.reset" = "デフォルトに戻す";
+"common.cancel" = "キャンセル";
 "common.item" = "項目";
 "common.items" = "項目";
 

@@ -63,12 +63,20 @@ class GitHubService: ObservableObject {
     @Published var latestRelease: Release?
     @Published var isCheckingForUpdates = false
     @Published var updateCheckError: String?
+    @Published var showUpdateAlert = false
 
     private let repoOwner = "KoukeNeko"
     private let repoName = "FinderHover"
     private let cacheKey = "cachedContributors"
     private var lastUpdateCheckTime: Date?
     private let updateCheckCooldown: TimeInterval = 5.0 // 5 seconds between checks
+
+    var downloadUrl: String {
+        guard let release = latestRelease else {
+            return ""
+        }
+        return "https://github.com/\(repoOwner)/\(repoName)/releases/download/\(release.tagName)/FinderHover.app.zip"
+    }
 
     init() {
         // Load cached contributors on initialization
@@ -175,6 +183,10 @@ class GitHubService: ObservableObject {
                     let releases = try decoder.decode([Release].self, from: data)
                     if let firstRelease = releases.first(where: { !$0.draft }) {
                         self.latestRelease = firstRelease
+                        // Show alert if update is available
+                        if self.isUpdateAvailable {
+                            self.showUpdateAlert = true
+                        }
                     } else {
                         updateCheckError = "settings.about.error.noReleases".localized
                     }
@@ -185,6 +197,10 @@ class GitHubService: ObservableObject {
                         updateCheckError = "settings.about.error.noStableRelease".localized
                     } else {
                         self.latestRelease = release
+                        // Show alert if update is available
+                        if self.isUpdateAvailable {
+                            self.showUpdateAlert = true
+                        }
                     }
                 }
             } else if httpResponse.statusCode == 404 {
@@ -211,6 +227,41 @@ class GitHubService: ObservableObject {
             return false
         }
         return compareVersions(current: currentVersion, latest: latestRelease.version) == .orderedAscending
+    }
+
+    func downloadUpdate() {
+        guard let url = URL(string: downloadUrl) else { return }
+
+        // Get Downloads folder
+        let downloadsPath = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask)[0]
+        let destinationURL = downloadsPath.appendingPathComponent("FinderHover.app.zip")
+
+        // Start download
+        let task = URLSession.shared.downloadTask(with: url) { tempURL, response, error in
+            guard let tempURL = tempURL, error == nil else {
+                print("Download failed: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+
+            do {
+                // Remove existing file if present
+                if FileManager.default.fileExists(atPath: destinationURL.path) {
+                    try FileManager.default.removeItem(at: destinationURL)
+                }
+
+                // Move downloaded file to Downloads
+                try FileManager.default.moveItem(at: tempURL, to: destinationURL)
+
+                // Show in Finder
+                DispatchQueue.main.async {
+                    NSWorkspace.shared.activateFileViewerSelecting([destinationURL])
+                }
+            } catch {
+                print("File operation failed: \(error.localizedDescription)")
+            }
+        }
+
+        task.resume()
     }
 
     private func cacheContributors(_ contributors: [Contributor]) {

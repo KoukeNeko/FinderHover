@@ -94,6 +94,8 @@
 "settings.about.checkForUpdates" = "Check for Updates";
 "settings.about.checkingForUpdates" = "Checking for updates...";
 "settings.about.updateAvailable" = "Update available: %@";
+"settings.about.updateAvailable.title" = "Update Available";
+"settings.about.updateAvailable.message" = "A new version is available!\n\nCurrent: %@\nLatest: %@\n\nThe update will be downloaded to your Downloads folder.";
 "settings.about.upToDate" = "You are up to date";
 "settings.about.upToDateWithVersion" = "Already on the latest version (%@)";
 "settings.about.currentVersion" = "Current version: %@";
@@ -170,6 +172,7 @@
 
 /* Common */
 "common.reset" = "Reset to Defaults";
+"common.cancel" = "Cancel";
 "common.item" = "item";
 "common.items" = "items";
 

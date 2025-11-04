@@ -1026,6 +1026,20 @@ struct AboutSettingsView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .alert("settings.about.updateAvailable.title".localized, isPresented: $githubService.showUpdateAlert) {
+            Button("settings.about.downloadUpdate".localized) {
+                githubService.downloadUpdate()
+                githubService.showUpdateAlert = false
+            }
+            Button("common.cancel".localized, role: .cancel) {
+                githubService.showUpdateAlert = false
+            }
+        } message: {
+            if let latestRelease = githubService.latestRelease,
+               let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+                Text(String(format: "settings.about.updateAvailable.message".localized, currentVersion, latestRelease.version))
+            }
+        }
     }
 }
 
