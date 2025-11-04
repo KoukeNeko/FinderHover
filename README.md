@@ -524,7 +524,27 @@ Contributions are welcome! Please feel free to:
 
 ## 📝 Changelog
 
-### Version 1.1.3 (Current)
+### Version 1.1.4 (Current)
+
+- 🐛 **Fixed: macOS 15.x Corner Radius Issue**
+  - Fixed rounded corners not rendering properly on macOS 15.x (Sequoia)
+  - Implemented container view approach with proper layer masking
+  - Added subtle gray border (0.5pt) matching native macOS HUD windows
+  - Enhanced visual consistency across all macOS versions
+- 👥 **NEW: GitHub Contributors Display**
+  - Added dynamic contributor avatars in About settings
+  - Contributors shown in responsive grid layout (32x32px avatars)
+  - Clickable avatars linking to contributor GitHub profiles
+  - Shows contribution count for each contributor
+  - Offline cache support (24-hour expiration)
+- 🌍 **Localization Updates**
+  - Added contributor feature strings for all languages
+  - Maintained full support for English, 繁體中文, 日本語
+- 🔧 **Technical Improvements**
+  - Cross-version compatibility (macOS 11-26+)
+  - Optimized window rendering for different OS versions
+
+### Version 1.1.3
 
 - 🎨 **NEW: Windows Style Tooltip Option**
   - Added UI style selector in Settings > Appearance tab
