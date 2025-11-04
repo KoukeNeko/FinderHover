@@ -100,6 +100,12 @@
 "settings.about.downloadUpdate" = "Download Update";
 "settings.about.retry" = "Retry";
 "settings.about.includePrereleases" = "Include pre-release versions";
+"settings.about.error.noReleases" = "No releases found";
+"settings.about.error.noStableRelease" = "No stable release found";
+"settings.about.error.rateLimit" = "Rate limit exceeded. Please try again later";
+"settings.about.error.invalidResponse" = "Invalid response";
+"settings.about.error.http" = "HTTP %@";
+"settings.about.error.wait" = "Please wait %d seconds before checking again";
 "settings.about.github" = "GitHub";
 "settings.about.github.repository" = "Repository";
 "settings.about.github.issues" = "Report Issue";

@@ -100,6 +100,12 @@
 "settings.about.downloadUpdate" = "アップデートをダウンロード";
 "settings.about.retry" = "再試行";
 "settings.about.includePrereleases" = "プレリリース版を含める";
+"settings.about.error.noReleases" = "リリースが見つかりません";
+"settings.about.error.noStableRelease" = "安定版リリースが見つかりません";
+"settings.about.error.rateLimit" = "レート制限を超えました。しばらくしてから再度お試しください";
+"settings.about.error.invalidResponse" = "無効な応答";
+"settings.about.error.http" = "HTTP %@";
+"settings.about.error.wait" = "%d 秒待ってから再度確認してください";
 "settings.about.github" = "GitHub";
 "settings.about.github.repository" = "リポジトリ";
 "settings.about.github.issues" = "問題を報告";

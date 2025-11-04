@@ -127,7 +127,7 @@ class GitHubService: ObservableObject {
             let timeSinceLastCheck = Date().timeIntervalSince(lastCheck)
             if timeSinceLastCheck < updateCheckCooldown {
                 let remainingTime = Int(ceil(updateCheckCooldown - timeSinceLastCheck))
-                updateCheckError = "Please wait \(remainingTime) seconds before checking again"
+                updateCheckError = String(format: "settings.about.error.wait".localized, remainingTime)
                 return
             }
         }
@@ -148,7 +148,7 @@ class GitHubService: ObservableObject {
         }
 
         guard let url = URL(string: urlString) else {
-            updateCheckError = "Invalid URL"
+            updateCheckError = "settings.about.error.invalidResponse".localized
             isCheckingForUpdates = false
             return
         }
@@ -162,7 +162,7 @@ class GitHubService: ObservableObject {
             let (data, response) = try await URLSession.shared.data(for: request)
 
             guard let httpResponse = response as? HTTPURLResponse else {
-                updateCheckError = "Invalid response"
+                updateCheckError = "settings.about.error.invalidResponse".localized
                 isCheckingForUpdates = false
                 return
             }
@@ -176,23 +176,23 @@ class GitHubService: ObservableObject {
                     if let firstRelease = releases.first(where: { !$0.draft }) {
                         self.latestRelease = firstRelease
                     } else {
-                        updateCheckError = "No releases found"
+                        updateCheckError = "settings.about.error.noReleases".localized
                     }
                 } else {
                     // Parse single release
                     let release = try decoder.decode(Release.self, from: data)
                     if release.draft {
-                        updateCheckError = "No stable release found"
+                        updateCheckError = "settings.about.error.noStableRelease".localized
                     } else {
                         self.latestRelease = release
                     }
                 }
             } else if httpResponse.statusCode == 404 {
-                updateCheckError = "No releases found"
+                updateCheckError = "settings.about.error.noReleases".localized
             } else if httpResponse.statusCode == 403 {
-                updateCheckError = "Rate limit exceeded. Please try again later"
+                updateCheckError = "settings.about.error.rateLimit".localized
             } else {
-                updateCheckError = "HTTP \(httpResponse.statusCode)"
+                updateCheckError = String(format: "settings.about.error.http".localized, "\(httpResponse.statusCode)")
             }
         } catch {
             self.updateCheckError = error.localizedDescription
