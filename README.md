@@ -522,18 +522,18 @@ Contributions are welcome! Please feel free to:
 <img width="762" height="644" alt="image" src="https://github.com/user-attachments/assets/33bbc116-ded6-481c-876b-32ee35199845" />
 *Customize every aspect of the app*
 
-## 📝 What's New in Version 1.1.5
+## 📝 What's New in Version 1.2.0
 
-- 🔄 **NEW: Automatic Update Checker with One-Click Download**
-  - Built-in update checker in About settings
-  - One-click check for latest releases from GitHub
-  - Smart version comparison with semantic versioning
-  - **Automatic Download**: When an update is available, shows alert dialog with direct download button
-  - **One-Click Installation**: Downloads `FinderHover.app.zip` directly to Downloads folder
-  - **Auto-Reveal in Finder**: Automatically opens Finder and highlights the downloaded file
-  - **Prerelease Support**: Optional toggle to check for beta/RC versions
-  - **Rate Limiting Protection**: 5-second cooldown between checks
-  - Fully localized in English, 繁體中文, 日本語
+- 🎨 **NEW: Enhanced Menu Bar Icon**
+  - Changed to `appwindow.swipe.rectangle` SF Symbol for better representation of the app's functionality
+  - Visual state indication for enabled/disabled status
+  - **Enabled state**: Full opacity with clear, visible icon
+  - **Disabled state**: Semi-transparent icon (50% opacity) for instant visual feedback
+  - Improved accessibility descriptions for screen readers
+- 🔄 **Update Checker Improvements**
+  - Alert dialog now automatically appears when update is available
+  - One-click download directly from alert notification
+  - Seamless integration with existing automatic update checker from v1.1.5
 
 📋 [View Full Changelog](CHANGELOG.md) for complete version history
 

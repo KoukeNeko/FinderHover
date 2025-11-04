@@ -2,7 +2,20 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.1.5 (Current)
+## Version 1.2.0 (Current)
+
+- 🎨 **NEW: Enhanced Menu Bar Icon**
+  - Changed to `appwindow.swipe.rectangle` SF Symbol for better representation
+  - Visual state indication for enabled/disabled status
+  - **Enabled state**: Full opacity (alpha 1.0) with clear icon
+  - **Disabled state**: Semi-transparent (alpha 0.5) for visual feedback
+  - Improved accessibility descriptions for both states
+- 🔄 **Update Checker Improvements**
+  - Alert dialog now automatically appears when update is available
+  - One-click download directly from alert notification
+  - Seamless integration with existing automatic update checker
+
+## Version 1.1.5
 
 - 🔄 **NEW: Automatic Update Checker with One-Click Download**
   - Built-in update checker in About settings
