@@ -734,6 +734,110 @@ struct AboutSettingsView: View {
                             .foregroundColor(.secondary)
                     }
 
+                    // Check for Updates Section
+                    VStack(spacing: 8) {
+                        if githubService.isCheckingForUpdates {
+                            HStack(spacing: 8) {
+                                ProgressView()
+                                    .scaleEffect(0.7)
+                                    .frame(width: 12, height: 12)
+                                Text("settings.about.checkingForUpdates".localized)
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.secondary)
+                            }
+                        } else if let error = githubService.updateCheckError {
+                            VStack(spacing: 4) {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "exclamationmark.triangle")
+                                        .font(.system(size: 11))
+                                        .foregroundColor(.orange)
+                                    Text(error)
+                                        .font(.system(size: 11))
+                                        .foregroundColor(.secondary)
+                                }
+                                Button(action: {
+                                    Task {
+                                        await githubService.fetchLatestRelease(includePrereleases: AppSettings.shared.includePrereleases)
+                                    }
+                                }) {
+                                    Text("settings.about.retry".localized)
+                                        .font(.system(size: 11))
+                                }
+                                .buttonStyle(.link)
+                            }
+                        } else if let latestRelease = githubService.latestRelease {
+                            if githubService.isUpdateAvailable {
+                                VStack(spacing: 8) {
+                                    HStack(spacing: 6) {
+                                        Image(systemName: "arrow.up.circle.fill")
+                                            .font(.system(size: 11))
+                                            .foregroundColor(.green)
+                                        Text(String(format: "settings.about.updateAvailable".localized, latestRelease.version))
+                                            .font(.system(size: 12))
+                                            .foregroundColor(.secondary)
+                                    }
+                                    Button(action: {
+                                        if let url = URL(string: latestRelease.htmlUrl) {
+                                            NSWorkspace.shared.open(url)
+                                        }
+                                    }) {
+                                        HStack(spacing: 6) {
+                                            Image(systemName: "arrow.down.circle")
+                                                .font(.system(size: 11))
+                                            Text("settings.about.downloadUpdate".localized)
+                                                .font(.system(size: 12))
+                                        }
+                                    }
+                                    .buttonStyle(.borderedProminent)
+                                }
+                            } else {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .font(.system(size: 11))
+                                        .foregroundColor(.green)
+                                    Text("settings.about.upToDate".localized)
+                                        .font(.system(size: 12))
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                        } else {
+                            Button(action: {
+                                Task {
+                                    await githubService.fetchLatestRelease(includePrereleases: AppSettings.shared.includePrereleases)
+                                }
+                            }) {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "arrow.up.circle")
+                                        .font(.system(size: 11))
+                                    Text("settings.about.checkForUpdates".localized)
+                                        .font(.system(size: 12))
+                                }
+                            }
+                            .buttonStyle(.bordered)
+                        }
+                    }
+                    .frame(height: 50)
+                    .frame(maxWidth: .infinity)
+
+                    // Prerelease Toggle
+                    HStack(spacing: 8) {
+                        Text("settings.about.includePrereleases".localized)
+                            .font(.system(size: 12))
+                            .foregroundColor(.secondary)
+                        Toggle("", isOn: Binding(
+                            get: { AppSettings.shared.includePrereleases },
+                            set: { newValue in
+                                AppSettings.shared.includePrereleases = newValue
+                                // Reset update check state when toggle changes
+                                githubService.latestRelease = nil
+                                githubService.updateCheckError = nil
+                            }
+                        ))
+                        .toggleStyle(.switch)
+                        .controlSize(.small)
+                    }
+                    .padding(.top, -8)
+
                     // Description
                     Text("settings.about.description".localized)
                         .font(.system(size: 13))

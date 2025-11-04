@@ -91,6 +91,13 @@
 "settings.about.usage.step1" = "Open Finder and navigate to any folder";
 "settings.about.usage.step2" = "Hover your mouse over any file name";
 "settings.about.usage.step3" = "A preview window appears with file details";
+"settings.about.checkForUpdates" = "Check for Updates";
+"settings.about.checkingForUpdates" = "Checking for updates...";
+"settings.about.updateAvailable" = "Update available: %@";
+"settings.about.upToDate" = "You are up to date";
+"settings.about.downloadUpdate" = "Download Update";
+"settings.about.retry" = "Retry";
+"settings.about.includePrereleases" = "Include pre-release versions";
 "settings.about.github" = "GitHub";
 "settings.about.github.repository" = "Repository";
 "settings.about.github.issues" = "Report Issue";

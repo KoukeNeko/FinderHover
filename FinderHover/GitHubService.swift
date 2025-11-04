@@ -27,12 +27,42 @@ struct Contributor: Identifiable, Codable {
     }
 }
 
+// MARK: - Release Model
+struct Release: Codable {
+    let tagName: String
+    let name: String
+    let htmlUrl: String
+    let prerelease: Bool
+    let draft: Bool
+    let publishedAt: String
+    let body: String?
+
+    enum CodingKeys: String, CodingKey {
+        case tagName = "tag_name"
+        case name
+        case htmlUrl = "html_url"
+        case prerelease
+        case draft
+        case publishedAt = "published_at"
+        case body
+    }
+
+    var version: String {
+        // Remove 'v' prefix if present (e.g., "v1.1.4" -> "1.1.4")
+        tagName.hasPrefix("v") ? String(tagName.dropFirst()) : tagName
+    }
+}
+
 // MARK: - GitHub Service
 @MainActor
 class GitHubService: ObservableObject {
     @Published var contributors: [Contributor] = []
     @Published var isLoading = false
     @Published var error: String?
+
+    @Published var latestRelease: Release?
+    @Published var isCheckingForUpdates = false
+    @Published var updateCheckError: String?
 
     private let repoOwner = "KoukeNeko"
     private let repoName = "FinderHover"
@@ -87,6 +117,66 @@ class GitHubService: ObservableObject {
         }
 
         isLoading = false
+    }
+
+    func fetchLatestRelease(includePrereleases: Bool = false) async {
+        isCheckingForUpdates = true
+        updateCheckError = nil
+        latestRelease = nil
+
+        let urlString = "https://api.github.com/repos/\(repoOwner)/\(repoName)/releases/latest"
+        guard let url = URL(string: urlString) else {
+            updateCheckError = "Invalid URL"
+            isCheckingForUpdates = false
+            return
+        }
+
+        do {
+            var request = URLRequest(url: url)
+            request.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
+            request.cachePolicy = .reloadIgnoringLocalCacheData
+            request.timeoutInterval = 10
+
+            let (data, response) = try await URLSession.shared.data(for: request)
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                updateCheckError = "Invalid response"
+                isCheckingForUpdates = false
+                return
+            }
+
+            if httpResponse.statusCode == 200 {
+                let decoder = JSONDecoder()
+                let release = try decoder.decode(Release.self, from: data)
+
+                // Filter out prereleases if not requested
+                if !includePrereleases && release.prerelease {
+                    updateCheckError = "No stable release found"
+                } else {
+                    self.latestRelease = release
+                }
+            } else if httpResponse.statusCode == 404 {
+                updateCheckError = "No releases found"
+            } else {
+                updateCheckError = "HTTP \(httpResponse.statusCode)"
+            }
+        } catch {
+            self.updateCheckError = error.localizedDescription
+        }
+
+        isCheckingForUpdates = false
+    }
+
+    func compareVersions(current: String, latest: String) -> ComparisonResult {
+        return current.compare(latest, options: .numeric)
+    }
+
+    var isUpdateAvailable: Bool {
+        guard let latestRelease = latestRelease,
+              let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else {
+            return false
+        }
+        return compareVersions(current: currentVersion, latest: latestRelease.version) == .orderedAscending
     }
 
     private func cacheContributors(_ contributors: [Contributor]) {

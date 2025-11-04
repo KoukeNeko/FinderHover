@@ -91,6 +91,13 @@
 "settings.about.usage.step1" = "開啟 Finder 並導覽至任何資料夾";
 "settings.about.usage.step2" = "將滑鼠懸停在任何檔案名稱上";
 "settings.about.usage.step3" = "預覽視窗將顯示檔案詳細資訊";
+"settings.about.checkForUpdates" = "檢查更新";
+"settings.about.checkingForUpdates" = "正在檢查更新...";
+"settings.about.updateAvailable" = "有可用更新: %@";
+"settings.about.upToDate" = "已是最新版本";
+"settings.about.downloadUpdate" = "下載更新";
+"settings.about.retry" = "重試";
+"settings.about.includePrereleases" = "包含預覽版本";
 "settings.about.github" = "GitHub";
 "settings.about.github.repository" = "儲存庫";
 "settings.about.github.issues" = "回報問題";
