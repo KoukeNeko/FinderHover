@@ -83,6 +83,14 @@ class HoverManager: ObservableObject {
         // If window is showing and we have current file info
         guard let currentInfo = currentFileInfo else { return }
 
+        // Check if user is renaming a file - hide immediately
+        if FinderInteraction.isRenamingFile() {
+            hideHoverWindow()
+            currentFileInfo = nil
+            displayTimer?.invalidate()
+            return
+        }
+
         // Check if mouse has moved significantly or if we can't find the same file
         if let currentPath = FinderInteraction.getFileAtMousePosition(location) {
             // If different file or no file, hide immediately

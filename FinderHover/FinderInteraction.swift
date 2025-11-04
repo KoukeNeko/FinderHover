@@ -10,8 +10,41 @@ import Foundation
 
 class FinderInteraction {
 
+    /// Checks if user is currently renaming a file in Finder
+    static func isRenamingFile() -> Bool {
+        guard let finderApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.finder").first else {
+            return false
+        }
+
+        let appElement = AXUIElementCreateApplication(finderApp.processIdentifier)
+
+        // Get the focused UI element
+        var focusedElementRef: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(appElement, kAXFocusedUIElementAttribute as CFString, &focusedElementRef) == .success,
+              let focusedElement = focusedElementRef as AXUIElement? else {
+            return false
+        }
+
+        // Check if the focused element is a text field (indicates renaming)
+        var roleRef: CFTypeRef?
+        if AXUIElementCopyAttributeValue(focusedElement, kAXRoleAttribute as CFString, &roleRef) == .success,
+           let role = roleRef as? String {
+            // Text fields in Finder are used for renaming files
+            if role == kAXTextFieldRole as String || role == kAXTextAreaRole as String {
+                return true
+            }
+        }
+
+        return false
+    }
+
     /// Gets file at specific position using accessibility API
     static func getFileAtMousePosition(_ position: CGPoint) -> String? {
+        // Don't return file path if user is renaming
+        if isRenamingFile() {
+            return nil
+        }
+
         // Try to get selected files from Finder using Accessibility API
         if let selected = getSelectedFinderFiles().first {
             return selected
