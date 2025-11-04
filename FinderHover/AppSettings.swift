@@ -88,8 +88,8 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .lastAccessDate: return "eye"
         case .permissions: return "lock.shield"
         case .owner: return "person"
-        case .exif: return "camera.fill"
-        case .video: return "video.fill"
+        case .exif: return "camera"
+        case .video: return "video"
         case .audio: return "music.note"
         case .filePath: return "folder"
         }
