@@ -36,6 +36,14 @@ class GitHubService: ObservableObject {
 
     private let repoOwner = "KoukeNeko"
     private let repoName = "FinderHover"
+    private let cacheKey = "cachedContributors"
+    private let cacheTimestampKey = "contributorsCacheTimestamp"
+    private let cacheExpirationInterval: TimeInterval = 86400 // 24 hours
+
+    init() {
+        // Load cached contributors on initialization
+        loadCachedContributors()
+    }
 
     func fetchContributors() async {
         isLoading = true
@@ -52,6 +60,7 @@ class GitHubService: ObservableObject {
             var request = URLRequest(url: url)
             request.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
             request.cachePolicy = .reloadIgnoringLocalCacheData
+            request.timeoutInterval = 10 // 10 second timeout
 
             let (data, response) = try await URLSession.shared.data(for: request)
 
@@ -65,14 +74,54 @@ class GitHubService: ObservableObject {
                 let decoder = JSONDecoder()
                 let fetchedContributors = try decoder.decode([Contributor].self, from: data)
                 self.contributors = fetchedContributors
+
+                // Cache the contributors data
+                cacheContributors(fetchedContributors)
             } else {
                 error = "HTTP \(httpResponse.statusCode)"
             }
         } catch {
             self.error = error.localizedDescription
+            // If fetch fails and we have no contributors, try to load from cache
+            if contributors.isEmpty {
+                loadCachedContributors()
+            }
         }
 
         isLoading = false
+    }
+
+    private func cacheContributors(_ contributors: [Contributor]) {
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(contributors)
+            UserDefaults.standard.set(data, forKey: cacheKey)
+            UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: cacheTimestampKey)
+        } catch {
+            print("Failed to cache contributors: \(error)")
+        }
+    }
+
+    private func loadCachedContributors() {
+        guard let data = UserDefaults.standard.data(forKey: cacheKey) else {
+            return
+        }
+
+        do {
+            let decoder = JSONDecoder()
+            let cachedContributors = try decoder.decode([Contributor].self, from: data)
+            self.contributors = cachedContributors
+        } catch {
+            print("Failed to load cached contributors: \(error)")
+        }
+    }
+
+    private func isCacheValid() -> Bool {
+        guard let timestamp = UserDefaults.standard.object(forKey: cacheTimestampKey) as? TimeInterval else {
+            return false
+        }
+        let cacheAge = Date().timeIntervalSince1970 - timestamp
+        return cacheAge < cacheExpirationInterval
     }
 }
 
