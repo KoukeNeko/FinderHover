@@ -83,49 +83,60 @@ class HoverWindowController: NSWindowController {
         // Check if blur is enabled
         if settings.enableBlur {
             let osVersion = ProcessInfo.processInfo.operatingSystemVersion
-            let useLegacyBlurLayout = osVersion.majorVersion < 11
+            // Use container view approach for macOS <= macOS 15.x (where direct cornerRadius doesn't work)
+            let useLegacyBlurLayout = osVersion.majorVersion <= 15
 
             // Create visual effect view for blur
             let effectView = NSVisualEffectView()
             effectView.state = .active
 
             if useLegacyBlurLayout {
-                // Older macOS builds (pre-11.0) have rendering artifacts when rounding the effect view layer directly.
-                effectView.material = .dark
-                effectView.blendingMode = .withinWindow
-
-                let containerView = NSView(frame: NSRect(origin: .zero, size: fittingSize))
-                containerView.wantsLayer = true
-                containerView.layer?.cornerRadius = cornerRadius
-                containerView.layer?.masksToBounds = true
-                containerView.layer?.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(settings.windowOpacity).cgColor
-
-                effectView.frame = containerView.bounds
-                effectView.autoresizingMask = [.width, .height]
+                // For macOS 15.x, use transparent container with clipping
+                // Direct cornerRadius on NSVisualEffectView doesn't work properly on macOS 15.x
+                effectView.material = .hudWindow
+                effectView.blendingMode = .behindWindow
+                effectView.frame = NSRect(origin: .zero, size: fittingSize)
 
                 hostingView.frame = effectView.bounds
                 hostingView.autoresizingMask = [.width, .height]
                 effectView.addSubview(hostingView)
 
+                // Create transparent clipping container
+                let containerView = NSView(frame: NSRect(origin: .zero, size: fittingSize))
+                containerView.wantsLayer = true
+                containerView.layer?.cornerRadius = cornerRadius
+                containerView.layer?.masksToBounds = true
+
+                // Add subtle border like native macOS HUD windows (only for macOS style)
+                if cornerRadius > 0 {
+                    containerView.layer?.borderWidth = 0.5
+                    containerView.layer?.borderColor = NSColor.systemGray.withAlphaComponent(0.5).cgColor
+                }
+
+                effectView.autoresizingMask = [.width, .height]
                 containerView.addSubview(effectView)
                 window.contentView = containerView
             } else {
+                // macOS 26+ support direct cornerRadius on NSVisualEffectView
                 effectView.material = .hudWindow
                 effectView.blendingMode = .behindWindow
                 effectView.wantsLayer = true
                 effectView.layer?.cornerRadius = cornerRadius
                 effectView.layer?.masksToBounds = true
 
-                // Remove any borders from the visual effect view
-                effectView.layer?.borderWidth = 0
-                effectView.layer?.borderColor = nil
+                // Add subtle border like native macOS HUD windows (only for macOS style)
+                if cornerRadius > 0 {
+                    effectView.layer?.borderWidth = 0.5
+                    effectView.layer?.borderColor = NSColor.black.withAlphaComponent(0.2).cgColor
+                } else {
+                    effectView.layer?.borderWidth = 0
+                    effectView.layer?.borderColor = nil
+                }
 
-                // Set frame to match content size
                 effectView.frame = NSRect(origin: .zero, size: fittingSize)
+
                 hostingView.frame = effectView.bounds
                 hostingView.autoresizingMask = [.width, .height]
-
-                // Add hosting view to effect view
                 effectView.addSubview(hostingView)
                 window.contentView = effectView
             }
