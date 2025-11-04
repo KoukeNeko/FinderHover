@@ -208,10 +208,11 @@ The app will automatically prompt you to enable Accessibility access:
 ### Basic Usage
 1. **Launch FinderHover** - it will appear in your menu bar with an 👁️ icon
 2. **Open Finder** and navigate to any folder
-3. **Click to select a file** (it will highlight in blue)
-4. **Hover your mouse** over the selected file
-5. **Wait 0.1 seconds** (customizable)
-6. A beautiful preview window appears showing file details!
+3. **Hover your mouse** over any file name
+4. **Wait 0.1 seconds** (customizable)
+5. A beautiful preview window appears showing file details!
+
+> **Note for macOS Sonoma (14.x) users**: On older macOS versions, you may need to click to select a file first before hovering. On macOS Sequoia (15.x) and later, simply hovering over the file name is sufficient - the Finder window doesn't even need to be focused!
 
 ### Menu Bar Options
 Click the 👁️ icon in your menu bar to access:

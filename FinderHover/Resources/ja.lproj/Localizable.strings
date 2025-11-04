@@ -88,8 +88,8 @@
 "settings.about.version" = "バージョン %@";
 "settings.about.description" = "Finder でファイルにホバーするとファイル情報を表示します。";
 "settings.about.usage" = "使用方法：";
-"settings.about.usage.step1" = "Finder でファイルを選択（クリック）";
-"settings.about.usage.step2" = "選択したファイルにマウスをホバー";
+"settings.about.usage.step1" = "Finder を開き、任意のフォルダに移動";
+"settings.about.usage.step2" = "任意のファイル名にマウスをホバー";
 "settings.about.usage.step3" = "プレビューウィンドウにファイル詳細が表示されます";
 "settings.about.copyright" = "© 2024 FinderHover";
 "settings.about.opensource" = "オープンソースプロジェクト";
