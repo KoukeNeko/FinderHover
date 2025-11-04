@@ -30,15 +30,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Create menu bar item
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
-        if let button = statusItem?.button {
-            button.image = NSImage(systemSymbolName: "eye.fill", accessibilityDescription: "FinderHover")
-        }
-
+        updateMenuBarIcon(enabled: true)
         setupMenuBar()
 
         // Initialize and start hover manager
         hoverManager = HoverManager()
         hoverManager?.startMonitoring()
+    }
+
+    private func updateMenuBarIcon(enabled: Bool) {
+        guard let button = statusItem?.button else { return }
+
+        if enabled {
+            // Enabled state: normal icon
+            button.image = NSImage(systemSymbolName: "appwindow.swipe.rectangle", accessibilityDescription: "FinderHover Enabled")
+        } else {
+            // Disabled state: slashed icon
+            button.image = NSImage(systemSymbolName: "appwindow.swipe.rectangle", accessibilityDescription: "FinderHover Disabled")
+            // Make the icon semi-transparent to indicate disabled state
+            button.image?.isTemplate = true
+            button.alphaValue = 0.5
+        }
+
+        // Reset alpha if enabled
+        if enabled {
+            button.alphaValue = 1.0
+        }
     }
 
     private func setupMenuBar() {
@@ -84,10 +101,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             sender.state = .off
             hoverManager?.isEnabled = false
             sender.title = "menu.enable".localized
+            updateMenuBarIcon(enabled: false)
         } else {
             sender.state = .on
             hoverManager?.isEnabled = true
             sender.title = "menu.disable".localized
+            updateMenuBarIcon(enabled: true)
         }
     }
 
