@@ -3,104 +3,58 @@
     <channel>
         <title>FinderHover Updates</title>
         <link>https://github.com/KoukeNeko/FinderHover</link>
-        <description>Software updates for FinderHover</description>
+        <description>Most recent updates to FinderHover</description>
         <language>en</language>
 
-        <!--
-        TEMPLATE: Add new releases here
+    <!-- Version 1.1.5 - 2025-11-04 -->
+    <item>
+        <title>Version 1.1.5</title>
+        <link>https://github.com/KoukeNeko/FinderHover/releases/tag/v1.1.5</link>
+        <sparkle:version>8</sparkle:version>
+        <sparkle:shortVersionString>1.1.5</sparkle:shortVersionString>
+        <description><![CDATA[
+            <h2>=€ What's New in Version 1.1.5</h2>
+            <p>This release introduces <strong>automatic updates</strong> powered by the industry-standard Sparkle framework!</p>
 
-        Each release item should contain:
-        - title: Version number
-        - link: GitHub release page URL
-        - sparkle:version: Build number (CFBundleVersion)
-        - sparkle:shortVersionString: Version string (CFBundleShortVersionString)
-        - description: Release notes in HTML format
-        - pubDate: Publication date in RFC 822 format
-        - enclosure: Download link with signature
+            <h3>( New Features</h3>
+            <ul>
+                <li><strong>= Automatic Updates with Sparkle</strong>
+                    <ul>
+                        <li>In-app update notifications when new versions are available</li>
+                        <li>One-click installation - no manual downloads needed</li>
+                        <li>Secure updates with EdDSA cryptographic signatures</li>
+                        <li>Configurable automatic update checks (24-hour interval)</li>
+                        <li>User control over automatic checking in Settings</li>
+                    </ul>
+                </li>
+                <li><strong>=Ü Release Automation Scripts</strong>
+                    <ul>
+                        <li>Semi-automatic release script for controlled releases</li>
+                        <li>Fully automatic release script with GitHub integration</li>
+                        <li>Comprehensive documentation for release workflow</li>
+                    </ul>
+                </li>
+            </ul>
 
-        To add a new release:
-        1. Build and archive your app in Xcode
-        2. Export as .app
-        3. Compress to .zip: ditto -c -k --sequesterRsrc --keepParent FinderHover.app FinderHover.zip
-        4. Sign the .zip: /opt/homebrew/Caskroom/sparkle/2.8.0/bin/sign_update FinderHover.zip
-        5. Get file size: ls -l FinderHover.zip
-        6. Upload .zip to GitHub release
-        7. Copy the template below and fill in the details
-        -->
+            <h3>=' Technical Improvements</h3>
+            <ul>
+                <li>Replaced custom UpdateChecker with industry-standard Sparkle framework</li>
+                <li>Enhanced security with code signing verification</li>
+                <li>Improved update notification reliability</li>
+                <li>Native macOS update mechanism for better user experience</li>
+            </ul>
 
-        <!-- Example Release (v1.1.5) - Update this with actual release -->
-        <item>
-            <title>Version 1.1.5</title>
-            <link>https://github.com/KoukeNeko/FinderHover/releases/tag/v1.1.5</link>
-            <sparkle:version>7</sparkle:version>
-            <sparkle:shortVersionString>1.1.5</sparkle:shortVersionString>
-            <description><![CDATA[
-                <h2>What's New in 1.1.5</h2>
-                <ul>
-                    <li><strong>Automatic Updates:</strong> Integrated Sparkle framework for seamless automatic updates</li>
-                    <li><strong>In-App Update Installation:</strong> Updates now download and install without opening browser</li>
-                    <li><strong>Secure Updates:</strong> All updates are cryptographically signed with EdDSA for security</li>
-                    <li><strong>Update Preferences:</strong> Control automatic update checking in Settings</li>
-                </ul>
-
-                <h3>Bug Fixes & Improvements</h3>
-                <ul>
-                    <li>Improved update notification system</li>
-                    <li>Enhanced security with code signing verification</li>
-                </ul>
-            ]]></description>
-            <pubDate>Mon, 04 Nov 2025 12:00:00 +0000</pubDate>
-            <enclosure
-                url="https://github.com/KoukeNeko/FinderHover/releases/download/v1.1.5/FinderHover.zip"
-                sparkle:version="7"
-                sparkle:shortVersionString="1.1.5"
-                length="REPLACE_WITH_FILE_SIZE"
-                type="application/octet-stream"
-                sparkle:edSignature="REPLACE_WITH_SIGNATURE" />
-        </item>
-
-        <!-- Previous Release (v1.1.4) -->
-        <item>
-            <title>Version 1.1.4</title>
-            <link>https://github.com/KoukeNeko/FinderHover/releases/tag/v1.1.4</link>
-            <sparkle:version>6</sparkle:version>
-            <sparkle:shortVersionString>1.1.4</sparkle:shortVersionString>
-            <description><![CDATA[
-                <h2>What's New in 1.1.4</h2>
-                <ul>
-                    <li><strong>Fixed:</strong> macOS 15.x Corner Radius Issue</li>
-                    <li><strong>NEW:</strong> GitHub Contributors Display in About settings</li>
-                    <li><strong>Improved:</strong> Cross-version compatibility (macOS 11-26+)</li>
-                </ul>
-            ]]></description>
-            <pubDate>Sun, 03 Nov 2025 12:00:00 +0000</pubDate>
-            <!-- Note: No enclosure for v1.1.4 as it predates Sparkle integration -->
-        </item>
-
-        <!--
-        RELEASE TEMPLATE - Copy and modify for new releases:
-
-        <item>
-            <title>Version X.Y.Z</title>
-            <link>https://github.com/KoukeNeko/FinderHover/releases/tag/vX.Y.Z</link>
-            <sparkle:version>BUILD_NUMBER</sparkle:version>
-            <sparkle:shortVersionString>X.Y.Z</sparkle:shortVersionString>
-            <description><![CDATA[
-                <h2>What's New in X.Y.Z</h2>
-                <ul>
-                    <li>Feature description</li>
-                </ul>
-            ]]></description>
-            <pubDate>DAY, DD MON YYYY HH:MM:SS +0000</pubDate>
-            <enclosure
-                url="https://github.com/KoukeNeko/FinderHover/releases/download/vX.Y.Z/FinderHover.zip"
-                sparkle:version="BUILD_NUMBER"
-                sparkle:shortVersionString="X.Y.Z"
-                length="FILE_SIZE_IN_BYTES"
-                type="application/octet-stream"
-                sparkle:edSignature="ED_SIGNATURE_HERE" />
-        </item>
-        -->
+            <p><a href="https://github.com/KoukeNeko/FinderHover/blob/main/CHANGELOG.md">View Complete Changelog</a></p>
+        ]]></description>
+        <pubDate>Mon, 04 Nov 2025 11:00:36 +0000</pubDate>
+        <enclosure
+            url="https://github.com/KoukeNeko/FinderHover/releases/download/v1.1.5/FinderHover.zip"
+            sparkle:version="8"
+            sparkle:shortVersionString="1.1.5"
+            length="2393991"
+            type="application/octet-stream"
+            sparkle:edSignature="PbPuq/v7a+xc91i3Lfo6xBqnns40zFxi295Uq7LM8+uFSJzV283s8WhbzfCOBrP2ad9yrNLK/cnuCg3YQHIpBw==" />
+    </item>
 
     </channel>
 </rss>

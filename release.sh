@@ -233,22 +233,45 @@ else
     echo "- Signature: $SIGNATURE"
 fi
 
+# Step 11: Optional cleanup
+echo ""
+read -p "Clean up build artifacts? (y/n) " -n 1 -r
+echo ""
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    print_step "Cleaning up temporary files..."
+    rm -rf "$PROJECT_DIR/build"
+    rm -f "$APPCAST_PATH.backup"
+    print_success "Cleaned up build artifacts"
+else
+    print_warning "Keeping build artifacts in: $PROJECT_DIR/build"
+fi
+
 echo ""
 echo -e "${BLUE}╔════════════════════════════════════════╗${NC}"
 echo -e "${BLUE}║          Release Summary               ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════╝${NC}"
 echo ""
 echo -e "${GREEN}✓ Version:${NC}     $VERSION (build $BUILD)"
-echo -e "${GREEN}✓ Archive:${NC}     $ARCHIVE_PATH"
-echo -e "${GREEN}✓ ZIP:${NC}         $ZIP_PATH"
+echo -e "${GREEN}✓ ZIP:${NC}         $([ -f "$ZIP_PATH" ] && echo "$ZIP_PATH" || echo "Cleaned up")"
 echo -e "${GREEN}✓ Size:${NC}        $FILE_SIZE bytes"
 echo -e "${GREEN}✓ Signature:${NC}   $SIGNATURE"
 echo ""
+echo -e "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${YELLOW}📝 IMPORTANT: Update appcast.xml release notes${NC}"
+echo -e "${YELLOW}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo ""
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo -e "File: ${BLUE}appcast.xml${NC}"
+    echo -e "Search for: ${RED}TODO: Add release notes${NC}"
+    echo ""
+    echo "Replace with detailed HTML release notes"
+    echo ""
+fi
 echo -e "${YELLOW}TODO:${NC}"
 echo "1. ✗ Create GitHub release (tag: v$VERSION)"
 echo "2. ✗ Upload ZIP file"
-echo "3. ✗ Update release notes in appcast.xml (if auto-updated)"
-echo "4. ✗ Commit and push appcast.xml"
+echo "3. ✗ Update release notes in appcast.xml"
+echo "4. ✗ Commit and push changes"
 echo "5. ✗ Verify appcast.xml is accessible"
 echo ""
 print_success "Release build completed successfully!"

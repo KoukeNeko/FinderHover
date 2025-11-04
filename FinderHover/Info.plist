@@ -2,37 +2,37 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>NSAppleEventsUsageDescription</key>
-    <string>FinderHover needs to control Finder to detect which file you're hovering over and display its information.</string>
-    <key>NSAppleScriptEnabled</key>
-    <true/>
-    <key>LSUIElement</key>
-    <true/>
-    <key>CFBundleDisplayName</key>
-    <string>FinderHover</string>
-    <key>CFBundleName</key>
-    <string>FinderHover</string>
-    <key>CFBundleIdentifier</key>
-    <string>dev.doeshing.FinderHover</string>
-    <key>CFBundleVersion</key>
-    <string>6</string>
-    <key>CFBundleShortVersionString</key>
-    <string>1.1.4</string>
-    <key>CFBundleDevelopmentRegion</key>
-    <string>en</string>
-    <key>CFBundleLocalizations</key>
-    <array>
-        <string>en</string>
-        <string>zh-Hant</string>
-        <string>ja</string>
-    </array>
-    <key>SUFeedURL</key>
-    <string>https://raw.githubusercontent.com/KoukeNeko/FinderHover/main/appcast.xml</string>
-    <key>SUPublicEDKey</key>
-    <string>mgw4N/t1wR4Ht478Z+zpmGHLs9ygmG82W3yqPjO5FYg=</string>
-    <key>SUEnableAutomaticChecks</key>
-    <true/>
-    <key>SUScheduledCheckInterval</key>
-    <integer>86400</integer>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>FinderHover</string>
+	<key>CFBundleIdentifier</key>
+	<string>dev.doeshing.FinderHover</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>zh-Hant</string>
+		<string>ja</string>
+	</array>
+	<key>CFBundleName</key>
+	<string>FinderHover</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.1.5</string>
+	<key>CFBundleVersion</key>
+	<string>8</string>
+	<key>LSUIElement</key>
+	<true/>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>FinderHover needs to control Finder to detect which file you're hovering over and display its information.</string>
+	<key>NSAppleScriptEnabled</key>
+	<true/>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUFeedURL</key>
+	<string>https://raw.githubusercontent.com/KoukeNeko/FinderHover/main/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>mgw4N/t1wR4Ht478Z+zpmGHLs9ygmG82W3yqPjO5FYg=</string>
+	<key>SUScheduledCheckInterval</key>
+	<integer>86400</integer>
 </dict>
 </plist>
