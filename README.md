@@ -148,7 +148,7 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
 4. **Build and run**
    - Press `Cmd+R` or click the Run button
    - App will launch with Xcode's entitlements
-   - The app will appear in your menu bar with an eye icon
+   - The app will appear in your menu bar
 
 #### Building from Command Line
 
@@ -209,7 +209,8 @@ The app will automatically prompt you to enable Accessibility access:
 ## 🚀 Usage
 
 ### Basic Usage
-1. **Launch FinderHover** - it will appear in your menu bar with an 👁️ icon
+
+1. **Launch FinderHover** - it will appear in your menu bar
 2. **Open Finder** and navigate to any folder
 3. **Hover your mouse** over any file name
 4. **Wait 0.1 seconds** (customizable)
@@ -218,7 +219,7 @@ The app will automatically prompt you to enable Accessibility access:
 > **Note for macOS Sonoma (14.x) users**: On older macOS versions, you may need to click to select a file first before hovering. On macOS Sequoia (15.x) and later, simply hovering over the file name is sufficient - the Finder window doesn't even need to be focused!
 
 ### Menu Bar Options
-Click the 👁️ icon in your menu bar to access:
+Click the menu bar icon to access:
 
 - **Enable/Disable Hover Preview** - Toggle the hover functionality on/off (`Cmd+E`)
 - **Settings...** - Open the settings window (`Cmd+,`)
@@ -467,7 +468,7 @@ Contributions are welcome! Please feel free to:
    - This is a macOS security limitation
 
 3. **Check App is Running**
-   - Look for the 👁️ icon in your menu bar
+   - Look for the menu bar icon
    - Click it and ensure "Enable Hover Preview" is checked
 
 4. **Verify Hover Delay**
