@@ -77,6 +77,9 @@ class HoverWindowController: NSWindowController {
         hostingView.removeFromSuperview()
         hostingView.translatesAutoresizingMaskIntoConstraints = true
 
+        // Determine corner radius based on UI style
+        let cornerRadius: CGFloat = settings.uiStyle == .windows ? 0 : 10
+
         // Check if blur is enabled
         if settings.enableBlur {
             let osVersion = ProcessInfo.processInfo.operatingSystemVersion
@@ -93,7 +96,7 @@ class HoverWindowController: NSWindowController {
 
                 let containerView = NSView(frame: NSRect(origin: .zero, size: fittingSize))
                 containerView.wantsLayer = true
-                containerView.layer?.cornerRadius = 10
+                containerView.layer?.cornerRadius = cornerRadius
                 containerView.layer?.masksToBounds = true
                 containerView.layer?.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(settings.windowOpacity).cgColor
 
@@ -110,7 +113,7 @@ class HoverWindowController: NSWindowController {
                 effectView.material = .hudWindow
                 effectView.blendingMode = .behindWindow
                 effectView.wantsLayer = true
-                effectView.layer?.cornerRadius = 10
+                effectView.layer?.cornerRadius = cornerRadius
                 effectView.layer?.masksToBounds = true
 
                 // Remove any borders from the visual effect view
@@ -129,10 +132,10 @@ class HoverWindowController: NSWindowController {
 
             self.visualEffectView = effectView
         } else {
-            // No blur - use solid background with rounded corners
+            // No blur - use solid background
             let containerView = NSView(frame: NSRect(origin: .zero, size: fittingSize))
             containerView.wantsLayer = true
-            containerView.layer?.cornerRadius = 10
+            containerView.layer?.cornerRadius = cornerRadius
             containerView.layer?.masksToBounds = true
             containerView.layer?.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(settings.windowOpacity).cgColor
 
@@ -569,25 +572,16 @@ struct WindowsStyleHoverView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            // File icon and name (Windows style - compact, no thumbnail)
-            HStack(spacing: 8) {
-                if settings.showIcon {
-                    Image(nsImage: fileInfo.icon)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 32, height: 32)
-                }
+            // File name only (no icon)
+            Text(fileInfo.name)
+                .font(.system(size: settings.fontSize, weight: .regular))
+                .lineLimit(nil)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.bottom, 4)
 
-                Text(fileInfo.name)
-                    .font(.system(size: settings.fontSize, weight: .regular))
-                    .lineLimit(nil)
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .padding(.bottom, 4)
-
-            // Windows-style simple info display (compact, left-aligned)
+            // Windows-style simple info display (no columns, all left-aligned)
             VStack(alignment: .leading, spacing: 0) {
                 if settings.showFileType {
                     WindowsDetailRow(
@@ -657,26 +651,18 @@ struct WindowsStyleHoverView: View {
     }
 }
 
-// Windows-style detail row (no icon, simple format)
+// Windows-style detail row (no columns, all text left-aligned)
 struct WindowsDetailRow: View {
     let label: String
     let value: String
     let fontSize: Double
 
     var body: some View {
-        HStack(alignment: .top, spacing: 4) {
-            Text(label + ":")
-                .font(.system(size: fontSize))
-                .foregroundColor(.primary)
-                .lineLimit(1)
-                .frame(minWidth: 85, alignment: .leading)
-
-            Text(value)
-                .font(.system(size: fontSize))
-                .foregroundColor(.primary)
-                .lineLimit(nil)
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity, alignment: .leading)
-        }
+        Text(label + ": " + value)
+            .font(.system(size: fontSize))
+            .foregroundColor(.primary)
+            .lineLimit(nil)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
