@@ -675,10 +675,12 @@ struct AboutSettingsView: View {
 
                 VStack(alignment: .center, spacing: 24) {
                     // App Icon
-                    Image(systemName: "eye.fill")
-                        .font(.system(size: 64))
-                        .foregroundColor(.accentColor)
-                        .padding(.top, 20)
+                    if let appIcon = NSImage(named: "AppIcon") {
+                        Image(nsImage: appIcon)
+                            .resizable()
+                            .frame(width: 256, height: 256)
+                            .padding(.top, 20)
+                    }
 
                     // App Name and Version
                     VStack(spacing: 8) {
