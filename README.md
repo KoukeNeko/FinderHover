@@ -522,18 +522,22 @@ Contributions are welcome! Please feel free to:
 <img width="762" height="644" alt="image" src="https://github.com/user-attachments/assets/33bbc116-ded6-481c-876b-32ee35199845" />
 *Customize every aspect of the app*
 
-## 📝 What's New in Version 1.2.2
+## 📝 What's New in Version 1.2.2.1
+
+- 🐛 **Bug Fix: Windows Style Border**
+  - Fixed inconsistent border styling for Windows tooltip mode on older macOS versions
+  - Unified border appearance across all macOS versions (15.x to 26+)
+  - Windows style now properly displays without borders
+
+### Previous Update (v1.2.2)
 
 - 🎨 **UI Icon Improvements**
   - Updated display settings icons to match new design specifications
   - Replaced filled icons with outlined versions for better visual consistency
-  - Enhanced icon clarity and readability across all settings pages
 - ✨ **Auto-hide When Renaming**
   - Hover window automatically hides when renaming files in Finder
-  - Seamless workflow without window interference
 - 🔧 **Code Quality Improvements**
   - Centralized icon management system for better maintainability
-  - Organized SF Symbols into logical namespaces
 
 📋 [View Full Changelog](CHANGELOG.md) for complete version history
 

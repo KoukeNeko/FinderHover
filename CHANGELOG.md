@@ -2,7 +2,15 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.2.2 (Current)
+## Version 1.2.2.1 (Current)
+
+- 🐛 **Bug Fix: Windows Style Border on Older macOS**
+  - Fixed inconsistent border styling for Windows tooltip mode on macOS versions before 26
+  - Unified border color to systemGray across all macOS versions
+  - Windows style now properly shows no border on both old and new macOS versions
+  - Improved visual consistency between macOS 15.x and 26+
+
+## Version 1.2.2
 
 - 🎨 **UI Icon Improvements**
   - Updated display settings icons to match new design specifications
