@@ -189,6 +189,7 @@
 
 /* Update Checker */
 "settings.update.check" = "アップデートを確認";
+"settings.update.automaticCheck" = "自動的にアップデートを確認";
 "settings.update.checking" = "アップデートを確認中...";
 "settings.update.uptodate" = "最新バージョンです";
 "settings.update.checkagain" = "再確認";

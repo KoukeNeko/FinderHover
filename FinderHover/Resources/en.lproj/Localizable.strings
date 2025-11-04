@@ -189,6 +189,7 @@
 
 /* Update Checker */
 "settings.update.check" = "Check for Updates";
+"settings.update.automaticCheck" = "Automatically check for updates";
 "settings.update.checking" = "Checking for updates...";
 "settings.update.uptodate" = "You're up to date";
 "settings.update.checkagain" = "Check again";

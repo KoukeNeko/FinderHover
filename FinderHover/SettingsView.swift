@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import Sparkle
 
 enum SettingsPage: String, CaseIterable, Identifiable {
     case behavior
@@ -687,7 +688,11 @@ struct DisplaySettingsView: View {
 struct AboutSettingsView: View {
     @ObservedObject var settings = AppSettings.shared
     @StateObject private var githubService = GitHubService()
-    @StateObject private var updateChecker = UpdateChecker()
+
+    // Access Sparkle updater from AppDelegate
+    private var updater: SPUUpdater? {
+        (NSApp.delegate as? AppDelegate)?.updater
+    }
 
     private var copyrightYear: String {
         // Get the app's build date from the bundle
@@ -736,128 +741,30 @@ struct AboutSettingsView: View {
                             .foregroundColor(.secondary)
                     }
 
-                    // Update Checker
+                    // Sparkle Update Checker
                     VStack(spacing: 8) {
-                        switch updateChecker.updateStatus {
-                        case .unknown:
-                            Button(action: {
-                                Task {
-                                    await updateChecker.checkForUpdates(force: true, includePrereleases: settings.checkPrereleaseUpdates)
-                                }
-                            }) {
-                                HStack(spacing: 6) {
-                                    Image(systemName: "arrow.clockwise")
-                                        .font(.system(size: 11))
-                                    Text("settings.update.check".localized)
-                                        .font(.system(size: 12))
-                                }
-                            }
-                            .buttonStyle(.bordered)
-                            .disabled(updateChecker.isChecking)
-
-                        case .checking:
-                            HStack(spacing: 8) {
-                                ProgressView()
-                                    .scaleEffect(0.6)
-                                    .frame(width: 12, height: 12)
-                                Text("settings.update.checking".localized)
+                        Button(action: {
+                            updater?.checkForUpdates()
+                        }) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "arrow.clockwise")
+                                    .font(.system(size: 11))
+                                Text("settings.update.check".localized)
                                     .font(.system(size: 12))
-                                    .foregroundColor(.secondary)
-                            }
-
-                        case .upToDate:
-                            VStack(spacing: 4) {
-                                HStack(spacing: 6) {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .font(.system(size: 12))
-                                        .foregroundColor(.green)
-                                    Text("settings.update.uptodate".localized)
-                                        .font(.system(size: 12))
-                                        .foregroundColor(.secondary)
-                                }
-
-                                Button(action: {
-                                    Task {
-                                        await updateChecker.checkForUpdates(force: true, includePrereleases: settings.checkPrereleaseUpdates)
-                                    }
-                                }) {
-                                    Text("settings.update.checkagain".localized)
-                                        .font(.system(size: 11))
-                                }
-                                .buttonStyle(.plain)
-                                .foregroundColor(.accentColor)
-                            }
-
-                        case .updateAvailable(let version, let url):
-                            VStack(spacing: 8) {
-                                HStack(spacing: 6) {
-                                    Image(systemName: "arrow.down.circle.fill")
-                                        .font(.system(size: 12))
-                                        .foregroundColor(.blue)
-                                    Text("settings.update.available".localized(version))
-                                        .font(.system(size: 12))
-                                        .foregroundColor(.secondary)
-                                }
-
-                                Button(action: {
-                                    updateChecker.openDownloadURL(url)
-                                }) {
-                                    HStack(spacing: 6) {
-                                        Image(systemName: "arrow.down.circle")
-                                            .font(.system(size: 11))
-                                        Text("settings.update.download".localized)
-                                            .font(.system(size: 12))
-                                    }
-                                }
-                                .buttonStyle(.borderedProminent)
-                            }
-
-                        case .error(let message):
-                            VStack(spacing: 4) {
-                                HStack(spacing: 6) {
-                                    Image(systemName: "exclamationmark.triangle.fill")
-                                        .font(.system(size: 12))
-                                        .foregroundColor(.orange)
-                                    Text("settings.update.error".localized)
-                                        .font(.system(size: 12))
-                                        .foregroundColor(.secondary)
-                                }
-
-                                Text(message)
-                                    .font(.system(size: 10))
-                                    .foregroundColor(.secondary)
-                                    .lineLimit(2)
-
-                                Button(action: {
-                                    Task {
-                                        await updateChecker.checkForUpdates(force: true, includePrereleases: settings.checkPrereleaseUpdates)
-                                    }
-                                }) {
-                                    Text("settings.update.retry".localized)
-                                        .font(.system(size: 11))
-                                }
-                                .buttonStyle(.plain)
-                                .foregroundColor(.accentColor)
                             }
                         }
-                    }
-                    .task {
-                        // Automatically check for updates when About tab is opened
-                        if updateChecker.updateStatus == .unknown {
-                            await updateChecker.checkForUpdates(force: false, includePrereleases: settings.checkPrereleaseUpdates)
-                        }
-                    }
+                        .buttonStyle(.bordered)
 
-                    // Prerelease updates toggle
-                    HStack(spacing: 8) {
-                        Toggle("settings.update.includePrerelease".localized, isOn: $settings.checkPrereleaseUpdates)
-                            .font(.system(size: 11))
-                            .foregroundColor(.secondary)
-                            .toggleStyle(.switch)
-                            .onChange(of: settings.checkPrereleaseUpdates) {
-                                // Reset status when preference changes
-                                updateChecker.updateStatus = .unknown
+                        // Automatically check for updates toggle
+                        Toggle("settings.update.automaticCheck".localized, isOn: Binding(
+                            get: { updater?.automaticallyChecksForUpdates ?? true },
+                            set: { newValue in
+                                updater?.automaticallyChecksForUpdates = newValue
                             }
+                        ))
+                        .font(.system(size: 11))
+                        .foregroundColor(.secondary)
+                        .toggleStyle(.switch)
                     }
                     .padding(.horizontal, 40)
 

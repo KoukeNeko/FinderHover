@@ -189,6 +189,7 @@
 
 /* Update Checker */
 "settings.update.check" = "檢查更新";
+"settings.update.automaticCheck" = "自動檢查更新";
 "settings.update.checking" = "正在檢查更新...";
 "settings.update.uptodate" = "已是最新版本";
 "settings.update.checkagain" = "再次檢查";

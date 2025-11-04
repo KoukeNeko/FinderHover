@@ -26,5 +26,13 @@
         <string>zh-Hant</string>
         <string>ja</string>
     </array>
+    <key>SUFeedURL</key>
+    <string>https://raw.githubusercontent.com/KoukeNeko/FinderHover/main/appcast.xml</string>
+    <key>SUPublicEDKey</key>
+    <string>mgw4N/t1wR4Ht478Z+zpmGHLs9ygmG82W3yqPjO5FYg=</string>
+    <key>SUEnableAutomaticChecks</key>
+    <true/>
+    <key>SUScheduledCheckInterval</key>
+    <integer>86400</integer>
 </dict>
 </plist>

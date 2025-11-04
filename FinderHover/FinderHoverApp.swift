@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Sparkle
 
 @main
 struct FinderHoverApp: App {
@@ -23,7 +24,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var hoverManager: HoverManager?
     var settingsWindow: NSWindow?
 
+    // Sparkle updater controller
+    private var updaterController: SPUStandardUpdaterController!
+
+    // Public accessor for Sparkle updater
+    var updater: SPUUpdater {
+        return updaterController.updater
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // Initialize Sparkle updater
+        updaterController = SPUStandardUpdaterController(
+            startingUpdater: true,
+            updaterDelegate: nil,
+            userDriverDelegate: nil
+        )
+
+
         // Hide dock icon to make it a menu bar only app
         NSApp.setActivationPolicy(.accessory)
 
