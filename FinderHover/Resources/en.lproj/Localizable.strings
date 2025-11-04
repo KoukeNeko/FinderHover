@@ -196,3 +196,4 @@
 "settings.update.download" = "Download Update";
 "settings.update.error" = "Failed to check for updates";
 "settings.update.retry" = "Try again";
+"settings.update.includePrerelease" = "Include pre-release versions";

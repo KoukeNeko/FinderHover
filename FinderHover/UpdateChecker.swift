@@ -16,6 +16,7 @@ struct GitHubRelease: Codable {
     let htmlUrl: String
     let publishedAt: String
     let body: String?
+    let prerelease: Bool
 
     enum CodingKeys: String, CodingKey {
         case tagName = "tag_name"
@@ -23,6 +24,7 @@ struct GitHubRelease: Codable {
         case htmlUrl = "html_url"
         case publishedAt = "published_at"
         case body
+        case prerelease
     }
 }
 
@@ -64,7 +66,7 @@ class UpdateChecker: ObservableObject {
     }
 
     // Check for updates
-    func checkForUpdates(force: Bool = false) async {
+    func checkForUpdates(force: Bool = false, includePrereleases: Bool = true) async {
         // Prevent duplicate checks
         guard !isChecking else { return }
 
@@ -77,7 +79,6 @@ class UpdateChecker: ObservableObject {
         updateStatus = .checking
 
         // Use /releases endpoint to get all releases (including prereleases)
-        // then take the first one (most recent)
         let urlString = "https://api.github.com/repos/\(repoOwner)/\(repoName)/releases"
         guard let url = URL(string: urlString) else {
             updateStatus = .error("Invalid URL")
@@ -103,8 +104,11 @@ class UpdateChecker: ObservableObject {
                 let decoder = JSONDecoder()
                 let releases = try decoder.decode([GitHubRelease].self, from: data)
 
-                // Get the first release (most recent)
-                guard let latestRelease = releases.first else {
+                // Filter releases based on prerelease preference
+                let filteredReleases = includePrereleases ? releases : releases.filter { !$0.prerelease }
+
+                // Get the first release (most recent) after filtering
+                guard let latestRelease = filteredReleases.first else {
                     updateStatus = .error("No releases found")
                     isChecking = false
                     return

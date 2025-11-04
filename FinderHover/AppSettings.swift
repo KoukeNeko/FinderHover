@@ -271,6 +271,13 @@ class AppSettings: ObservableObject {
         }
     }
 
+    // Update checker preference
+    @Published var checkPrereleaseUpdates: Bool {
+        didSet {
+            UserDefaults.standard.set(checkPrereleaseUpdates, forKey: "checkPrereleaseUpdates")
+        }
+    }
+
     private init() {
         // Load display order or use default
         if let data = UserDefaults.standard.data(forKey: "displayOrder"),
@@ -374,6 +381,9 @@ class AppSettings: ObservableObject {
             self.preferredLanguage = .system
         }
 
+        // Load update checker preference
+        self.checkPrereleaseUpdates = UserDefaults.standard.object(forKey: "checkPrereleaseUpdates") as? Bool ?? true
+
         // Apply language preference on launch
         applyLanguagePreference()
     }
@@ -447,5 +457,6 @@ class AppSettings: ObservableObject {
         windowOffsetY = 15
         uiStyle = .macOS
         preferredLanguage = .system
+        checkPrereleaseUpdates = true
     }
 }

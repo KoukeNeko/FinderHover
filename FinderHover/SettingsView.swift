@@ -685,6 +685,7 @@ struct DisplaySettingsView: View {
 
 // MARK: - About Settings
 struct AboutSettingsView: View {
+    @ObservedObject var settings = AppSettings.shared
     @StateObject private var githubService = GitHubService()
     @StateObject private var updateChecker = UpdateChecker()
 
@@ -741,7 +742,7 @@ struct AboutSettingsView: View {
                         case .unknown:
                             Button(action: {
                                 Task {
-                                    await updateChecker.checkForUpdates(force: true)
+                                    await updateChecker.checkForUpdates(force: true, includePrereleases: settings.checkPrereleaseUpdates)
                                 }
                             }) {
                                 HStack(spacing: 6) {
@@ -777,7 +778,7 @@ struct AboutSettingsView: View {
 
                                 Button(action: {
                                     Task {
-                                        await updateChecker.checkForUpdates(force: true)
+                                        await updateChecker.checkForUpdates(force: true, includePrereleases: settings.checkPrereleaseUpdates)
                                     }
                                 }) {
                                     Text("settings.update.checkagain".localized)
@@ -829,7 +830,7 @@ struct AboutSettingsView: View {
 
                                 Button(action: {
                                     Task {
-                                        await updateChecker.checkForUpdates(force: true)
+                                        await updateChecker.checkForUpdates(force: true, includePrereleases: settings.checkPrereleaseUpdates)
                                     }
                                 }) {
                                     Text("settings.update.retry".localized)
@@ -843,9 +844,22 @@ struct AboutSettingsView: View {
                     .task {
                         // Automatically check for updates when About tab is opened
                         if updateChecker.updateStatus == .unknown {
-                            await updateChecker.checkForUpdates(force: false)
+                            await updateChecker.checkForUpdates(force: false, includePrereleases: settings.checkPrereleaseUpdates)
                         }
                     }
+
+                    // Prerelease updates toggle
+                    HStack(spacing: 8) {
+                        Toggle("settings.update.includePrerelease".localized, isOn: $settings.checkPrereleaseUpdates)
+                            .font(.system(size: 11))
+                            .foregroundColor(.secondary)
+                            .toggleStyle(.switch)
+                            .onChange(of: settings.checkPrereleaseUpdates) { _ in
+                                // Reset status when preference changes
+                                updateChecker.updateStatus = .unknown
+                            }
+                    }
+                    .padding(.horizontal, 40)
 
                     // Description
                     Text("settings.about.description".localized)

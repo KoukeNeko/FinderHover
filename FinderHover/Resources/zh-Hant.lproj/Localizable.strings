@@ -196,3 +196,4 @@
 "settings.update.download" = "下載更新";
 "settings.update.error" = "檢查更新失敗";
 "settings.update.retry" = "重試";
+"settings.update.includePrerelease" = "包含預先發行版本";

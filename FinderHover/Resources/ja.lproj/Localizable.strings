@@ -196,3 +196,4 @@
 "settings.update.download" = "アップデートをダウンロード";
 "settings.update.error" = "アップデートの確認に失敗しました";
 "settings.update.retry" = "再試行";
+"settings.update.includePrerelease" = "プレリリース版を含める";
