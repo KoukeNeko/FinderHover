@@ -765,6 +765,73 @@ struct AboutSettingsView: View {
                     Divider()
                         .padding(.vertical, 8)
 
+                    // GitHub Links
+                    VStack(spacing: 12) {
+                        Text("settings.about.github".localized)
+                            .font(.system(size: 13, weight: .semibold))
+
+                        HStack(spacing: 12) {
+                            Button(action: {
+                                if let url = URL(string: "https://github.com/KoukeNeko/FinderHover") {
+                                    NSWorkspace.shared.open(url)
+                                }
+                            }) {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "link")
+                                        .font(.system(size: 11))
+                                    Text("settings.about.github.repository".localized)
+                                        .font(.system(size: 12))
+                                }
+                            }
+                            .buttonStyle(.bordered)
+
+                            Button(action: {
+                                if let url = URL(string: "https://github.com/KoukeNeko/FinderHover/issues") {
+                                    NSWorkspace.shared.open(url)
+                                }
+                            }) {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "exclamationmark.bubble")
+                                        .font(.system(size: 11))
+                                    Text("settings.about.github.issues".localized)
+                                        .font(.system(size: 12))
+                                }
+                            }
+                            .buttonStyle(.bordered)
+
+                            Button(action: {
+                                if let url = URL(string: "https://github.com/KoukeNeko/FinderHover/releases") {
+                                    NSWorkspace.shared.open(url)
+                                }
+                            }) {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "arrow.down.circle")
+                                        .font(.system(size: 11))
+                                    Text("settings.about.github.releases".localized)
+                                        .font(.system(size: 12))
+                                }
+                            }
+                            .buttonStyle(.bordered)
+                        }
+
+                        Button(action: {
+                            if let url = URL(string: "https://github.com/KoukeNeko/FinderHover/graphs/contributors") {
+                                NSWorkspace.shared.open(url)
+                            }
+                        }) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "person.3")
+                                    .font(.system(size: 11))
+                                Text("settings.about.github.contributors".localized)
+                                    .font(.system(size: 12))
+                            }
+                        }
+                        .buttonStyle(.bordered)
+                    }
+
+                    Divider()
+                        .padding(.vertical, 8)
+
                     // Credits
                     VStack(spacing: 8) {
                         Text("settings.about.copyright".localized)
