@@ -117,7 +117,7 @@
 "hover.label.created" = "作成";
 "hover.label.modified" = "変更";
 "hover.label.accessed" = "アクセス";
-"hover.label.mode" = "モード";
+"hover.label.mode" = "アクセス権";
 "hover.label.owner" = "所有者";
 "hover.label.location" = "ファイルパス";
 "hover.exif.title" = "写真情報";
