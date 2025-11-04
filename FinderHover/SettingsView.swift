@@ -686,6 +686,7 @@ struct DisplaySettingsView: View {
 // MARK: - About Settings
 struct AboutSettingsView: View {
     @StateObject private var githubService = GitHubService()
+    @StateObject private var updateChecker = UpdateChecker()
 
     private var copyrightYear: String {
         // Get the app's build date from the bundle
@@ -732,6 +733,118 @@ struct AboutSettingsView: View {
                         Text(String(format: "settings.about.version".localized, Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"))
                             .font(.system(size: 13))
                             .foregroundColor(.secondary)
+                    }
+
+                    // Update Checker
+                    VStack(spacing: 8) {
+                        switch updateChecker.updateStatus {
+                        case .unknown:
+                            Button(action: {
+                                Task {
+                                    await updateChecker.checkForUpdates(force: true)
+                                }
+                            }) {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "arrow.clockwise")
+                                        .font(.system(size: 11))
+                                    Text("settings.update.check".localized)
+                                        .font(.system(size: 12))
+                                }
+                            }
+                            .buttonStyle(.bordered)
+                            .disabled(updateChecker.isChecking)
+
+                        case .checking:
+                            HStack(spacing: 8) {
+                                ProgressView()
+                                    .scaleEffect(0.6)
+                                    .frame(width: 12, height: 12)
+                                Text("settings.update.checking".localized)
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.secondary)
+                            }
+
+                        case .upToDate:
+                            VStack(spacing: 4) {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .font(.system(size: 12))
+                                        .foregroundColor(.green)
+                                    Text("settings.update.uptodate".localized)
+                                        .font(.system(size: 12))
+                                        .foregroundColor(.secondary)
+                                }
+
+                                Button(action: {
+                                    Task {
+                                        await updateChecker.checkForUpdates(force: true)
+                                    }
+                                }) {
+                                    Text("settings.update.checkagain".localized)
+                                        .font(.system(size: 11))
+                                }
+                                .buttonStyle(.plain)
+                                .foregroundColor(.accentColor)
+                            }
+
+                        case .updateAvailable(let version, let url):
+                            VStack(spacing: 8) {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "arrow.down.circle.fill")
+                                        .font(.system(size: 12))
+                                        .foregroundColor(.blue)
+                                    Text("settings.update.available".localized(version))
+                                        .font(.system(size: 12))
+                                        .foregroundColor(.secondary)
+                                }
+
+                                Button(action: {
+                                    updateChecker.openDownloadURL(url)
+                                }) {
+                                    HStack(spacing: 6) {
+                                        Image(systemName: "arrow.down.circle")
+                                            .font(.system(size: 11))
+                                        Text("settings.update.download".localized)
+                                            .font(.system(size: 12))
+                                    }
+                                }
+                                .buttonStyle(.borderedProminent)
+                            }
+
+                        case .error(let message):
+                            VStack(spacing: 4) {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .font(.system(size: 12))
+                                        .foregroundColor(.orange)
+                                    Text("settings.update.error".localized)
+                                        .font(.system(size: 12))
+                                        .foregroundColor(.secondary)
+                                }
+
+                                Text(message)
+                                    .font(.system(size: 10))
+                                    .foregroundColor(.secondary)
+                                    .lineLimit(2)
+
+                                Button(action: {
+                                    Task {
+                                        await updateChecker.checkForUpdates(force: true)
+                                    }
+                                }) {
+                                    Text("settings.update.retry".localized)
+                                        .font(.system(size: 11))
+                                }
+                                .buttonStyle(.plain)
+                                .foregroundColor(.accentColor)
+                            }
+                        }
+                    }
+                    .task {
+                        // Automatically check for updates when About tab is opened
+                        if updateChecker.updateStatus == .unknown {
+                            await updateChecker.checkForUpdates(force: false)
+                        }
                     }
 
                     // Description

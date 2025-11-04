@@ -186,3 +186,13 @@
 "settings.language.english" = "English";
 "settings.language.chinese" = "繁體中文";
 "settings.language.japanese" = "日本語";
+
+/* Update Checker */
+"settings.update.check" = "檢查更新";
+"settings.update.checking" = "正在檢查更新...";
+"settings.update.uptodate" = "已是最新版本";
+"settings.update.checkagain" = "再次檢查";
+"settings.update.available" = "有新版本 %@ 可用";
+"settings.update.download" = "下載更新";
+"settings.update.error" = "檢查更新失敗";
+"settings.update.retry" = "重試";
