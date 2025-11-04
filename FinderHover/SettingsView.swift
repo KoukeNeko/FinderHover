@@ -854,7 +854,7 @@ struct AboutSettingsView: View {
                             .font(.system(size: 11))
                             .foregroundColor(.secondary)
                             .toggleStyle(.switch)
-                            .onChange(of: settings.checkPrereleaseUpdates) { _ in
+                            .onChange(of: settings.checkPrereleaseUpdates) {
                                 // Reset status when preference changes
                                 updateChecker.updateStatus = .unknown
                             }
