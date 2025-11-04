@@ -2,8 +2,6 @@
 
 A beautiful, highly customizable macOS menu bar app that displays rich file information when hovering over files in Finder, similar to Windows file preview behavior.
 
-
-
 <p align="center">
   <img src="/FinderHover/Assets.xcassets/AppIcon.appiconset/Icon-256.png" alt="Icon-256">
 </p>
@@ -14,514 +12,108 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
   <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License MIT">
 </p>
 
-## 📑 Table of Contents
-- [Features](#-features)
-- [Installation](#-installation)
-- [Usage](#-usage)
-- [How It Works](#-how-it-works)
-- [Settings](#-settings)
-- [Development](#-development)
-- [Troubleshooting](#-troubleshooting)
-- [Privacy](#-privacy)
-- [Screenshots](#-screenshots)
-- [Changelog](#-changelog)
-- [Contributing](#-contributing)
-- [License](#-license)
-
 ## ✨ Features
+
 ![A6700471](https://github.com/user-attachments/assets/455d868a-7e7d-4e8c-84bb-e032a6feffbf)
 
+### 🎯 Core Features
 
-### 🎯 Smart Hover Preview
-- **Instant response**: Adjustable hover delay (0.1s - 2.0s, default: 0.1s)
-- Automatically shows detailed file information when you hover over selected files in Finder
-- Smart window positioning that avoids screen edges
-- Auto-hide when mouse moves away from file
-- **Drag operation detection** - Automatically hides during file drag operations
-- **Launch at login** - Optional automatic startup with macOS
+- **Smart hover preview** with adjustable delay (0.1s - 2.0s)
+- **QuickLook thumbnails** for PDFs, images, and documents
+- **Rich file metadata** - size, dates, permissions, owner, path
+- **Photo EXIF data** - camera, lens, settings, dimensions, GPS
+- **Video metadata** - duration, resolution, codec, frame rate, bitrate
+- **Audio metadata** - title, artist, album, genre, duration, bitrate, sample rate
+- **Two UI styles** - macOS (rich) or Windows (minimal) tooltip design
+- **Multi-language support** - English, 繁體中文, 日本語
+- **Customizable display** - drag to reorder fields, toggle visibility
+- **Auto-hide when renaming** - prevents interference with file operations
 
-### 📊 Rich Information Display
-- **Full filename** with automatic wrapping for long names
-- **QuickLook thumbnails** - Shows actual file previews for PDFs, images, documents
-  - Async loading for instant window display
-  - Falls back to standard icons if preview unavailable
-- **Smart file type descriptions** (recognizes 50+ file types)
-  - "PDF Document", "PowerPoint Presentation", "Photoshop Document", etc.
-- **Comprehensive file metadata**:
-  - File size in human-readable format (KB, MB, GB)
-  - Creation date with date and time
-  - Modification date with date and time
-  - **Last access date** (optional)
-  - **Item count** for folders (optional)
-  - **File permissions** in octal format with rwx notation (optional)
-  - **Owner information** (optional)
-- **Photo EXIF Information** - Detailed metadata for image files:
-  - Camera model (e.g., "Canon EOS R5")
-  - Lens information (e.g., "RF 24-70mm F2.8 L IS USM")
-  - Camera settings (focal length, aperture, shutter speed, ISO)
-  - Date taken with original timestamp
-  - Image dimensions (width × height)
-  - GPS location data (optional, privacy-aware)
-  - Supports: JPEG, PNG, TIFF, HEIC, RAW formats (CR2, NEF, ARW, DNG, etc.)
-- **Video Metadata** - Comprehensive information for video files:
-  - Duration (formatted as hours:minutes:seconds)
-  - Resolution (width × height in pixels)
-  - Video codec (e.g., "avc1", "hvc1")
-  - Frame rate (e.g., "30 fps", "60 fps")
-  - Bitrate (Mbps or kbps)
-  - Supports: MP4, MOV, M4V, AVI, MKV, FLV, WMV, WebM, MPEG, MPG, 3GP, MTS, M2TS
-- **Audio Metadata** - Detailed information for audio files:
-  - Song title, artist, album, genre, year
-  - Duration (formatted as minutes:seconds)
-  - Bitrate (kbps)
-  - Sample rate (kHz or Hz)
-  - Channel configuration (Mono, Stereo, multi-channel)
-  - Supports: MP3, M4A, AAC, WAV, FLAC, AIFF, AIF, WMA, OGG, Opus, ALAC
-- **Complete file path** with text selection support (no truncation)
-- **Perfect icon alignment** across all information rows
-- **Dynamic window height** - Automatically adjusts to content length
-- **Customizable display order** - Drag and drop to reorder information fields
+### 🎨 Customization
 
-### 🎨 Modern & Customizable Design
-- **Two UI Styles** - Choose between macOS and Windows tooltip styles
-  - **macOS Style**: Rich preview with icons, thumbnails, rounded corners, and detailed metadata
-  - **Windows Style**: Clean, minimalist text-only display inspired by Windows File Explorer
-- **Native blur effect** - macOS-style background blur (toggleable)
-  - Professional HUD window appearance
-  - Smooth rounded corners (macOS style only)
-- **Adjustable transparency** - Window opacity (70% - 100%)
-  - Note: Only available when blur effect is disabled
-- **Compact mode** - Reduced spacing and padding for a more compact layout
-- Customizable window size (300px - 600px)
-- Adjustable font size (9pt - 14pt)
-- Toggle individual information fields on/off
-- Adapts to filename and path length automatically
+- Adjustable window size (300-600px) and font size (9-14pt)
+- Native blur effect or custom opacity (70-100%)
+- Compact mode for reduced spacing
+- Launch at login support
+- Recognizes 50+ file types with smart descriptions
 
-### ⚙️ Professional Settings Interface
-- **macOS-native sidebar navigation** (like System Settings)
-- Three organized setting pages:
-  - **Behavior**: Hover delay, auto-hide, launch at login, window positioning, language selection
-  - **Appearance**: Blur effect, opacity, compact mode, window size, font size
-  - **Display**: Toggle which information to show (10+ options)
-- Real-time preview of all changes
-- Contextual hints (e.g., opacity setting availability)
-- One-click reset to defaults
-- Keyboard shortcut: `Cmd+,`
+### 🔒 Privacy First
 
-### 🌐 Multi-Language Support
-- **Three languages fully supported**:
-  - 🇺🇸 English
-  - 🇹🇼 繁體中文 (Traditional Chinese)
-  - 🇯🇵 日本語 (Japanese)
-- **System Default option** - Automatically follows your macOS language settings
-- **In-app language switcher** - Change language without leaving the app
-- **One-click restart** - Apply language changes instantly
-- **Complete localization** - All UI elements, settings, and menus translated
-
-### ⚡ Performance & Privacy
-- **Lightweight**: Minimal CPU and memory usage
-- **Menu bar app**: Runs quietly in the background
-- **Privacy-first**: Uses only Accessibility APIs (no AppleScript)
-- **No network access**: Runs entirely locally on your Mac
-- **No analytics or tracking**
-- **Open source**: Inspect the code yourself
+- No network access - runs entirely locally
+- No analytics or tracking
+- Open source - inspect the code yourself
 
 ## 📦 Installation
 
-### Option 1: Build from Source
+### Download Release (Recommended)
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/KoukeNeko/FinderHover.git
-   cd FinderHover
-   ```
+1. Download `FinderHover.app.zip` from [Releases](../../releases)
+2. Extract and move to Applications folder
+3. Launch FinderHover
 
-2. **Open in Xcode**
-   ```bash
-   open FinderHover.xcodeproj
-   ```
+### Build from Source
 
-3. **Configure signing**
-   - Select your development team in project settings
-   - Update bundle identifier if needed
+```bash
+git clone https://github.com/KoukeNeko/FinderHover.git
+cd FinderHover
+open FinderHover.xcodeproj
+```
 
-4. **Build and run**
-   - Press `Cmd+R` or click the Run button
-   - App will launch with Xcode's entitlements
-   - The app will appear in your menu bar
-
-#### Building from Command Line
-
-For command line builds without opening Xcode:
-
-1. **Build the app (Debug)**
-   ```bash
-   xcodebuild -project FinderHover.xcodeproj -scheme FinderHover -configuration Debug build
-   ```
-
-2. **Find the built .app file**
-   ```bash
-   # The .app is located in DerivedData:
-   find ~/Library/Developer/Xcode/DerivedData/FinderHover-* -name "FinderHover.app" -type d
-   ```
-
-3. **Copy to Applications or Desktop**
-   ```bash
-   # Copy to Desktop
-   cp -r ~/Library/Developer/Xcode/DerivedData/FinderHover-*/Build/Products/Debug/FinderHover.app ~/Desktop/
-
-   # Or copy to Applications
-   cp -r ~/Library/Developer/Xcode/DerivedData/FinderHover-*/Build/Products/Debug/FinderHover.app /Applications/
-   ```
-
-4. **Build for Release**
-   ```bash
-   xcodebuild -project FinderHover.xcodeproj -scheme FinderHover -configuration Release build
-   ```
-
-> **Note**: Debug builds can be run locally without an Apple Developer Program membership. Release builds for distribution require signing with a valid developer certificate.
-
-### Option 2: Download Release
-- Download the latest `.app` from [Releases](../../releases)
-- Move to Applications folder
-- Launch FinderHover
+Press `Cmd+R` to build and run. Requires Xcode 15.0+ and macOS 14.0+.
 
 ## ⚙️ Setup
 
-### First Launch
-On first launch, you only need to grant **one permission**:
+On first launch, grant **Accessibility permission**:
 
-#### Accessibility Permission
-The app will automatically prompt you to enable Accessibility access:
-
-1. Click **"Open System Settings"** when prompted (or manually go to System Settings)
+1. The app will prompt you to open System Settings
 2. Navigate to **Privacy & Security** > **Accessibility**
-3. Click the **🔒 lock icon** to unlock (enter your password)
-4. Enable **FinderHover** (or **Xcode** during development) in the list
-5. **Restart the app**
+3. Enable **FinderHover** (or **Xcode** during development)
+4. **Restart the app**
 
-> **Why this permission?**
-> FinderHover needs Accessibility permission to:
-> - Monitor mouse position globally
-> - Detect which file is selected in Finder
-> - Display the hover window at the correct position
+> **Why?** FinderHover needs to monitor mouse position and detect which file is selected in Finder.
 
 ## 🚀 Usage
 
-### Basic Usage
+### Quick Start
 
-1. **Launch FinderHover** - it will appear in your menu bar
-2. **Open Finder** and navigate to any folder
-3. **Hover your mouse** over any file name
-4. **Wait 0.1 seconds** (customizable)
-5. A beautiful preview window appears showing file details!
+1. Launch FinderHover - it appears in your menu bar
+2. Open Finder and hover over any file
+3. Wait 0.1 seconds (customizable)
+4. Preview window appears with file details
 
-> **Note for macOS Sonoma (14.x) users**: On older macOS versions, you may need to click to select a file first before hovering. On macOS Sequoia (15.x) and later, simply hovering over the file name is sufficient - the Finder window doesn't even need to be focused!
+> **Note**: On macOS Sonoma (14.x), you may need to select a file first. On Sequoia (15.x)+, just hover.
 
-### Menu Bar Options
-Click the menu bar icon to access:
+### Settings
 
-- **Enable/Disable Hover Preview** - Toggle the hover functionality on/off (`Cmd+E`)
-- **Settings...** - Open the settings window (`Cmd+,`)
-- **About FinderHover** - View app information (`Cmd+A`)
-- **Quit** - Close the application (`Cmd+Q`)
+Press `Cmd+,` to customize:
 
-### Customization
-Open **Settings** (`Cmd+,`) to customize:
+#### Behavior
 
-#### Behavior Tab
-- **Hover Delay**: 0.1s - 2.0s (how long to wait before showing preview)
-- **Auto-hide**: Instantly hide window when mouse moves away
-- **Launch at Login**: Automatically start FinderHover when you log in
-- **Window Position**: Adjust horizontal/vertical offset from cursor (0-50px)
-- **Language**: Choose app language (English, 繁體中文, 日本語, or System Default)
-  - One-click restart button appears when language is changed
+- Hover delay, auto-hide, launch at login, window position, language
 
-#### Appearance Tab
-- **UI Style**: Choose between macOS or Windows tooltip style
-  - **macOS Style**: Rich preview with icons, thumbnails, and detailed metadata
-  - **Windows Style**: Clean, text-only display with essential information (Type, Size, Date modified)
-- **Blur Effect**: Enable/disable native macOS background blur
-- **Window Opacity**: 70% - 100% (transparency level)
-  - Only available when blur effect is disabled
-- **Compact Mode**: Reduced spacing and padding for a more compact layout
-- **Maximum Width**: 300px - 600px (window size)
-- **Font Size**: 9pt - 14pt (all text scales proportionally)
+#### Appearance
 
-#### Display Tab
-Toggle what information to show:
-- ☑️ File Icon
-- ☑️ File Type
-- ☑️ File Size
-- ☑️ Item Count (for folders)
-- ☑️ Creation Date
-- ☑️ Modification Date
-- ☑️ Last Access Date
-- ☑️ Permissions (file mode)
-- ☑️ Owner
-- ☑️ File Path
-- ☑️ **Photo Information (EXIF)** - for image files
-  - Camera Model
-  - Lens Model
-  - Camera Settings (focal length, aperture, shutter speed, ISO)
-  - Date Taken
-  - Image Dimensions
-  - GPS Location
-- ☑️ **Video Information** - for video files
-  - Duration
-  - Resolution
-  - Codec
-  - Frame Rate
-  - Bitrate
-- ☑️ **Audio Information** - for audio files
-  - Song Title
-  - Artist
-  - Album
-  - Genre
-  - Year
-  - Duration
-  - Bitrate
-  - Sample Rate
+- UI style (macOS/Windows), blur effect, opacity, compact mode, window size, font size
 
-**Display Order Customization:**
+#### Display
 
-- Drag and drop items to reorder them in the hover window
-- EXIF information moves as a complete group
-- Changes save automatically and apply in real-time
-
-> **💡 Tip**: All settings apply **instantly** - no need to restart!
-
-## 🔧 How It Works
-
-The app uses modern macOS technologies:
-
-- **Accessibility API**: Monitors mouse position globally and retrieves file information from Finder
-- **QuickLook API**: Generates thumbnail previews for files asynchronously
-- **ImageIO**: Extracts EXIF metadata from image files (camera, lens, settings, GPS)
-- **AVFoundation**: Extracts video and audio metadata (duration, codec, bitrate, ID3 tags)
-- **SwiftUI**: Renders the beautiful hover window with adaptive sizing and reactive updates
-- **AppKit**: Manages window positioning, screen boundary detection, and visual effects
-- **NSVisualEffectView**: Native blur effects with HUD window material
-- **Combine**: Reactive updates for settings and mouse tracking
-- **UserDefaults**: Persistent settings storage with JSON encoding for complex data
-- **Menu Bar Integration**: Runs as a lightweight background app (LSUIElement)
-
-### Technical Architecture
-
-```
-FinderHoverApp (Menu Bar)
-    ↓
-HoverManager (Coordination)
-    ↓
-    ├── MouseTracker (Global mouse events)
-    ├── FinderInteraction (Accessibility API)
-    └── HoverWindow (SwiftUI preview)
-            ↓
-        AppSettings (User preferences)
-```
-
-**Note**: The app works with **selected files** in Finder. Select a file (click it), then hover your mouse over it to see the preview.
-
-### Limitations
-Due to macOS security restrictions:
-- Requires file to be **selected first** (highlighted in blue)
-- True "hover-only" detection (without selection) is not possible
-- Requires Accessibility permission to function
-
-## 📋 Requirements
-
-- **macOS 14.0 or later** (Sonoma)
-  - Compatible with macOS 15.0 (Sequoia) and future versions
-- **Accessibility permissions** (automatically prompted on first launch)
-- **Xcode 15.0+** for building from source
-- **Apple Silicon** or **Intel** Mac
-
-## Privacy & Security
-
-FinderHover is designed with privacy in mind:
-- ✅ Only accesses file metadata (name, size, dates, paths)
-- ✅ Does not read file contents
-- ✅ Does not send any data over the network
-- ✅ No analytics or tracking
-- ✅ Runs entirely locally on your Mac
-- ✅ Uses Accessibility API only (no AppleScript automation)
-- ✅ Open source - inspect the code yourself!
-
-## 🛠️ Development
-
-### Technology Stack
-- **Swift 5.0** - Modern, safe programming language
-- **SwiftUI** - Declarative UI framework with reactive updates
-- **AppKit** - Native window management and visual effects
-- **QuickLookThumbnailing** - File preview thumbnail generation
-- **ImageIO** - EXIF metadata extraction from image files
-- **AVFoundation** - Video and audio metadata extraction (duration, codec, bitrate, ID3 tags)
-- **NSVisualEffectView** - Native blur and vibrancy effects
-- **Accessibility Framework** - File detection and mouse tracking
-- **Combine** - Reactive programming for settings and events
-- **UserDefaults** - Persistent settings storage with Codable support
-
-### Project Structure
-```
-FinderHover/
-├── FinderHoverApp.swift      # Main app & menu bar
-├── AppSettings.swift          # Settings model with UserDefaults & language
-├── SettingsView.swift         # Settings UI (sidebar navigation)
-├── HoverWindow.swift          # Preview window with SwiftUI
-├── HoverManager.swift         # Coordination layer
-├── MouseTracker.swift         # Global mouse events
-├── FinderInteraction.swift   # Accessibility API integration
-├── FileInfo.swift             # File metadata model
-├── Info.plist                 # App permissions
-└── Resources/                 # Localization files
-    ├── en.lproj/
-    │   └── Localizable.strings      # English
-    ├── zh-Hant.lproj/
-    │   └── Localizable.strings      # Traditional Chinese
-    └── ja.lproj/
-        └── Localizable.strings      # Japanese
-```
-
-### Key Components
-
-**HoverManager**
-- Coordinates mouse tracking and window display
-- Manages hover delay and auto-hide behavior
-- Integrates with AppSettings for customization
-
-**MouseTracker**
-- Monitors global mouse movement events
-- Publishes location updates via Combine
-- Detects hover duration
-
-**FinderInteraction**
-- Uses Accessibility API to query Finder
-- Retrieves selected file information
-- No AppleScript required (pure Accessibility)
-
-**HoverWindow**
-- SwiftUI-based preview window
-- Adapts size based on content and settings
-- Smart positioning with screen boundary detection
-
-**AppSettings**
-- ObservableObject for reactive updates
-- Persists all user preferences
-- Publishes changes to SwiftUI views
-
-### Supported File Types (50+)
-
-The app recognizes and provides smart descriptions for:
-
-**Documents**
-- PDF, Word (.doc, .docx), Excel (.xls, .xlsx), PowerPoint (.ppt, .pptx)
-- Pages, Numbers, Keynote (Apple iWork)
-- Text (.txt, .rtf, .md), CSV, JSON, XML
-
-**Images**
-- JPEG, PNG, GIF, SVG, BMP, TIFF
-- Photoshop (.psd), Illustrator (.ai), Sketch
-
-**Media**
-- Video: MP4, MOV, AVI, MKV
-- Audio: MP3, WAV, AAC, FLAC
-
-**Archives**
-- ZIP, RAR, 7Z, TAR, GZIP
-- DMG, ISO, PKG (macOS installers)
-
-**Code**
-- Swift, Python, JavaScript, TypeScript
-- Java, C, C++, PHP
-- HTML, CSS, Shell scripts
-
-**Other**
-- Applications (.app)
-- And any file type with extension
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to:
-- Report bugs via [Issues](../../issues)
-- Suggest features via [Discussions](../../discussions)
-- Submit pull requests
-
-**Development Guidelines:**
-- Follow Swift API Design Guidelines
-- Maintain SwiftUI best practices
-- Keep accessibility in mind
-- Test on multiple macOS versions
-- Update README for new features
-
-## ❓ Troubleshooting
-
-### Hover window not appearing?
-
-1. **Check Accessibility Permission**
-   - Go to System Settings > Privacy & Security > Accessibility
-   - Ensure FinderHover is enabled and checked ✓
-   - If not listed, click **+** and add the app manually
-
-2. **Ensure File is Selected**
-   - The app requires you to **click the file first** (it should highlight in blue)
-   - Then hover your mouse over the selected file
-   - This is a macOS security limitation
-
-3. **Check App is Running**
-   - Look for the menu bar icon
-   - Click it and ensure "Enable Hover Preview" is checked
-
-4. **Verify Hover Delay**
-   - Open Settings (`Cmd+,`) > Behavior
-   - Check your hover delay setting (default: 0.1s)
-   - Try increasing it to 0.5s if it appears too fast
-
-5. **Try Restarting**
-   - Quit FinderHover from menu bar
-   - Relaunch the app
-
-### Window appears in wrong position?
-
-- Open Settings > Behavior > Window Position
-- Adjust horizontal/vertical offset values
-- Window should stay within screen bounds automatically
-
-### Text is too small/large?
-
-- Open Settings > Appearance > Font Size
-- Adjust between 9pt - 14pt
-- All text scales proportionally
-
-### Performance issues?
-
-- The app is highly optimized and uses minimal resources
-- Try disabling unused information in Settings > Display
-- Reduce window opacity in Settings > Appearance
-- You can temporarily disable it from the menu bar
-
-### Settings not saving?
-
-- Settings are automatically saved to UserDefaults
-- If issues persist, try:
-  ```bash
-  defaults delete dev.doeshing.FinderHover
-  ```
-- Then restart the app (settings will reset to defaults)
+- Toggle fields (icon, type, size, dates, permissions, owner, path)
+- Photo EXIF (camera, lens, settings, GPS, dimensions)
+- Video (duration, resolution, codec, frame rate, bitrate)
+- Audio (title, artist, album, genre, year, duration, bitrate, sample rate)
+- Drag to reorder
 
 ## 📸 Screenshots
 
-### Hover Preview Window
+### Hover Preview
+
 <img width="942" height="454" alt="image" src="https://github.com/user-attachments/assets/fe969256-a07d-4db6-8715-a3bb3226782b" />
 <img width="938" height="513" alt="image" src="https://github.com/user-attachments/assets/f492dc51-9fd8-49f2-b854-d9fc4ac026a6" />
-*Beautiful preview with complete file information*
 
-### Settings - Sidebar Navigation
+### Settings Interface
+
 <img width="762" height="644" alt="image" src="https://github.com/user-attachments/assets/7978cc15-cf16-455b-856b-683a5fc82b19" />
-*Professional macOS-native settings interface*
-
-### Settings Tabs
 <img width="762" height="644" alt="image" src="https://github.com/user-attachments/assets/33bbc116-ded6-481c-876b-32ee35199845" />
-*Customize every aspect of the app*
 
 ## 📝 What's New in Version 1.2.3
 
@@ -532,25 +124,70 @@ Contributions are welcome! Please feel free to:
 
 ### Previous Update (v1.2.2)
 
-- 🎨 **UI Icon Improvements**
-  - Updated display settings icons to match new design specifications
-  - Replaced filled icons with outlined versions for better visual consistency
-- ✨ **Auto-hide When Renaming**
-  - Hover window automatically hides when renaming files in Finder
-- 🔧 **Code Quality Improvements**
-  - Centralized icon management system for better maintainability
+- 🎨 UI Icon Improvements - Updated icons to outlined versions
+- ✨ Auto-hide When Renaming - Hides hover window when renaming files
+- 🔧 Code Quality - Centralized icon management system
 
-📋 [View Full Changelog](CHANGELOG.md) for complete version history
+📋 [View Full Changelog](CHANGELOG.md)
 
-## ✨ Key Features
+## ❓ Troubleshooting
 
-- 💾 Persistent settings with UserDefaults
-- 🚀 Lightweight and efficient
-- 🌐 Full Unicode support for international file names
+**Hover window not appearing?**
+
+1. Check Accessibility permission (System Settings > Privacy & Security > Accessibility)
+2. Ensure file is selected (highlighted in blue) - macOS requirement
+3. Verify app is running (check menu bar)
+4. Adjust hover delay in Settings if needed
+
+**Settings not saving?**
+
+```bash
+defaults delete dev.doeshing.FinderHover
+```
+
+Then restart to reset to defaults.
+
+## 🛠️ Development
+
+### Tech Stack
+
+- Swift 5.0, SwiftUI, AppKit
+- QuickLookThumbnailing, ImageIO, AVFoundation
+- Accessibility Framework, Combine
+
+### Requirements
+
+- macOS 14.0+ (Sonoma)
+- Xcode 15.0+
+- Apple Silicon or Intel Mac
+
+### Project Structure
+
+```
+FinderHover/
+├── FinderHoverApp.swift      # Main app & menu bar
+├── AppSettings.swift          # Settings model
+├── SettingsView.swift         # Settings UI
+├── HoverWindow.swift          # Preview window
+├── HoverManager.swift         # Coordination
+├── MouseTracker.swift         # Mouse events
+├── FinderInteraction.swift   # Accessibility API
+├── FileInfo.swift             # File metadata
+├── IconManager.swift          # Centralized SF Symbols management
+└── Resources/                 # Localizations (en, zh-Hant, ja)
+```
+
+## 🤝 Contributing
+
+Contributions welcome!
+
+- Report bugs via [Issues](../../issues)
+- Suggest features via [Discussions](../../discussions)
+- Submit pull requests
 
 ## 🙏 Acknowledgments
 
-- Inspired by [this video showcasing Windows file preview functionality](https://youtu.be/veum1I6G__g?si=CDWpYV9anOszM6ai&t=375)
+- Inspired by [Windows file preview functionality](https://youtu.be/veum1I6G__g?si=CDWpYV9anOszM6ai&t=375)
 - Built with Apple's SwiftUI and Accessibility frameworks
 - Icons from SF Symbols
 
@@ -558,15 +195,8 @@ Contributions are welcome! Please feel free to:
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
-Created with ❤️ for macOS users who want a better Finder experience.
 ---
 
-**Note**: This app requires **Accessibility permission** to function. Your privacy is protected - the app:
-- ✅ Only reads file metadata (name, size, dates, path)
-- ✅ Does NOT read file contents
-- ✅ Does NOT send any data over the network
-- ✅ Does NOT collect analytics or telemetry
-- ✅ Runs entirely locally on your Mac
-- ✅ Open source - inspect the code yourself
-
 **Made with Swift & SwiftUI** 🚀
+
+**Privacy Protected** - Only reads file metadata, never file contents. No network access, no analytics, fully open source.
