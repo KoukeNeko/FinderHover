@@ -685,6 +685,8 @@ struct DisplaySettingsView: View {
 
 // MARK: - About Settings
 struct AboutSettingsView: View {
+    @StateObject private var githubService = GitHubService()
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
@@ -813,20 +815,69 @@ struct AboutSettingsView: View {
                             }
                             .buttonStyle(.bordered)
                         }
+                    }
 
-                        Button(action: {
-                            if let url = URL(string: "https://github.com/KoukeNeko/FinderHover/graphs/contributors") {
-                                NSWorkspace.shared.open(url)
-                            }
-                        }) {
-                            HStack(spacing: 6) {
-                                Image(systemName: "person.3")
-                                    .font(.system(size: 11))
-                                Text("settings.about.github.contributors".localized)
-                                    .font(.system(size: 12))
+                    // Contributors Section
+                    VStack(spacing: 12) {
+                        if githubService.isLoading {
+                            ProgressView()
+                                .scaleEffect(0.8)
+                                .frame(height: 60)
+                        } else if let error = githubService.error {
+                            Text("Failed to load contributors: \(error)")
+                                .font(.system(size: 11))
+                                .foregroundColor(.secondary)
+                                .frame(height: 60)
+                        } else if !githubService.contributors.isEmpty {
+                            VStack(spacing: 8) {
+                                Text("settings.about.contributors".localized)
+                                    .font(.system(size: 11, weight: .medium))
+                                    .foregroundColor(.secondary)
+
+                                // Contributors Grid
+                                LazyVGrid(columns: [GridItem(.adaptive(minimum: 60), spacing: 10)], spacing: 10) {
+                                    ForEach(githubService.contributors) { contributor in
+                                        Button(action: {
+                                            if let url = URL(string: contributor.htmlUrl) {
+                                                NSWorkspace.shared.open(url)
+                                            }
+                                        }) {
+                                            VStack(spacing: 3) {
+                                                if let avatarURL = URL(string: contributor.avatarUrl) {
+                                                    AvatarImageView(url: avatarURL)
+                                                        .frame(width: 32, height: 32)
+                                                        .clipShape(Circle())
+                                                        .overlay(
+                                                            Circle()
+                                                                .stroke(Color.gray.opacity(0.2), lineWidth: 0.5)
+                                                        )
+                                                }
+
+                                                Text(contributor.login)
+                                                    .font(.system(size: 9))
+                                                    .foregroundColor(.primary)
+                                                    .lineLimit(1)
+                                                    .truncationMode(.tail)
+                                                    .frame(maxWidth: 60)
+
+                                                Text("\(contributor.contributions)")
+                                                    .font(.system(size: 8))
+                                                    .foregroundColor(.secondary)
+                                            }
+                                            .frame(width: 60)
+                                        }
+                                        .buttonStyle(.plain)
+                                        .help(contributor.login)
+                                    }
+                                }
+                                .frame(maxWidth: 380)
                             }
                         }
-                        .buttonStyle(.bordered)
+                    }
+                    .task {
+                        if githubService.contributors.isEmpty && !githubService.isLoading {
+                            await githubService.fetchContributors()
+                        }
                     }
 
                     Divider()
