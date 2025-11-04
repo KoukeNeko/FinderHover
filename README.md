@@ -59,7 +59,15 @@ cd FinderHover
 open FinderHover.xcodeproj
 ```
 
-Press `Cmd+R` to build and run. Requires Xcode 15.0+ and macOS 14.0+.
+Press `Cmd+R` to build and run.
+
+Or build from command line:
+
+```bash
+xcodebuild -project FinderHover.xcodeproj -scheme FinderHover -configuration Release build
+```
+
+Requires Xcode 15.0+ and macOS 14.0+.
 
 ## ⚙️ Setup
 
