@@ -91,23 +91,23 @@ class HoverWindowController: NSWindowController {
             effectView.state = .active
 
             if useLegacyBlurLayout {
-                // Older macOS builds (pre-11.0) and macOS 15.x have rendering artifacts when rounding the effect view layer directly.
-                // Use container view approach for proper corner radius rendering.
+                // For macOS 15.x, use transparent container with clipping
+                // Direct cornerRadius on NSVisualEffectView doesn't work properly on macOS 15.x
                 effectView.material = .hudWindow
                 effectView.blendingMode = .behindWindow
-
-                let containerView = NSView(frame: NSRect(origin: .zero, size: fittingSize))
-                containerView.wantsLayer = true
-                containerView.layer?.cornerRadius = cornerRadius
-                containerView.layer?.masksToBounds = true
-
-                effectView.frame = containerView.bounds
-                effectView.autoresizingMask = [.width, .height]
+                effectView.frame = NSRect(origin: .zero, size: fittingSize)
 
                 hostingView.frame = effectView.bounds
                 hostingView.autoresizingMask = [.width, .height]
                 effectView.addSubview(hostingView)
 
+                // Create transparent clipping container
+                let containerView = NSView(frame: NSRect(origin: .zero, size: fittingSize))
+                containerView.wantsLayer = true
+                containerView.layer?.cornerRadius = cornerRadius
+                containerView.layer?.masksToBounds = true
+
+                effectView.autoresizingMask = [.width, .height]
                 containerView.addSubview(effectView)
                 window.contentView = containerView
             } else {
@@ -117,17 +117,12 @@ class HoverWindowController: NSWindowController {
                 effectView.wantsLayer = true
                 effectView.layer?.cornerRadius = cornerRadius
                 effectView.layer?.masksToBounds = true
-
-                // Remove any borders from the visual effect view
                 effectView.layer?.borderWidth = 0
                 effectView.layer?.borderColor = nil
-
-                // Set frame to match content size
                 effectView.frame = NSRect(origin: .zero, size: fittingSize)
+
                 hostingView.frame = effectView.bounds
                 hostingView.autoresizingMask = [.width, .height]
-
-                // Add hosting view to effect view
                 effectView.addSubview(hostingView)
                 window.contentView = effectView
             }
