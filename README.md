@@ -14,7 +14,8 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
 
 ## ✨ Features
 
-![A6700471](https://github.com/user-attachments/assets/455d868a-7e7d-4e8c-84bb-e032a6feffbf)
+<img width="1926" height="1324" alt="image" src="https://github.com/user-attachments/assets/7d27934e-5e11-4196-a6ac-5c7ebc6a1f17" />
+
 
 ### 🎯 Core Features
 
