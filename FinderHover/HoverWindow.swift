@@ -565,40 +565,30 @@ struct DetailRow: View {
 // MARK: - Windows Style Hover View
 struct WindowsStyleHoverView: View {
     let fileInfo: FileInfo
-    @State private var thumbnail: NSImage?
     @ObservedObject var settings = AppSettings.shared
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            // File icon and name (similar to Windows tooltip)
-            HStack(spacing: 12) {
+        VStack(alignment: .leading, spacing: 4) {
+            // File icon and name (Windows style - compact, no thumbnail)
+            HStack(spacing: 8) {
                 if settings.showIcon {
-                    Image(nsImage: thumbnail ?? fileInfo.icon)
+                    Image(nsImage: fileInfo.icon)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 48, height: 48)
-                        .onAppear {
-                            fileInfo.generateThumbnailAsync { image in
-                                if let image = image {
-                                    thumbnail = image
-                                }
-                            }
-                        }
+                        .frame(width: 32, height: 32)
                 }
 
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(fileInfo.name)
-                        .font(.system(size: settings.fontSize, weight: .regular))
-                        .lineLimit(nil)
-                        .multilineTextAlignment(.leading)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
+                Text(fileInfo.name)
+                    .font(.system(size: settings.fontSize, weight: .regular))
+                    .lineLimit(nil)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(.bottom, 8)
+            .padding(.bottom, 4)
 
-            // Windows-style simple info display (no icons, just label: value)
-            VStack(alignment: .leading, spacing: 2) {
+            // Windows-style simple info display (compact, left-aligned)
+            VStack(alignment: .leading, spacing: 0) {
                 if settings.showFileType {
                     WindowsDetailRow(
                         label: "hover.windows.type".localized,
@@ -624,7 +614,7 @@ struct WindowsStyleHoverView: View {
                 }
             }
         }
-        .padding(12)
+        .padding(10)
         .frame(minWidth: 280, maxWidth: settings.windowMaxWidth)
         .fixedSize(horizontal: false, vertical: true)
         .background(Color.clear)
