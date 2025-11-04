@@ -2,6 +2,12 @@
 
 A beautiful, highly customizable macOS menu bar app that displays rich file information when hovering over files in Finder, similar to Windows file preview behavior.
 
+
+
+<p align="center">
+  <img src="/FinderHover/Assets.xcassets/AppIcon.appiconset/Icon-256.png" alt="Icon-256">
+</p>
+
 <p align="center">
   <img src="https://img.shields.io/badge/macOS-14.0+-blue.svg" alt="macOS 14.0+">
   <img src="https://img.shields.io/badge/Swift-5.0-orange.svg" alt="Swift 5.0">
