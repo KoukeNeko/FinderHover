@@ -2,7 +2,20 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.2.0 (Current)
+## Version 1.2.1 (Current)
+
+- 🎨 **UI Icon Improvements**
+  - Updated display settings icons to match new design specifications
+  - Replaced filled icons with outlined versions for better consistency
+  - Changed specific icons:
+    - Camera and video icons: `camera.fill` → `camera`, `video.fill` → `video`
+    - Dimensions and resolution: `square.resize`/`rectangle.resize` → `arrow.up.left.and.arrow.down.right`
+    - Frame rate: `gauge` → `speedometer`
+    - GPS location: `location.fill` → `location`
+    - Artist: `person.fill` → `person`
+  - Enhanced visual consistency across all settings pages
+
+## Version 1.2.0
 
 - 🎨 **NEW: Enhanced Menu Bar Icon**
   - Changed to `appwindow.swipe.rectangle` SF Symbol for better representation
