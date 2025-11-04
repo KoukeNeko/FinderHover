@@ -132,7 +132,7 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/FinderHover.git
+   git clone git@github.com:KoukeNeko/FinderHover.git
    cd FinderHover
    ```
 
