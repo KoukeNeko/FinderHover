@@ -2,7 +2,7 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.2.4 (Current)
+## Version 1.2.4.1 (Current)
 
 - 🐛 **Bug Fix: Hover Window Persistence on App Switch**
   - Fixed hover window not disappearing when switching apps via Spotlight or other methods (e.g., Cmd+Tab, clicking other apps)

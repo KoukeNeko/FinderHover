@@ -124,7 +124,7 @@ Press `Cmd+,` to customize:
 <img width="762" height="644" alt="image" src="https://github.com/user-attachments/assets/7978cc15-cf16-455b-856b-683a5fc82b19" />
 <img width="762" height="644" alt="image" src="https://github.com/user-attachments/assets/33bbc116-ded6-481c-876b-32ee35199845" />
 
-## 📝 What's New in Version 1.2.4
+## 📝 What's New in Version 1.2.4.1
 
 - 🐛 **Bug Fix: Hover Window Persistence on App Switch**
   - Fixed hover window not disappearing when switching apps via Spotlight or other methods
