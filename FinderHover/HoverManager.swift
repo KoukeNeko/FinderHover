@@ -33,6 +33,7 @@ class HoverManager: ObservableObject {
 
     init() {
         setupSubscriptions()
+        setupAppSwitchObserver()
         checkAccessibilityPermissions()
     }
 
@@ -63,6 +64,46 @@ class HoverManager: ObservableObject {
                 }
             }
             .store(in: &cancellables)
+    }
+
+    private func setupAppSwitchObserver() {
+        // Monitor when any application becomes active
+        NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didActivateApplicationNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let userInfo = notification.userInfo,
+                  let app = userInfo[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication else {
+                return
+            }
+
+            // If the activated app is NOT Finder, hide the hover window
+            if app.bundleIdentifier != "com.apple.finder" {
+                self?.hideHoverWindow()
+                self?.currentFileInfo = nil
+                self?.displayTimer?.invalidate()
+            }
+        }
+
+        // Monitor when any application is deactivated
+        NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didDeactivateApplicationNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let userInfo = notification.userInfo,
+                  let app = userInfo[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication else {
+                return
+            }
+
+            // If Finder is deactivated, hide the hover window
+            if app.bundleIdentifier == "com.apple.finder" {
+                self?.hideHoverWindow()
+                self?.currentFileInfo = nil
+                self?.displayTimer?.invalidate()
+            }
+        }
     }
 
     func startMonitoring() {
