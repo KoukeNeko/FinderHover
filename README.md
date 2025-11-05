@@ -126,15 +126,20 @@ Press `Cmd+,` to customize:
 
 ## 📝 What's New in Version 1.2.4.1
 
-- 🐛 **Bug Fix: Hover Window Persistence on App Switch**
-  - Fixed hover window not disappearing when switching apps via Spotlight or other methods
-  - Added dual monitoring for application activation and Finder deactivation events
-  - Improved responsiveness when switching between applications
-  - Hover window now instantly hides when Finder loses focus
-- 🔄 **Update Checker Improvements**
-  - Changed from automatic download to opening GitHub Release page
-  - More control and transparency for users
-  - Review release notes before downloading
+### 📦 New DMG Installer
+
+Now available as a DMG disk image for easier installation! Simply drag FinderHover.app to your Applications folder.
+
+**What's New:**
+
+- 💿 DMG installer with drag-to-Applications interface
+- 🔧 Automated build script for consistent releases
+- 📝 Improved installation experience
+
+### Previous Update (v1.2.4)
+
+- 🐛 **Bug Fix**: Hover window persistence on app switch - Fixed window not disappearing when switching apps via Spotlight
+- 🔄 **Update Checker**: Changed from automatic download to opening GitHub Release page for transparency
 
 ### Previous Update (v1.2.3)
 
