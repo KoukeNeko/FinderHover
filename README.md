@@ -118,11 +118,14 @@ Press `Cmd+,` to customize:
 
 <img width="942" height="454" alt="image" src="https://github.com/user-attachments/assets/fe969256-a07d-4db6-8715-a3bb3226782b" />
 <img width="938" height="513" alt="image" src="https://github.com/user-attachments/assets/f492dc51-9fd8-49f2-b854-d9fc4ac026a6" />
+<img width="939" height="507" alt="image" src="https://github.com/user-attachments/assets/dc04ba05-2bcb-4308-b0cc-bd5ed2259d07" />
+
 
 ### Settings Interface
+<img width="762" height="1002" alt="image" src="https://github.com/user-attachments/assets/140accdd-6034-4b2d-b4d9-ccc55a28586c" />
+<img width="762" height="1002" alt="image" src="https://github.com/user-attachments/assets/8307070f-a13c-434d-9a66-0ed2da98a996" />
+<img width="762" height="1002" alt="image" src="https://github.com/user-attachments/assets/0afda2cb-e26f-4574-b002-6b56a1c06102" />
 
-<img width="762" height="644" alt="image" src="https://github.com/user-attachments/assets/7978cc15-cf16-455b-856b-683a5fc82b19" />
-<img width="762" height="644" alt="image" src="https://github.com/user-attachments/assets/33bbc116-ded6-481c-876b-32ee35199845" />
 
 ## 📝 What's New in Version 1.2.4.1
 
