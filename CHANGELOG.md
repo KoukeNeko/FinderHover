@@ -12,6 +12,13 @@ All notable changes to FinderHover will be documented in this file.
   - Hover window now instantly hides when Finder loses focus
   - Improved responsiveness and user experience when switching between applications
   - Technical implementation: Dual NSWorkspace notification observers for comprehensive app switch detection
+- 🔄 **Update Checker Improvements**
+  - Changed update behavior from automatic download to opening GitHub Release page
+  - Users now have better control over when and what to download
+  - Updated button from "Download Update" to "View Release" with new icon (`arrow.up.forward.square`)
+  - Simplified alert message - removed confusing "download to Downloads folder" text
+  - More transparent update process - users can review release notes before downloading
+  - Localized button text in all three languages (English, 繁體中文, 日本語)
 
 ## Version 1.2.3
 

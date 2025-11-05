@@ -131,6 +131,10 @@ Press `Cmd+,` to customize:
   - Added dual monitoring for application activation and Finder deactivation events
   - Improved responsiveness when switching between applications
   - Hover window now instantly hides when Finder loses focus
+- 🔄 **Update Checker Improvements**
+  - Changed from automatic download to opening GitHub Release page
+  - More control and transparency for users
+  - Review release notes before downloading
 
 ### Previous Update (v1.2.3)
 

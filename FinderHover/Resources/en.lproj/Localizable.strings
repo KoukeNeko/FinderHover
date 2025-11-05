@@ -95,11 +95,11 @@
 "settings.about.checkingForUpdates" = "Checking for updates...";
 "settings.about.updateAvailable" = "Update available: %@";
 "settings.about.updateAvailable.title" = "Update Available";
-"settings.about.updateAvailable.message" = "A new version is available!\n\nCurrent: %@\nLatest: %@\n\nThe update will be downloaded to your Downloads folder.";
+"settings.about.updateAvailable.message" = "A new version is available!\n\nCurrent: %@\nLatest: %@";
 "settings.about.upToDate" = "You are up to date";
 "settings.about.upToDateWithVersion" = "Already on the latest version (%@)";
 "settings.about.currentVersion" = "Current version: %@";
-"settings.about.downloadUpdate" = "Download Update";
+"settings.about.viewRelease" = "View Release";
 "settings.about.retry" = "Retry";
 "settings.about.includePrereleases" = "Include pre-release versions";
 "settings.about.error.noReleases" = "No releases found";
