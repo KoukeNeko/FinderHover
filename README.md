@@ -57,18 +57,45 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
 ```bash
 git clone https://github.com/KoukeNeko/FinderHover.git
 cd FinderHover
+```
+
+#### Option 1: Build in Xcode
+
+```bash
 open FinderHover.xcodeproj
 ```
 
 Press `Cmd+R` to build and run.
 
-Or build from command line:
+#### Option 2: Build DMG Release
+
+Use the automated build script to create a production-ready DMG installer:
+
+```bash
+./scripts/build-dmg.sh
+```
+
+This will:
+
+- Auto-detect version from Info.plist
+- Build unsigned Release version
+- Create DMG with drag-to-Applications interface
+- Generate ZIP archive for GitHub Release
+
+Output files:
+
+- `FinderHover-v{version}.dmg` - DMG installer
+- `FinderHover-v{version}.zip` - Compressed for distribution
+
+#### Option 3: Command Line Build
 
 ```bash
 xcodebuild -project FinderHover.xcodeproj -scheme FinderHover -configuration Release build
 ```
 
-Requires Xcode 15.0+ and macOS 14.0+.
+#### Requirements
+
+Xcode 15.0+ and macOS 14.0+
 
 ## ⚙️ Setup
 
@@ -177,7 +204,7 @@ Then restart to reset to defaults.
 - QuickLookThumbnailing, ImageIO, AVFoundation
 - Accessibility Framework, Combine
 
-### Requirements
+### Development Requirements
 
 - macOS 14.0+ (Sonoma)
 - Xcode 15.0+
