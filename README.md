@@ -124,18 +124,19 @@ Press `Cmd+,` to customize:
 <img width="762" height="644" alt="image" src="https://github.com/user-attachments/assets/7978cc15-cf16-455b-856b-683a5fc82b19" />
 <img width="762" height="644" alt="image" src="https://github.com/user-attachments/assets/33bbc116-ded6-481c-876b-32ee35199845" />
 
-## 📝 What's New in Version 1.2.3
+## 📝 What's New in Version 1.2.4
 
-- 🐛 **Bug Fix: Windows Style Border**
-  - Fixed inconsistent border styling for Windows tooltip mode on older macOS versions
-  - Unified border appearance across all macOS versions (15.x to 26+)
-  - Windows style now properly displays without borders
+- 🐛 **Bug Fix: Hover Window Persistence on App Switch**
+  - Fixed hover window not disappearing when switching apps via Spotlight or other methods
+  - Added dual monitoring for application activation and Finder deactivation events
+  - Improved responsiveness when switching between applications
+  - Hover window now instantly hides when Finder loses focus
 
-### Previous Update (v1.2.2)
+### Previous Update (v1.2.3)
 
+- 🐛 Bug Fix: Windows Style Border - Fixed inconsistent border styling for Windows tooltip mode
 - 🎨 UI Icon Improvements - Updated icons to outlined versions
 - ✨ Auto-hide When Renaming - Hides hover window when renaming files
-- 🔧 Code Quality - Centralized icon management system
 
 📋 [View Full Changelog](CHANGELOG.md)
 

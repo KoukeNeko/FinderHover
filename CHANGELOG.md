@@ -2,7 +2,18 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.2.3 (Current)
+## Version 1.2.4 (Current)
+
+- 🐛 **Bug Fix: Hover Window Persistence on App Switch**
+  - Fixed hover window not disappearing when switching apps via Spotlight or other methods (e.g., Cmd+Tab, clicking other apps)
+  - Added dual application switch monitoring in `HoverManager`
+  - Monitors application activation events (`didActivateApplicationNotification`)
+  - Monitors Finder deactivation events (`didDeactivateApplicationNotification`)
+  - Hover window now instantly hides when Finder loses focus
+  - Improved responsiveness and user experience when switching between applications
+  - Technical implementation: Dual NSWorkspace notification observers for comprehensive app switch detection
+
+## Version 1.2.3
 
 - 🐛 **Bug Fix: Windows Style Border on Older macOS**
   - Fixed inconsistent border styling for Windows tooltip mode on macOS versions before 26
