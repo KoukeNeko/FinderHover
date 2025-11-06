@@ -172,6 +172,22 @@ Previously, the hover window would appear at incorrect positions when hovering o
 
 ## ❓ Troubleshooting
 
+**"FinderHover.app is damaged and can't be opened" error?**
+
+This is caused by macOS Gatekeeper because the app is not signed with an Apple Developer certificate. To fix this:
+
+```bash
+xattr -cr /Applications/FinderHover.app
+```
+
+Or if the app is still in Downloads:
+
+```bash
+xattr -cr ~/Downloads/FinderHover.app
+```
+
+Then open the app normally. This removes the quarantine attribute that macOS adds to downloaded files.
+
 **Hover window not appearing?**
 
 1. Check Accessibility permission (System Settings > Privacy & Security > Accessibility)
