@@ -2,7 +2,28 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.2.4.1 (Current)
+## Version 1.2.4.2 (Current)
+
+### 🐛 Bug Fixes
+
+#### Multi-Display DPI Positioning
+
+Fixed hover window positioning offset issue when using multiple displays with different DPI/resolution settings.
+
+**Problem:**
+- When the mouse cursor was on an external display (e.g., 1080p) while the main display had different DPI (e.g., 3.5K Retina), the hover window would appear at incorrect positions
+- The issue was caused by always using `NSScreen.main` for coordinate conversion and window boundary checking
+
+**Solution:**
+- Use `NSMouseInRect` to detect which screen actually contains the mouse cursor
+- Perform coordinate conversion and window positioning calculations based on the correct display
+- Ensures accurate positioning across all connected displays regardless of resolution or DPI scaling
+
+**Technical Changes:**
+- `FinderInteraction.swift`: Updated Accessibility API coordinate conversion to use the actual screen containing the mouse position
+- `HoverWindow.swift`: Updated window boundary checking to use the screen containing the mouse position instead of always using main screen
+
+## Version 1.2.4.1
 
 ### 📦 Distribution Improvements
 
