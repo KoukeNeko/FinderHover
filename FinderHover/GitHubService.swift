@@ -71,11 +71,11 @@ class GitHubService: ObservableObject {
     private var lastUpdateCheckTime: Date?
     private let updateCheckCooldown: TimeInterval = 5.0 // 5 seconds between checks
 
-    var downloadUrl: String {
+    var releasePageUrl: String {
         guard let release = latestRelease else {
-            return ""
+            return "https://github.com/\(repoOwner)/\(repoName)/releases"
         }
-        return "https://github.com/\(repoOwner)/\(repoName)/releases/download/\(release.tagName)/FinderHover.app.zip"
+        return release.htmlUrl
     }
 
     init() {
@@ -229,39 +229,9 @@ class GitHubService: ObservableObject {
         return compareVersions(current: currentVersion, latest: latestRelease.version) == .orderedAscending
     }
 
-    func downloadUpdate() {
-        guard let url = URL(string: downloadUrl) else { return }
-
-        // Get Downloads folder
-        let downloadsPath = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask)[0]
-        let destinationURL = downloadsPath.appendingPathComponent("FinderHover.app.zip")
-
-        // Start download
-        let task = URLSession.shared.downloadTask(with: url) { tempURL, response, error in
-            guard let tempURL = tempURL, error == nil else {
-                print("Download failed: \(error?.localizedDescription ?? "Unknown error")")
-                return
-            }
-
-            do {
-                // Remove existing file if present
-                if FileManager.default.fileExists(atPath: destinationURL.path) {
-                    try FileManager.default.removeItem(at: destinationURL)
-                }
-
-                // Move downloaded file to Downloads
-                try FileManager.default.moveItem(at: tempURL, to: destinationURL)
-
-                // Show in Finder
-                DispatchQueue.main.async {
-                    NSWorkspace.shared.activateFileViewerSelecting([destinationURL])
-                }
-            } catch {
-                print("File operation failed: \(error.localizedDescription)")
-            }
-        }
-
-        task.resume()
+    func openReleasePage() {
+        guard let url = URL(string: releasePageUrl) else { return }
+        NSWorkspace.shared.open(url)
     }
 
     private func cacheContributors(_ contributors: [Contributor]) {

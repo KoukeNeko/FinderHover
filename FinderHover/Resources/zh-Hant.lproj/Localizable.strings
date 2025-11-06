@@ -95,11 +95,11 @@
 "settings.about.checkingForUpdates" = "正在檢查更新...";
 "settings.about.updateAvailable" = "有可用更新: %@";
 "settings.about.updateAvailable.title" = "有可用更新";
-"settings.about.updateAvailable.message" = "有新版本可用！\n\n目前版本：%@\n最新版本：%@\n\n更新檔案將會下載到您的「下載項目」資料夾。";
+"settings.about.updateAvailable.message" = "有新版本可用！\n\n目前版本：%@\n最新版本：%@";
 "settings.about.upToDate" = "已是最新版本";
 "settings.about.upToDateWithVersion" = "已經是最新版本 (%@)";
 "settings.about.currentVersion" = "目前版本: %@";
-"settings.about.downloadUpdate" = "下載更新";
+"settings.about.viewRelease" = "查看發布";
 "settings.about.retry" = "重試";
 "settings.about.includePrereleases" = "包含預覽版本";
 "settings.about.error.noReleases" = "找不到版本發布";

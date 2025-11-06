@@ -782,9 +782,9 @@ struct AboutSettingsView: View {
                                         }
                                     }) {
                                         HStack(spacing: 6) {
-                                            Image(systemName: "arrow.down.circle")
+                                            Image(systemName: "arrow.up.forward.square")
                                                 .font(.system(size: 11))
-                                            Text("settings.about.downloadUpdate".localized)
+                                            Text("settings.about.viewRelease".localized)
                                                 .font(.system(size: 12))
                                         }
                                     }
@@ -1027,8 +1027,8 @@ struct AboutSettingsView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .alert("settings.about.updateAvailable.title".localized, isPresented: $githubService.showUpdateAlert) {
-            Button("settings.about.downloadUpdate".localized) {
-                githubService.downloadUpdate()
+            Button("settings.about.viewRelease".localized) {
+                githubService.openReleasePage()
                 githubService.showUpdateAlert = false
             }
             Button("common.cancel".localized, role: .cancel) {

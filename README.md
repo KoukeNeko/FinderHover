@@ -57,18 +57,45 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
 ```bash
 git clone https://github.com/KoukeNeko/FinderHover.git
 cd FinderHover
+```
+
+#### Option 1: Build in Xcode
+
+```bash
 open FinderHover.xcodeproj
 ```
 
 Press `Cmd+R` to build and run.
 
-Or build from command line:
+#### Option 2: Build DMG Release
+
+Use the automated build script to create a production-ready DMG installer:
+
+```bash
+./scripts/build-dmg.sh
+```
+
+This will:
+
+- Auto-detect version from Info.plist
+- Build unsigned Release version
+- Create DMG with drag-to-Applications interface
+- Generate ZIP archive for GitHub Release
+
+Output files:
+
+- `FinderHover-v{version}.dmg` - DMG installer
+- `FinderHover-v{version}.zip` - Compressed for distribution
+
+#### Option 3: Command Line Build
 
 ```bash
 xcodebuild -project FinderHover.xcodeproj -scheme FinderHover -configuration Release build
 ```
 
-Requires Xcode 15.0+ and macOS 14.0+.
+#### Requirements
+
+Xcode 15.0+ and macOS 14.0+
 
 ## ⚙️ Setup
 
@@ -118,24 +145,28 @@ Press `Cmd+,` to customize:
 
 <img width="942" height="454" alt="image" src="https://github.com/user-attachments/assets/fe969256-a07d-4db6-8715-a3bb3226782b" />
 <img width="938" height="513" alt="image" src="https://github.com/user-attachments/assets/f492dc51-9fd8-49f2-b854-d9fc4ac026a6" />
+<img width="939" height="507" alt="image" src="https://github.com/user-attachments/assets/dc04ba05-2bcb-4308-b0cc-bd5ed2259d07" />
+
 
 ### Settings Interface
+<img width="762" height="1002" alt="image" src="https://github.com/user-attachments/assets/140accdd-6034-4b2d-b4d9-ccc55a28586c" />
+<img width="762" height="1002" alt="image" src="https://github.com/user-attachments/assets/8307070f-a13c-434d-9a66-0ed2da98a996" />
+<img width="762" height="1002" alt="image" src="https://github.com/user-attachments/assets/0afda2cb-e26f-4574-b002-6b56a1c06102" />
 
-<img width="762" height="644" alt="image" src="https://github.com/user-attachments/assets/7978cc15-cf16-455b-856b-683a5fc82b19" />
-<img width="762" height="644" alt="image" src="https://github.com/user-attachments/assets/33bbc116-ded6-481c-876b-32ee35199845" />
 
-## 📝 What's New in Version 1.2.3
+## 📝 What's New in Version 1.2.4.2
 
-- 🐛 **Bug Fix: Windows Style Border**
-  - Fixed inconsistent border styling for Windows tooltip mode on older macOS versions
-  - Unified border appearance across all macOS versions (15.x to 26+)
-  - Windows style now properly displays without borders
+### 🐛 Multi-Display DPI Positioning Fix
 
-### Previous Update (v1.2.2)
+Fixed hover window positioning issues when using multiple displays with different DPI/resolution settings!
 
-- 🎨 UI Icon Improvements - Updated icons to outlined versions
-- ✨ Auto-hide When Renaming - Hides hover window when renaming files
-- 🔧 Code Quality - Centralized icon management system
+**What's Fixed:**
+
+- ✅ Accurate window positioning on external displays with different DPI
+- ✅ Correct coordinate conversion for 1080p, 4K, and Retina displays
+- ✅ Proper boundary checking across all connected screens
+
+Previously, the hover window would appear at incorrect positions when hovering over files on an external display (e.g., 1080p) while using a built-in Retina display (3.5K). Now it works perfectly across all display configurations!
 
 📋 [View Full Changelog](CHANGELOG.md)
 
@@ -164,7 +195,7 @@ Then restart to reset to defaults.
 - QuickLookThumbnailing, ImageIO, AVFoundation
 - Accessibility Framework, Combine
 
-### Requirements
+### Development Requirements
 
 - macOS 14.0+ (Sonoma)
 - Xcode 15.0+

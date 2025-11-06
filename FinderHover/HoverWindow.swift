@@ -171,8 +171,9 @@ class HoverWindowController: NSWindowController {
             y: position.y - offsetY - window.frame.height
         )
 
-        // Ensure window stays on screen
-        if let screen = NSScreen.main {
+        // Ensure window stays on screen - find the screen that contains the mouse position
+        let screen = NSScreen.screens.first { NSMouseInRect(position, $0.frame, false) } ?? NSScreen.main
+        if let screen = screen {
             let screenFrame = screen.visibleFrame
 
             // Check right edge

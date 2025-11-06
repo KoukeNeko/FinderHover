@@ -2,7 +2,79 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.2.3 (Current)
+## Version 1.2.4.2 (Current)
+
+### 🐛 Bug Fixes
+
+#### Multi-Display DPI Positioning
+
+Fixed hover window positioning offset issue when using multiple displays with different DPI/resolution settings.
+
+**Problem:**
+- When the mouse cursor was on an external display (e.g., 1080p) while the main display had different DPI (e.g., 3.5K Retina), the hover window would appear at incorrect positions
+- The issue was caused by always using `NSScreen.main` for coordinate conversion and window boundary checking
+
+**Solution:**
+- Use `NSMouseInRect` to detect which screen actually contains the mouse cursor
+- Perform coordinate conversion and window positioning calculations based on the correct display
+- Ensures accurate positioning across all connected displays regardless of resolution or DPI scaling
+
+**Technical Changes:**
+- `FinderInteraction.swift`: Updated Accessibility API coordinate conversion to use the actual screen containing the mouse position
+- `HoverWindow.swift`: Updated window boundary checking to use the screen containing the mouse position instead of always using main screen
+
+## Version 1.2.4.1
+
+### 📦 Distribution Improvements
+
+#### New DMG Installer
+
+This release introduces a DMG disk image installer for easier installation and distribution.
+
+**What's New:**
+
+- 💿 **DMG Installer**: Professional disk image with drag-to-Applications interface
+- 🔧 **Automated Build Script**: `scripts/build-dmg.sh` for consistent releases
+  - Auto-detects version from Info.plist
+  - Builds unsigned Release version for testing
+  - Creates DMG with Applications symlink
+  - Generates ZIP archive ready for GitHub Release
+- 📝 **Improved Installation**: Cleaner user experience with standard macOS installation method
+
+**Technical Details:**
+
+- Unsigned build for open source distribution
+- Uses `hdiutil` for DMG creation
+- Includes `ditto` compression for GitHub uploads
+- Clean extended attributes handling
+
+## Version 1.2.4
+
+### 🐛 Bug Fixes
+
+#### Hover Window Persistence on App Switch
+
+- Fixed hover window not disappearing when switching apps via Spotlight or other methods (e.g., Cmd+Tab, clicking other apps, Mission Control)
+- Added dual application switch monitoring in `HoverManager` for comprehensive detection
+- Monitors application activation events (`didActivateApplicationNotification`)
+- Monitors Finder deactivation events (`didDeactivateApplicationNotification`)
+- Hover window now instantly hides when Finder loses focus
+- Improved responsiveness and user experience when switching between applications
+- Technical implementation: Dual NSWorkspace notification observers for comprehensive app switch detection
+
+### 🔄 Update Checker Improvements
+
+#### More Transparent Update Process
+
+- Changed update behavior from automatic download to opening GitHub Release page
+- Users now have better control over when and what to download
+- Can review release notes and changelog before downloading
+- Updated button from "Download Update" to "View Release" with new icon (`arrow.up.forward.square`)
+- Simplified alert message - removed confusing "download to Downloads folder" text
+- More transparent update process - users can review release notes before downloading
+- Localized button text in all three languages (English, 繁體中文, 日本語)
+
+## Version 1.2.3
 
 - 🐛 **Bug Fix: Windows Style Border on Older macOS**
   - Fixed inconsistent border styling for Windows tooltip mode on macOS versions before 26
