@@ -132,6 +132,31 @@ class FinderInteraction {
             return nil
         }
 
+        // Check the element's role to filter out window controls and non-file elements
+        var roleRef: CFTypeRef?
+        if AXUIElementCopyAttributeValue(element, kAXRoleAttribute as CFString, &roleRef) == .success,
+           let role = roleRef as? String {
+            // Ignore window controls, buttons, and other UI elements
+            let ignoredRoles = [
+                "AXButton",
+                "AXCloseButton",
+                "AXMinimizeButton",
+                "AXZoomButton",
+                "AXToolbarButton",
+                "AXWindow",
+                "AXDialog",
+                "AXSheet",
+                "AXScrollBar",
+                "AXScrollArea",
+                "AXStaticText",
+                "AXImage"  // Ignore standalone images in dialogs
+            ]
+
+            if ignoredRoles.contains(role) {
+                return nil
+            }
+        }
+
         return getFilePathFromElement(element)
     }
 
