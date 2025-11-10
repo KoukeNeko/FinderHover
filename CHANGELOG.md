@@ -2,7 +2,22 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.3 (Current)
+## Version 1.3.1 (Current)
+
+### 🐛 Bug Fixes
+
+#### Display Settings Scroll Performance
+- Fixed display settings page freezing/spinning wheel when scrolling quickly
+- Reverted LazyVStack back to VStack for better stability
+- LazyVStack caused excessive view creation/destruction during fast scrolling
+- Now provides smooth scrolling experience without crashes
+
+**Technical Details:**
+- LazyVStack was incompatible with 100+ Toggle bindings in DisplaySettingsView
+- Frequent view recycling during fast scroll caused main thread blocking
+- VStack provides stable view references and better performance in this scenario
+
+## Version 1.3
 
 ### 🆕 New Metadata Support
 
