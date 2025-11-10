@@ -461,73 +461,10 @@ struct HoverContentView: View {
     }
 
     private func getFileTypeDescription() -> String {
-        if fileInfo.isDirectory {
-            return "Folder"
-        }
-
-        if let ext = fileInfo.fileExtension {
-            let typeMap: [String: String] = [
-                "pdf": "PDF Document",
-                "doc": "Word Document",
-                "docx": "Word Document",
-                "xls": "Excel Spreadsheet",
-                "xlsx": "Excel Spreadsheet",
-                "ppt": "PowerPoint Presentation",
-                "pptx": "PowerPoint Presentation",
-                "key": "Keynote Presentation",
-                "pages": "Pages Document",
-                "numbers": "Numbers Spreadsheet",
-                "txt": "Text File",
-                "rtf": "Rich Text Document",
-                "md": "Markdown File",
-                "csv": "CSV File",
-                "json": "JSON File",
-                "xml": "XML File",
-                "jpg": "JPEG Image",
-                "jpeg": "JPEG Image",
-                "png": "PNG Image",
-                "gif": "GIF Image",
-                "svg": "SVG Image",
-                "bmp": "Bitmap Image",
-                "tiff": "TIFF Image",
-                "psd": "Photoshop Document",
-                "ai": "Illustrator File",
-                "sketch": "Sketch File",
-                "mp4": "MP4 Video",
-                "mov": "QuickTime Movie",
-                "avi": "AVI Video",
-                "mkv": "MKV Video",
-                "mp3": "MP3 Audio",
-                "wav": "WAV Audio",
-                "aac": "AAC Audio",
-                "flac": "FLAC Audio",
-                "zip": "ZIP Archive",
-                "rar": "RAR Archive",
-                "7z": "7-Zip Archive",
-                "tar": "TAR Archive",
-                "gz": "GZIP Archive",
-                "dmg": "Disk Image",
-                "iso": "ISO Disk Image",
-                "pkg": "macOS Installer",
-                "app": "Application",
-                "swift": "Swift Source",
-                "py": "Python Script",
-                "js": "JavaScript File",
-                "ts": "TypeScript File",
-                "css": "CSS Stylesheet",
-                "html": "HTML Document",
-                "php": "PHP Script",
-                "java": "Java Source",
-                "c": "C Source",
-                "cpp": "C++ Source",
-                "h": "Header File",
-                "sh": "Shell Script"
-            ]
-
-            return typeMap[ext.lowercased()] ?? "\(ext.uppercased()) File"
-        }
-
-        return "File"
+        return FileTypeDescriptor.description(
+            fileExtension: fileInfo.fileExtension,
+            isDirectory: fileInfo.isDirectory
+        )
     }
 
     private func formattedDate(_ date: Date) -> String {
