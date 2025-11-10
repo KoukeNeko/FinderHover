@@ -466,13 +466,6 @@ struct HoverContentView: View {
             isDirectory: fileInfo.isDirectory
         )
     }
-
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
-    }
 }
 
 struct DetailRow: View {
@@ -554,39 +547,10 @@ struct WindowsStyleHoverView: View {
     }
 
     private func getFileTypeDescription() -> String {
-        if fileInfo.isDirectory {
-            return "Folder"
-        }
-
-        if let ext = fileInfo.fileExtension {
-            let typeMap: [String: String] = [
-                "pdf": "PDF Document",
-                "doc": "Microsoft Word 97 - 2003 Document",
-                "docx": "Microsoft Word Document",
-                "xls": "Microsoft Excel 97 - 2003 Spreadsheet",
-                "xlsx": "Microsoft Excel Spreadsheet",
-                "ppt": "Microsoft PowerPoint 97 - 2003 Presentation",
-                "pptx": "Microsoft PowerPoint Presentation",
-                "txt": "Text Document",
-                "rtf": "Rich Text Document",
-                "jpg": "JPEG Image",
-                "jpeg": "JPEG Image",
-                "png": "PNG Image",
-                "gif": "GIF Image",
-                "bmp": "Bitmap Image",
-                "mp4": "MP4 Video",
-                "mov": "QuickTime Movie",
-                "avi": "AVI Video",
-                "mp3": "MP3 Audio",
-                "wav": "WAV Audio",
-                "zip": "ZIP Archive",
-                "rar": "RAR Archive"
-            ]
-
-            return typeMap[ext.lowercased()] ?? "\(ext.uppercased()) File"
-        }
-
-        return "File"
+        return FileTypeDescriptor.description(
+            fileExtension: fileInfo.fileExtension,
+            isDirectory: fileInfo.isDirectory
+        )
     }
 }
 
