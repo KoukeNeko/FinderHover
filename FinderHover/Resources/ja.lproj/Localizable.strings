@@ -158,6 +158,17 @@
 "settings.display.font.glyphCount" = "グリフ数";
 "settings.display.font.hint" = "フォントメタデータはTTF、OTFなどのフォント形式にのみ表示されます";
 
+"settings.display.diskImage.title" = "ディスクイメージ情報";
+"settings.display.diskImage.show" = "ディスクイメージメタデータを表示";
+"settings.display.diskImage.format" = "イメージ形式";
+"settings.display.diskImage.totalSize" = "合計サイズ";
+"settings.display.diskImage.compressedSize" = "圧縮サイズ";
+"settings.display.diskImage.compressionRatio" = "圧縮率";
+"settings.display.diskImage.encrypted" = "暗号化状態";
+"settings.display.diskImage.partitionScheme" = "パーティション方式";
+"settings.display.diskImage.fileSystem" = "ファイルシステム";
+"settings.display.diskImage.hint" = "ディスクイメージメタデータはDMG、ISOなどのディスクイメージ形式にのみ表示されます";
+
 "settings.display.order" = "表示順序";
 "settings.display.order.hint" = "項目をドラッグして並べ替えます。EXIF はグループとして移動します。";
 
@@ -230,6 +241,7 @@
 "displayItem.ebook" = "電子書籍情報";
 "displayItem.code" = "コードファイル情報";
 "displayItem.font" = "フォント情報";
+"displayItem.diskImage" = "ディスクイメージ情報";
 "displayItem.filePath" = "ファイルパス";
 
 /* Hover Window */
@@ -342,6 +354,16 @@
 "hover.font.designer" = "デザイナー";
 "hover.font.copyright" = "著作権";
 "hover.font.glyphCount" = "グリフ数";
+
+/* Disk Image Hover */
+"hover.diskImage.title" = "ディスクイメージ";
+"hover.diskImage.format" = "フォーマット";
+"hover.diskImage.totalSize" = "合計サイズ";
+"hover.diskImage.compressedSize" = "圧縮サイズ";
+"hover.diskImage.compressionRatio" = "圧縮率";
+"hover.diskImage.encrypted" = "暗号化状態";
+"hover.diskImage.partitionScheme" = "パーティション方式";
+"hover.diskImage.fileSystem" = "ファイルシステム";
 
 /* Common */
 "common.reset" = "デフォルトに戻す";

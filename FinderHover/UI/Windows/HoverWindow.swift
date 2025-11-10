@@ -726,6 +726,48 @@ struct HoverContentView: View {
                         .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
+            
+        case .diskImage:
+            if settings.showDiskImage, let diskImage = fileInfo.diskImageMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.diskImage.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showDiskImageFormat, let format = diskImage.format {
+                        DetailRow(icon: "opticaldiscdrive", label: "hover.diskImage.format".localized, value: format, fontSize: settings.fontSize)
+                    }
+                    if settings.showDiskImageTotalSize, let totalSize = diskImage.totalSize {
+                        let sizeStr = ByteCountFormatter.string(fromByteCount: totalSize, countStyle: .file)
+                        DetailRow(icon: "externaldrive", label: "hover.diskImage.totalSize".localized, value: sizeStr, fontSize: settings.fontSize)
+                    }
+                    if settings.showDiskImageCompressedSize, let compressedSize = diskImage.compressedSize {
+                        let sizeStr = ByteCountFormatter.string(fromByteCount: compressedSize, countStyle: .file)
+                        DetailRow(icon: "arrow.down.circle", label: "hover.diskImage.compressedSize".localized, value: sizeStr, fontSize: settings.fontSize)
+                    }
+                    if settings.showDiskImageCompressionRatio, let ratio = diskImage.compressionRatio {
+                        DetailRow(icon: "chart.bar", label: "hover.diskImage.compressionRatio".localized, value: ratio, fontSize: settings.fontSize)
+                    }
+                    if settings.showDiskImageEncrypted, let isEncrypted = diskImage.isEncrypted {
+                        let status = isEncrypted ? "Yes" : "No"
+                        DetailRow(icon: "lock.shield", label: "hover.diskImage.encrypted".localized, value: status, fontSize: settings.fontSize)
+                    }
+                    if settings.showDiskImagePartitionScheme, let scheme = diskImage.partitionScheme {
+                        DetailRow(icon: "square.split.2x2", label: "hover.diskImage.partitionScheme".localized, value: scheme, fontSize: settings.fontSize)
+                    }
+                    if settings.showDiskImageFileSystem, let fileSystem = diskImage.fileSystem {
+                        DetailRow(icon: "doc.text", label: "hover.diskImage.fileSystem".localized, value: fileSystem, fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
 
         case .filePath:
             if settings.showFilePath {

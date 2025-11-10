@@ -158,6 +158,17 @@
 "settings.display.font.glyphCount" = "Glyph Count";
 "settings.display.font.hint" = "Font metadata only appears for TTF, OTF, and other font formats";
 
+"settings.display.diskImage.title" = "Disk Image Information";
+"settings.display.diskImage.show" = "Show Disk Image Metadata";
+"settings.display.diskImage.format" = "Image Format";
+"settings.display.diskImage.totalSize" = "Total Size";
+"settings.display.diskImage.compressedSize" = "Compressed Size";
+"settings.display.diskImage.compressionRatio" = "Compression Ratio";
+"settings.display.diskImage.encrypted" = "Encrypted Status";
+"settings.display.diskImage.partitionScheme" = "Partition Scheme";
+"settings.display.diskImage.fileSystem" = "File System";
+"settings.display.diskImage.hint" = "Disk image metadata only appears for DMG, ISO, and other disk image formats";
+
 "settings.display.order" = "Display Order";
 "settings.display.order.hint" = "Drag items to reorder. EXIF moves as a group.";
 
@@ -230,6 +241,7 @@
 "displayItem.ebook" = "E-book Information";
 "displayItem.code" = "Code File Information";
 "displayItem.font" = "Font Information";
+"displayItem.diskImage" = "Disk Image Information";
 "displayItem.filePath" = "File Path";
 
 /* Hover Window */
@@ -342,6 +354,16 @@
 "hover.font.designer" = "Designer";
 "hover.font.copyright" = "Copyright";
 "hover.font.glyphCount" = "Glyphs";
+
+/* Disk Image Hover */
+"hover.diskImage.title" = "Disk Image";
+"hover.diskImage.format" = "Format";
+"hover.diskImage.totalSize" = "Total Size";
+"hover.diskImage.compressedSize" = "Compressed";
+"hover.diskImage.compressionRatio" = "Ratio";
+"hover.diskImage.encrypted" = "Encrypted";
+"hover.diskImage.partitionScheme" = "Partition Scheme";
+"hover.diskImage.fileSystem" = "File System";
 
 /* Common */
 "common.reset" = "Reset to Defaults";

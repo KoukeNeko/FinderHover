@@ -63,6 +63,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
     case ebook = "E-book Information"
     case code = "Code File Information"
     case font = "Font Information"
+    case diskImage = "Disk Image Information"
     case filePath = "File Path"
 
     var id: String { rawValue }
@@ -86,6 +87,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .ebook: return "displayItem.ebook".localized
         case .code: return "displayItem.code".localized
         case .font: return "displayItem.font".localized
+        case .diskImage: return "displayItem.diskImage".localized
         case .filePath: return "displayItem.filePath".localized
         }
     }
@@ -109,6 +111,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .ebook: return "book.closed"
         case .code: return "chevron.left.forwardslash.chevron.right"
         case .font: return "textformat"
+        case .diskImage: return "opticaldiscdrive"
         case .filePath: return IconManager.FileSystem.folder
         }
     }
@@ -439,6 +442,32 @@ class AppSettings: ObservableObject {
     @Published var showFontGlyphCount: Bool {
         didSet { UserDefaults.standard.set(showFontGlyphCount, forKey: "showFontGlyphCount") }
     }
+    
+    // Disk Image metadata toggles
+    @Published var showDiskImage: Bool {
+        didSet { UserDefaults.standard.set(showDiskImage, forKey: "showDiskImage") }
+    }
+    @Published var showDiskImageFormat: Bool {
+        didSet { UserDefaults.standard.set(showDiskImageFormat, forKey: "showDiskImageFormat") }
+    }
+    @Published var showDiskImageTotalSize: Bool {
+        didSet { UserDefaults.standard.set(showDiskImageTotalSize, forKey: "showDiskImageTotalSize") }
+    }
+    @Published var showDiskImageCompressedSize: Bool {
+        didSet { UserDefaults.standard.set(showDiskImageCompressedSize, forKey: "showDiskImageCompressedSize") }
+    }
+    @Published var showDiskImageCompressionRatio: Bool {
+        didSet { UserDefaults.standard.set(showDiskImageCompressionRatio, forKey: "showDiskImageCompressionRatio") }
+    }
+    @Published var showDiskImageEncrypted: Bool {
+        didSet { UserDefaults.standard.set(showDiskImageEncrypted, forKey: "showDiskImageEncrypted") }
+    }
+    @Published var showDiskImagePartitionScheme: Bool {
+        didSet { UserDefaults.standard.set(showDiskImagePartitionScheme, forKey: "showDiskImagePartitionScheme") }
+    }
+    @Published var showDiskImageFileSystem: Bool {
+        didSet { UserDefaults.standard.set(showDiskImageFileSystem, forKey: "showDiskImageFileSystem") }
+    }
 
     // Display order
     @Published var displayOrder: [DisplayItem] {
@@ -557,6 +586,15 @@ class AppSettings: ObservableObject {
                     decoded.append(.font)
                 }
             }
+            if !decoded.contains(.diskImage) {
+                if let fontIndex = decoded.firstIndex(of: .font) {
+                    decoded.insert(.diskImage, at: fontIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.diskImage, at: filePathIndex)
+                } else {
+                    decoded.append(.diskImage)
+                }
+            }
             self.displayOrder = decoded
         } else {
             // Default order
@@ -578,6 +616,7 @@ class AppSettings: ObservableObject {
                 .ebook,
                 .code,
                 .font,
+                .diskImage,
                 .filePath
             ]
         }
@@ -683,6 +722,16 @@ class AppSettings: ObservableObject {
         self.showFontDesigner = UserDefaults.standard.object(forKey: "showFontDesigner") as? Bool ?? Constants.Defaults.showFontDesigner
         self.showFontCopyright = UserDefaults.standard.object(forKey: "showFontCopyright") as? Bool ?? Constants.Defaults.showFontCopyright
         self.showFontGlyphCount = UserDefaults.standard.object(forKey: "showFontGlyphCount") as? Bool ?? Constants.Defaults.showFontGlyphCount
+        
+        // Initialize disk image metadata toggles
+        self.showDiskImage = UserDefaults.standard.object(forKey: "showDiskImage") as? Bool ?? Constants.Defaults.showDiskImage
+        self.showDiskImageFormat = UserDefaults.standard.object(forKey: "showDiskImageFormat") as? Bool ?? Constants.Defaults.showDiskImageFormat
+        self.showDiskImageTotalSize = UserDefaults.standard.object(forKey: "showDiskImageTotalSize") as? Bool ?? Constants.Defaults.showDiskImageTotalSize
+        self.showDiskImageCompressedSize = UserDefaults.standard.object(forKey: "showDiskImageCompressedSize") as? Bool ?? Constants.Defaults.showDiskImageCompressedSize
+        self.showDiskImageCompressionRatio = UserDefaults.standard.object(forKey: "showDiskImageCompressionRatio") as? Bool ?? Constants.Defaults.showDiskImageCompressionRatio
+        self.showDiskImageEncrypted = UserDefaults.standard.object(forKey: "showDiskImageEncrypted") as? Bool ?? Constants.Defaults.showDiskImageEncrypted
+        self.showDiskImagePartitionScheme = UserDefaults.standard.object(forKey: "showDiskImagePartitionScheme") as? Bool ?? Constants.Defaults.showDiskImagePartitionScheme
+        self.showDiskImageFileSystem = UserDefaults.standard.object(forKey: "showDiskImageFileSystem") as? Bool ?? Constants.Defaults.showDiskImageFileSystem
         
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? Constants.Defaults.followCursor
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? Constants.Defaults.windowOffsetX

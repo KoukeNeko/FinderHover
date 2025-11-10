@@ -364,6 +364,31 @@ enum Constants {
         
         /// Default show Font glyph count
         static let showFontGlyphCount: Bool = true
+        
+        // Disk Image metadata defaults
+        /// Default show Disk Image information
+        static let showDiskImage: Bool = true
+        
+        /// Default show Disk Image format
+        static let showDiskImageFormat: Bool = true
+        
+        /// Default show Disk Image total size
+        static let showDiskImageTotalSize: Bool = true
+        
+        /// Default show Disk Image compressed size
+        static let showDiskImageCompressedSize: Bool = true
+        
+        /// Default show Disk Image compression ratio
+        static let showDiskImageCompressionRatio: Bool = true
+        
+        /// Default show Disk Image encrypted status
+        static let showDiskImageEncrypted: Bool = true
+        
+        /// Default show Disk Image partition scheme
+        static let showDiskImagePartitionScheme: Bool = true
+        
+        /// Default show Disk Image file system
+        static let showDiskImageFileSystem: Bool = true
 
         /// Default follow cursor
         static let followCursor: Bool = true

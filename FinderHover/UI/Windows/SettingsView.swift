@@ -959,6 +959,60 @@ struct DisplaySettingsView: View {
                     .foregroundColor(.secondary)
                     .padding(.horizontal, 20)
                     .padding(.top, 8)
+                    
+                    // Disk Image Information
+                    Text("settings.display.diskImage.title".localized)
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(Color(NSColor.labelColor))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 20)
+                        .padding(.top, 16)
+                        .padding(.bottom, 8)
+
+                    VStack(spacing: 0) {
+                        DisplayToggleRow(title: "settings.display.diskImage.show".localized, icon: "opticaldiscdrive", isOn: $settings.showDiskImage)
+
+                        DisplayToggleRow(title: "settings.display.diskImage.format".localized, icon: "opticaldiscdrive", isOn: $settings.showDiskImageFormat)
+                            .disabled(!settings.showDiskImage)
+                            .opacity(settings.showDiskImage ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.diskImage.totalSize".localized, icon: "externaldrive", isOn: $settings.showDiskImageTotalSize)
+                            .disabled(!settings.showDiskImage)
+                            .opacity(settings.showDiskImage ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.diskImage.compressedSize".localized, icon: "arrow.down.circle", isOn: $settings.showDiskImageCompressedSize)
+                            .disabled(!settings.showDiskImage)
+                            .opacity(settings.showDiskImage ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.diskImage.compressionRatio".localized, icon: "chart.bar", isOn: $settings.showDiskImageCompressionRatio)
+                            .disabled(!settings.showDiskImage)
+                            .opacity(settings.showDiskImage ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.diskImage.encrypted".localized, icon: "lock.shield", isOn: $settings.showDiskImageEncrypted)
+                            .disabled(!settings.showDiskImage)
+                            .opacity(settings.showDiskImage ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.diskImage.partitionScheme".localized, icon: "square.split.2x2", isOn: $settings.showDiskImagePartitionScheme)
+                            .disabled(!settings.showDiskImage)
+                            .opacity(settings.showDiskImage ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.diskImage.fileSystem".localized, icon: "doc.text", isOn: $settings.showDiskImageFileSystem)
+                            .disabled(!settings.showDiskImage)
+                            .opacity(settings.showDiskImage ? 1 : 0.5)
+                    }
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(6)
+                    .padding(.horizontal, 20)
+
+                    HStack(spacing: 6) {
+                        Image(systemName: "info.circle")
+                            .font(.system(size: 11))
+                        Text("settings.display.diskImage.hint".localized)
+                            .font(.system(size: 11))
+                    }
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
 
                     // Display Order Section
                     Text("settings.display.order".localized)

@@ -158,6 +158,17 @@
 "settings.display.font.glyphCount" = "字形數量";
 "settings.display.font.hint" = "字型中繼資料僅顯示於 TTF、OTF 等字型格式";
 
+"settings.display.diskImage.title" = "磁碟映像資訊";
+"settings.display.diskImage.show" = "顯示磁碟映像中繼資料";
+"settings.display.diskImage.format" = "映像格式";
+"settings.display.diskImage.totalSize" = "總大小";
+"settings.display.diskImage.compressedSize" = "壓縮大小";
+"settings.display.diskImage.compressionRatio" = "壓縮率";
+"settings.display.diskImage.encrypted" = "加密狀態";
+"settings.display.diskImage.partitionScheme" = "分割區配置";
+"settings.display.diskImage.fileSystem" = "檔案系統";
+"settings.display.diskImage.hint" = "磁碟映像中繼資料僅顯示於 DMG、ISO 等磁碟映像格式";
+
 "settings.display.order" = "顯示順序";
 "settings.display.order.hint" = "拖曳項目以重新排序。EXIF 作為群組移動。";
 
@@ -230,6 +241,7 @@
 "displayItem.ebook" = "電子書資訊";
 "displayItem.code" = "程式碼檔案資訊";
 "displayItem.font" = "字型資訊";
+"displayItem.diskImage" = "磁碟映像資訊";
 "displayItem.filePath" = "檔案路徑";
 
 /* Hover Window */
@@ -342,6 +354,16 @@
 "hover.font.designer" = "設計者";
 "hover.font.copyright" = "版權";
 "hover.font.glyphCount" = "字形數";
+
+/* Disk Image Hover */
+"hover.diskImage.title" = "磁碟映像";
+"hover.diskImage.format" = "格式";
+"hover.diskImage.totalSize" = "總大小";
+"hover.diskImage.compressedSize" = "壓縮大小";
+"hover.diskImage.compressionRatio" = "壓縮率";
+"hover.diskImage.encrypted" = "加密狀態";
+"hover.diskImage.partitionScheme" = "分割區配置";
+"hover.diskImage.fileSystem" = "檔案系統";
 
 /* Common */
 "common.reset" = "重設為預設值";

@@ -184,6 +184,22 @@ struct FontMetadata {
     }
 }
 
+// MARK: - Disk Image Metadata Structure
+struct DiskImageMetadata {
+    let format: String?           // Image format (UDIF, UDZO, UDBZ, ISO 9660, etc.)
+    let totalSize: Int64?         // Total size in bytes
+    let compressedSize: Int64?    // Compressed size in bytes (if applicable)
+    let compressionRatio: String? // Compression ratio (e.g., "2.5:1")
+    let isEncrypted: Bool?        // Whether the image is encrypted
+    let partitionScheme: String?  // Partition scheme (GPT, APM, MBR, etc.)
+    let fileSystem: String?       // File system (HFS+, APFS, ISO 9660, etc.)
+    
+    var hasData: Bool {
+        return format != nil || totalSize != nil || compressedSize != nil ||
+               compressionRatio != nil || isEncrypted != nil || partitionScheme != nil || fileSystem != nil
+    }
+}
+
 struct FileInfo {
     let name: String
     let path: String
@@ -230,6 +246,9 @@ struct FileInfo {
 
     // Font metadata
     let fontMetadata: FontMetadata?
+    
+    // Disk image metadata
+    let diskImageMetadata: DiskImageMetadata?
 
     var formattedSize: String {
         ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
@@ -353,6 +372,9 @@ struct FileInfo {
 
             // Extract Font metadata
             let fontMetadata = extractFontMetadata(from: url)
+            
+            // Extract Disk Image metadata
+            let diskImageMetadata = extractDiskImageMetadata(from: url)
 
             return FileInfo(
                 name: url.lastPathComponent,
@@ -379,7 +401,8 @@ struct FileInfo {
                 archiveMetadata: archiveMetadata,
                 ebookMetadata: ebookMetadata,
                 codeMetadata: codeMetadata,
-                fontMetadata: fontMetadata
+                fontMetadata: fontMetadata,
+                diskImageMetadata: diskImageMetadata
             )
         } catch {
             Logger.error("Failed to read file attributes: \(path)", error: error, subsystem: .fileSystem)
@@ -1450,6 +1473,113 @@ struct FileInfo {
             copyright: copyright,
             glyphCount: glyphCount > 0 ? Int(glyphCount) : nil
         )
+    }
+    
+    private static func extractDiskImageMetadata(from url: URL) -> DiskImageMetadata? {
+        let diskImageExtensions = ["dmg", "iso", "img", "cdr", "toast", "sparseimage", "sparsebundle"]
+        let ext = url.pathExtension.lowercased()
+        guard diskImageExtensions.contains(ext) else { return nil }
+        
+        // Use hdiutil to get disk image information
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
+        process.arguments = ["imageinfo", url.path]
+        
+        let pipe = Pipe()
+        process.standardOutput = pipe
+        process.standardError = Pipe()
+        
+        do {
+            try process.run()
+            process.waitUntilExit()
+            
+            guard process.terminationStatus == 0 else { return nil }
+            
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            guard let output = String(data: data, encoding: .utf8) else { return nil }
+            
+            var format: String?
+            var totalSize: Int64?
+            var compressedSize: Int64?
+            var compressionRatio: String?
+            var isEncrypted: Bool?
+            var partitionScheme: String?
+            var fileSystem: String?
+            
+            // Parse hdiutil output
+            let lines = output.components(separatedBy: .newlines)
+            for line in lines {
+                let trimmed = line.trimmingCharacters(in: .whitespaces)
+                
+                // Format
+                if trimmed.hasPrefix("Format:") {
+                    format = trimmed.replacingOccurrences(of: "Format:", with: "").trimmingCharacters(in: .whitespaces)
+                }
+                
+                // Total size
+                if trimmed.hasPrefix("Total Bytes:") || trimmed.hasPrefix("Size Information:") {
+                    if let sizeStr = trimmed.components(separatedBy: ":").last?.trimmingCharacters(in: .whitespaces),
+                       let size = Int64(sizeStr.components(separatedBy: .whitespaces).first ?? "") {
+                        totalSize = size
+                    }
+                }
+                
+                // Compressed size
+                if trimmed.hasPrefix("Compressed Bytes:") || trimmed.hasPrefix("Compressed:") {
+                    if let sizeStr = trimmed.components(separatedBy: ":").last?.trimmingCharacters(in: .whitespaces),
+                       let size = Int64(sizeStr.components(separatedBy: .whitespaces).first ?? "") {
+                        compressedSize = size
+                    }
+                }
+                
+                // Encryption
+                if trimmed.contains("Encrypted:") || trimmed.contains("encrypted") {
+                    isEncrypted = trimmed.contains("yes") || trimmed.contains("true")
+                }
+                
+                // Partition scheme
+                if trimmed.hasPrefix("Partition Scheme:") || trimmed.contains("partition-scheme") {
+                    partitionScheme = trimmed.components(separatedBy: ":").last?.trimmingCharacters(in: .whitespaces)
+                }
+                
+                // File system
+                if trimmed.hasPrefix("Format Description:") {
+                    let description = trimmed.replacingOccurrences(of: "Format Description:", with: "").trimmingCharacters(in: .whitespaces)
+                    if description.contains("HFS+") {
+                        fileSystem = "HFS+"
+                    } else if description.contains("APFS") {
+                        fileSystem = "APFS"
+                    } else if description.contains("ISO") {
+                        fileSystem = "ISO 9660"
+                    } else if description.contains("FAT") {
+                        fileSystem = "FAT32"
+                    }
+                }
+            }
+            
+            // Calculate compression ratio if both sizes are available
+            if let total = totalSize, let compressed = compressedSize, compressed > 0 {
+                let ratio = Double(total) / Double(compressed)
+                compressionRatio = String(format: "%.1f:1", ratio)
+            }
+            
+            // If encryption info not found, assume not encrypted
+            if isEncrypted == nil {
+                isEncrypted = false
+            }
+            
+            return DiskImageMetadata(
+                format: format,
+                totalSize: totalSize,
+                compressedSize: compressedSize,
+                compressionRatio: compressionRatio,
+                isEncrypted: isEncrypted,
+                partitionScheme: partitionScheme,
+                fileSystem: fileSystem
+            )
+        } catch {
+            return nil
+        }
     }
 
     // MARK: - Helper Functions
