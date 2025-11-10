@@ -576,6 +576,40 @@ struct HoverContentView: View {
                 }
             }
 
+        case .archive:
+            if settings.showArchive, let archive = fileInfo.archiveMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.archive.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showArchiveFormat, let format = archive.format {
+                        DetailRow(icon: "doc.zipper", label: "hover.archive.format".localized, value: format, fontSize: settings.fontSize)
+                    }
+                    if settings.showArchiveFileCount, let fileCount = archive.fileCount {
+                        DetailRow(icon: "doc.on.doc", label: "hover.archive.fileCount".localized, value: "\(fileCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showArchiveUncompressedSize, let uncompressedSize = archive.uncompressedSize {
+                        let sizeStr = ByteCountFormatter.string(fromByteCount: Int64(uncompressedSize), countStyle: .file)
+                        DetailRow(icon: "arrow.up.doc", label: "hover.archive.uncompressedSize".localized, value: sizeStr, fontSize: settings.fontSize)
+                    }
+                    if settings.showArchiveCompressionRatio, let compressionRatio = archive.compressionRatio {
+                        DetailRow(icon: "chart.bar", label: "hover.archive.compressionRatio".localized, value: String(format: "%.1f%%", compressionRatio), fontSize: settings.fontSize)
+                    }
+                    if settings.showArchiveEncrypted, let isEncrypted = archive.isEncrypted, isEncrypted {
+                        DetailRow(icon: "lock.fill", label: "hover.archive.encrypted".localized, value: "hover.archive.yes".localized, fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
+
         case .filePath:
             if settings.showFilePath {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {

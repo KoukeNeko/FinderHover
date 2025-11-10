@@ -59,6 +59,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
     case audio = "Audio Information"
     case pdf = "PDF Information"
     case office = "Office Document Information"
+    case archive = "Archive Information"
     case filePath = "File Path"
 
     var id: String { rawValue }
@@ -78,6 +79,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .audio: return "displayItem.audio".localized
         case .pdf: return "displayItem.pdf".localized
         case .office: return "displayItem.office".localized
+        case .archive: return "displayItem.archive".localized
         case .filePath: return "displayItem.filePath".localized
         }
     }
@@ -97,6 +99,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .audio: return IconManager.Audio.music
         case .pdf: return "doc.richtext"
         case .office: return "doc.text.fill"
+        case .archive: return "doc.zipper"
         case .filePath: return IconManager.FileSystem.folder
         }
     }
@@ -330,6 +333,26 @@ class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(showOfficeCategory, forKey: "showOfficeCategory") }
     }
 
+    // Archive display settings
+    @Published var showArchive: Bool {
+        didSet { UserDefaults.standard.set(showArchive, forKey: "showArchive") }
+    }
+    @Published var showArchiveFormat: Bool {
+        didSet { UserDefaults.standard.set(showArchiveFormat, forKey: "showArchiveFormat") }
+    }
+    @Published var showArchiveFileCount: Bool {
+        didSet { UserDefaults.standard.set(showArchiveFileCount, forKey: "showArchiveFileCount") }
+    }
+    @Published var showArchiveUncompressedSize: Bool {
+        didSet { UserDefaults.standard.set(showArchiveUncompressedSize, forKey: "showArchiveUncompressedSize") }
+    }
+    @Published var showArchiveCompressionRatio: Bool {
+        didSet { UserDefaults.standard.set(showArchiveCompressionRatio, forKey: "showArchiveCompressionRatio") }
+    }
+    @Published var showArchiveEncrypted: Bool {
+        didSet { UserDefaults.standard.set(showArchiveEncrypted, forKey: "showArchiveEncrypted") }
+    }
+
     // Display order
     @Published var displayOrder: [DisplayItem] {
         didSet {
@@ -411,6 +434,15 @@ class AppSettings: ObservableObject {
                     decoded.append(.office)
                 }
             }
+            if !decoded.contains(.archive) {
+                if let officeIndex = decoded.firstIndex(of: .office) {
+                    decoded.insert(.archive, at: officeIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.archive, at: filePathIndex)
+                } else {
+                    decoded.append(.archive)
+                }
+            }
             self.displayOrder = decoded
         } else {
             // Default order
@@ -428,6 +460,7 @@ class AppSettings: ObservableObject {
                 .audio,
                 .pdf,
                 .office,
+                .archive,
                 .filePath
             ]
         }
@@ -501,6 +534,12 @@ class AppSettings: ObservableObject {
         self.showOfficeSlideCount = UserDefaults.standard.object(forKey: "showOfficeSlideCount") as? Bool ?? Constants.Defaults.showOfficeSlideCount
         self.showOfficeCompany = UserDefaults.standard.object(forKey: "showOfficeCompany") as? Bool ?? Constants.Defaults.showOfficeCompany
         self.showOfficeCategory = UserDefaults.standard.object(forKey: "showOfficeCategory") as? Bool ?? Constants.Defaults.showOfficeCategory
+        self.showArchive = UserDefaults.standard.object(forKey: "showArchive") as? Bool ?? Constants.Defaults.showArchive
+        self.showArchiveFormat = UserDefaults.standard.object(forKey: "showArchiveFormat") as? Bool ?? Constants.Defaults.showArchiveFormat
+        self.showArchiveFileCount = UserDefaults.standard.object(forKey: "showArchiveFileCount") as? Bool ?? Constants.Defaults.showArchiveFileCount
+        self.showArchiveUncompressedSize = UserDefaults.standard.object(forKey: "showArchiveUncompressedSize") as? Bool ?? Constants.Defaults.showArchiveUncompressedSize
+        self.showArchiveCompressionRatio = UserDefaults.standard.object(forKey: "showArchiveCompressionRatio") as? Bool ?? Constants.Defaults.showArchiveCompressionRatio
+        self.showArchiveEncrypted = UserDefaults.standard.object(forKey: "showArchiveEncrypted") as? Bool ?? Constants.Defaults.showArchiveEncrypted
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? Constants.Defaults.followCursor
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? Constants.Defaults.windowOffsetX
         self.windowOffsetY = UserDefaults.standard.object(forKey: "windowOffsetY") as? Double ?? Constants.Defaults.windowOffsetY

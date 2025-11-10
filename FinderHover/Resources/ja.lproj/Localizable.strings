@@ -116,6 +116,15 @@
 "settings.display.office.category" = "カテゴリ";
 "settings.display.office.hint" = "OfficeメタデータはMicrosoft Office文書にのみ表示されます";
 
+"settings.display.archive" = "アーカイブ情報";
+"settings.display.archive.show" = "アーカイブメタデータを表示";
+"settings.display.archive.format" = "圧縮形式";
+"settings.display.archive.fileCount" = "ファイル数";
+"settings.display.archive.uncompressedSize" = "展開後のサイズ";
+"settings.display.archive.compressionRatio" = "圧縮率";
+"settings.display.archive.encrypted" = "暗号化状態";
+"settings.display.archive.hint" = "アーカイブメタデータは圧縮ファイルにのみ表示されます";
+
 "settings.display.order" = "表示順序";
 "settings.display.order.hint" = "項目をドラッグして並べ替えます。EXIF はグループとして移動します。";
 
@@ -184,6 +193,7 @@
 "displayItem.audio" = "オーディオ情報";
 "displayItem.pdf" = "PDF情報";
 "displayItem.office" = "Office文書情報";
+"displayItem.archive" = "アーカイブ情報";
 "displayItem.filePath" = "ファイルパス";
 
 /* Hover Window */
@@ -257,6 +267,15 @@
 "hover.office.modificationDate" = "変更日";
 "hover.office.company" = "会社名";
 "hover.office.category" = "カテゴリ";
+
+/* Archive Hover */
+"hover.archive.title" = "アーカイブ";
+"hover.archive.format" = "形式";
+"hover.archive.fileCount" = "ファイル数";
+"hover.archive.uncompressedSize" = "展開後";
+"hover.archive.compressionRatio" = "圧縮率";
+"hover.archive.encrypted" = "暗号化";
+"hover.archive.yes" = "はい";
 
 /* Common */
 "common.reset" = "デフォルトに戻す";

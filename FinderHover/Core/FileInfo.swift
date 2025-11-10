@@ -120,6 +120,21 @@ struct OfficeMetadata {
     }
 }
 
+// MARK: - Archive Metadata Structure
+struct ArchiveMetadata {
+    let format: String?           // ZIP, RAR, 7Z, TAR, GZ, etc.
+    let fileCount: Int?           // Number of files in archive
+    let uncompressedSize: UInt64? // Total uncompressed size
+    let compressionRatio: Double? // Compression ratio percentage
+    let isEncrypted: Bool?        // Whether archive is password protected
+    let comment: String?          // Archive comment (ZIP)
+
+    var hasData: Bool {
+        return format != nil || fileCount != nil || uncompressedSize != nil ||
+               compressionRatio != nil || isEncrypted != nil || comment != nil
+    }
+}
+
 struct FileInfo {
     let name: String
     let path: String
@@ -154,6 +169,9 @@ struct FileInfo {
 
     // Office document metadata
     let officeMetadata: OfficeMetadata?
+
+    // Archive metadata
+    let archiveMetadata: ArchiveMetadata?
 
     var formattedSize: String {
         ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
@@ -266,6 +284,9 @@ struct FileInfo {
             // Extract Office document metadata
             let officeMetadata = extractOfficeMetadata(from: url)
 
+            // Extract Archive metadata
+            let archiveMetadata = extractArchiveMetadata(from: url)
+
             return FileInfo(
                 name: url.lastPathComponent,
                 path: path,
@@ -287,7 +308,8 @@ struct FileInfo {
                 videoMetadata: videoMetadata,
                 audioMetadata: audioMetadata,
                 pdfMetadata: pdfMetadata,
-                officeMetadata: officeMetadata
+                officeMetadata: officeMetadata,
+                archiveMetadata: archiveMetadata
             )
         } catch {
             Logger.error("Failed to read file attributes: \(path)", error: error, subsystem: .fileSystem)
@@ -824,6 +846,178 @@ struct FileInfo {
             slideCount: slideCount,
             company: company,
             category: category
+        )
+
+        return metadata.hasData ? metadata : nil
+    }
+
+    // MARK: - Archive Metadata Extraction
+    private static func extractArchiveMetadata(from url: URL) -> ArchiveMetadata? {
+        // Check if file is an archive by extension
+        let archiveExtensions = ["zip", "rar", "7z", "tar", "gz", "bz2", "xz", "tgz", "tbz2", "txz", "tar.gz", "tar.bz2", "tar.xz"]
+        let ext = url.pathExtension.lowercased()
+        
+        // Check for double extensions like .tar.gz
+        let fileName = url.deletingPathExtension().lastPathComponent
+        let doubleExt = fileName.contains(".") ? "\(fileName.split(separator: ".").last!).\(ext)" : ext
+        
+        guard archiveExtensions.contains(ext) || archiveExtensions.contains(doubleExt) else {
+            return nil
+        }
+
+        // Determine format
+        var format: String? = nil
+        if ext == "zip" {
+            format = "ZIP"
+        } else if ext == "rar" {
+            format = "RAR"
+        } else if ext == "7z" {
+            format = "7-Zip"
+        } else if ext == "tar" || doubleExt.hasPrefix("tar.") {
+            if doubleExt.hasSuffix(".gz") || ext == "tgz" {
+                format = "TAR.GZ"
+            } else if doubleExt.hasSuffix(".bz2") || ext == "tbz2" {
+                format = "TAR.BZ2"
+            } else if doubleExt.hasSuffix(".xz") || ext == "txz" {
+                format = "TAR.XZ"
+            } else {
+                format = "TAR"
+            }
+        } else if ext == "gz" {
+            format = "GZIP"
+        } else if ext == "bz2" {
+            format = "BZIP2"
+        } else if ext == "xz" {
+            format = "XZ"
+        }
+
+        var fileCount: Int? = nil
+        var uncompressedSize: UInt64? = nil
+        var isEncrypted: Bool? = nil
+        var comment: String? = nil
+
+        // Try to extract metadata based on archive type
+        if ext == "zip" || ext == "jar" {
+            // Use zipinfo command for ZIP files
+            let process = Process()
+            process.executableURL = URL(fileURLWithPath: "/usr/bin/zipinfo")
+            process.arguments = ["-t", url.path]
+            
+            let pipe = Pipe()
+            process.standardOutput = pipe
+            process.standardError = Pipe()
+            
+            do {
+                try process.run()
+                process.waitUntilExit()
+                
+                let data = pipe.fileHandleForReading.readDataToEndOfFile()
+                if let output = String(data: data, encoding: .utf8) {
+                    // Parse zipinfo output
+                    // Format: "123 files, 456789 bytes uncompressed, 123456 bytes compressed"
+                    let lines = output.components(separatedBy: .newlines)
+                    for line in lines {
+                        if line.contains("files,") {
+                            // Extract file count
+                            if let countMatch = line.split(separator: " ").first,
+                               let count = Int(countMatch) {
+                                fileCount = count
+                            }
+                            
+                            // Extract uncompressed size
+                            let components = line.components(separatedBy: " ")
+                            if let uncompIndex = components.firstIndex(of: "bytes"), uncompIndex > 0,
+                               let size = UInt64(components[uncompIndex - 1].replacingOccurrences(of: ",", with: "")) {
+                                uncompressedSize = size
+                            }
+                        }
+                    }
+                }
+            } catch {
+                // Silently fail
+            }
+            
+            // Check for encryption
+            let listProcess = Process()
+            listProcess.executableURL = URL(fileURLWithPath: "/usr/bin/unzip")
+            listProcess.arguments = ["-Z", "-1", url.path]
+            
+            let listPipe = Pipe()
+            let errorPipe = Pipe()
+            listProcess.standardOutput = listPipe
+            listProcess.standardError = errorPipe
+            
+            do {
+                try listProcess.run()
+                listProcess.waitUntilExit()
+                
+                if listProcess.terminationStatus != 0 {
+                    // If unzip fails, might be encrypted
+                    let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
+                    if let errorOutput = String(data: errorData, encoding: .utf8),
+                       errorOutput.contains("password") || errorOutput.contains("encrypted") {
+                        isEncrypted = true
+                    }
+                }
+            } catch {
+                // Silently fail
+            }
+            
+        } else if doubleExt.hasPrefix("tar") || ext == "tar" || ext == "tgz" || ext == "tbz2" || ext == "txz" {
+            // Use tar command for TAR files
+            let process = Process()
+            process.executableURL = URL(fileURLWithPath: "/usr/bin/tar")
+            
+            var tarArgs = ["-t"]
+            if ext == "gz" || ext == "tgz" || doubleExt.hasSuffix(".gz") {
+                tarArgs.append("-z")
+            } else if ext == "bz2" || ext == "tbz2" || doubleExt.hasSuffix(".bz2") {
+                tarArgs.append("-j")
+            } else if ext == "xz" || ext == "txz" || doubleExt.hasSuffix(".xz") {
+                tarArgs.append("-J")
+            }
+            tarArgs.append(contentsOf: ["-f", url.path])
+            
+            process.arguments = tarArgs
+            
+            let pipe = Pipe()
+            process.standardOutput = pipe
+            process.standardError = Pipe()
+            
+            do {
+                try process.run()
+                process.waitUntilExit()
+                
+                let data = pipe.fileHandleForReading.readDataToEndOfFile()
+                if let output = String(data: data, encoding: .utf8) {
+                    let files = output.components(separatedBy: .newlines).filter { !$0.isEmpty && !$0.hasSuffix("/") }
+                    fileCount = files.count
+                }
+            } catch {
+                // Silently fail
+            }
+        }
+
+        // Calculate compression ratio if we have both sizes
+        var compressionRatio: Double? = nil
+        if let uncompSize = uncompressedSize, uncompSize > 0 {
+            do {
+                let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
+                if let compressedSize = attributes[.size] as? UInt64, compressedSize > 0 {
+                    compressionRatio = (1.0 - Double(compressedSize) / Double(uncompSize)) * 100.0
+                }
+            } catch {
+                // Silently fail
+            }
+        }
+
+        let metadata = ArchiveMetadata(
+            format: format,
+            fileCount: fileCount,
+            uncompressedSize: uncompressedSize,
+            compressionRatio: compressionRatio,
+            isEncrypted: isEncrypted,
+            comment: comment
         )
 
         return metadata.hasData ? metadata : nil

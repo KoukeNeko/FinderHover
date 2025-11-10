@@ -272,6 +272,24 @@ enum Constants {
         /// Default show Office document category
         static let showOfficeCategory: Bool = false
 
+        /// Default show Archive metadata
+        static let showArchive: Bool = true
+
+        /// Default show Archive format
+        static let showArchiveFormat: Bool = true
+
+        /// Default show Archive file count
+        static let showArchiveFileCount: Bool = true
+
+        /// Default show Archive uncompressed size
+        static let showArchiveUncompressedSize: Bool = true
+
+        /// Default show Archive compression ratio
+        static let showArchiveCompressionRatio: Bool = true
+
+        /// Default show Archive encrypted status
+        static let showArchiveEncrypted: Bool = true
+
         /// Default follow cursor
         static let followCursor: Bool = true
 

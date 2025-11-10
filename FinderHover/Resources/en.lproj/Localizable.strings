@@ -116,6 +116,15 @@
 "settings.display.office.category" = "Category";
 "settings.display.office.hint" = "Office metadata only appears for Microsoft Office documents";
 
+"settings.display.archive" = "Archive Information";
+"settings.display.archive.show" = "Show Archive Metadata";
+"settings.display.archive.format" = "Archive Format";
+"settings.display.archive.fileCount" = "File Count";
+"settings.display.archive.uncompressedSize" = "Uncompressed Size";
+"settings.display.archive.compressionRatio" = "Compression Ratio";
+"settings.display.archive.encrypted" = "Encrypted Status";
+"settings.display.archive.hint" = "Archive metadata only appears for compressed files";
+
 "settings.display.order" = "Display Order";
 "settings.display.order.hint" = "Drag items to reorder. EXIF moves as a group.";
 
@@ -184,6 +193,7 @@
 "displayItem.audio" = "Audio Information";
 "displayItem.pdf" = "PDF Information";
 "displayItem.office" = "Office Document Information";
+"displayItem.archive" = "Archive Information";
 "displayItem.filePath" = "File Path";
 
 /* Hover Window */
@@ -257,6 +267,15 @@
 "hover.office.modificationDate" = "Modified";
 "hover.office.company" = "Company";
 "hover.office.category" = "Category";
+
+/* Archive Hover */
+"hover.archive.title" = "Archive";
+"hover.archive.format" = "Format";
+"hover.archive.fileCount" = "Files";
+"hover.archive.uncompressedSize" = "Uncompressed";
+"hover.archive.compressionRatio" = "Compression";
+"hover.archive.encrypted" = "Encrypted";
+"hover.archive.yes" = "Yes";
 
 /* Common */
 "common.reset" = "Reset to Defaults";

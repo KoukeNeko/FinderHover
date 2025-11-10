@@ -116,6 +116,15 @@
 "settings.display.office.category" = "類別";
 "settings.display.office.hint" = "Office 中繼資料僅顯示於 Microsoft Office 文件";
 
+"settings.display.archive" = "壓縮檔資訊";
+"settings.display.archive.show" = "顯示壓縮檔中繼資料";
+"settings.display.archive.format" = "壓縮格式";
+"settings.display.archive.fileCount" = "檔案數量";
+"settings.display.archive.uncompressedSize" = "未壓縮大小";
+"settings.display.archive.compressionRatio" = "壓縮率";
+"settings.display.archive.encrypted" = "加密狀態";
+"settings.display.archive.hint" = "壓縮檔中繼資料僅顯示於壓縮檔案";
+
 "settings.display.order" = "顯示順序";
 "settings.display.order.hint" = "拖曳項目以重新排序。EXIF 作為群組移動。";
 
@@ -184,6 +193,7 @@
 "displayItem.audio" = "音訊資訊";
 "displayItem.pdf" = "PDF 資訊";
 "displayItem.office" = "Office 文件資訊";
+"displayItem.archive" = "壓縮檔資訊";
 "displayItem.filePath" = "檔案路徑";
 
 /* Hover Window */
@@ -257,6 +267,15 @@
 "hover.office.modificationDate" = "修改時間";
 "hover.office.company" = "公司";
 "hover.office.category" = "類別";
+
+/* Archive Hover */
+"hover.archive.title" = "壓縮檔";
+"hover.archive.format" = "格式";
+"hover.archive.fileCount" = "檔案數";
+"hover.archive.uncompressedSize" = "未壓縮";
+"hover.archive.compressionRatio" = "壓縮率";
+"hover.archive.encrypted" = "已加密";
+"hover.archive.yes" = "是";
 
 /* Common */
 "common.reset" = "重設為預設值";

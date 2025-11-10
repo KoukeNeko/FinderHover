@@ -759,6 +759,49 @@ struct DisplaySettingsView: View {
                     .padding(.horizontal, 20)
                     .padding(.top, 8)
 
+                    // Archive Section
+                    Text("settings.display.archive".localized)
+                        .font(.system(size: 13, weight: .semibold))
+                        .padding(.horizontal, 20)
+                        .padding(.top, 8)
+
+                    VStack(spacing: 0) {
+                        DisplayToggleRow(title: "settings.display.archive.show".localized, icon: "doc.zipper", isOn: $settings.showArchive)
+                        Divider().padding(.leading, 60)
+                        DisplayToggleRow(title: "settings.display.archive.format".localized, icon: "doc.zipper", isOn: $settings.showArchiveFormat)
+                            .disabled(!settings.showArchive)
+                            .opacity(settings.showArchive ? 1.0 : 0.5)
+                        Divider().padding(.leading, 60)
+                        DisplayToggleRow(title: "settings.display.archive.fileCount".localized, icon: "doc.on.doc", isOn: $settings.showArchiveFileCount)
+                            .disabled(!settings.showArchive)
+                            .opacity(settings.showArchive ? 1.0 : 0.5)
+                        Divider().padding(.leading, 60)
+                        DisplayToggleRow(title: "settings.display.archive.uncompressedSize".localized, icon: "arrow.up.doc", isOn: $settings.showArchiveUncompressedSize)
+                            .disabled(!settings.showArchive)
+                            .opacity(settings.showArchive ? 1.0 : 0.5)
+                        Divider().padding(.leading, 60)
+                        DisplayToggleRow(title: "settings.display.archive.compressionRatio".localized, icon: "chart.bar", isOn: $settings.showArchiveCompressionRatio)
+                            .disabled(!settings.showArchive)
+                            .opacity(settings.showArchive ? 1.0 : 0.5)
+                        Divider().padding(.leading, 60)
+                        DisplayToggleRow(title: "settings.display.archive.encrypted".localized, icon: "lock.fill", isOn: $settings.showArchiveEncrypted)
+                            .disabled(!settings.showArchive)
+                            .opacity(settings.showArchive ? 1.0 : 0.5)
+                    }
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(8)
+                    .padding(.horizontal, 20)
+
+                    HStack(spacing: 6) {
+                        Image(systemName: "info.circle")
+                            .font(.system(size: 11))
+                        Text("settings.display.archive.hint".localized)
+                            .font(.system(size: 11))
+                    }
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
+
                     // Display Order Section
                     Text("settings.display.order".localized)
                         .font(.system(size: 13, weight: .semibold))
