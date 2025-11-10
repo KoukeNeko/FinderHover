@@ -153,6 +153,21 @@ struct EbookMetadata {
     }
 }
 
+// MARK: - Code File Metadata Structure
+struct CodeMetadata {
+    let language: String?         // Programming language
+    let lineCount: Int?           // Total lines
+    let codeLines: Int?           // Lines of code (excluding blank and comments)
+    let commentLines: Int?        // Comment lines
+    let blankLines: Int?          // Blank lines
+    let encoding: String?         // File encoding (UTF-8, ASCII, etc.)
+
+    var hasData: Bool {
+        return language != nil || lineCount != nil || codeLines != nil ||
+               commentLines != nil || blankLines != nil || encoding != nil
+    }
+}
+
 struct FileInfo {
     let name: String
     let path: String
@@ -193,6 +208,9 @@ struct FileInfo {
 
     // E-book metadata
     let ebookMetadata: EbookMetadata?
+
+    // Code file metadata
+    let codeMetadata: CodeMetadata?
 
     var formattedSize: String {
         ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
@@ -311,6 +329,9 @@ struct FileInfo {
             // Extract E-book metadata
             let ebookMetadata = extractEbookMetadata(from: url)
 
+            // Extract Code file metadata
+            let codeMetadata = extractCodeMetadata(from: url)
+
             return FileInfo(
                 name: url.lastPathComponent,
                 path: path,
@@ -334,7 +355,8 @@ struct FileInfo {
                 pdfMetadata: pdfMetadata,
                 officeMetadata: officeMetadata,
                 archiveMetadata: archiveMetadata,
-                ebookMetadata: ebookMetadata
+                ebookMetadata: ebookMetadata,
+                codeMetadata: codeMetadata
             )
         } catch {
             Logger.error("Failed to read file attributes: \(path)", error: error, subsystem: .fileSystem)
@@ -1176,6 +1198,189 @@ struct FileInfo {
             description: description,
             pageCount: pageCount
         )
+    }
+
+    // MARK: - Code File Metadata Extraction
+    private static func extractCodeMetadata(from url: URL) -> CodeMetadata? {
+        let ext = url.pathExtension.lowercased()
+        
+        // Check if it's a code file
+        guard let language = languageFromExtension(ext) else {
+            return nil
+        }
+        
+        // Limit file size to avoid reading huge files (5MB limit)
+        guard let attrs = try? FileManager.default.attributesOfItem(atPath: url.path),
+              let fileSize = attrs[.size] as? Int64,
+              fileSize < 5 * 1024 * 1024 else {
+            return nil
+        }
+        
+        // Try to read the file
+        guard let data = try? Data(contentsOf: url),
+              let content = String(data: data, encoding: .utf8) ?? String(data: data, encoding: .ascii) else {
+            return nil
+        }
+        
+        // Detect encoding
+        let encoding = detectEncoding(data: data)
+        
+        // Count lines
+        let lines = content.components(separatedBy: .newlines)
+        let lineCount = lines.count
+        
+        // Analyze lines
+        var codeLines = 0
+        var commentLines = 0
+        var blankLines = 0
+        var inMultiLineComment = false
+        
+        let commentSyntax = getCommentSyntax(for: language)
+        
+        for line in lines {
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+            
+            // Check for blank lines
+            if trimmed.isEmpty {
+                blankLines += 1
+                continue
+            }
+            
+            // Check for multi-line comments
+            if let multiStart = commentSyntax.multiLineStart, let multiEnd = commentSyntax.multiLineEnd {
+                if trimmed.contains(multiStart) {
+                    inMultiLineComment = true
+                }
+                if inMultiLineComment {
+                    commentLines += 1
+                    if trimmed.contains(multiEnd) {
+                        inMultiLineComment = false
+                    }
+                    continue
+                }
+            }
+            
+            // Check for single-line comments
+            var isComment = false
+            for prefix in commentSyntax.singleLine {
+                if trimmed.hasPrefix(prefix) {
+                    commentLines += 1
+                    isComment = true
+                    break
+                }
+            }
+            
+            if !isComment {
+                codeLines += 1
+            }
+        }
+        
+        return CodeMetadata(
+            language: language,
+            lineCount: lineCount,
+            codeLines: codeLines,
+            commentLines: commentLines,
+            blankLines: blankLines,
+            encoding: encoding
+        )
+    }
+    
+    private static func languageFromExtension(_ ext: String) -> String? {
+        let languageMap: [String: String] = [
+            // C-family
+            "c": "C", "h": "C",
+            "cpp": "C++", "cc": "C++", "cxx": "C++", "hpp": "C++", "hxx": "C++",
+            "m": "Objective-C", "mm": "Objective-C++",
+            "cs": "C#",
+            // Modern languages
+            "swift": "Swift",
+            "rs": "Rust",
+            "go": "Go",
+            "kt": "Kotlin", "kts": "Kotlin",
+            "dart": "Dart",
+            // Scripting
+            "py": "Python", "pyw": "Python",
+            "rb": "Ruby",
+            "php": "PHP",
+            "pl": "Perl", "pm": "Perl",
+            "sh": "Shell", "bash": "Bash", "zsh": "Zsh",
+            // JVM
+            "java": "Java",
+            "scala": "Scala",
+            "groovy": "Groovy",
+            // Web
+            "js": "JavaScript", "mjs": "JavaScript",
+            "ts": "TypeScript", "tsx": "TypeScript",
+            "jsx": "JSX",
+            "html": "HTML", "htm": "HTML",
+            "css": "CSS",
+            "scss": "SCSS", "sass": "Sass",
+            "less": "Less",
+            "vue": "Vue",
+            // Data/Config
+            "json": "JSON",
+            "yaml": "YAML", "yml": "YAML",
+            "xml": "XML",
+            "toml": "TOML",
+            "ini": "INI",
+            // Other
+            "md": "Markdown", "markdown": "Markdown",
+            "sql": "SQL",
+            "r": "R",
+            "lua": "Lua",
+            "vim": "Vim Script",
+            "el": "Emacs Lisp", "elisp": "Emacs Lisp"
+        ]
+        
+        return languageMap[ext]
+    }
+    
+    private struct CommentSyntax {
+        let singleLine: [String]
+        let multiLineStart: String?
+        let multiLineEnd: String?
+    }
+    
+    private static func getCommentSyntax(for language: String) -> CommentSyntax {
+        switch language {
+        case "C", "C++", "Objective-C", "Objective-C++", "C#", "Swift", "JavaScript", "TypeScript", "JSX", "Java", "Kotlin", "Scala", "Groovy", "Rust", "Go", "Dart", "PHP":
+            return CommentSyntax(singleLine: ["//"], multiLineStart: "/*", multiLineEnd: "*/")
+        case "Python", "Ruby", "Shell", "Bash", "Zsh", "Perl", "YAML", "TOML", "INI", "R":
+            return CommentSyntax(singleLine: ["#"], multiLineStart: nil, multiLineEnd: nil)
+        case "HTML", "XML":
+            return CommentSyntax(singleLine: [], multiLineStart: "<!--", multiLineEnd: "-->")
+        case "CSS", "SCSS", "Sass", "Less":
+            return CommentSyntax(singleLine: ["//"], multiLineStart: "/*", multiLineEnd: "*/")
+        case "Lua":
+            return CommentSyntax(singleLine: ["--"], multiLineStart: "--[[", multiLineEnd: "]]")
+        case "SQL":
+            return CommentSyntax(singleLine: ["--"], multiLineStart: "/*", multiLineEnd: "*/")
+        case "Vim Script":
+            return CommentSyntax(singleLine: ["\""], multiLineStart: nil, multiLineEnd: nil)
+        case "Emacs Lisp":
+            return CommentSyntax(singleLine: [";"], multiLineStart: nil, multiLineEnd: nil)
+        default:
+            return CommentSyntax(singleLine: ["//", "#"], multiLineStart: "/*", multiLineEnd: "*/")
+        }
+    }
+    
+    private static func detectEncoding(data: Data) -> String {
+        // Try UTF-8
+        if String(data: data, encoding: .utf8) != nil {
+            return "UTF-8"
+        }
+        // Try ASCII
+        if String(data: data, encoding: .ascii) != nil {
+            return "ASCII"
+        }
+        // Try other encodings
+        if String(data: data, encoding: .utf16) != nil {
+            return "UTF-16"
+        }
+        if String(data: data, encoding: .isoLatin1) != nil {
+            return "ISO-8859-1"
+        }
+        return "Unknown"
     }
 
     // MARK: - Helper Functions

@@ -652,6 +652,42 @@ struct HoverContentView: View {
                 }
             }
 
+        case .code:
+            if settings.showCode, let code = fileInfo.codeMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.code.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showCodeLanguage, let language = code.language {
+                        DetailRow(icon: "chevron.left.forwardslash.chevron.right", label: "hover.code.language".localized, value: language, fontSize: settings.fontSize)
+                    }
+                    if settings.showCodeLineCount, let lineCount = code.lineCount {
+                        DetailRow(icon: "number", label: "hover.code.lineCount".localized, value: "\(lineCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showCodeLines, let codeLines = code.codeLines {
+                        DetailRow(icon: "curlybraces", label: "hover.code.codeLines".localized, value: "\(codeLines)", fontSize: settings.fontSize)
+                    }
+                    if settings.showCodeCommentLines, let commentLines = code.commentLines {
+                        DetailRow(icon: "text.bubble", label: "hover.code.commentLines".localized, value: "\(commentLines)", fontSize: settings.fontSize)
+                    }
+                    if settings.showCodeBlankLines, let blankLines = code.blankLines {
+                        DetailRow(icon: "minus", label: "hover.code.blankLines".localized, value: "\(blankLines)", fontSize: settings.fontSize)
+                    }
+                    if settings.showCodeEncoding, let encoding = code.encoding {
+                        DetailRow(icon: "textformat.abc", label: "hover.code.encoding".localized, value: encoding, fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
+
         case .filePath:
             if settings.showFilePath {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {

@@ -858,6 +858,54 @@ struct DisplaySettingsView: View {
                     .padding(.horizontal, 20)
                     .padding(.top, 8)
 
+                    // Code File Section
+                    Text("settings.display.code".localized)
+                        .font(.system(size: 13, weight: .semibold))
+                        .padding(.horizontal, 20)
+                        .padding(.top, 16)
+                        .padding(.bottom, 8)
+
+                    VStack(spacing: 0) {
+                        DisplayToggleRow(title: "settings.display.code.show".localized, icon: "chevron.left.forwardslash.chevron.right", isOn: $settings.showCode)
+
+                        DisplayToggleRow(title: "settings.display.code.language".localized, icon: "chevron.left.forwardslash.chevron.right", isOn: $settings.showCodeLanguage)
+                            .disabled(!settings.showCode)
+                            .opacity(settings.showCode ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.code.lineCount".localized, icon: "number", isOn: $settings.showCodeLineCount)
+                            .disabled(!settings.showCode)
+                            .opacity(settings.showCode ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.code.codeLines".localized, icon: "curlybraces", isOn: $settings.showCodeLines)
+                            .disabled(!settings.showCode)
+                            .opacity(settings.showCode ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.code.commentLines".localized, icon: "text.bubble", isOn: $settings.showCodeCommentLines)
+                            .disabled(!settings.showCode)
+                            .opacity(settings.showCode ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.code.blankLines".localized, icon: "minus", isOn: $settings.showCodeBlankLines)
+                            .disabled(!settings.showCode)
+                            .opacity(settings.showCode ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.code.encoding".localized, icon: "textformat.abc", isOn: $settings.showCodeEncoding)
+                            .disabled(!settings.showCode)
+                            .opacity(settings.showCode ? 1 : 0.5)
+                    }
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(6)
+                    .padding(.horizontal, 20)
+
+                    HStack(spacing: 6) {
+                        Image(systemName: "info.circle")
+                            .font(.system(size: 11))
+                        Text("settings.display.code.hint".localized)
+                            .font(.system(size: 11))
+                    }
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
+
                     // Display Order Section
                     Text("settings.display.order".localized)
                         .font(.system(size: 13, weight: .semibold))

@@ -137,6 +137,16 @@
 "settings.display.ebook.pageCount" = "ページ数";
 "settings.display.ebook.hint" = "電子書籍メタデータはEPUB、MOBIなどの電子書籍形式にのみ表示されます";
 
+"settings.display.code" = "コードファイル情報";
+"settings.display.code.show" = "コードメタデータを表示";
+"settings.display.code.language" = "プログラミング言語";
+"settings.display.code.lineCount" = "総行数";
+"settings.display.code.codeLines" = "コード行数";
+"settings.display.code.commentLines" = "コメント行数";
+"settings.display.code.blankLines" = "空白行数";
+"settings.display.code.encoding" = "ファイルエンコーディング";
+"settings.display.code.hint" = "コードメタデータはソースコードファイルにのみ表示されます";
+
 "settings.display.order" = "表示順序";
 "settings.display.order.hint" = "項目をドラッグして並べ替えます。EXIF はグループとして移動します。";
 
@@ -207,6 +217,7 @@
 "displayItem.office" = "Office文書情報";
 "displayItem.archive" = "アーカイブ情報";
 "displayItem.ebook" = "電子書籍情報";
+"displayItem.code" = "コードファイル情報";
 "displayItem.filePath" = "ファイルパス";
 
 /* Hover Window */
@@ -300,6 +311,15 @@
 "hover.ebook.language" = "言語";
 "hover.ebook.description" = "内容紹介";
 "hover.ebook.pageCount" = "ページ数";
+
+/* Code File Hover */
+"hover.code.title" = "コードファイル";
+"hover.code.language" = "言語";
+"hover.code.lineCount" = "行数";
+"hover.code.codeLines" = "コード";
+"hover.code.commentLines" = "コメント";
+"hover.code.blankLines" = "空白";
+"hover.code.encoding" = "エンコーディング";
 
 /* Common */
 "common.reset" = "デフォルトに戻す";

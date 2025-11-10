@@ -137,6 +137,16 @@
 "settings.display.ebook.pageCount" = "Page Count";
 "settings.display.ebook.hint" = "E-book metadata only appears for EPUB, MOBI, and other e-book formats";
 
+"settings.display.code" = "Code File Information";
+"settings.display.code.show" = "Show Code Metadata";
+"settings.display.code.language" = "Programming Language";
+"settings.display.code.lineCount" = "Total Lines";
+"settings.display.code.codeLines" = "Code Lines";
+"settings.display.code.commentLines" = "Comment Lines";
+"settings.display.code.blankLines" = "Blank Lines";
+"settings.display.code.encoding" = "File Encoding";
+"settings.display.code.hint" = "Code metadata only appears for source code files";
+
 "settings.display.order" = "Display Order";
 "settings.display.order.hint" = "Drag items to reorder. EXIF moves as a group.";
 
@@ -207,6 +217,7 @@
 "displayItem.office" = "Office Document Information";
 "displayItem.archive" = "Archive Information";
 "displayItem.ebook" = "E-book Information";
+"displayItem.code" = "Code File Information";
 "displayItem.filePath" = "File Path";
 
 /* Hover Window */
@@ -300,6 +311,15 @@
 "hover.ebook.language" = "Language";
 "hover.ebook.description" = "Description";
 "hover.ebook.pageCount" = "Pages";
+
+/* Code File Hover */
+"hover.code.title" = "Code File";
+"hover.code.language" = "Language";
+"hover.code.lineCount" = "Lines";
+"hover.code.codeLines" = "Code";
+"hover.code.commentLines" = "Comments";
+"hover.code.blankLines" = "Blank";
+"hover.code.encoding" = "Encoding";
 
 /* Common */
 "common.reset" = "Reset to Defaults";

@@ -318,6 +318,28 @@ enum Constants {
         /// Default show E-book page count
         static let showEbookPageCount: Bool = true
 
+        // MARK: - Code File Display Defaults
+        /// Default show Code section
+        static let showCode: Bool = true
+
+        /// Default show Code language
+        static let showCodeLanguage: Bool = true
+
+        /// Default show Code line count
+        static let showCodeLineCount: Bool = true
+
+        /// Default show Code lines
+        static let showCodeLines: Bool = true
+
+        /// Default show Code comment lines
+        static let showCodeCommentLines: Bool = true
+
+        /// Default show Code blank lines
+        static let showCodeBlankLines: Bool = true
+
+        /// Default show Code encoding
+        static let showCodeEncoding: Bool = true
+
         /// Default follow cursor
         static let followCursor: Bool = true
 

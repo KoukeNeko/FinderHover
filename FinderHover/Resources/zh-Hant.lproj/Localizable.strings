@@ -137,6 +137,16 @@
 "settings.display.ebook.pageCount" = "頁數";
 "settings.display.ebook.hint" = "電子書中繼資料僅顯示於 EPUB、MOBI 等電子書格式";
 
+"settings.display.code" = "程式碼檔案資訊";
+"settings.display.code.show" = "顯示程式碼中繼資料";
+"settings.display.code.language" = "程式語言";
+"settings.display.code.lineCount" = "總行數";
+"settings.display.code.codeLines" = "程式碼行數";
+"settings.display.code.commentLines" = "註解行數";
+"settings.display.code.blankLines" = "空白行數";
+"settings.display.code.encoding" = "檔案編碼";
+"settings.display.code.hint" = "程式碼中繼資料僅顯示於原始碼檔案";
+
 "settings.display.order" = "顯示順序";
 "settings.display.order.hint" = "拖曳項目以重新排序。EXIF 作為群組移動。";
 
@@ -207,6 +217,7 @@
 "displayItem.office" = "Office 文件資訊";
 "displayItem.archive" = "壓縮檔資訊";
 "displayItem.ebook" = "電子書資訊";
+"displayItem.code" = "程式碼檔案資訊";
 "displayItem.filePath" = "檔案路徑";
 
 /* Hover Window */
@@ -300,6 +311,15 @@
 "hover.ebook.language" = "語言";
 "hover.ebook.description" = "內容簡介";
 "hover.ebook.pageCount" = "頁數";
+
+/* Code File Hover */
+"hover.code.title" = "程式碼檔案";
+"hover.code.language" = "語言";
+"hover.code.lineCount" = "行數";
+"hover.code.codeLines" = "程式碼";
+"hover.code.commentLines" = "註解";
+"hover.code.blankLines" = "空白";
+"hover.code.encoding" = "編碼";
 
 /* Common */
 "common.reset" = "重設為預設值";

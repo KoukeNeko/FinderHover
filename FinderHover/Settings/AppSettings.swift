@@ -61,6 +61,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
     case office = "Office Document Information"
     case archive = "Archive Information"
     case ebook = "E-book Information"
+    case code = "Code File Information"
     case filePath = "File Path"
 
     var id: String { rawValue }
@@ -82,6 +83,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .office: return "displayItem.office".localized
         case .archive: return "displayItem.archive".localized
         case .ebook: return "displayItem.ebook".localized
+        case .code: return "displayItem.code".localized
         case .filePath: return "displayItem.filePath".localized
         }
     }
@@ -103,6 +105,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .office: return "doc.text.fill"
         case .archive: return "doc.zipper"
         case .ebook: return "book.closed"
+        case .code: return "chevron.left.forwardslash.chevron.right"
         case .filePath: return IconManager.FileSystem.folder
         }
     }
@@ -385,6 +388,29 @@ class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(showEbookPageCount, forKey: "showEbookPageCount") }
     }
 
+    // MARK: - Code File Display Settings
+    @Published var showCode: Bool {
+        didSet { UserDefaults.standard.set(showCode, forKey: "showCode") }
+    }
+    @Published var showCodeLanguage: Bool {
+        didSet { UserDefaults.standard.set(showCodeLanguage, forKey: "showCodeLanguage") }
+    }
+    @Published var showCodeLineCount: Bool {
+        didSet { UserDefaults.standard.set(showCodeLineCount, forKey: "showCodeLineCount") }
+    }
+    @Published var showCodeLines: Bool {
+        didSet { UserDefaults.standard.set(showCodeLines, forKey: "showCodeLines") }
+    }
+    @Published var showCodeCommentLines: Bool {
+        didSet { UserDefaults.standard.set(showCodeCommentLines, forKey: "showCodeCommentLines") }
+    }
+    @Published var showCodeBlankLines: Bool {
+        didSet { UserDefaults.standard.set(showCodeBlankLines, forKey: "showCodeBlankLines") }
+    }
+    @Published var showCodeEncoding: Bool {
+        didSet { UserDefaults.standard.set(showCodeEncoding, forKey: "showCodeEncoding") }
+    }
+
     // Display order
     @Published var displayOrder: [DisplayItem] {
         didSet {
@@ -484,6 +510,15 @@ class AppSettings: ObservableObject {
                     decoded.append(.ebook)
                 }
             }
+            if !decoded.contains(.code) {
+                if let ebookIndex = decoded.firstIndex(of: .ebook) {
+                    decoded.insert(.code, at: ebookIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.code, at: filePathIndex)
+                } else {
+                    decoded.append(.code)
+                }
+            }
             self.displayOrder = decoded
         } else {
             // Default order
@@ -503,6 +538,7 @@ class AppSettings: ObservableObject {
                 .office,
                 .archive,
                 .ebook,
+                .code,
                 .filePath
             ]
         }
@@ -591,6 +627,13 @@ class AppSettings: ObservableObject {
         self.showEbookLanguage = UserDefaults.standard.object(forKey: "showEbookLanguage") as? Bool ?? Constants.Defaults.showEbookLanguage
         self.showEbookDescription = UserDefaults.standard.object(forKey: "showEbookDescription") as? Bool ?? Constants.Defaults.showEbookDescription
         self.showEbookPageCount = UserDefaults.standard.object(forKey: "showEbookPageCount") as? Bool ?? Constants.Defaults.showEbookPageCount
+        self.showCode = UserDefaults.standard.object(forKey: "showCode") as? Bool ?? Constants.Defaults.showCode
+        self.showCodeLanguage = UserDefaults.standard.object(forKey: "showCodeLanguage") as? Bool ?? Constants.Defaults.showCodeLanguage
+        self.showCodeLineCount = UserDefaults.standard.object(forKey: "showCodeLineCount") as? Bool ?? Constants.Defaults.showCodeLineCount
+        self.showCodeLines = UserDefaults.standard.object(forKey: "showCodeLines") as? Bool ?? Constants.Defaults.showCodeLines
+        self.showCodeCommentLines = UserDefaults.standard.object(forKey: "showCodeCommentLines") as? Bool ?? Constants.Defaults.showCodeCommentLines
+        self.showCodeBlankLines = UserDefaults.standard.object(forKey: "showCodeBlankLines") as? Bool ?? Constants.Defaults.showCodeBlankLines
+        self.showCodeEncoding = UserDefaults.standard.object(forKey: "showCodeEncoding") as? Bool ?? Constants.Defaults.showCodeEncoding
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? Constants.Defaults.followCursor
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? Constants.Defaults.windowOffsetX
         self.windowOffsetY = UserDefaults.standard.object(forKey: "windowOffsetY") as? Double ?? Constants.Defaults.windowOffsetY
