@@ -94,6 +94,32 @@ struct PDFMetadata {
     }
 }
 
+// MARK: - Office Document Metadata Structure
+struct OfficeMetadata {
+    let title: String?
+    let author: String?
+    let subject: String?
+    let keywords: String?
+    let comment: String?
+    let lastModifiedBy: String?
+    let creationDate: String?
+    let modificationDate: String?
+    let pageCount: Int?        // For Word documents
+    let wordCount: Int?        // For Word documents
+    let sheetCount: Int?       // For Excel documents
+    let slideCount: Int?       // For PowerPoint documents
+    let company: String?
+    let category: String?
+
+    var hasData: Bool {
+        return title != nil || author != nil || subject != nil ||
+               keywords != nil || comment != nil || lastModifiedBy != nil ||
+               creationDate != nil || modificationDate != nil || pageCount != nil ||
+               wordCount != nil || sheetCount != nil || slideCount != nil ||
+               company != nil || category != nil
+    }
+}
+
 struct FileInfo {
     let name: String
     let path: String
@@ -125,6 +151,9 @@ struct FileInfo {
 
     // PDF metadata
     let pdfMetadata: PDFMetadata?
+
+    // Office document metadata
+    let officeMetadata: OfficeMetadata?
 
     var formattedSize: String {
         ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
@@ -234,6 +263,9 @@ struct FileInfo {
             // Extract PDF metadata for PDF files
             let pdfMetadata = extractPDFMetadata(from: url)
 
+            // Extract Office document metadata
+            let officeMetadata = extractOfficeMetadata(from: url)
+
             return FileInfo(
                 name: url.lastPathComponent,
                 path: path,
@@ -254,7 +286,8 @@ struct FileInfo {
                 exifData: exifData,
                 videoMetadata: videoMetadata,
                 audioMetadata: audioMetadata,
-                pdfMetadata: pdfMetadata
+                pdfMetadata: pdfMetadata,
+                officeMetadata: officeMetadata
             )
         } catch {
             Logger.error("Failed to read file attributes: \(path)", error: error, subsystem: .fileSystem)
@@ -697,6 +730,100 @@ struct FileInfo {
             version: version,
             isEncrypted: isEncrypted ? true : nil,
             keywords: keywords
+        )
+
+        return metadata.hasData ? metadata : nil
+    }
+
+    // MARK: - Office Document Metadata Extraction
+    private static func extractOfficeMetadata(from url: URL) -> OfficeMetadata? {
+        // Check if file is an Office document by extension
+        let officeExtensions = ["docx", "doc", "xlsx", "xls", "pptx", "ppt"]
+        guard let ext = url.pathExtension.lowercased() as String?,
+              officeExtensions.contains(ext) else {
+            return nil
+        }
+
+        // Use MDItem to get Spotlight metadata
+        guard let mdItem = MDItemCreate(kCFAllocatorDefault, url.path as CFString) else {
+            return nil
+        }
+
+        // Extract title
+        let title = MDItemCopyAttribute(mdItem, kMDItemTitle) as? String
+
+        // Extract author(s)
+        var author: String? = nil
+        if let authors = MDItemCopyAttribute(mdItem, kMDItemAuthors) as? [String], !authors.isEmpty {
+            author = authors.joined(separator: ", ")
+        }
+
+        // Extract subject
+        let subject = MDItemCopyAttribute(mdItem, kMDItemSubject) as? String
+
+        // Extract keywords
+        var keywords: String? = nil
+        if let keywordArray = MDItemCopyAttribute(mdItem, kMDItemKeywords) as? [String], !keywordArray.isEmpty {
+            keywords = keywordArray.joined(separator: ", ")
+        }
+
+        // Extract comment/description
+        let comment = MDItemCopyAttribute(mdItem, kMDItemComment) as? String
+
+        // Extract last modified by
+        let lastModifiedBy = MDItemCopyAttribute(mdItem, kMDItemLastUsedDate) as? String
+
+        // Extract dates
+        var creationDate: String? = nil
+        if let date = MDItemCopyAttribute(mdItem, kMDItemContentCreationDate) as? Date {
+            creationDate = DateFormatters.formatMediumDateTime(date)
+        }
+
+        var modificationDate: String? = nil
+        if let date = MDItemCopyAttribute(mdItem, kMDItemContentModificationDate) as? Date {
+            modificationDate = DateFormatters.formatMediumDateTime(date)
+        }
+
+        // Extract page count (for Word documents)
+        let pageCount = MDItemCopyAttribute(mdItem, kMDItemNumberOfPages) as? Int
+
+        // Extract word count (for Word documents)
+        let wordCount = MDItemCopyAttribute(mdItem, kMDItemTextContent) as? String
+        let actualWordCount: Int? = wordCount != nil ? wordCount!.split(separator: " ").count : nil
+
+        // Extract sheet count (for Excel - approximate via page count)
+        var sheetCount: Int? = nil
+        if ext == "xlsx" || ext == "xls" {
+            sheetCount = pageCount // Excel reports sheets as pages
+        }
+
+        // Extract slide count (for PowerPoint)
+        var slideCount: Int? = nil
+        if ext == "pptx" || ext == "ppt" {
+            slideCount = pageCount // PowerPoint reports slides as pages
+        }
+
+        // Extract company
+        let company = MDItemCopyAttribute(mdItem, kMDItemOrganizations) as? String
+
+        // Extract category
+        let category = MDItemCopyAttribute(mdItem, kMDItemHeadline) as? String
+
+        let metadata = OfficeMetadata(
+            title: title,
+            author: author,
+            subject: subject,
+            keywords: keywords,
+            comment: comment,
+            lastModifiedBy: lastModifiedBy,
+            creationDate: creationDate,
+            modificationDate: modificationDate,
+            pageCount: (ext == "docx" || ext == "doc") ? pageCount : nil,
+            wordCount: (ext == "docx" || ext == "doc") ? actualWordCount : nil,
+            sheetCount: sheetCount,
+            slideCount: slideCount,
+            company: company,
+            category: category
         )
 
         return metadata.hasData ? metadata : nil

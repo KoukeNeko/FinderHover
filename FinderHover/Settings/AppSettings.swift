@@ -58,6 +58,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
     case video = "Video Information"
     case audio = "Audio Information"
     case pdf = "PDF Information"
+    case office = "Office Document Information"
     case filePath = "File Path"
 
     var id: String { rawValue }
@@ -76,6 +77,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .video: return "displayItem.video".localized
         case .audio: return "displayItem.audio".localized
         case .pdf: return "displayItem.pdf".localized
+        case .office: return "displayItem.office".localized
         case .filePath: return "displayItem.filePath".localized
         }
     }
@@ -94,6 +96,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .video: return IconManager.Video.video
         case .audio: return IconManager.Audio.music
         case .pdf: return "doc.richtext"
+        case .office: return "doc.text.fill"
         case .filePath: return IconManager.FileSystem.folder
         }
     }
@@ -280,6 +283,53 @@ class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(showPDFEncrypted, forKey: "showPDFEncrypted") }
     }
 
+    // Office document display settings
+    @Published var showOffice: Bool {
+        didSet { UserDefaults.standard.set(showOffice, forKey: "showOffice") }
+    }
+    @Published var showOfficeTitle: Bool {
+        didSet { UserDefaults.standard.set(showOfficeTitle, forKey: "showOfficeTitle") }
+    }
+    @Published var showOfficeAuthor: Bool {
+        didSet { UserDefaults.standard.set(showOfficeAuthor, forKey: "showOfficeAuthor") }
+    }
+    @Published var showOfficeSubject: Bool {
+        didSet { UserDefaults.standard.set(showOfficeSubject, forKey: "showOfficeSubject") }
+    }
+    @Published var showOfficeKeywords: Bool {
+        didSet { UserDefaults.standard.set(showOfficeKeywords, forKey: "showOfficeKeywords") }
+    }
+    @Published var showOfficeComment: Bool {
+        didSet { UserDefaults.standard.set(showOfficeComment, forKey: "showOfficeComment") }
+    }
+    @Published var showOfficeLastModifiedBy: Bool {
+        didSet { UserDefaults.standard.set(showOfficeLastModifiedBy, forKey: "showOfficeLastModifiedBy") }
+    }
+    @Published var showOfficeCreationDate: Bool {
+        didSet { UserDefaults.standard.set(showOfficeCreationDate, forKey: "showOfficeCreationDate") }
+    }
+    @Published var showOfficeModificationDate: Bool {
+        didSet { UserDefaults.standard.set(showOfficeModificationDate, forKey: "showOfficeModificationDate") }
+    }
+    @Published var showOfficePageCount: Bool {
+        didSet { UserDefaults.standard.set(showOfficePageCount, forKey: "showOfficePageCount") }
+    }
+    @Published var showOfficeWordCount: Bool {
+        didSet { UserDefaults.standard.set(showOfficeWordCount, forKey: "showOfficeWordCount") }
+    }
+    @Published var showOfficeSheetCount: Bool {
+        didSet { UserDefaults.standard.set(showOfficeSheetCount, forKey: "showOfficeSheetCount") }
+    }
+    @Published var showOfficeSlideCount: Bool {
+        didSet { UserDefaults.standard.set(showOfficeSlideCount, forKey: "showOfficeSlideCount") }
+    }
+    @Published var showOfficeCompany: Bool {
+        didSet { UserDefaults.standard.set(showOfficeCompany, forKey: "showOfficeCompany") }
+    }
+    @Published var showOfficeCategory: Bool {
+        didSet { UserDefaults.standard.set(showOfficeCategory, forKey: "showOfficeCategory") }
+    }
+
     // Display order
     @Published var displayOrder: [DisplayItem] {
         didSet {
@@ -352,6 +402,15 @@ class AppSettings: ObservableObject {
                     decoded.append(.pdf)
                 }
             }
+            if !decoded.contains(.office) {
+                if let pdfIndex = decoded.firstIndex(of: .pdf) {
+                    decoded.insert(.office, at: pdfIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.office, at: filePathIndex)
+                } else {
+                    decoded.append(.office)
+                }
+            }
             self.displayOrder = decoded
         } else {
             // Default order
@@ -368,6 +427,7 @@ class AppSettings: ObservableObject {
                 .video,
                 .audio,
                 .pdf,
+                .office,
                 .filePath
             ]
         }
@@ -426,6 +486,21 @@ class AppSettings: ObservableObject {
         self.showPDFModificationDate = UserDefaults.standard.object(forKey: "showPDFModificationDate") as? Bool ?? Constants.Defaults.showPDFModificationDate
         self.showPDFKeywords = UserDefaults.standard.object(forKey: "showPDFKeywords") as? Bool ?? Constants.Defaults.showPDFKeywords
         self.showPDFEncrypted = UserDefaults.standard.object(forKey: "showPDFEncrypted") as? Bool ?? Constants.Defaults.showPDFEncrypted
+        self.showOffice = UserDefaults.standard.object(forKey: "showOffice") as? Bool ?? Constants.Defaults.showOffice
+        self.showOfficeTitle = UserDefaults.standard.object(forKey: "showOfficeTitle") as? Bool ?? Constants.Defaults.showOfficeTitle
+        self.showOfficeAuthor = UserDefaults.standard.object(forKey: "showOfficeAuthor") as? Bool ?? Constants.Defaults.showOfficeAuthor
+        self.showOfficeSubject = UserDefaults.standard.object(forKey: "showOfficeSubject") as? Bool ?? Constants.Defaults.showOfficeSubject
+        self.showOfficeKeywords = UserDefaults.standard.object(forKey: "showOfficeKeywords") as? Bool ?? Constants.Defaults.showOfficeKeywords
+        self.showOfficeComment = UserDefaults.standard.object(forKey: "showOfficeComment") as? Bool ?? Constants.Defaults.showOfficeComment
+        self.showOfficeLastModifiedBy = UserDefaults.standard.object(forKey: "showOfficeLastModifiedBy") as? Bool ?? Constants.Defaults.showOfficeLastModifiedBy
+        self.showOfficeCreationDate = UserDefaults.standard.object(forKey: "showOfficeCreationDate") as? Bool ?? Constants.Defaults.showOfficeCreationDate
+        self.showOfficeModificationDate = UserDefaults.standard.object(forKey: "showOfficeModificationDate") as? Bool ?? Constants.Defaults.showOfficeModificationDate
+        self.showOfficePageCount = UserDefaults.standard.object(forKey: "showOfficePageCount") as? Bool ?? Constants.Defaults.showOfficePageCount
+        self.showOfficeWordCount = UserDefaults.standard.object(forKey: "showOfficeWordCount") as? Bool ?? Constants.Defaults.showOfficeWordCount
+        self.showOfficeSheetCount = UserDefaults.standard.object(forKey: "showOfficeSheetCount") as? Bool ?? Constants.Defaults.showOfficeSheetCount
+        self.showOfficeSlideCount = UserDefaults.standard.object(forKey: "showOfficeSlideCount") as? Bool ?? Constants.Defaults.showOfficeSlideCount
+        self.showOfficeCompany = UserDefaults.standard.object(forKey: "showOfficeCompany") as? Bool ?? Constants.Defaults.showOfficeCompany
+        self.showOfficeCategory = UserDefaults.standard.object(forKey: "showOfficeCategory") as? Bool ?? Constants.Defaults.showOfficeCategory
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? Constants.Defaults.followCursor
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? Constants.Defaults.windowOffsetX
         self.windowOffsetY = UserDefaults.standard.object(forKey: "windowOffsetY") as? Double ?? Constants.Defaults.windowOffsetY

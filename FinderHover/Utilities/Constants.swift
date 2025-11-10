@@ -227,6 +227,51 @@ enum Constants {
         /// Default show PDF encrypted status
         static let showPDFEncrypted: Bool = true
 
+        /// Default show Office metadata
+        static let showOffice: Bool = true
+
+        /// Default show Office document title
+        static let showOfficeTitle: Bool = true
+
+        /// Default show Office document author
+        static let showOfficeAuthor: Bool = true
+
+        /// Default show Office document subject
+        static let showOfficeSubject: Bool = true
+
+        /// Default show Office document keywords
+        static let showOfficeKeywords: Bool = true
+
+        /// Default show Office document comment
+        static let showOfficeComment: Bool = true
+
+        /// Default show Office document last modified by
+        static let showOfficeLastModifiedBy: Bool = false
+
+        /// Default show Office document creation date
+        static let showOfficeCreationDate: Bool = true
+
+        /// Default show Office document modification date
+        static let showOfficeModificationDate: Bool = true
+
+        /// Default show Office document page count (Word)
+        static let showOfficePageCount: Bool = true
+
+        /// Default show Office document word count (Word)
+        static let showOfficeWordCount: Bool = true
+
+        /// Default show Office document sheet count (Excel)
+        static let showOfficeSheetCount: Bool = true
+
+        /// Default show Office document slide count (PowerPoint)
+        static let showOfficeSlideCount: Bool = true
+
+        /// Default show Office document company
+        static let showOfficeCompany: Bool = false
+
+        /// Default show Office document category
+        static let showOfficeCategory: Bool = false
+
         /// Default follow cursor
         static let followCursor: Bool = true
 
