@@ -188,6 +188,45 @@ enum Constants {
         /// Default show audio sample rate
         static let showAudioSampleRate: Bool = true
 
+        /// Default show PDF metadata
+        static let showPDF: Bool = true
+
+        /// Default show PDF page count
+        static let showPDFPageCount: Bool = true
+
+        /// Default show PDF page size
+        static let showPDFPageSize: Bool = true
+
+        /// Default show PDF version
+        static let showPDFVersion: Bool = true
+
+        /// Default show PDF title
+        static let showPDFTitle: Bool = true
+
+        /// Default show PDF author
+        static let showPDFAuthor: Bool = true
+
+        /// Default show PDF subject
+        static let showPDFSubject: Bool = true
+
+        /// Default show PDF creator
+        static let showPDFCreator: Bool = true
+
+        /// Default show PDF producer
+        static let showPDFProducer: Bool = true
+
+        /// Default show PDF creation date
+        static let showPDFCreationDate: Bool = true
+
+        /// Default show PDF modification date
+        static let showPDFModificationDate: Bool = true
+
+        /// Default show PDF keywords
+        static let showPDFKeywords: Bool = true
+
+        /// Default show PDF encrypted status
+        static let showPDFEncrypted: Bool = true
+
         /// Default follow cursor
         static let followCursor: Bool = true
 

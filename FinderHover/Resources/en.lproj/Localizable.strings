@@ -82,6 +82,22 @@
 "settings.display.audio.samplerate" = "Sample Rate";
 "settings.display.audio.hint" = "Audio metadata only appears for audio files with ID3 tags";
 
+"settings.display.pdf" = "PDF Information";
+"settings.display.pdf.show" = "Show PDF Metadata";
+"settings.display.pdf.pageCount" = "Page Count";
+"settings.display.pdf.pageSize" = "Page Size";
+"settings.display.pdf.version" = "PDF Version";
+"settings.display.pdf.title" = "Document Title";
+"settings.display.pdf.author" = "Author";
+"settings.display.pdf.subject" = "Subject";
+"settings.display.pdf.creator" = "Creator Application";
+"settings.display.pdf.producer" = "PDF Producer";
+"settings.display.pdf.creationDate" = "Creation Date";
+"settings.display.pdf.modificationDate" = "Modification Date";
+"settings.display.pdf.keywords" = "Keywords";
+"settings.display.pdf.encrypted" = "Encryption Status";
+"settings.display.pdf.hint" = "PDF metadata only appears for PDF files";
+
 "settings.display.order" = "Display Order";
 "settings.display.order.hint" = "Drag items to reorder. EXIF moves as a group.";
 
@@ -148,6 +164,7 @@
 "displayItem.exif" = "Photo Information (EXIF)";
 "displayItem.video" = "Video Information";
 "displayItem.audio" = "Audio Information";
+"displayItem.pdf" = "PDF Information";
 "displayItem.filePath" = "File Path";
 
 /* Hover Window */
@@ -189,6 +206,21 @@
 "hover.audio.bitrate" = "Bitrate";
 "hover.audio.samplerate" = "Sample Rate";
 "hover.audio.channels" = "Channels";
+
+/* PDF Information */
+"hover.pdf.title" = "PDF Information";
+"hover.pdf.pageCount" = "Pages";
+"hover.pdf.pageSize" = "Page Size";
+"hover.pdf.version" = "PDF Version";
+"hover.pdf.documentTitle" = "Title";
+"hover.pdf.author" = "Author";
+"hover.pdf.subject" = "Subject";
+"hover.pdf.creator" = "Creator";
+"hover.pdf.producer" = "Producer";
+"hover.pdf.creationDate" = "Created";
+"hover.pdf.modificationDate" = "Modified";
+"hover.pdf.keywords" = "Keywords";
+"hover.pdf.encrypted" = "Encrypted";
 
 /* Common */
 "common.reset" = "Reset to Defaults";

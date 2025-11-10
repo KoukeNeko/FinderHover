@@ -57,6 +57,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
     case exif = "Photo Information (EXIF)"
     case video = "Video Information"
     case audio = "Audio Information"
+    case pdf = "PDF Information"
     case filePath = "File Path"
 
     var id: String { rawValue }
@@ -74,6 +75,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .exif: return "displayItem.exif".localized
         case .video: return "displayItem.video".localized
         case .audio: return "displayItem.audio".localized
+        case .pdf: return "displayItem.pdf".localized
         case .filePath: return "displayItem.filePath".localized
         }
     }
@@ -91,6 +93,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .exif: return IconManager.Photo.camera
         case .video: return IconManager.Video.video
         case .audio: return IconManager.Audio.music
+        case .pdf: return "doc.richtext"
         case .filePath: return IconManager.FileSystem.folder
         }
     }
@@ -236,6 +239,47 @@ class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(showAudioSampleRate, forKey: "showAudioSampleRate") }
     }
 
+    // PDF metadata display settings
+    @Published var showPDF: Bool {
+        didSet { UserDefaults.standard.set(showPDF, forKey: "showPDF") }
+    }
+    @Published var showPDFPageCount: Bool {
+        didSet { UserDefaults.standard.set(showPDFPageCount, forKey: "showPDFPageCount") }
+    }
+    @Published var showPDFPageSize: Bool {
+        didSet { UserDefaults.standard.set(showPDFPageSize, forKey: "showPDFPageSize") }
+    }
+    @Published var showPDFVersion: Bool {
+        didSet { UserDefaults.standard.set(showPDFVersion, forKey: "showPDFVersion") }
+    }
+    @Published var showPDFTitle: Bool {
+        didSet { UserDefaults.standard.set(showPDFTitle, forKey: "showPDFTitle") }
+    }
+    @Published var showPDFAuthor: Bool {
+        didSet { UserDefaults.standard.set(showPDFAuthor, forKey: "showPDFAuthor") }
+    }
+    @Published var showPDFSubject: Bool {
+        didSet { UserDefaults.standard.set(showPDFSubject, forKey: "showPDFSubject") }
+    }
+    @Published var showPDFCreator: Bool {
+        didSet { UserDefaults.standard.set(showPDFCreator, forKey: "showPDFCreator") }
+    }
+    @Published var showPDFProducer: Bool {
+        didSet { UserDefaults.standard.set(showPDFProducer, forKey: "showPDFProducer") }
+    }
+    @Published var showPDFCreationDate: Bool {
+        didSet { UserDefaults.standard.set(showPDFCreationDate, forKey: "showPDFCreationDate") }
+    }
+    @Published var showPDFModificationDate: Bool {
+        didSet { UserDefaults.standard.set(showPDFModificationDate, forKey: "showPDFModificationDate") }
+    }
+    @Published var showPDFKeywords: Bool {
+        didSet { UserDefaults.standard.set(showPDFKeywords, forKey: "showPDFKeywords") }
+    }
+    @Published var showPDFEncrypted: Bool {
+        didSet { UserDefaults.standard.set(showPDFEncrypted, forKey: "showPDFEncrypted") }
+    }
+
     // Display order
     @Published var displayOrder: [DisplayItem] {
         didSet {
@@ -299,6 +343,15 @@ class AppSettings: ObservableObject {
                     decoded.append(.audio)
                 }
             }
+            if !decoded.contains(.pdf) {
+                if let audioIndex = decoded.firstIndex(of: .audio) {
+                    decoded.insert(.pdf, at: audioIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.pdf, at: filePathIndex)
+                } else {
+                    decoded.append(.pdf)
+                }
+            }
             self.displayOrder = decoded
         } else {
             // Default order
@@ -314,6 +367,7 @@ class AppSettings: ObservableObject {
                 .exif,
                 .video,
                 .audio,
+                .pdf,
                 .filePath
             ]
         }
@@ -359,6 +413,19 @@ class AppSettings: ObservableObject {
         self.showAudioDuration = UserDefaults.standard.object(forKey: "showAudioDuration") as? Bool ?? Constants.Defaults.showAudioDuration
         self.showAudioBitrate = UserDefaults.standard.object(forKey: "showAudioBitrate") as? Bool ?? Constants.Defaults.showAudioBitrate
         self.showAudioSampleRate = UserDefaults.standard.object(forKey: "showAudioSampleRate") as? Bool ?? Constants.Defaults.showAudioSampleRate
+        self.showPDF = UserDefaults.standard.object(forKey: "showPDF") as? Bool ?? Constants.Defaults.showPDF
+        self.showPDFPageCount = UserDefaults.standard.object(forKey: "showPDFPageCount") as? Bool ?? Constants.Defaults.showPDFPageCount
+        self.showPDFPageSize = UserDefaults.standard.object(forKey: "showPDFPageSize") as? Bool ?? Constants.Defaults.showPDFPageSize
+        self.showPDFVersion = UserDefaults.standard.object(forKey: "showPDFVersion") as? Bool ?? Constants.Defaults.showPDFVersion
+        self.showPDFTitle = UserDefaults.standard.object(forKey: "showPDFTitle") as? Bool ?? Constants.Defaults.showPDFTitle
+        self.showPDFAuthor = UserDefaults.standard.object(forKey: "showPDFAuthor") as? Bool ?? Constants.Defaults.showPDFAuthor
+        self.showPDFSubject = UserDefaults.standard.object(forKey: "showPDFSubject") as? Bool ?? Constants.Defaults.showPDFSubject
+        self.showPDFCreator = UserDefaults.standard.object(forKey: "showPDFCreator") as? Bool ?? Constants.Defaults.showPDFCreator
+        self.showPDFProducer = UserDefaults.standard.object(forKey: "showPDFProducer") as? Bool ?? Constants.Defaults.showPDFProducer
+        self.showPDFCreationDate = UserDefaults.standard.object(forKey: "showPDFCreationDate") as? Bool ?? Constants.Defaults.showPDFCreationDate
+        self.showPDFModificationDate = UserDefaults.standard.object(forKey: "showPDFModificationDate") as? Bool ?? Constants.Defaults.showPDFModificationDate
+        self.showPDFKeywords = UserDefaults.standard.object(forKey: "showPDFKeywords") as? Bool ?? Constants.Defaults.showPDFKeywords
+        self.showPDFEncrypted = UserDefaults.standard.object(forKey: "showPDFEncrypted") as? Bool ?? Constants.Defaults.showPDFEncrypted
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? Constants.Defaults.followCursor
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? Constants.Defaults.windowOffsetX
         self.windowOffsetY = UserDefaults.standard.object(forKey: "windowOffsetY") as? Double ?? Constants.Defaults.windowOffsetY

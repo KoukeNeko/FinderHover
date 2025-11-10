@@ -82,6 +82,22 @@
 "settings.display.audio.samplerate" = "取樣率";
 "settings.display.audio.hint" = "音訊中繼資料僅顯示於包含 ID3 標籤的音訊檔案";
 
+"settings.display.pdf" = "PDF 資訊";
+"settings.display.pdf.show" = "顯示 PDF 中繼資料";
+"settings.display.pdf.pageCount" = "頁數";
+"settings.display.pdf.pageSize" = "頁面大小";
+"settings.display.pdf.version" = "PDF 版本";
+"settings.display.pdf.title" = "文件標題";
+"settings.display.pdf.author" = "作者";
+"settings.display.pdf.subject" = "主旨";
+"settings.display.pdf.creator" = "建立應用程式";
+"settings.display.pdf.producer" = "PDF 製作者";
+"settings.display.pdf.creationDate" = "建立日期";
+"settings.display.pdf.modificationDate" = "修改日期";
+"settings.display.pdf.keywords" = "關鍵字";
+"settings.display.pdf.encrypted" = "加密狀態";
+"settings.display.pdf.hint" = "PDF 中繼資料僅顯示於 PDF 檔案";
+
 "settings.display.order" = "顯示順序";
 "settings.display.order.hint" = "拖曳項目以重新排序。EXIF 作為群組移動。";
 
@@ -148,6 +164,7 @@
 "displayItem.exif" = "照片資訊（EXIF）";
 "displayItem.video" = "影片資訊";
 "displayItem.audio" = "音訊資訊";
+"displayItem.pdf" = "PDF 資訊";
 "displayItem.filePath" = "檔案路徑";
 
 /* Hover Window */
@@ -189,6 +206,21 @@
 "hover.audio.bitrate" = "位元率";
 "hover.audio.samplerate" = "取樣率";
 "hover.audio.channels" = "聲道";
+
+/* PDF Information */
+"hover.pdf.title" = "PDF 資訊";
+"hover.pdf.pageCount" = "頁數";
+"hover.pdf.pageSize" = "頁面大小";
+"hover.pdf.version" = "PDF 版本";
+"hover.pdf.documentTitle" = "標題";
+"hover.pdf.author" = "作者";
+"hover.pdf.subject" = "主旨";
+"hover.pdf.creator" = "建立者";
+"hover.pdf.producer" = "製作者";
+"hover.pdf.creationDate" = "建立時間";
+"hover.pdf.modificationDate" = "修改時間";
+"hover.pdf.keywords" = "關鍵字";
+"hover.pdf.encrypted" = "已加密";
 
 /* Common */
 "common.reset" = "重設為預設值";

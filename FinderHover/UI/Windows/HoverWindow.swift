@@ -462,6 +462,60 @@ struct HoverContentView: View {
                 }
             }
 
+        case .pdf:
+            if settings.showPDF, let pdf = fileInfo.pdfMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.pdf.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showPDFPageCount, let pageCount = pdf.pageCount {
+                        DetailRow(icon: "doc.text", label: "hover.pdf.pageCount".localized, value: "\(pageCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showPDFPageSize, let pageSize = pdf.pageSize {
+                        DetailRow(icon: "ruler", label: "hover.pdf.pageSize".localized, value: pageSize, fontSize: settings.fontSize)
+                    }
+                    if settings.showPDFVersion, let version = pdf.version {
+                        DetailRow(icon: "info.circle", label: "hover.pdf.version".localized, value: version, fontSize: settings.fontSize)
+                    }
+                    if settings.showPDFTitle, let title = pdf.title {
+                        DetailRow(icon: "textformat", label: "hover.pdf.documentTitle".localized, value: title, fontSize: settings.fontSize)
+                    }
+                    if settings.showPDFAuthor, let author = pdf.author {
+                        DetailRow(icon: "person", label: "hover.pdf.author".localized, value: author, fontSize: settings.fontSize)
+                    }
+                    if settings.showPDFSubject, let subject = pdf.subject {
+                        DetailRow(icon: "text.alignleft", label: "hover.pdf.subject".localized, value: subject, fontSize: settings.fontSize)
+                    }
+                    if settings.showPDFCreator, let creator = pdf.creator {
+                        DetailRow(icon: "app", label: "hover.pdf.creator".localized, value: creator, fontSize: settings.fontSize)
+                    }
+                    if settings.showPDFProducer, let producer = pdf.producer {
+                        DetailRow(icon: "gearshape", label: "hover.pdf.producer".localized, value: producer, fontSize: settings.fontSize)
+                    }
+                    if settings.showPDFCreationDate, let creationDate = pdf.creationDate {
+                        DetailRow(icon: "calendar", label: "hover.pdf.creationDate".localized, value: creationDate, fontSize: settings.fontSize)
+                    }
+                    if settings.showPDFModificationDate, let modificationDate = pdf.modificationDate {
+                        DetailRow(icon: "clock", label: "hover.pdf.modificationDate".localized, value: modificationDate, fontSize: settings.fontSize)
+                    }
+                    if settings.showPDFKeywords, let keywords = pdf.keywords {
+                        DetailRow(icon: "tag", label: "hover.pdf.keywords".localized, value: keywords, fontSize: settings.fontSize)
+                    }
+                    if settings.showPDFEncrypted, let isEncrypted = pdf.isEncrypted, isEncrypted {
+                        DetailRow(icon: "lock.fill", label: "hover.pdf.encrypted".localized, value: "Yes", fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
+
         case .filePath:
             if settings.showFilePath {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {

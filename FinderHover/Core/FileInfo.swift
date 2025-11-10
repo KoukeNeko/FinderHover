@@ -10,6 +10,7 @@ import AppKit
 import QuickLookThumbnailing
 import ImageIO
 import AVFoundation
+import PDFKit
 
 // MARK: - EXIF Data Structure
 struct EXIFData {
@@ -70,6 +71,29 @@ struct AudioMetadata {
     }
 }
 
+// MARK: - PDF Metadata Structure
+struct PDFMetadata {
+    let title: String?
+    let author: String?
+    let subject: String?
+    let creator: String?
+    let producer: String?
+    let creationDate: String?
+    let modificationDate: String?
+    let pageCount: Int?
+    let pageSize: String?
+    let version: String?
+    let isEncrypted: Bool?
+    let keywords: String?
+
+    var hasData: Bool {
+        return title != nil || author != nil || subject != nil ||
+               creator != nil || producer != nil || creationDate != nil ||
+               modificationDate != nil || pageCount != nil || pageSize != nil ||
+               version != nil || isEncrypted != nil || keywords != nil
+    }
+}
+
 struct FileInfo {
     let name: String
     let path: String
@@ -98,6 +122,9 @@ struct FileInfo {
 
     // Audio metadata
     let audioMetadata: AudioMetadata?
+
+    // PDF metadata
+    let pdfMetadata: PDFMetadata?
 
     var formattedSize: String {
         ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
@@ -204,6 +231,9 @@ struct FileInfo {
             // Extract audio metadata for audio files
             let audioMetadata = extractAudioMetadata(from: url)
 
+            // Extract PDF metadata for PDF files
+            let pdfMetadata = extractPDFMetadata(from: url)
+
             return FileInfo(
                 name: url.lastPathComponent,
                 path: path,
@@ -223,7 +253,8 @@ struct FileInfo {
                 isHidden: isHidden,
                 exifData: exifData,
                 videoMetadata: videoMetadata,
-                audioMetadata: audioMetadata
+                audioMetadata: audioMetadata,
+                pdfMetadata: pdfMetadata
             )
         } catch {
             Logger.error("Failed to read file attributes: \(path)", error: error, subsystem: .fileSystem)
@@ -560,6 +591,112 @@ struct FileInfo {
             bitrate: bitrate,
             sampleRate: sampleRate,
             channels: channels
+        )
+
+        return metadata.hasData ? metadata : nil
+    }
+
+    // MARK: - PDF Metadata Extraction
+    private static func extractPDFMetadata(from url: URL) -> PDFMetadata? {
+        // Check if file is a PDF by extension
+        guard url.pathExtension.lowercased() == "pdf" else {
+            return nil
+        }
+
+        // Import PDFKit
+        guard let pdfDocument = PDFDocument(url: url) else {
+            return nil
+        }
+
+        // Extract basic document attributes
+        let attributes = pdfDocument.documentAttributes
+
+        // Extract title
+        let title = attributes?[PDFDocumentAttribute.titleAttribute] as? String
+
+        // Extract author
+        let author = attributes?[PDFDocumentAttribute.authorAttribute] as? String
+
+        // Extract subject
+        let subject = attributes?[PDFDocumentAttribute.subjectAttribute] as? String
+
+        // Extract creator (application that created the PDF)
+        let creator = attributes?[PDFDocumentAttribute.creatorAttribute] as? String
+
+        // Extract producer (PDF library used)
+        let producer = attributes?[PDFDocumentAttribute.producerAttribute] as? String
+
+        // Extract keywords
+        let keywords = attributes?[PDFDocumentAttribute.keywordsAttribute] as? String
+
+        // Extract creation date
+        var creationDate: String? = nil
+        if let date = attributes?[PDFDocumentAttribute.creationDateAttribute] as? Date {
+            creationDate = DateFormatters.formatMediumDateTime(date)
+        }
+
+        // Extract modification date
+        var modificationDate: String? = nil
+        if let date = attributes?[PDFDocumentAttribute.modificationDateAttribute] as? Date {
+            modificationDate = DateFormatters.formatMediumDateTime(date)
+        }
+
+        // Get page count
+        let pageCount = pdfDocument.pageCount
+
+        // Get page size (from first page)
+        var pageSize: String? = nil
+        if let firstPage = pdfDocument.page(at: 0) {
+            let bounds = firstPage.bounds(for: .mediaBox)
+            let width = bounds.width
+            let height = bounds.height
+
+            // Convert points to inches (1 inch = 72 points)
+            let widthInches = width / 72.0
+            let heightInches = height / 72.0
+
+            // Check for common paper sizes
+            if abs(widthInches - 8.5) < 0.1 && abs(heightInches - 11.0) < 0.1 {
+                pageSize = "Letter (8.5\" × 11\")"
+            } else if abs(widthInches - 11.0) < 0.1 && abs(heightInches - 17.0) < 0.1 {
+                pageSize = "Tabloid (11\" × 17\")"
+            } else if abs(width - 595.0) < 2.0 && abs(height - 842.0) < 2.0 {
+                pageSize = "A4 (210mm × 297mm)"
+            } else if abs(width - 420.0) < 2.0 && abs(height - 595.0) < 2.0 {
+                pageSize = "A5 (148mm × 210mm)"
+            } else if abs(width - 842.0) < 2.0 && abs(height - 1191.0) < 2.0 {
+                pageSize = "A3 (297mm × 420mm)"
+            } else {
+                // Custom size - show in points and approximate inches
+                pageSize = String(format: "%.0f × %.0f pt (%.1f\" × %.1f\")", 
+                                width, height, widthInches, heightInches)
+            }
+        }
+
+        // Get PDF version
+        var version: String? = nil
+        let majorVersion = pdfDocument.majorVersion
+        let minorVersion = pdfDocument.minorVersion
+        if majorVersion > 0 {
+            version = "\(majorVersion).\(minorVersion)"
+        }
+
+        // Check if encrypted
+        let isEncrypted = pdfDocument.isEncrypted
+
+        let metadata = PDFMetadata(
+            title: title,
+            author: author,
+            subject: subject,
+            creator: creator,
+            producer: producer,
+            creationDate: creationDate,
+            modificationDate: modificationDate,
+            pageCount: pageCount > 0 ? pageCount : nil,
+            pageSize: pageSize,
+            version: version,
+            isEncrypted: isEncrypted ? true : nil,
+            keywords: keywords
         )
 
         return metadata.hasData ? metadata : nil
