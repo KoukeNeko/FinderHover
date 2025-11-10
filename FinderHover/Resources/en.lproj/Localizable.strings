@@ -9,6 +9,7 @@
 "settings.tab.behavior" = "Behavior";
 "settings.tab.appearance" = "Appearance";
 "settings.tab.display" = "Display";
+"settings.tab.permissions" = "Permissions";
 "settings.tab.about" = "About";
 
 /* Settings - Behavior */
@@ -83,6 +84,25 @@
 
 "settings.display.order" = "Display Order";
 "settings.display.order.hint" = "Drag items to reorder. EXIF moves as a group.";
+
+/* Settings - Permissions */
+"settings.permissions.title" = "Permissions";
+"settings.permissions.accessibility" = "Accessibility";
+"settings.permissions.accessibility.description" = "Required to detect files under mouse cursor and track mouse movements in Finder";
+"settings.permissions.accessibility.required" = "Accessibility permission is required";
+"settings.permissions.accessibility.steps" = "1. Click 'Open System Settings' below\n2. Find FinderHover in the list\n3. Toggle the switch to enable";
+"settings.permissions.granted" = "Granted";
+"settings.permissions.notGranted" = "Not Granted";
+"settings.permissions.openSystemSettings" = "Open System Settings";
+"settings.permissions.whyNeeded" = "Why These Permissions Are Needed";
+"settings.permissions.reason.mouseTracking" = "Track Mouse Position";
+"settings.permissions.reason.mouseTracking.description" = "Monitor mouse movements to detect when you're hovering over files in Finder";
+"settings.permissions.reason.fileDetection" = "Detect Files Under Cursor";
+"settings.permissions.reason.fileDetection.description" = "Use Accessibility API to identify which file is currently under your mouse cursor";
+"settings.permissions.reason.noInvasion" = "Privacy First";
+"settings.permissions.reason.noInvasion.description" = "Only reads file metadata, never file contents. No network access, no analytics, fully open source";
+"settings.permissions.privacy" = "Your Privacy is Protected";
+"settings.permissions.privacy.description" = "FinderHover only accesses file metadata (name, size, dates) and never reads file contents. All data stays on your Mac. No information is sent to the internet. The app is fully open source for your review.";
 
 /* Settings - About */
 "settings.about.version" = "version %@";

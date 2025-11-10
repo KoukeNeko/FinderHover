@@ -9,6 +9,7 @@
 "settings.tab.behavior" = "行為";
 "settings.tab.appearance" = "外觀";
 "settings.tab.display" = "顯示";
+"settings.tab.permissions" = "權限";
 "settings.tab.about" = "關於";
 
 /* Settings - Behavior */
@@ -83,6 +84,25 @@
 
 "settings.display.order" = "顯示順序";
 "settings.display.order.hint" = "拖曳項目以重新排序。EXIF 作為群組移動。";
+
+/* Settings - Permissions */
+"settings.permissions.title" = "權限";
+"settings.permissions.accessibility" = "輔助使用";
+"settings.permissions.accessibility.description" = "需要此權限來偵測滑鼠游標下的檔案並追蹤 Finder 中的滑鼠移動";
+"settings.permissions.accessibility.required" = "需要輔助使用權限";
+"settings.permissions.accessibility.steps" = "1. 點擊下方的「開啟系統設定」\n2. 在列表中找到 FinderHover\n3. 切換開關以啟用";
+"settings.permissions.granted" = "已授權";
+"settings.permissions.notGranted" = "未授權";
+"settings.permissions.openSystemSettings" = "開啟系統設定";
+"settings.permissions.whyNeeded" = "為什麼需要這些權限";
+"settings.permissions.reason.mouseTracking" = "追蹤滑鼠位置";
+"settings.permissions.reason.mouseTracking.description" = "監控滑鼠移動以偵測您何時懸停在 Finder 中的檔案上";
+"settings.permissions.reason.fileDetection" = "偵測游標下的檔案";
+"settings.permissions.reason.fileDetection.description" = "使用輔助使用 API 識別目前滑鼠游標下的檔案";
+"settings.permissions.reason.noInvasion" = "隱私優先";
+"settings.permissions.reason.noInvasion.description" = "僅讀取檔案中繼資料，從不讀取檔案內容。無網路存取，無分析追蹤，完全開源";
+"settings.permissions.privacy" = "您的隱私受到保護";
+"settings.permissions.privacy.description" = "FinderHover 僅存取檔案中繼資料（名稱、大小、日期），從不讀取檔案內容。所有資料都保留在您的 Mac 上。不會將任何資訊傳送到網際網路。本應用程式完全開源供您審查。";
 
 /* Settings - About */
 "settings.about.version" = "版本 %@";
