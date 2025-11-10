@@ -132,7 +132,10 @@ struct FileInfo {
 
     func generateThumbnailAsync(completion: @escaping (NSImage?) -> Void) {
         let url = URL(fileURLWithPath: path)
-        let size = CGSize(width: 128, height: 128)
+        let size = CGSize(
+            width: Constants.Thumbnail.standardSize,
+            height: Constants.Thumbnail.standardSize
+        )
         let scale = NSScreen.main?.backingScaleFactor ?? 2.0
 
         let request = QLThumbnailGenerator.Request(

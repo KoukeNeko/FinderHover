@@ -205,8 +205,11 @@ class HoverManager: ObservableObject {
         // Stop existing timer
         renamingCheckTimer?.invalidate()
 
-        // Check every 0.1 seconds if user is renaming
-        renamingCheckTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+        // Check periodically if user is renaming
+        renamingCheckTimer = Timer.scheduledTimer(
+            withTimeInterval: Constants.MouseTracking.renamingCheckInterval,
+            repeats: true
+        ) { [weak self] _ in
             if FinderInteraction.isRenamingFile() {
                 self?.hideHoverWindow()
                 self?.currentFileInfo = nil

@@ -79,5 +79,119 @@ enum Constants {
 
         /// Default window offset from cursor (vertical)
         static let windowOffsetY: Double = 15
+
+        /// Default auto-hide behavior
+        static let autoHideEnabled: Bool = true
+
+        /// Default launch at login behavior
+        static let launchAtLogin: Bool = false
+
+        /// Default blur effect enabled
+        static let enableBlur: Bool = true
+
+        /// Default compact mode
+        static let compactMode: Bool = false
+
+        /// Default show creation date
+        static let showCreationDate: Bool = true
+
+        /// Default show modification date
+        static let showModificationDate: Bool = true
+
+        /// Default show file size
+        static let showFileSize: Bool = true
+
+        /// Default show file type
+        static let showFileType: Bool = true
+
+        /// Default show file path
+        static let showFilePath: Bool = true
+
+        /// Default show icon
+        static let showIcon: Bool = true
+
+        /// Default show last access date
+        static let showLastAccessDate: Bool = false
+
+        /// Default show permissions
+        static let showPermissions: Bool = false
+
+        /// Default show owner
+        static let showOwner: Bool = false
+
+        /// Default show item count
+        static let showItemCount: Bool = true
+
+        /// Default show EXIF
+        static let showEXIF: Bool = true
+
+        /// Default show EXIF camera
+        static let showEXIFCamera: Bool = true
+
+        /// Default show EXIF lens
+        static let showEXIFLens: Bool = true
+
+        /// Default show EXIF settings
+        static let showEXIFSettings: Bool = true
+
+        /// Default show EXIF date taken
+        static let showEXIFDateTaken: Bool = true
+
+        /// Default show EXIF dimensions
+        static let showEXIFDimensions: Bool = true
+
+        /// Default show EXIF GPS
+        static let showEXIFGPS: Bool = false
+
+        /// Default show video
+        static let showVideo: Bool = true
+
+        /// Default show video duration
+        static let showVideoDuration: Bool = true
+
+        /// Default show video resolution
+        static let showVideoResolution: Bool = true
+
+        /// Default show video codec
+        static let showVideoCodec: Bool = true
+
+        /// Default show video frame rate
+        static let showVideoFrameRate: Bool = true
+
+        /// Default show video bitrate
+        static let showVideoBitrate: Bool = true
+
+        /// Default show audio
+        static let showAudio: Bool = true
+
+        /// Default show audio title
+        static let showAudioTitle: Bool = true
+
+        /// Default show audio artist
+        static let showAudioArtist: Bool = true
+
+        /// Default show audio album
+        static let showAudioAlbum: Bool = true
+
+        /// Default show audio genre
+        static let showAudioGenre: Bool = true
+
+        /// Default show audio year
+        static let showAudioYear: Bool = true
+
+        /// Default show audio duration
+        static let showAudioDuration: Bool = true
+
+        /// Default show audio bitrate
+        static let showAudioBitrate: Bool = true
+
+        /// Default show audio sample rate
+        static let showAudioSampleRate: Bool = true
+
+        /// Default follow cursor
+        static let followCursor: Bool = true
+
+        /// Default include prereleases
+        static let includePrereleases: Bool = false
     }
 }

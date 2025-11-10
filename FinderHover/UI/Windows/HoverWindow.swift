@@ -59,7 +59,12 @@ class HoverWindowController: NSWindowController {
         hostingView.translatesAutoresizingMaskIntoConstraints = false
 
         // Create temporary container to calculate size
-        let tempContainer = NSView(frame: NSRect(x: 0, y: 0, width: maxWidth, height: 5000))
+        let tempContainer = NSView(frame: NSRect(
+            x: 0,
+            y: 0,
+            width: maxWidth,
+            height: Constants.WindowLayout.tempContainerHeight
+        ))
         tempContainer.addSubview(hostingView)
         NSLayoutConstraint.activate([
             hostingView.leadingAnchor.constraint(equalTo: tempContainer.leadingAnchor),
@@ -78,13 +83,15 @@ class HoverWindowController: NSWindowController {
         hostingView.translatesAutoresizingMaskIntoConstraints = true
 
         // Determine corner radius based on UI style
-        let cornerRadius: CGFloat = settings.uiStyle == .windows ? 0 : 10
+        let cornerRadius: CGFloat = settings.uiStyle == .windows
+            ? Constants.WindowLayout.windowsCornerRadius
+            : Constants.WindowLayout.macOSCornerRadius
 
         // Check if blur is enabled
         if settings.enableBlur {
             let osVersion = ProcessInfo.processInfo.operatingSystemVersion
             // Use container view approach for macOS <= macOS 15.x (where direct cornerRadius doesn't work)
-            let useLegacyBlurLayout = osVersion.majorVersion <= 15
+            let useLegacyBlurLayout = osVersion.majorVersion <= Constants.Compatibility.blurLayoutChangeVersion
 
             // Create visual effect view for blur
             let effectView = NSVisualEffectView()
@@ -109,10 +116,10 @@ class HoverWindowController: NSWindowController {
 
                 // Add subtle border like native macOS HUD windows (only for macOS style)
                 if cornerRadius > 0 {
-                    containerView.layer?.borderWidth = 0.5
+                    containerView.layer?.borderWidth = Constants.WindowLayout.macOSBorderWidth
                     containerView.layer?.borderColor = NSColor.systemGray.withAlphaComponent(0.5).cgColor
                 } else {
-                    // Windows style: no border or use light border
+                    // Windows style: no border
                     containerView.layer?.borderWidth = 0
                     containerView.layer?.borderColor = nil
                 }
@@ -171,7 +178,7 @@ class HoverWindowController: NSWindowController {
 
             // Check left edge
             if windowOrigin.x < screenFrame.minX {
-                windowOrigin.x = screenFrame.minX + 10
+                windowOrigin.x = screenFrame.minX + Constants.WindowLayout.screenEdgePadding
             }
 
             // Check bottom edge
@@ -181,7 +188,7 @@ class HoverWindowController: NSWindowController {
 
             // Check top edge
             if windowOrigin.y + window.frame.height > screenFrame.maxY {
-                windowOrigin.y = screenFrame.maxY - window.frame.height - 10
+                windowOrigin.y = screenFrame.maxY - window.frame.height - Constants.WindowLayout.screenEdgePadding
             }
         }
 
@@ -205,10 +212,13 @@ struct HoverContentView: View {
             // File icon and name
             HStack(spacing: settings.compactMode ? 8 : 12) {
                 if settings.showIcon {
+                    let iconSize = settings.compactMode
+                        ? Constants.Thumbnail.compactIconSize
+                        : Constants.Thumbnail.normalIconSize
                     Image(nsImage: thumbnail ?? fileInfo.icon)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: settings.compactMode ? 32 : 48, height: settings.compactMode ? 32 : 48)
+                        .frame(width: iconSize, height: iconSize)
                         .onAppear {
                             // Load thumbnail asynchronously
                             fileInfo.generateThumbnailAsync { image in
