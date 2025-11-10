@@ -91,6 +91,10 @@
 "settings.permissions.accessibility.description" = "需要此權限來偵測滑鼠游標下的檔案並追蹤 Finder 中的滑鼠移動";
 "settings.permissions.accessibility.required" = "需要輔助使用權限";
 "settings.permissions.accessibility.steps" = "1. 點擊下方的「開啟系統設定」\n2. 在列表中找到 FinderHover\n3. 切換開關以啟用";
+"settings.permissions.fullDiskAccess" = "完整磁碟取用權";
+"settings.permissions.fullDiskAccess.description" = "需要此權限來讀取包括桌面、文件和下載項目在內的所有位置的檔案資訊和中繼資料";
+"settings.permissions.fullDiskAccess.required" = "需要完整磁碟取用權";
+"settings.permissions.fullDiskAccess.steps" = "1. 點擊下方的「開啟系統設定」\n2. 在列表中找到 FinderHover\n3. 切換開關以啟用\n4. 重新啟動應用程式以使變更生效";
 "settings.permissions.granted" = "已授權";
 "settings.permissions.notGranted" = "未授權";
 "settings.permissions.openSystemSettings" = "開啟系統設定";

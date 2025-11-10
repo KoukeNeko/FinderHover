@@ -26,5 +26,15 @@
 	<string>FinderHover needs to control Finder to detect which file you're hovering over and display its information.</string>
 	<key>NSAppleScriptEnabled</key>
 	<true/>
+	<key>NSDesktopFolderUsageDescription</key>
+	<string>FinderHover needs access to your Desktop folder to display file information when you hover over files.</string>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>FinderHover needs access to your Documents folder to display file information when you hover over files.</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>FinderHover needs access to your Downloads folder to display file information when you hover over files.</string>
+	<key>NSRemovableVolumesUsageDescription</key>
+	<string>FinderHover needs access to removable volumes to display file information when you hover over files.</string>
+	<key>NSNetworkVolumesUsageDescription</key>
+	<string>FinderHover needs access to network volumes to display file information when you hover over files.</string>
 </dict>
 </plist>

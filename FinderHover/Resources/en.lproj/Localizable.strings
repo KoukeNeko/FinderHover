@@ -91,6 +91,10 @@
 "settings.permissions.accessibility.description" = "Required to detect files under mouse cursor and track mouse movements in Finder";
 "settings.permissions.accessibility.required" = "Accessibility permission is required";
 "settings.permissions.accessibility.steps" = "1. Click 'Open System Settings' below\n2. Find FinderHover in the list\n3. Toggle the switch to enable";
+"settings.permissions.fullDiskAccess" = "Full Disk Access";
+"settings.permissions.fullDiskAccess.description" = "Required to read file information and metadata from all locations including Desktop, Documents, and Downloads";
+"settings.permissions.fullDiskAccess.required" = "Full Disk Access permission is required";
+"settings.permissions.fullDiskAccess.steps" = "1. Click 'Open System Settings' below\n2. Find FinderHover in the list\n3. Toggle the switch to enable\n4. Restart the app for changes to take effect";
 "settings.permissions.granted" = "Granted";
 "settings.permissions.notGranted" = "Not Granted";
 "settings.permissions.openSystemSettings" = "Open System Settings";

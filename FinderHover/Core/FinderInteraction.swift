@@ -43,13 +43,17 @@ class FinderInteraction {
             return nil
         }
 
-        // Try to get selected files from Finder using Accessibility API
+        // Try to get element at mouse position first (priority)
+        if let filePath = getFilePathAtPosition(position) {
+            return filePath
+        }
+
+        // Fall back to selected files if we couldn't get file at position
         if let selected = getSelectedFinderFiles().first {
             return selected
         }
 
-        // Try to get element at mouse position
-        return getFilePathAtPosition(position)
+        return nil
     }
 
     /// Gets currently selected files in Finder using Accessibility API
@@ -140,6 +144,7 @@ class FinderInteraction {
         if AXUIElementCopyAttributeValue(element, kAXRoleAttribute as CFString, &roleRef) == .success,
            let role = roleRef as? String {
             // Ignore window controls, buttons, and other UI elements
+            // Note: AXImage is NOT in this list because file icons in Finder have AXImage role
             let ignoredRoles = [
                 "AXButton",
                 "AXCloseButton",
@@ -151,8 +156,7 @@ class FinderInteraction {
                 "AXSheet",
                 "AXScrollBar",
                 "AXScrollArea",
-                "AXStaticText",
-                "AXImage"  // Ignore standalone images in dialogs
+                "AXStaticText"
             ]
 
             if ignoredRoles.contains(role) {

@@ -691,6 +691,7 @@ struct DisplaySettingsView: View {
 // MARK: - Permissions Settings
 struct PermissionsSettingsView: View {
     @State private var accessibilityEnabled = AXIsProcessTrusted()
+    @State private var fullDiskAccessEnabled = false
     @State private var refreshTimer: Timer?
 
     var body: some View {
@@ -762,6 +763,79 @@ struct PermissionsSettingsView: View {
                                 }
 
                                 Text("settings.permissions.accessibility.steps".localized)
+                                    .font(.system(size: 11))
+                                    .foregroundColor(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .padding(.leading, 18)
+                            }
+                            .padding(12)
+                            .background(Color.blue.opacity(0.1))
+                            .cornerRadius(8)
+                        }
+                    }
+                    .padding(16)
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(10)
+                    .padding(.horizontal, 20)
+
+                    Divider()
+                        .padding(.horizontal, 20)
+
+                    // Full Disk Access Permission
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack(alignment: .center) {
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "folder.fill")
+                                        .font(.system(size: 16))
+                                        .foregroundColor(fullDiskAccessEnabled ? .green : .orange)
+
+                                    Text("settings.permissions.fullDiskAccess".localized)
+                                        .font(.system(size: 14, weight: .semibold))
+                                }
+
+                                Text("settings.permissions.fullDiskAccess.description".localized)
+                                    .font(.system(size: 11))
+                                    .foregroundColor(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+
+                            Spacer()
+
+                            VStack(alignment: .trailing, spacing: 8) {
+                                HStack(spacing: 8) {
+                                    Image(systemName: fullDiskAccessEnabled ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                        .font(.system(size: 14))
+                                        .foregroundColor(fullDiskAccessEnabled ? .green : .red)
+
+                                    Text(fullDiskAccessEnabled ? "settings.permissions.granted".localized : "settings.permissions.notGranted".localized)
+                                        .font(.system(size: 12, weight: .medium))
+                                        .foregroundColor(fullDiskAccessEnabled ? .green : .red)
+                                }
+
+                                if !fullDiskAccessEnabled {
+                                    Button("settings.permissions.openSystemSettings".localized) {
+                                        openFullDiskAccessSettings()
+                                    }
+                                    .buttonStyle(.borderedProminent)
+                                    .controlSize(.small)
+                                }
+                            }
+                        }
+
+                        // Additional info box
+                        if !fullDiskAccessEnabled {
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "info.circle.fill")
+                                        .font(.system(size: 12))
+                                        .foregroundColor(.blue)
+                                    Text("settings.permissions.fullDiskAccess.required".localized)
+                                        .font(.system(size: 11, weight: .medium))
+                                        .foregroundColor(.primary)
+                                }
+
+                                Text("settings.permissions.fullDiskAccess.steps".localized)
                                     .font(.system(size: 11))
                                     .foregroundColor(.secondary)
                                     .fixedSize(horizontal: false, vertical: true)
@@ -855,9 +929,38 @@ struct PermissionsSettingsView: View {
         NSWorkspace.shared.open(url)
     }
 
+    private func openFullDiskAccessSettings() {
+        let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles")!
+        NSWorkspace.shared.open(url)
+    }
+
+    private func checkFullDiskAccess() -> Bool {
+        // Try to access Downloads folder to check Full Disk Access
+        // Downloads is more restricted than Desktop and requires Full Disk Access
+        let downloadsURL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Downloads")
+
+        // Try to read file attributes from Downloads folder
+        // This is a more reliable check than just listing directory contents
+        do {
+            let contents = try FileManager.default.contentsOfDirectory(at: downloadsURL, includingPropertiesForKeys: [.fileSizeKey, .creationDateKey], options: [])
+
+            // If we can list contents, try to read attributes of the first file
+            // This ensures we have actual file access, not just directory listing
+            if let firstFile = contents.first {
+                _ = try FileManager.default.attributesOfItem(atPath: firstFile.path)
+            }
+
+            return true
+        } catch {
+            // Full Disk Access not granted
+            return false
+        }
+    }
+
     private func startRefreshTimer() {
         refreshTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             accessibilityEnabled = AXIsProcessTrusted()
+            fullDiskAccessEnabled = checkFullDiskAccess()
         }
     }
 
