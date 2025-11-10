@@ -867,27 +867,27 @@ struct DisplaySettingsView: View {
 
                     VStack(spacing: 0) {
                         DisplayToggleRow(title: "settings.display.code.show".localized, icon: "chevron.left.forwardslash.chevron.right", isOn: $settings.showCode)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.code.language".localized, icon: "chevron.left.forwardslash.chevron.right", isOn: $settings.showCodeLanguage)
                             .disabled(!settings.showCode)
                             .opacity(settings.showCode ? 1 : 0.5)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.code.lineCount".localized, icon: "number", isOn: $settings.showCodeLineCount)
                             .disabled(!settings.showCode)
                             .opacity(settings.showCode ? 1 : 0.5)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.code.codeLines".localized, icon: "curlybraces", isOn: $settings.showCodeLines)
                             .disabled(!settings.showCode)
                             .opacity(settings.showCode ? 1 : 0.5)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.code.commentLines".localized, icon: "text.bubble", isOn: $settings.showCodeCommentLines)
                             .disabled(!settings.showCode)
                             .opacity(settings.showCode ? 1 : 0.5)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.code.blankLines".localized, icon: "minus", isOn: $settings.showCodeBlankLines)
                             .disabled(!settings.showCode)
                             .opacity(settings.showCode ? 1 : 0.5)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.code.encoding".localized, icon: "textformat.abc", isOn: $settings.showCodeEncoding)
                             .disabled(!settings.showCode)
                             .opacity(settings.showCode ? 1 : 0.5)
@@ -917,31 +917,31 @@ struct DisplaySettingsView: View {
 
                     VStack(spacing: 0) {
                         DisplayToggleRow(title: "settings.display.font.show".localized, icon: "textformat", isOn: $settings.showFont)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.font.name".localized, icon: "textformat", isOn: $settings.showFontName)
                             .disabled(!settings.showFont)
                             .opacity(settings.showFont ? 1 : 0.5)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.font.family".localized, icon: "textformat.alt", isOn: $settings.showFontFamily)
                             .disabled(!settings.showFont)
                             .opacity(settings.showFont ? 1 : 0.5)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.font.style".localized, icon: "italic", isOn: $settings.showFontStyle)
                             .disabled(!settings.showFont)
                             .opacity(settings.showFont ? 1 : 0.5)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.font.version".localized, icon: "number", isOn: $settings.showFontVersion)
                             .disabled(!settings.showFont)
                             .opacity(settings.showFont ? 1 : 0.5)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.font.designer".localized, icon: "person", isOn: $settings.showFontDesigner)
                             .disabled(!settings.showFont)
                             .opacity(settings.showFont ? 1 : 0.5)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.font.copyright".localized, icon: "c.circle", isOn: $settings.showFontCopyright)
                             .disabled(!settings.showFont)
                             .opacity(settings.showFont ? 1 : 0.5)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.font.glyphCount".localized, icon: "character.textbox", isOn: $settings.showFontGlyphCount)
                             .disabled(!settings.showFont)
                             .opacity(settings.showFont ? 1 : 0.5)
@@ -971,31 +971,31 @@ struct DisplaySettingsView: View {
 
                     VStack(spacing: 0) {
                         DisplayToggleRow(title: "settings.display.diskImage.show".localized, icon: "opticaldiscdrive", isOn: $settings.showDiskImage)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.diskImage.format".localized, icon: "opticaldiscdrive", isOn: $settings.showDiskImageFormat)
                             .disabled(!settings.showDiskImage)
                             .opacity(settings.showDiskImage ? 1 : 0.5)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.diskImage.totalSize".localized, icon: "externaldrive", isOn: $settings.showDiskImageTotalSize)
                             .disabled(!settings.showDiskImage)
                             .opacity(settings.showDiskImage ? 1 : 0.5)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.diskImage.compressedSize".localized, icon: "arrow.down.circle", isOn: $settings.showDiskImageCompressedSize)
                             .disabled(!settings.showDiskImage)
                             .opacity(settings.showDiskImage ? 1 : 0.5)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.diskImage.compressionRatio".localized, icon: "chart.bar", isOn: $settings.showDiskImageCompressionRatio)
                             .disabled(!settings.showDiskImage)
                             .opacity(settings.showDiskImage ? 1 : 0.5)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.diskImage.encrypted".localized, icon: "lock.shield", isOn: $settings.showDiskImageEncrypted)
                             .disabled(!settings.showDiskImage)
                             .opacity(settings.showDiskImage ? 1 : 0.5)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.diskImage.partitionScheme".localized, icon: "square.split.2x2", isOn: $settings.showDiskImagePartitionScheme)
                             .disabled(!settings.showDiskImage)
                             .opacity(settings.showDiskImage ? 1 : 0.5)
-
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.diskImage.fileSystem".localized, icon: "doc.text", isOn: $settings.showDiskImageFileSystem)
                             .disabled(!settings.showDiskImage)
                             .opacity(settings.showDiskImage ? 1 : 0.5)
@@ -1020,33 +1020,41 @@ struct DisplaySettingsView: View {
                         .padding(.horizontal, 20)
                         .padding(.top, 16)
 
-                    VStack(spacing: 10) {
+                    VStack(spacing: 0) {
                         // Main toggle
                         DisplayToggleRow(title: "settings.display.vectorGraphics.show".localized, icon: "paintbrush.pointed", isOn: $settings.showVectorGraphics)
-
+                        Divider().padding(.leading, 60)
                         // Detail toggles
                         DisplayToggleRow(title: "settings.display.vectorGraphics.format".localized, icon: "paintbrush.pointed", isOn: $settings.showVectorGraphicsFormat)
                             .disabled(!settings.showVectorGraphics)
                             .opacity(settings.showVectorGraphics ? 1 : 0.5)
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.vectorGraphics.dimensions".localized, icon: "arrow.up.left.and.arrow.down.right", isOn: $settings.showVectorGraphicsDimensions)
                             .disabled(!settings.showVectorGraphics)
                             .opacity(settings.showVectorGraphics ? 1 : 0.5)
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.vectorGraphics.viewBox".localized, icon: "rectangle.dashed", isOn: $settings.showVectorGraphicsViewBox)
                             .disabled(!settings.showVectorGraphics)
                             .opacity(settings.showVectorGraphics ? 1 : 0.5)
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.vectorGraphics.elementCount".localized, icon: "square.stack.3d.up", isOn: $settings.showVectorGraphicsElementCount)
                             .disabled(!settings.showVectorGraphics)
                             .opacity(settings.showVectorGraphics ? 1 : 0.5)
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.vectorGraphics.colorMode".localized, icon: "paintpalette", isOn: $settings.showVectorGraphicsColorMode)
                             .disabled(!settings.showVectorGraphics)
                             .opacity(settings.showVectorGraphics ? 1 : 0.5)
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.vectorGraphics.creator".localized, icon: "hammer", isOn: $settings.showVectorGraphicsCreator)
                             .disabled(!settings.showVectorGraphics)
                             .opacity(settings.showVectorGraphics ? 1 : 0.5)
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.vectorGraphics.version".localized, icon: "number", isOn: $settings.showVectorGraphicsVersion)
                             .disabled(!settings.showVectorGraphics)
                             .opacity(settings.showVectorGraphics ? 1 : 0.5)
                     }
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(6)
                     .padding(.horizontal, 20)
 
                     HStack(spacing: 6) {
@@ -1065,33 +1073,41 @@ struct DisplaySettingsView: View {
                         .padding(.horizontal, 20)
                         .padding(.top, 16)
 
-                    VStack(spacing: 10) {
+                    VStack(spacing: 0) {
                         // Main toggle
                         DisplayToggleRow(title: "settings.display.subtitle.show".localized, icon: "captions.bubble", isOn: $settings.showSubtitle)
-
+                        Divider().padding(.leading, 60)
                         // Detail toggles
                         DisplayToggleRow(title: "settings.display.subtitle.format".localized, icon: "captions.bubble", isOn: $settings.showSubtitleFormat)
                             .disabled(!settings.showSubtitle)
                             .opacity(settings.showSubtitle ? 1 : 0.5)
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.subtitle.encoding".localized, icon: "textformat.abc", isOn: $settings.showSubtitleEncoding)
                             .disabled(!settings.showSubtitle)
                             .opacity(settings.showSubtitle ? 1 : 0.5)
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.subtitle.entryCount".localized, icon: "list.number", isOn: $settings.showSubtitleEntryCount)
                             .disabled(!settings.showSubtitle)
                             .opacity(settings.showSubtitle ? 1 : 0.5)
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.subtitle.duration".localized, icon: "clock", isOn: $settings.showSubtitleDuration)
                             .disabled(!settings.showSubtitle)
                             .opacity(settings.showSubtitle ? 1 : 0.5)
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.subtitle.language".localized, icon: "globe", isOn: $settings.showSubtitleLanguage)
                             .disabled(!settings.showSubtitle)
                             .opacity(settings.showSubtitle ? 1 : 0.5)
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.subtitle.frameRate".localized, icon: "film", isOn: $settings.showSubtitleFrameRate)
                             .disabled(!settings.showSubtitle)
                             .opacity(settings.showSubtitle ? 1 : 0.5)
+                        Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.subtitle.hasFormatting".localized, icon: "textformat", isOn: $settings.showSubtitleFormatting)
                             .disabled(!settings.showSubtitle)
                             .opacity(settings.showSubtitle ? 1 : 0.5)
                     }
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(6)
                     .padding(.horizontal, 20)
 
                     HStack(spacing: 6) {
