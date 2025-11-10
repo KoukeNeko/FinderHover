@@ -154,19 +154,21 @@ Press `Cmd+,` to customize:
 <img width="762" height="1002" alt="image" src="https://github.com/user-attachments/assets/0afda2cb-e26f-4574-b002-6b56a1c06102" />
 
 
-## 📝 What's New in Version 1.2.4.2
+## 📝 What's New in Version 1.2.5
 
-### 🐛 Multi-Display DPI Positioning Fix
+### 🔧 Code Quality & Maintainability Improvements
 
-Fixed hover window positioning issues when using multiple displays with different DPI/resolution settings!
+This release focuses on internal improvements to make the codebase more maintainable, debuggable, and efficient!
 
-**What's Fixed:**
+**What's Improved:**
 
-- ✅ Accurate window positioning on external displays with different DPI
-- ✅ Correct coordinate conversion for 1080p, 4K, and Retina displays
-- ✅ Proper boundary checking across all connected screens
+- ✅ **Centralized Constants** - Eliminated magic numbers throughout the codebase
+- ✅ **Enhanced Logging System** - Comprehensive logging with multiple severity levels and subsystems
+- ✅ **Memory Leak Prevention** - Improved timer management for better resource cleanup
+- ✅ **Code Deduplication** - Removed 120+ lines of duplicate code
+- ✅ **Better Organization** - Refactored project structure into logical directories
 
-Previously, the hover window would appear at incorrect positions when hovering over files on an external display (e.g., 1080p) while using a built-in Retina display (3.5K). Now it works perfectly across all display configurations!
+While users won't see visible changes, these improvements make the app more stable, easier to debug, and set a solid foundation for future features!
 
 📋 [View Full Changelog](CHANGELOG.md)
 
@@ -260,25 +262,6 @@ Contributions welcome!
 - Inspired by [my final dream ULTIMATE productivity desk setup. (2026)](https://youtu.be/veum1I6G__g?si=CDWpYV9anOszM6ai&t=375)
 - Built with Apple's SwiftUI and Accessibility frameworks
 - Icons from SF Symbols
-
-## 📝 Changelog
-
-### Version 1.2.5
-
-#### Code Quality Improvements
-
-- Refactored magic numbers into centralized `Constants.swift` for better maintainability
-- Improved timer management in `HoverManager` to prevent memory leaks
-- Refactored `HoverWindow.show()` method by splitting into smaller, focused helper methods
-- Added comprehensive logging system (`Logger.swift`) with multiple severity levels and subsystems
-- Enhanced error tracking for file system operations and accessibility API calls
-
-#### Technical Details
-
-- Created `DateFormatters.swift` for reusable date formatter instances
-- Created `FileTypeDescriptor.swift` to eliminate 120+ lines of duplicate code
-- Improved code organization with proper separation of concerns
-- All changes verified with successful builds
 
 ## 📄 License
 
