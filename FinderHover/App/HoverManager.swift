@@ -106,11 +106,16 @@ class HoverManager: ObservableObject {
     }
 
     func startMonitoring() {
-        guard isEnabled else { return }
+        guard isEnabled else {
+            Logger.debug("Monitoring not started - disabled by user", subsystem: .mouseTracking)
+            return
+        }
+        Logger.info("Starting mouse tracking", subsystem: .mouseTracking)
         mouseTracker.startTracking()
     }
 
     func stopMonitoring() {
+        Logger.info("Stopping mouse tracking", subsystem: .mouseTracking)
         mouseTracker.stopTracking()
         hideHoverWindow()
         invalidateDisplayTimer()
@@ -172,6 +177,7 @@ class HoverManager: ObservableObject {
 
             // Only update if it's a different file
             if currentFileInfo?.path != fileInfo.path {
+                Logger.debug("Displaying hover for file: \(fileInfo.name)", subsystem: .ui)
                 currentFileInfo = fileInfo
                 showHoverWindow(at: location, with: fileInfo)
             }
@@ -238,9 +244,12 @@ class HoverManager: ObservableObject {
         let accessEnabled = AXIsProcessTrustedWithOptions(options)
 
         if !accessEnabled {
+            Logger.warning("Accessibility permissions not granted", subsystem: .accessibility)
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.showAccessibilityAlert()
             }
+        } else {
+            Logger.info("Accessibility permissions granted", subsystem: .accessibility)
         }
     }
 

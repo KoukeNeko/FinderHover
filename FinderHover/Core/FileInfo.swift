@@ -156,6 +156,7 @@ struct FileInfo {
         let fileManager = FileManager.default
 
         guard fileManager.fileExists(atPath: path) else {
+            Logger.debug("File does not exist: \(path)", subsystem: .fileSystem)
             return nil
         }
 
@@ -183,6 +184,7 @@ struct FileInfo {
                     let contents = try fileManager.contentsOfDirectory(atPath: path)
                     itemCount = contents.count
                 } catch {
+                    Logger.error("Failed to read directory contents: \(path)", error: error, subsystem: .fileSystem)
                     itemCount = nil
                 }
             }
@@ -224,6 +226,7 @@ struct FileInfo {
                 audioMetadata: audioMetadata
             )
         } catch {
+            Logger.error("Failed to read file attributes: \(path)", error: error, subsystem: .fileSystem)
             return nil
         }
     }
