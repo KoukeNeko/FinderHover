@@ -768,6 +768,45 @@ struct HoverContentView: View {
                         .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
+        
+        case .vectorGraphics:
+            if settings.showVectorGraphics, let vectorGraphics = fileInfo.vectorGraphicsMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.vectorGraphics.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showVectorGraphicsFormat, let format = vectorGraphics.format {
+                        DetailRow(icon: "paintbrush.pointed", label: "hover.vectorGraphics.format".localized, value: format, fontSize: settings.fontSize)
+                    }
+                    if settings.showVectorGraphicsDimensions, let dimensions = vectorGraphics.dimensions {
+                        DetailRow(icon: "arrow.up.left.and.arrow.down.right", label: "hover.vectorGraphics.dimensions".localized, value: dimensions, fontSize: settings.fontSize)
+                    }
+                    if settings.showVectorGraphicsViewBox, let viewBox = vectorGraphics.viewBox {
+                        DetailRow(icon: "rectangle.dashed", label: "hover.vectorGraphics.viewBox".localized, value: viewBox, fontSize: settings.fontSize)
+                    }
+                    if settings.showVectorGraphicsElementCount, let elementCount = vectorGraphics.elementCount {
+                        DetailRow(icon: "square.stack.3d.up", label: "hover.vectorGraphics.elementCount".localized, value: "\(elementCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showVectorGraphicsColorMode, let colorMode = vectorGraphics.colorMode {
+                        DetailRow(icon: "paintpalette", label: "hover.vectorGraphics.colorMode".localized, value: colorMode, fontSize: settings.fontSize)
+                    }
+                    if settings.showVectorGraphicsCreator, let creator = vectorGraphics.creator {
+                        DetailRow(icon: "hammer", label: "hover.vectorGraphics.creator".localized, value: creator, fontSize: settings.fontSize)
+                    }
+                    if settings.showVectorGraphicsVersion, let version = vectorGraphics.version {
+                        DetailRow(icon: "number", label: "hover.vectorGraphics.version".localized, value: version, fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
 
         case .filePath:
             if settings.showFilePath {

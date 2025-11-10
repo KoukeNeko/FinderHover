@@ -169,6 +169,17 @@
 "settings.display.diskImage.fileSystem" = "File System";
 "settings.display.diskImage.hint" = "Disk image metadata only appears for DMG, ISO, and other disk image formats";
 
+"settings.display.vectorGraphics.title" = "Vector Graphics Information";
+"settings.display.vectorGraphics.show" = "Show Vector Graphics Metadata";
+"settings.display.vectorGraphics.format" = "Format Type";
+"settings.display.vectorGraphics.dimensions" = "Dimensions";
+"settings.display.vectorGraphics.viewBox" = "ViewBox";
+"settings.display.vectorGraphics.elementCount" = "Element Count";
+"settings.display.vectorGraphics.colorMode" = "Color Mode";
+"settings.display.vectorGraphics.creator" = "Creator Application";
+"settings.display.vectorGraphics.version" = "Format Version";
+"settings.display.vectorGraphics.hint" = "Vector graphics metadata only appears for SVG, EPS, AI, and vector PDF files";
+
 "settings.display.order" = "Display Order";
 "settings.display.order.hint" = "Drag items to reorder. EXIF moves as a group.";
 
@@ -242,6 +253,7 @@
 "displayItem.code" = "Code File Information";
 "displayItem.font" = "Font Information";
 "displayItem.diskImage" = "Disk Image Information";
+"displayItem.vectorGraphics" = "Vector Graphics Information";
 "displayItem.filePath" = "File Path";
 
 /* Hover Window */
@@ -364,6 +376,16 @@
 "hover.diskImage.encrypted" = "Encrypted";
 "hover.diskImage.partitionScheme" = "Partition Scheme";
 "hover.diskImage.fileSystem" = "File System";
+
+/* Vector Graphics Hover */
+"hover.vectorGraphics.title" = "Vector Graphics";
+"hover.vectorGraphics.format" = "Format";
+"hover.vectorGraphics.dimensions" = "Dimensions";
+"hover.vectorGraphics.viewBox" = "ViewBox";
+"hover.vectorGraphics.elementCount" = "Elements";
+"hover.vectorGraphics.colorMode" = "Color Mode";
+"hover.vectorGraphics.creator" = "Creator";
+"hover.vectorGraphics.version" = "Version";
 
 /* Common */
 "common.reset" = "Reset to Defaults";

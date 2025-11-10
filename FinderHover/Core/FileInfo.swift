@@ -200,6 +200,22 @@ struct DiskImageMetadata {
     }
 }
 
+// MARK: - Vector Graphics Metadata Structure
+struct VectorGraphicsMetadata {
+    let format: String?           // Format type (SVG, EPS, AI, etc.)
+    let dimensions: String?       // Width x Height
+    let viewBox: String?          // ViewBox for SVG
+    let elementCount: Int?        // Number of paths/shapes
+    let colorMode: String?        // Color mode (RGB, CMYK, etc.)
+    let creator: String?          // Creator application
+    let version: String?          // Format version (e.g., SVG 1.1)
+    
+    var hasData: Bool {
+        return format != nil || dimensions != nil || viewBox != nil ||
+               elementCount != nil || colorMode != nil || creator != nil || version != nil
+    }
+}
+
 struct FileInfo {
     let name: String
     let path: String
@@ -249,6 +265,9 @@ struct FileInfo {
     
     // Disk image metadata
     let diskImageMetadata: DiskImageMetadata?
+    
+    // Vector graphics metadata
+    let vectorGraphicsMetadata: VectorGraphicsMetadata?
 
     var formattedSize: String {
         ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
@@ -375,6 +394,9 @@ struct FileInfo {
             
             // Extract Disk Image metadata
             let diskImageMetadata = extractDiskImageMetadata(from: url)
+            
+            // Extract Vector Graphics metadata
+            let vectorGraphicsMetadata = extractVectorGraphicsMetadata(from: url)
 
             return FileInfo(
                 name: url.lastPathComponent,
@@ -402,7 +424,8 @@ struct FileInfo {
                 ebookMetadata: ebookMetadata,
                 codeMetadata: codeMetadata,
                 fontMetadata: fontMetadata,
-                diskImageMetadata: diskImageMetadata
+                diskImageMetadata: diskImageMetadata,
+                vectorGraphicsMetadata: vectorGraphicsMetadata
             )
         } catch {
             Logger.error("Failed to read file attributes: \(path)", error: error, subsystem: .fileSystem)
@@ -1580,6 +1603,141 @@ struct FileInfo {
         } catch {
             return nil
         }
+    }
+    
+    private static func extractVectorGraphicsMetadata(from url: URL) -> VectorGraphicsMetadata? {
+        let vectorExtensions = ["svg", "svgz", "eps", "ai", "pdf"]
+        let ext = url.pathExtension.lowercased()
+        guard vectorExtensions.contains(ext) else { return nil }
+        
+        var format: String?
+        var dimensions: String?
+        var viewBox: String?
+        var elementCount: Int?
+        var colorMode: String?
+        var creator: String?
+        var version: String?
+        
+        if ext == "svg" || ext == "svgz" {
+            // Parse SVG file
+            do {
+                let data: Data
+                if ext == "svgz" {
+                    // Decompress gzipped SVG
+                    guard let compressedData = try? Data(contentsOf: url),
+                          let decompressedData = try? (compressedData as NSData).decompressed(using: .zlib) as Data else {
+                        return nil
+                    }
+                    data = decompressedData
+                } else {
+                    data = try Data(contentsOf: url)
+                }
+                
+                guard let xmlString = String(data: data, encoding: .utf8) else { return nil }
+                
+                format = "SVG"
+                
+                // Extract SVG version
+                if let versionRange = xmlString.range(of: #"version="([^"]+)""#, options: .regularExpression) {
+                    let versionString = String(xmlString[versionRange])
+                    if let match = versionString.range(of: #""([^"]+)""#, options: .regularExpression) {
+                        version = String(versionString[match]).replacingOccurrences(of: "\"", with: "")
+                    }
+                }
+                
+                // Extract viewBox
+                if let viewBoxRange = xmlString.range(of: #"viewBox="([^"]+)""#, options: .regularExpression) {
+                    let viewBoxString = String(xmlString[viewBoxRange])
+                    if let match = viewBoxString.range(of: #""([^"]+)""#, options: .regularExpression) {
+                        viewBox = String(viewBoxString[match]).replacingOccurrences(of: "\"", with: "")
+                    }
+                }
+                
+                // Extract width and height
+                var width: String?
+                var height: String?
+                if let widthRange = xmlString.range(of: #"width="([^"]+)""#, options: .regularExpression) {
+                    let widthString = String(xmlString[widthRange])
+                    if let match = widthString.range(of: #""([^"]+)""#, options: .regularExpression) {
+                        width = String(widthString[match]).replacingOccurrences(of: "\"", with: "")
+                    }
+                }
+                if let heightRange = xmlString.range(of: #"height="([^"]+)""#, options: .regularExpression) {
+                    let heightString = String(xmlString[heightRange])
+                    if let match = heightString.range(of: #""([^"]+)""#, options: .regularExpression) {
+                        height = String(heightString[match]).replacingOccurrences(of: "\"", with: "")
+                    }
+                }
+                if let w = width, let h = height {
+                    dimensions = "\(w) × \(h)"
+                }
+                
+                // Count elements (paths, circles, rects, etc.)
+                let pathCount = xmlString.components(separatedBy: "<path").count - 1
+                let circleCount = xmlString.components(separatedBy: "<circle").count - 1
+                let rectCount = xmlString.components(separatedBy: "<rect").count - 1
+                let ellipseCount = xmlString.components(separatedBy: "<ellipse").count - 1
+                let polygonCount = xmlString.components(separatedBy: "<polygon").count - 1
+                let polylineCount = xmlString.components(separatedBy: "<polyline").count - 1
+                elementCount = pathCount + circleCount + rectCount + ellipseCount + polygonCount + polylineCount
+                
+                // Extract creator/generator
+                if let creatorRange = xmlString.range(of: #"<dc:creator>([^<]+)</dc:creator>"#, options: .regularExpression) {
+                    let creatorString = String(xmlString[creatorRange])
+                    creator = creatorString.replacingOccurrences(of: "<dc:creator>", with: "").replacingOccurrences(of: "</dc:creator>", with: "")
+                } else if let generatorRange = xmlString.range(of: #"generator="([^"]+)""#, options: .regularExpression) {
+                    let generatorString = String(xmlString[generatorRange])
+                    if let match = generatorString.range(of: #""([^"]+)""#, options: .regularExpression) {
+                        creator = String(generatorString[match]).replacingOccurrences(of: "\"", with: "")
+                    }
+                }
+                
+            } catch {
+                return nil
+            }
+        } else if ext == "eps" || ext == "ai" {
+            // Parse EPS/AI file
+            guard let data = try? Data(contentsOf: url),
+                  let content = String(data: data.prefix(4096), encoding: .utf8) else {
+                return nil
+            }
+            
+            format = ext == "ai" ? "Adobe Illustrator" : "EPS"
+            
+            // Extract BoundingBox
+            if let bboxRange = content.range(of: #"%%BoundingBox:\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)"#, options: .regularExpression) {
+                let bboxString = String(content[bboxRange])
+                let components = bboxString.components(separatedBy: .whitespaces).compactMap { Int($0) }
+                if components.count >= 4 {
+                    let width = components[2] - components[0]
+                    let height = components[3] - components[1]
+                    dimensions = "\(width) × \(height) pt"
+                }
+            }
+            
+            // Extract Creator
+            if let creatorRange = content.range(of: #"%%Creator:\s*(.+)"#, options: .regularExpression) {
+                let creatorLine = String(content[creatorRange])
+                creator = creatorLine.replacingOccurrences(of: "%%Creator:", with: "").trimmingCharacters(in: .whitespaces)
+            }
+            
+            // Detect color mode
+            if content.contains("CMYK") || content.contains("setcmykcolor") {
+                colorMode = "CMYK"
+            } else if content.contains("RGB") || content.contains("setrgbcolor") {
+                colorMode = "RGB"
+            }
+        }
+        
+        return VectorGraphicsMetadata(
+            format: format,
+            dimensions: dimensions,
+            viewBox: viewBox,
+            elementCount: elementCount,
+            colorMode: colorMode,
+            creator: creator,
+            version: version
+        )
     }
 
     // MARK: - Helper Functions

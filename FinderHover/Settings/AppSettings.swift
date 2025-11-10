@@ -64,6 +64,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
     case code = "Code File Information"
     case font = "Font Information"
     case diskImage = "Disk Image Information"
+    case vectorGraphics = "Vector Graphics Information"
     case filePath = "File Path"
 
     var id: String { rawValue }
@@ -88,6 +89,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .code: return "displayItem.code".localized
         case .font: return "displayItem.font".localized
         case .diskImage: return "displayItem.diskImage".localized
+        case .vectorGraphics: return "displayItem.vectorGraphics".localized
         case .filePath: return "displayItem.filePath".localized
         }
     }
@@ -112,6 +114,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .code: return "chevron.left.forwardslash.chevron.right"
         case .font: return "textformat"
         case .diskImage: return "opticaldiscdrive"
+        case .vectorGraphics: return "paintbrush.pointed"
         case .filePath: return IconManager.FileSystem.folder
         }
     }
@@ -468,6 +471,32 @@ class AppSettings: ObservableObject {
     @Published var showDiskImageFileSystem: Bool {
         didSet { UserDefaults.standard.set(showDiskImageFileSystem, forKey: "showDiskImageFileSystem") }
     }
+    
+    // Vector Graphics metadata
+    @Published var showVectorGraphics: Bool {
+        didSet { UserDefaults.standard.set(showVectorGraphics, forKey: "showVectorGraphics") }
+    }
+    @Published var showVectorGraphicsFormat: Bool {
+        didSet { UserDefaults.standard.set(showVectorGraphicsFormat, forKey: "showVectorGraphicsFormat") }
+    }
+    @Published var showVectorGraphicsDimensions: Bool {
+        didSet { UserDefaults.standard.set(showVectorGraphicsDimensions, forKey: "showVectorGraphicsDimensions") }
+    }
+    @Published var showVectorGraphicsViewBox: Bool {
+        didSet { UserDefaults.standard.set(showVectorGraphicsViewBox, forKey: "showVectorGraphicsViewBox") }
+    }
+    @Published var showVectorGraphicsElementCount: Bool {
+        didSet { UserDefaults.standard.set(showVectorGraphicsElementCount, forKey: "showVectorGraphicsElementCount") }
+    }
+    @Published var showVectorGraphicsColorMode: Bool {
+        didSet { UserDefaults.standard.set(showVectorGraphicsColorMode, forKey: "showVectorGraphicsColorMode") }
+    }
+    @Published var showVectorGraphicsCreator: Bool {
+        didSet { UserDefaults.standard.set(showVectorGraphicsCreator, forKey: "showVectorGraphicsCreator") }
+    }
+    @Published var showVectorGraphicsVersion: Bool {
+        didSet { UserDefaults.standard.set(showVectorGraphicsVersion, forKey: "showVectorGraphicsVersion") }
+    }
 
     // Display order
     @Published var displayOrder: [DisplayItem] {
@@ -595,6 +624,15 @@ class AppSettings: ObservableObject {
                     decoded.append(.diskImage)
                 }
             }
+            if !decoded.contains(.vectorGraphics) {
+                if let diskImageIndex = decoded.firstIndex(of: .diskImage) {
+                    decoded.insert(.vectorGraphics, at: diskImageIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.vectorGraphics, at: filePathIndex)
+                } else {
+                    decoded.append(.vectorGraphics)
+                }
+            }
             self.displayOrder = decoded
         } else {
             // Default order
@@ -617,6 +655,7 @@ class AppSettings: ObservableObject {
                 .code,
                 .font,
                 .diskImage,
+                .vectorGraphics,
                 .filePath
             ]
         }
@@ -732,6 +771,15 @@ class AppSettings: ObservableObject {
         self.showDiskImageEncrypted = UserDefaults.standard.object(forKey: "showDiskImageEncrypted") as? Bool ?? Constants.Defaults.showDiskImageEncrypted
         self.showDiskImagePartitionScheme = UserDefaults.standard.object(forKey: "showDiskImagePartitionScheme") as? Bool ?? Constants.Defaults.showDiskImagePartitionScheme
         self.showDiskImageFileSystem = UserDefaults.standard.object(forKey: "showDiskImageFileSystem") as? Bool ?? Constants.Defaults.showDiskImageFileSystem
+        
+        self.showVectorGraphics = UserDefaults.standard.object(forKey: "showVectorGraphics") as? Bool ?? Constants.Defaults.showVectorGraphics
+        self.showVectorGraphicsFormat = UserDefaults.standard.object(forKey: "showVectorGraphicsFormat") as? Bool ?? Constants.Defaults.showVectorGraphicsFormat
+        self.showVectorGraphicsDimensions = UserDefaults.standard.object(forKey: "showVectorGraphicsDimensions") as? Bool ?? Constants.Defaults.showVectorGraphicsDimensions
+        self.showVectorGraphicsViewBox = UserDefaults.standard.object(forKey: "showVectorGraphicsViewBox") as? Bool ?? Constants.Defaults.showVectorGraphicsViewBox
+        self.showVectorGraphicsElementCount = UserDefaults.standard.object(forKey: "showVectorGraphicsElementCount") as? Bool ?? Constants.Defaults.showVectorGraphicsElementCount
+        self.showVectorGraphicsColorMode = UserDefaults.standard.object(forKey: "showVectorGraphicsColorMode") as? Bool ?? Constants.Defaults.showVectorGraphicsColorMode
+        self.showVectorGraphicsCreator = UserDefaults.standard.object(forKey: "showVectorGraphicsCreator") as? Bool ?? Constants.Defaults.showVectorGraphicsCreator
+        self.showVectorGraphicsVersion = UserDefaults.standard.object(forKey: "showVectorGraphicsVersion") as? Bool ?? Constants.Defaults.showVectorGraphicsVersion
         
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? Constants.Defaults.followCursor
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? Constants.Defaults.windowOffsetX

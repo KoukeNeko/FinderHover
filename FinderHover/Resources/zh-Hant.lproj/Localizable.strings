@@ -169,6 +169,17 @@
 "settings.display.diskImage.fileSystem" = "檔案系統";
 "settings.display.diskImage.hint" = "磁碟映像中繼資料僅顯示於 DMG、ISO 等磁碟映像格式";
 
+"settings.display.vectorGraphics.title" = "向量圖形資訊";
+"settings.display.vectorGraphics.show" = "顯示向量圖形中繼資料";
+"settings.display.vectorGraphics.format" = "格式類型";
+"settings.display.vectorGraphics.dimensions" = "尺寸";
+"settings.display.vectorGraphics.viewBox" = "視圖框";
+"settings.display.vectorGraphics.elementCount" = "元素數量";
+"settings.display.vectorGraphics.colorMode" = "色彩模式";
+"settings.display.vectorGraphics.creator" = "建立應用程式";
+"settings.display.vectorGraphics.version" = "格式版本";
+"settings.display.vectorGraphics.hint" = "向量圖形中繼資料僅顯示於 SVG、EPS、AI 與向量 PDF 檔案";
+
 "settings.display.order" = "顯示順序";
 "settings.display.order.hint" = "拖曳項目以重新排序。EXIF 作為群組移動。";
 
@@ -242,6 +253,7 @@
 "displayItem.code" = "程式碼檔案資訊";
 "displayItem.font" = "字型資訊";
 "displayItem.diskImage" = "磁碟映像資訊";
+"displayItem.vectorGraphics" = "向量圖形資訊";
 "displayItem.filePath" = "檔案路徑";
 
 /* Hover Window */
@@ -364,6 +376,16 @@
 "hover.diskImage.encrypted" = "加密狀態";
 "hover.diskImage.partitionScheme" = "分割區配置";
 "hover.diskImage.fileSystem" = "檔案系統";
+
+/* Vector Graphics Hover */
+"hover.vectorGraphics.title" = "向量圖形";
+"hover.vectorGraphics.format" = "格式";
+"hover.vectorGraphics.dimensions" = "尺寸";
+"hover.vectorGraphics.viewBox" = "視圖框";
+"hover.vectorGraphics.elementCount" = "元素數";
+"hover.vectorGraphics.colorMode" = "色彩模式";
+"hover.vectorGraphics.creator" = "建立者";
+"hover.vectorGraphics.version" = "版本";
 
 /* Common */
 "common.reset" = "重設為預設值";

@@ -389,6 +389,30 @@ enum Constants {
         
         /// Default show Disk Image file system
         static let showDiskImageFileSystem: Bool = true
+        
+        /// Default show Vector Graphics info
+        static let showVectorGraphics: Bool = true
+        
+        /// Default show Vector Graphics format
+        static let showVectorGraphicsFormat: Bool = true
+        
+        /// Default show Vector Graphics dimensions
+        static let showVectorGraphicsDimensions: Bool = true
+        
+        /// Default show Vector Graphics viewBox
+        static let showVectorGraphicsViewBox: Bool = true
+        
+        /// Default show Vector Graphics element count
+        static let showVectorGraphicsElementCount: Bool = true
+        
+        /// Default show Vector Graphics color mode
+        static let showVectorGraphicsColorMode: Bool = true
+        
+        /// Default show Vector Graphics creator
+        static let showVectorGraphicsCreator: Bool = true
+        
+        /// Default show Vector Graphics version
+        static let showVectorGraphicsVersion: Bool = true
 
         /// Default follow cursor
         static let followCursor: Bool = true

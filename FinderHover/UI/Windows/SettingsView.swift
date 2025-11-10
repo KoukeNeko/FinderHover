@@ -1013,6 +1013,51 @@ struct DisplaySettingsView: View {
                     .foregroundColor(.secondary)
                     .padding(.horizontal, 20)
                     .padding(.top, 8)
+                    
+                    // Vector Graphics Section
+                    Text("settings.display.vectorGraphics.title".localized)
+                        .font(.system(size: 13, weight: .semibold))
+                        .padding(.horizontal, 20)
+                        .padding(.top, 16)
+
+                    VStack(spacing: 10) {
+                        // Main toggle
+                        DisplayToggleRow(title: "settings.display.vectorGraphics.show".localized, icon: "paintbrush.pointed", isOn: $settings.showVectorGraphics)
+
+                        // Detail toggles
+                        DisplayToggleRow(title: "settings.display.vectorGraphics.format".localized, icon: "paintbrush.pointed", isOn: $settings.showVectorGraphicsFormat)
+                            .disabled(!settings.showVectorGraphics)
+                            .opacity(settings.showVectorGraphics ? 1 : 0.5)
+                        DisplayToggleRow(title: "settings.display.vectorGraphics.dimensions".localized, icon: "arrow.up.left.and.arrow.down.right", isOn: $settings.showVectorGraphicsDimensions)
+                            .disabled(!settings.showVectorGraphics)
+                            .opacity(settings.showVectorGraphics ? 1 : 0.5)
+                        DisplayToggleRow(title: "settings.display.vectorGraphics.viewBox".localized, icon: "rectangle.dashed", isOn: $settings.showVectorGraphicsViewBox)
+                            .disabled(!settings.showVectorGraphics)
+                            .opacity(settings.showVectorGraphics ? 1 : 0.5)
+                        DisplayToggleRow(title: "settings.display.vectorGraphics.elementCount".localized, icon: "square.stack.3d.up", isOn: $settings.showVectorGraphicsElementCount)
+                            .disabled(!settings.showVectorGraphics)
+                            .opacity(settings.showVectorGraphics ? 1 : 0.5)
+                        DisplayToggleRow(title: "settings.display.vectorGraphics.colorMode".localized, icon: "paintpalette", isOn: $settings.showVectorGraphicsColorMode)
+                            .disabled(!settings.showVectorGraphics)
+                            .opacity(settings.showVectorGraphics ? 1 : 0.5)
+                        DisplayToggleRow(title: "settings.display.vectorGraphics.creator".localized, icon: "hammer", isOn: $settings.showVectorGraphicsCreator)
+                            .disabled(!settings.showVectorGraphics)
+                            .opacity(settings.showVectorGraphics ? 1 : 0.5)
+                        DisplayToggleRow(title: "settings.display.vectorGraphics.version".localized, icon: "number", isOn: $settings.showVectorGraphicsVersion)
+                            .disabled(!settings.showVectorGraphics)
+                            .opacity(settings.showVectorGraphics ? 1 : 0.5)
+                    }
+                    .padding(.horizontal, 20)
+
+                    HStack(spacing: 6) {
+                        Image(systemName: "info.circle")
+                            .font(.system(size: 11))
+                        Text("settings.display.vectorGraphics.hint".localized)
+                            .font(.system(size: 11))
+                    }
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
 
                     // Display Order Section
                     Text("settings.display.order".localized)
