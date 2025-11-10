@@ -98,6 +98,24 @@
 "settings.display.pdf.encrypted" = "Encryption Status";
 "settings.display.pdf.hint" = "PDF metadata only appears for PDF files";
 
+"settings.display.office" = "Office Document Information";
+"settings.display.office.show" = "Show Office Metadata";
+"settings.display.office.title" = "Document Title";
+"settings.display.office.author" = "Author";
+"settings.display.office.subject" = "Subject";
+"settings.display.office.keywords" = "Keywords";
+"settings.display.office.comment" = "Comment";
+"settings.display.office.lastModifiedBy" = "Last Modified By";
+"settings.display.office.creationDate" = "Creation Date";
+"settings.display.office.modificationDate" = "Modification Date";
+"settings.display.office.pageCount" = "Page Count (Word)";
+"settings.display.office.wordCount" = "Word Count (Word)";
+"settings.display.office.sheetCount" = "Sheet Count (Excel)";
+"settings.display.office.slideCount" = "Slide Count (PowerPoint)";
+"settings.display.office.company" = "Company";
+"settings.display.office.category" = "Category";
+"settings.display.office.hint" = "Office metadata only appears for Microsoft Office documents";
+
 "settings.display.order" = "Display Order";
 "settings.display.order.hint" = "Drag items to reorder. EXIF moves as a group.";
 
@@ -165,6 +183,7 @@
 "displayItem.video" = "Video Information";
 "displayItem.audio" = "Audio Information";
 "displayItem.pdf" = "PDF Information";
+"displayItem.office" = "Office Document Information";
 "displayItem.filePath" = "File Path";
 
 /* Hover Window */
@@ -221,6 +240,23 @@
 "hover.pdf.modificationDate" = "Modified";
 "hover.pdf.keywords" = "Keywords";
 "hover.pdf.encrypted" = "Encrypted";
+
+/* Office Document Information */
+"hover.office.title" = "Office Document";
+"hover.office.documentTitle" = "Title";
+"hover.office.author" = "Author";
+"hover.office.subject" = "Subject";
+"hover.office.pageCount" = "Pages";
+"hover.office.wordCount" = "Words";
+"hover.office.sheetCount" = "Sheets";
+"hover.office.slideCount" = "Slides";
+"hover.office.keywords" = "Keywords";
+"hover.office.comment" = "Comment";
+"hover.office.lastModifiedBy" = "Modified By";
+"hover.office.creationDate" = "Created";
+"hover.office.modificationDate" = "Modified";
+"hover.office.company" = "Company";
+"hover.office.category" = "Category";
 
 /* Common */
 "common.reset" = "Reset to Defaults";

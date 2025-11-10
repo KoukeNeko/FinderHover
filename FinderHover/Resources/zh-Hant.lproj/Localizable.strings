@@ -98,6 +98,24 @@
 "settings.display.pdf.encrypted" = "加密狀態";
 "settings.display.pdf.hint" = "PDF 中繼資料僅顯示於 PDF 檔案";
 
+"settings.display.office" = "Office 文件資訊";
+"settings.display.office.show" = "顯示 Office 中繼資料";
+"settings.display.office.title" = "文件標題";
+"settings.display.office.author" = "作者";
+"settings.display.office.subject" = "主旨";
+"settings.display.office.keywords" = "關鍵字";
+"settings.display.office.comment" = "註解";
+"settings.display.office.lastModifiedBy" = "最後修改者";
+"settings.display.office.creationDate" = "建立日期";
+"settings.display.office.modificationDate" = "修改日期";
+"settings.display.office.pageCount" = "頁數 (Word)";
+"settings.display.office.wordCount" = "字數 (Word)";
+"settings.display.office.sheetCount" = "工作表數 (Excel)";
+"settings.display.office.slideCount" = "投影片數 (PowerPoint)";
+"settings.display.office.company" = "公司";
+"settings.display.office.category" = "類別";
+"settings.display.office.hint" = "Office 中繼資料僅顯示於 Microsoft Office 文件";
+
 "settings.display.order" = "顯示順序";
 "settings.display.order.hint" = "拖曳項目以重新排序。EXIF 作為群組移動。";
 
@@ -165,6 +183,7 @@
 "displayItem.video" = "影片資訊";
 "displayItem.audio" = "音訊資訊";
 "displayItem.pdf" = "PDF 資訊";
+"displayItem.office" = "Office 文件資訊";
 "displayItem.filePath" = "檔案路徑";
 
 /* Hover Window */
@@ -221,6 +240,23 @@
 "hover.pdf.modificationDate" = "修改時間";
 "hover.pdf.keywords" = "關鍵字";
 "hover.pdf.encrypted" = "已加密";
+
+/* Office Document Hover */
+"hover.office.title" = "Office 文件";
+"hover.office.documentTitle" = "標題";
+"hover.office.author" = "作者";
+"hover.office.subject" = "主旨";
+"hover.office.pageCount" = "頁數";
+"hover.office.wordCount" = "字數";
+"hover.office.sheetCount" = "工作表數";
+"hover.office.slideCount" = "投影片數";
+"hover.office.keywords" = "關鍵字";
+"hover.office.comment" = "註解";
+"hover.office.lastModifiedBy" = "修改者";
+"hover.office.creationDate" = "建立時間";
+"hover.office.modificationDate" = "修改時間";
+"hover.office.company" = "公司";
+"hover.office.category" = "類別";
 
 /* Common */
 "common.reset" = "重設為預設值";

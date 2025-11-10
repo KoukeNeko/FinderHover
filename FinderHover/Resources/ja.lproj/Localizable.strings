@@ -98,6 +98,24 @@
 "settings.display.pdf.encrypted" = "暗号化状態";
 "settings.display.pdf.hint" = "PDFメタデータはPDFファイルにのみ表示されます";
 
+"settings.display.office" = "Office文書情報";
+"settings.display.office.show" = "Officeメタデータを表示";
+"settings.display.office.title" = "文書タイトル";
+"settings.display.office.author" = "作成者";
+"settings.display.office.subject" = "件名";
+"settings.display.office.keywords" = "キーワード";
+"settings.display.office.comment" = "コメント";
+"settings.display.office.lastModifiedBy" = "最終更新者";
+"settings.display.office.creationDate" = "作成日";
+"settings.display.office.modificationDate" = "変更日";
+"settings.display.office.pageCount" = "ページ数 (Word)";
+"settings.display.office.wordCount" = "文字数 (Word)";
+"settings.display.office.sheetCount" = "シート数 (Excel)";
+"settings.display.office.slideCount" = "スライド数 (PowerPoint)";
+"settings.display.office.company" = "会社名";
+"settings.display.office.category" = "カテゴリ";
+"settings.display.office.hint" = "OfficeメタデータはMicrosoft Office文書にのみ表示されます";
+
 "settings.display.order" = "表示順序";
 "settings.display.order.hint" = "項目をドラッグして並べ替えます。EXIF はグループとして移動します。";
 
@@ -165,6 +183,7 @@
 "displayItem.video" = "動画情報";
 "displayItem.audio" = "オーディオ情報";
 "displayItem.pdf" = "PDF情報";
+"displayItem.office" = "Office文書情報";
 "displayItem.filePath" = "ファイルパス";
 
 /* Hover Window */
@@ -221,6 +240,23 @@
 "hover.pdf.modificationDate" = "変更日";
 "hover.pdf.keywords" = "キーワード";
 "hover.pdf.encrypted" = "暗号化";
+
+/* Office Document Hover */
+"hover.office.title" = "Office文書";
+"hover.office.documentTitle" = "タイトル";
+"hover.office.author" = "作成者";
+"hover.office.subject" = "件名";
+"hover.office.pageCount" = "ページ数";
+"hover.office.wordCount" = "文字数";
+"hover.office.sheetCount" = "シート数";
+"hover.office.slideCount" = "スライド数";
+"hover.office.keywords" = "キーワード";
+"hover.office.comment" = "コメント";
+"hover.office.lastModifiedBy" = "最終更新者";
+"hover.office.creationDate" = "作成日";
+"hover.office.modificationDate" = "変更日";
+"hover.office.company" = "会社名";
+"hover.office.category" = "カテゴリ";
 
 /* Common */
 "common.reset" = "デフォルトに戻す";

@@ -516,6 +516,66 @@ struct HoverContentView: View {
                 }
             }
 
+        case .office:
+            if settings.showOffice, let office = fileInfo.officeMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.office.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showOfficeTitle, let title = office.title {
+                        DetailRow(icon: "textformat", label: "hover.office.documentTitle".localized, value: title, fontSize: settings.fontSize)
+                    }
+                    if settings.showOfficeAuthor, let author = office.author {
+                        DetailRow(icon: "person", label: "hover.office.author".localized, value: author, fontSize: settings.fontSize)
+                    }
+                    if settings.showOfficeSubject, let subject = office.subject {
+                        DetailRow(icon: "text.alignleft", label: "hover.office.subject".localized, value: subject, fontSize: settings.fontSize)
+                    }
+                    if settings.showOfficePageCount, let pageCount = office.pageCount {
+                        DetailRow(icon: "doc.text", label: "hover.office.pageCount".localized, value: "\(pageCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showOfficeWordCount, let wordCount = office.wordCount {
+                        DetailRow(icon: "textformat.size", label: "hover.office.wordCount".localized, value: "\(wordCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showOfficeSheetCount, let sheetCount = office.sheetCount {
+                        DetailRow(icon: "tablecells", label: "hover.office.sheetCount".localized, value: "\(sheetCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showOfficeSlideCount, let slideCount = office.slideCount {
+                        DetailRow(icon: "rectangle.stack", label: "hover.office.slideCount".localized, value: "\(slideCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showOfficeKeywords, let keywords = office.keywords {
+                        DetailRow(icon: "tag", label: "hover.office.keywords".localized, value: keywords, fontSize: settings.fontSize)
+                    }
+                    if settings.showOfficeComment, let comment = office.comment {
+                        DetailRow(icon: "text.bubble", label: "hover.office.comment".localized, value: comment, fontSize: settings.fontSize)
+                    }
+                    if settings.showOfficeLastModifiedBy, let lastModifiedBy = office.lastModifiedBy {
+                        DetailRow(icon: "person.crop.circle", label: "hover.office.lastModifiedBy".localized, value: lastModifiedBy, fontSize: settings.fontSize)
+                    }
+                    if settings.showOfficeCreationDate, let creationDate = office.creationDate {
+                        DetailRow(icon: "calendar", label: "hover.office.creationDate".localized, value: creationDate, fontSize: settings.fontSize)
+                    }
+                    if settings.showOfficeModificationDate, let modificationDate = office.modificationDate {
+                        DetailRow(icon: "clock", label: "hover.office.modificationDate".localized, value: modificationDate, fontSize: settings.fontSize)
+                    }
+                    if settings.showOfficeCompany, let company = office.company {
+                        DetailRow(icon: "building.2", label: "hover.office.company".localized, value: company, fontSize: settings.fontSize)
+                    }
+                    if settings.showOfficeCategory, let category = office.category {
+                        DetailRow(icon: "folder", label: "hover.office.category".localized, value: category, fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
+
         case .filePath:
             if settings.showFilePath {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
