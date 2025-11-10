@@ -54,7 +54,7 @@ A beautiful, highly customizable macOS app that displays rich file information w
 
 ### Download Release (Recommended)
 
-1. Download `FinderHover.app.zip` from [Releases](../../releases)
+1. Download `FinderHover.dmg.zip` from [Releases](../../releases)
 2. Extract and move to Applications folder
 3. Launch FinderHover
 
