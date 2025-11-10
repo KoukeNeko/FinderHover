@@ -393,8 +393,36 @@ struct FileInfo {
             // Extract audio metadata for audio files
             let audioMetadata = extractAudioMetadata(from: url)
 
-            // Extract PDF metadata for PDF files
-            let pdfMetadata = extractPDFMetadata(from: url)
+            // Extract metadata based on file type
+            // Note: PDF can be either a document or vector graphics, check page count to determine
+            var pdfMetadata: PDFMetadata? = nil
+            var vectorGraphicsMetadata: VectorGraphicsMetadata? = nil
+
+            if url.pathExtension.lowercased() == "pdf" {
+                // Extract PDF metadata first
+                let metadata = extractPDFMetadata(from: url)
+
+                // If PDF has multiple pages or has text content, treat as document
+                // Otherwise, treat as vector graphics
+                if let pageCount = metadata?.pageCount, pageCount > 1 {
+                    pdfMetadata = metadata
+                } else if metadata?.title != nil || metadata?.author != nil {
+                    // Has document metadata, treat as document
+                    pdfMetadata = metadata
+                } else {
+                    // Single page PDF with no document metadata, could be vector graphics
+                    // Try to extract as vector graphics
+                    vectorGraphicsMetadata = extractVectorGraphicsMetadata(from: url)
+                    // If no vector graphics metadata found, fall back to PDF metadata
+                    if vectorGraphicsMetadata == nil {
+                        pdfMetadata = metadata
+                    }
+                }
+            } else {
+                // Not a PDF, extract normally
+                pdfMetadata = extractPDFMetadata(from: url)
+                vectorGraphicsMetadata = extractVectorGraphicsMetadata(from: url)
+            }
 
             // Extract Office document metadata
             let officeMetadata = extractOfficeMetadata(from: url)
@@ -410,13 +438,10 @@ struct FileInfo {
 
             // Extract Font metadata
             let fontMetadata = extractFontMetadata(from: url)
-            
+
             // Extract Disk Image metadata
             let diskImageMetadata = extractDiskImageMetadata(from: url)
-            
-            // Extract Vector Graphics metadata
-            let vectorGraphicsMetadata = extractVectorGraphicsMetadata(from: url)
-            
+
             // Extract Subtitle metadata
             let subtitleMetadata = extractSubtitleMetadata(from: url)
 
@@ -1629,6 +1654,7 @@ struct FileInfo {
     }
     
     private static func extractVectorGraphicsMetadata(from url: URL) -> VectorGraphicsMetadata? {
+        // Note: PDF is handled separately in FileInfo.from() to avoid overlap with PDF document metadata
         let vectorExtensions = ["svg", "svgz", "eps", "ai", "pdf"]
         let ext = url.pathExtension.lowercased()
         guard vectorExtensions.contains(ext) else { return nil }
