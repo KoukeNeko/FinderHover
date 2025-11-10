@@ -290,6 +290,34 @@ enum Constants {
         /// Default show Archive encrypted status
         static let showArchiveEncrypted: Bool = true
 
+        // MARK: - E-book Display Defaults
+        /// Default show E-book section
+        static let showEbook: Bool = true
+
+        /// Default show E-book title
+        static let showEbookTitle: Bool = true
+
+        /// Default show E-book author
+        static let showEbookAuthor: Bool = true
+
+        /// Default show E-book publisher
+        static let showEbookPublisher: Bool = true
+
+        /// Default show E-book publication date
+        static let showEbookPublicationDate: Bool = true
+
+        /// Default show E-book ISBN
+        static let showEbookISBN: Bool = true
+
+        /// Default show E-book language
+        static let showEbookLanguage: Bool = true
+
+        /// Default show E-book description
+        static let showEbookDescription: Bool = true
+
+        /// Default show E-book page count
+        static let showEbookPageCount: Bool = true
+
         /// Default follow cursor
         static let followCursor: Bool = true
 

@@ -125,6 +125,18 @@
 "settings.display.archive.encrypted" = "加密狀態";
 "settings.display.archive.hint" = "壓縮檔中繼資料僅顯示於壓縮檔案";
 
+"settings.display.ebook" = "電子書資訊";
+"settings.display.ebook.show" = "顯示電子書中繼資料";
+"settings.display.ebook.title" = "書名";
+"settings.display.ebook.author" = "作者";
+"settings.display.ebook.publisher" = "出版社";
+"settings.display.ebook.publicationDate" = "出版日期";
+"settings.display.ebook.isbn" = "ISBN";
+"settings.display.ebook.language" = "語言";
+"settings.display.ebook.description" = "內容簡介";
+"settings.display.ebook.pageCount" = "頁數";
+"settings.display.ebook.hint" = "電子書中繼資料僅顯示於 EPUB、MOBI 等電子書格式";
+
 "settings.display.order" = "顯示順序";
 "settings.display.order.hint" = "拖曳項目以重新排序。EXIF 作為群組移動。";
 
@@ -194,6 +206,7 @@
 "displayItem.pdf" = "PDF 資訊";
 "displayItem.office" = "Office 文件資訊";
 "displayItem.archive" = "壓縮檔資訊";
+"displayItem.ebook" = "電子書資訊";
 "displayItem.filePath" = "檔案路徑";
 
 /* Hover Window */
@@ -276,6 +289,17 @@
 "hover.archive.compressionRatio" = "壓縮率";
 "hover.archive.encrypted" = "已加密";
 "hover.archive.yes" = "是";
+
+/* E-book Hover */
+"hover.ebook.title" = "電子書";
+"hover.ebook.bookTitle" = "書名";
+"hover.ebook.author" = "作者";
+"hover.ebook.publisher" = "出版社";
+"hover.ebook.publicationDate" = "出版日期";
+"hover.ebook.isbn" = "ISBN";
+"hover.ebook.language" = "語言";
+"hover.ebook.description" = "內容簡介";
+"hover.ebook.pageCount" = "頁數";
 
 /* Common */
 "common.reset" = "重設為預設值";

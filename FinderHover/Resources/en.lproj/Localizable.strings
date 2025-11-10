@@ -125,6 +125,18 @@
 "settings.display.archive.encrypted" = "Encrypted Status";
 "settings.display.archive.hint" = "Archive metadata only appears for compressed files";
 
+"settings.display.ebook" = "E-book Information";
+"settings.display.ebook.show" = "Show E-book Metadata";
+"settings.display.ebook.title" = "Book Title";
+"settings.display.ebook.author" = "Author";
+"settings.display.ebook.publisher" = "Publisher";
+"settings.display.ebook.publicationDate" = "Publication Date";
+"settings.display.ebook.isbn" = "ISBN";
+"settings.display.ebook.language" = "Language";
+"settings.display.ebook.description" = "Description";
+"settings.display.ebook.pageCount" = "Page Count";
+"settings.display.ebook.hint" = "E-book metadata only appears for EPUB, MOBI, and other e-book formats";
+
 "settings.display.order" = "Display Order";
 "settings.display.order.hint" = "Drag items to reorder. EXIF moves as a group.";
 
@@ -194,6 +206,7 @@
 "displayItem.pdf" = "PDF Information";
 "displayItem.office" = "Office Document Information";
 "displayItem.archive" = "Archive Information";
+"displayItem.ebook" = "E-book Information";
 "displayItem.filePath" = "File Path";
 
 /* Hover Window */
@@ -276,6 +289,17 @@
 "hover.archive.compressionRatio" = "Compression";
 "hover.archive.encrypted" = "Encrypted";
 "hover.archive.yes" = "Yes";
+
+/* E-book Hover */
+"hover.ebook.title" = "E-book";
+"hover.ebook.bookTitle" = "Title";
+"hover.ebook.author" = "Author";
+"hover.ebook.publisher" = "Publisher";
+"hover.ebook.publicationDate" = "Published";
+"hover.ebook.isbn" = "ISBN";
+"hover.ebook.language" = "Language";
+"hover.ebook.description" = "Description";
+"hover.ebook.pageCount" = "Pages";
 
 /* Common */
 "common.reset" = "Reset to Defaults";

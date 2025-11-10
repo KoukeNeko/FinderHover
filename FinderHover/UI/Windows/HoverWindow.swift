@@ -610,6 +610,48 @@ struct HoverContentView: View {
                 }
             }
 
+        case .ebook:
+            if settings.showEbook, let ebook = fileInfo.ebookMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.ebook.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showEbookTitle, let title = ebook.title {
+                        DetailRow(icon: "book.closed", label: "hover.ebook.bookTitle".localized, value: title, fontSize: settings.fontSize)
+                    }
+                    if settings.showEbookAuthor, let author = ebook.author {
+                        DetailRow(icon: "person", label: "hover.ebook.author".localized, value: author, fontSize: settings.fontSize)
+                    }
+                    if settings.showEbookPublisher, let publisher = ebook.publisher {
+                        DetailRow(icon: "building.2", label: "hover.ebook.publisher".localized, value: publisher, fontSize: settings.fontSize)
+                    }
+                    if settings.showEbookPublicationDate, let publicationDate = ebook.publicationDate {
+                        DetailRow(icon: "calendar", label: "hover.ebook.publicationDate".localized, value: publicationDate, fontSize: settings.fontSize)
+                    }
+                    if settings.showEbookISBN, let isbn = ebook.isbn {
+                        DetailRow(icon: "barcode", label: "hover.ebook.isbn".localized, value: isbn, fontSize: settings.fontSize)
+                    }
+                    if settings.showEbookLanguage, let language = ebook.language {
+                        DetailRow(icon: "globe", label: "hover.ebook.language".localized, value: language, fontSize: settings.fontSize)
+                    }
+                    if settings.showEbookDescription, let description = ebook.description {
+                        DetailRow(icon: "text.alignleft", label: "hover.ebook.description".localized, value: description, fontSize: settings.fontSize)
+                    }
+                    if settings.showEbookPageCount, let pageCount = ebook.pageCount {
+                        DetailRow(icon: "doc.text", label: "hover.ebook.pageCount".localized, value: "\(pageCount)", fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
+
         case .filePath:
             if settings.showFilePath {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {

@@ -135,6 +135,24 @@ struct ArchiveMetadata {
     }
 }
 
+// MARK: - E-book Metadata Structure
+struct EbookMetadata {
+    let title: String?            // Book title
+    let author: String?           // Author(s)
+    let publisher: String?        // Publisher
+    let publicationDate: String?  // Publication date
+    let isbn: String?             // ISBN
+    let language: String?         // Language
+    let description: String?      // Book description/summary
+    let pageCount: Int?           // Number of pages
+
+    var hasData: Bool {
+        return title != nil || author != nil || publisher != nil ||
+               publicationDate != nil || isbn != nil || language != nil ||
+               description != nil || pageCount != nil
+    }
+}
+
 struct FileInfo {
     let name: String
     let path: String
@@ -172,6 +190,9 @@ struct FileInfo {
 
     // Archive metadata
     let archiveMetadata: ArchiveMetadata?
+
+    // E-book metadata
+    let ebookMetadata: EbookMetadata?
 
     var formattedSize: String {
         ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
@@ -287,6 +308,9 @@ struct FileInfo {
             // Extract Archive metadata
             let archiveMetadata = extractArchiveMetadata(from: url)
 
+            // Extract E-book metadata
+            let ebookMetadata = extractEbookMetadata(from: url)
+
             return FileInfo(
                 name: url.lastPathComponent,
                 path: path,
@@ -309,7 +333,8 @@ struct FileInfo {
                 audioMetadata: audioMetadata,
                 pdfMetadata: pdfMetadata,
                 officeMetadata: officeMetadata,
-                archiveMetadata: archiveMetadata
+                archiveMetadata: archiveMetadata,
+                ebookMetadata: ebookMetadata
             )
         } catch {
             Logger.error("Failed to read file attributes: \(path)", error: error, subsystem: .fileSystem)
@@ -1021,6 +1046,136 @@ struct FileInfo {
         )
 
         return metadata.hasData ? metadata : nil
+    }
+
+    // MARK: - E-book Metadata Extraction
+    private static func extractEbookMetadata(from url: URL) -> EbookMetadata? {
+        let ext = url.pathExtension.lowercased()
+        let ebookExtensions = ["epub", "mobi", "azw", "azw3", "fb2", "lit", "prc"]
+        
+        guard ebookExtensions.contains(ext) else {
+            return nil
+        }
+        
+        // Try EPUB parsing first (most common format)
+        if ext == "epub" {
+            return extractEPUBMetadata(from: url)
+        }
+        
+        // Fallback to MDItem API for other formats
+        return extractEbookMetadataViaMDItem(from: url)
+    }
+    
+    private static func extractEPUBMetadata(from url: URL) -> EbookMetadata? {
+        let fileManager = FileManager.default
+        let tempDir = fileManager.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        
+        defer {
+            try? fileManager.removeItem(at: tempDir)
+        }
+        
+        // EPUB is a ZIP file, extract to temp directory
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/unzip")
+        process.arguments = ["-q", url.path, "-d", tempDir.path]
+        
+        do {
+            try process.run()
+            process.waitUntilExit()
+            
+            guard process.terminationStatus == 0 else {
+                return nil
+            }
+            
+            // Find container.xml to get OPF file path
+            let containerPath = tempDir.appendingPathComponent("META-INF/container.xml")
+            guard fileManager.fileExists(atPath: containerPath.path) else {
+                return nil
+            }
+            
+            let containerData = try Data(contentsOf: containerPath)
+            let containerXML = try XMLDocument(data: containerData, options: [])
+            
+            // Get OPF file path from container.xml
+            guard let rootfile = try containerXML.nodes(forXPath: "//rootfile[@media-type='application/oebps-package+xml']").first as? XMLElement,
+                  let opfRelativePath = rootfile.attribute(forName: "full-path")?.stringValue else {
+                return nil
+            }
+            
+            // Parse OPF file for metadata
+            let opfPath = tempDir.appendingPathComponent(opfRelativePath)
+            let opfData = try Data(contentsOf: opfPath)
+            let opfXML = try XMLDocument(data: opfData, options: [])
+            
+            // Extract metadata using XPath (without namespace prefix for simplicity)
+            // EPUB uses Dublin Core, but we'll search without namespace
+            let title = try? opfXML.nodes(forXPath: "//*[local-name()='title']").first?.stringValue
+            let author = try? opfXML.nodes(forXPath: "//*[local-name()='creator']").first?.stringValue
+            let publisher = try? opfXML.nodes(forXPath: "//*[local-name()='publisher']").first?.stringValue
+            let publicationDate = try? opfXML.nodes(forXPath: "//*[local-name()='date']").first?.stringValue
+            let language = try? opfXML.nodes(forXPath: "//*[local-name()='language']").first?.stringValue
+            let description = try? opfXML.nodes(forXPath: "//*[local-name()='description']").first?.stringValue
+            
+            // Try to find ISBN in identifier elements
+            var isbn: String? = nil
+            if let identifiers = try? opfXML.nodes(forXPath: "//*[local-name()='identifier']") {
+                for identifier in identifiers {
+                    if let element = identifier as? XMLElement,
+                       let scheme = element.attribute(forName: "scheme")?.stringValue?.lowercased(),
+                       scheme.contains("isbn") {
+                        isbn = element.stringValue
+                        break
+                    }
+                    // Also check opf:scheme attribute
+                    if let element = identifier as? XMLElement,
+                       let value = element.stringValue,
+                       value.uppercased().contains("ISBN") {
+                        isbn = value
+                        break
+                    }
+                }
+            }
+            
+            return EbookMetadata(
+                title: title,
+                author: author,
+                publisher: publisher,
+                publicationDate: publicationDate,
+                isbn: isbn,
+                language: language,
+                description: description,
+                pageCount: nil  // EPUB doesn't have fixed page count
+            )
+            
+        } catch {
+            print("Error extracting EPUB metadata: \(error)")
+            return nil
+        }
+    }
+    
+    private static func extractEbookMetadataViaMDItem(from url: URL) -> EbookMetadata? {
+        guard let mdItem = MDItemCreateWithURL(kCFAllocatorDefault, url as CFURL) else {
+            return nil
+        }
+        
+        let title = MDItemCopyAttribute(mdItem, kMDItemTitle) as? String
+        let authors = MDItemCopyAttribute(mdItem, kMDItemAuthors) as? [String]
+        let author = authors?.joined(separator: ", ")
+        let publisher = MDItemCopyAttribute(mdItem, kMDItemPublishers) as? [String]
+        let language = MDItemCopyAttribute(mdItem, kMDItemLanguages) as? [String]
+        let description = MDItemCopyAttribute(mdItem, kMDItemDescription) as? String
+        let pageCount = MDItemCopyAttribute(mdItem, kMDItemNumberOfPages) as? Int
+        
+        return EbookMetadata(
+            title: title,
+            author: author,
+            publisher: publisher?.first,
+            publicationDate: nil,
+            isbn: nil,
+            language: language?.first,
+            description: description,
+            pageCount: pageCount
+        )
     }
 
     // MARK: - Helper Functions

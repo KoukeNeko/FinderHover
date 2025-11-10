@@ -125,6 +125,18 @@
 "settings.display.archive.encrypted" = "暗号化状態";
 "settings.display.archive.hint" = "アーカイブメタデータは圧縮ファイルにのみ表示されます";
 
+"settings.display.ebook" = "電子書籍情報";
+"settings.display.ebook.show" = "電子書籍メタデータを表示";
+"settings.display.ebook.title" = "書名";
+"settings.display.ebook.author" = "著者";
+"settings.display.ebook.publisher" = "出版社";
+"settings.display.ebook.publicationDate" = "出版日";
+"settings.display.ebook.isbn" = "ISBN";
+"settings.display.ebook.language" = "言語";
+"settings.display.ebook.description" = "内容紹介";
+"settings.display.ebook.pageCount" = "ページ数";
+"settings.display.ebook.hint" = "電子書籍メタデータはEPUB、MOBIなどの電子書籍形式にのみ表示されます";
+
 "settings.display.order" = "表示順序";
 "settings.display.order.hint" = "項目をドラッグして並べ替えます。EXIF はグループとして移動します。";
 
@@ -194,6 +206,7 @@
 "displayItem.pdf" = "PDF情報";
 "displayItem.office" = "Office文書情報";
 "displayItem.archive" = "アーカイブ情報";
+"displayItem.ebook" = "電子書籍情報";
 "displayItem.filePath" = "ファイルパス";
 
 /* Hover Window */
@@ -276,6 +289,17 @@
 "hover.archive.compressionRatio" = "圧縮率";
 "hover.archive.encrypted" = "暗号化";
 "hover.archive.yes" = "はい";
+
+/* E-book Hover */
+"hover.ebook.title" = "電子書籍";
+"hover.ebook.bookTitle" = "書名";
+"hover.ebook.author" = "著者";
+"hover.ebook.publisher" = "出版社";
+"hover.ebook.publicationDate" = "出版日";
+"hover.ebook.isbn" = "ISBN";
+"hover.ebook.language" = "言語";
+"hover.ebook.description" = "内容紹介";
+"hover.ebook.pageCount" = "ページ数";
 
 /* Common */
 "common.reset" = "デフォルトに戻す";

@@ -60,6 +60,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
     case pdf = "PDF Information"
     case office = "Office Document Information"
     case archive = "Archive Information"
+    case ebook = "E-book Information"
     case filePath = "File Path"
 
     var id: String { rawValue }
@@ -80,6 +81,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .pdf: return "displayItem.pdf".localized
         case .office: return "displayItem.office".localized
         case .archive: return "displayItem.archive".localized
+        case .ebook: return "displayItem.ebook".localized
         case .filePath: return "displayItem.filePath".localized
         }
     }
@@ -100,6 +102,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .pdf: return "doc.richtext"
         case .office: return "doc.text.fill"
         case .archive: return "doc.zipper"
+        case .ebook: return "book.closed"
         case .filePath: return IconManager.FileSystem.folder
         }
     }
@@ -353,6 +356,35 @@ class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(showArchiveEncrypted, forKey: "showArchiveEncrypted") }
     }
 
+    // MARK: - E-book Display Settings
+    @Published var showEbook: Bool {
+        didSet { UserDefaults.standard.set(showEbook, forKey: "showEbook") }
+    }
+    @Published var showEbookTitle: Bool {
+        didSet { UserDefaults.standard.set(showEbookTitle, forKey: "showEbookTitle") }
+    }
+    @Published var showEbookAuthor: Bool {
+        didSet { UserDefaults.standard.set(showEbookAuthor, forKey: "showEbookAuthor") }
+    }
+    @Published var showEbookPublisher: Bool {
+        didSet { UserDefaults.standard.set(showEbookPublisher, forKey: "showEbookPublisher") }
+    }
+    @Published var showEbookPublicationDate: Bool {
+        didSet { UserDefaults.standard.set(showEbookPublicationDate, forKey: "showEbookPublicationDate") }
+    }
+    @Published var showEbookISBN: Bool {
+        didSet { UserDefaults.standard.set(showEbookISBN, forKey: "showEbookISBN") }
+    }
+    @Published var showEbookLanguage: Bool {
+        didSet { UserDefaults.standard.set(showEbookLanguage, forKey: "showEbookLanguage") }
+    }
+    @Published var showEbookDescription: Bool {
+        didSet { UserDefaults.standard.set(showEbookDescription, forKey: "showEbookDescription") }
+    }
+    @Published var showEbookPageCount: Bool {
+        didSet { UserDefaults.standard.set(showEbookPageCount, forKey: "showEbookPageCount") }
+    }
+
     // Display order
     @Published var displayOrder: [DisplayItem] {
         didSet {
@@ -443,6 +475,15 @@ class AppSettings: ObservableObject {
                     decoded.append(.archive)
                 }
             }
+            if !decoded.contains(.ebook) {
+                if let archiveIndex = decoded.firstIndex(of: .archive) {
+                    decoded.insert(.ebook, at: archiveIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.ebook, at: filePathIndex)
+                } else {
+                    decoded.append(.ebook)
+                }
+            }
             self.displayOrder = decoded
         } else {
             // Default order
@@ -461,6 +502,7 @@ class AppSettings: ObservableObject {
                 .pdf,
                 .office,
                 .archive,
+                .ebook,
                 .filePath
             ]
         }
@@ -540,6 +582,15 @@ class AppSettings: ObservableObject {
         self.showArchiveUncompressedSize = UserDefaults.standard.object(forKey: "showArchiveUncompressedSize") as? Bool ?? Constants.Defaults.showArchiveUncompressedSize
         self.showArchiveCompressionRatio = UserDefaults.standard.object(forKey: "showArchiveCompressionRatio") as? Bool ?? Constants.Defaults.showArchiveCompressionRatio
         self.showArchiveEncrypted = UserDefaults.standard.object(forKey: "showArchiveEncrypted") as? Bool ?? Constants.Defaults.showArchiveEncrypted
+        self.showEbook = UserDefaults.standard.object(forKey: "showEbook") as? Bool ?? Constants.Defaults.showEbook
+        self.showEbookTitle = UserDefaults.standard.object(forKey: "showEbookTitle") as? Bool ?? Constants.Defaults.showEbookTitle
+        self.showEbookAuthor = UserDefaults.standard.object(forKey: "showEbookAuthor") as? Bool ?? Constants.Defaults.showEbookAuthor
+        self.showEbookPublisher = UserDefaults.standard.object(forKey: "showEbookPublisher") as? Bool ?? Constants.Defaults.showEbookPublisher
+        self.showEbookPublicationDate = UserDefaults.standard.object(forKey: "showEbookPublicationDate") as? Bool ?? Constants.Defaults.showEbookPublicationDate
+        self.showEbookISBN = UserDefaults.standard.object(forKey: "showEbookISBN") as? Bool ?? Constants.Defaults.showEbookISBN
+        self.showEbookLanguage = UserDefaults.standard.object(forKey: "showEbookLanguage") as? Bool ?? Constants.Defaults.showEbookLanguage
+        self.showEbookDescription = UserDefaults.standard.object(forKey: "showEbookDescription") as? Bool ?? Constants.Defaults.showEbookDescription
+        self.showEbookPageCount = UserDefaults.standard.object(forKey: "showEbookPageCount") as? Bool ?? Constants.Defaults.showEbookPageCount
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? Constants.Defaults.followCursor
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? Constants.Defaults.windowOffsetX
         self.windowOffsetY = UserDefaults.standard.object(forKey: "windowOffsetY") as? Double ?? Constants.Defaults.windowOffsetY

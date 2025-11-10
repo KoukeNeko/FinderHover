@@ -802,6 +802,62 @@ struct DisplaySettingsView: View {
                     .padding(.horizontal, 20)
                     .padding(.top, 8)
 
+                    // E-book Section
+                    Text("settings.display.ebook".localized)
+                        .font(.system(size: 13, weight: .semibold))
+                        .padding(.horizontal, 20)
+                        .padding(.top, 16)
+                        .padding(.bottom, 8)
+
+                    VStack(spacing: 0) {
+                        DisplayToggleRow(title: "settings.display.ebook.show".localized, icon: "book.closed", isOn: $settings.showEbook)
+
+                        DisplayToggleRow(title: "settings.display.ebook.title".localized, icon: "book.closed", isOn: $settings.showEbookTitle)
+                            .disabled(!settings.showEbook)
+                            .opacity(settings.showEbook ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.ebook.author".localized, icon: "person", isOn: $settings.showEbookAuthor)
+                            .disabled(!settings.showEbook)
+                            .opacity(settings.showEbook ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.ebook.publisher".localized, icon: "building.2", isOn: $settings.showEbookPublisher)
+                            .disabled(!settings.showEbook)
+                            .opacity(settings.showEbook ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.ebook.publicationDate".localized, icon: "calendar", isOn: $settings.showEbookPublicationDate)
+                            .disabled(!settings.showEbook)
+                            .opacity(settings.showEbook ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.ebook.isbn".localized, icon: "barcode", isOn: $settings.showEbookISBN)
+                            .disabled(!settings.showEbook)
+                            .opacity(settings.showEbook ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.ebook.language".localized, icon: "globe", isOn: $settings.showEbookLanguage)
+                            .disabled(!settings.showEbook)
+                            .opacity(settings.showEbook ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.ebook.description".localized, icon: "text.alignleft", isOn: $settings.showEbookDescription)
+                            .disabled(!settings.showEbook)
+                            .opacity(settings.showEbook ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.ebook.pageCount".localized, icon: "doc.text", isOn: $settings.showEbookPageCount)
+                            .disabled(!settings.showEbook)
+                            .opacity(settings.showEbook ? 1 : 0.5)
+                    }
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(6)
+                    .padding(.horizontal, 20)
+
+                    HStack(spacing: 6) {
+                        Image(systemName: "info.circle")
+                            .font(.system(size: 11))
+                        Text("settings.display.ebook.hint".localized)
+                            .font(.system(size: 11))
+                    }
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
+
                     // Display Order Section
                     Text("settings.display.order".localized)
                         .font(.system(size: 13, weight: .semibold))
