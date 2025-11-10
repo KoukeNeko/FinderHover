@@ -2,7 +2,51 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.2.4.2 (Current)
+## Version 1.2.5 (Current)
+
+### 🔧 Code Quality Improvements
+
+#### Centralized Constants Management
+
+- Created `Constants.swift` to eliminate magic numbers throughout the codebase
+- Organized constants into logical namespaces (MouseTracking, WindowLayout, Thumbnail, Compatibility, Defaults)
+- Improved maintainability by centralizing all configuration values
+
+#### Enhanced Logging System
+
+- Introduced comprehensive `Logger.swift` with os_log integration
+- Multiple severity levels: debug, info, warning, error, critical
+- Subsystem categorization for better log filtering (general, mouseTracking, fileSystem, accessibility, ui, settings)
+- Automatic file/line/function metadata capture for debugging
+- Console output in debug builds with ISO8601 timestamps
+
+#### Timer Management Improvements
+
+- Added proper timer cleanup methods in `HoverManager`
+- Prevents memory leaks by ensuring timers are properly invalidated
+- Explicit nil-setting after invalidation for safety
+
+#### Method Refactoring
+
+- Split large `HoverWindow.show()` method into focused helper methods
+- Improved code readability and maintainability
+- Better separation of concerns
+
+#### Code Deduplication
+
+- Created `DateFormatters.swift` for reusable date formatter instances
+- Created `FileTypeDescriptor.swift` to eliminate 120+ lines of duplicate code
+- Reduced code duplication across the codebase
+
+**Technical Changes:**
+
+- `FinderHover/Utilities/Constants.swift`: New centralized constants file
+- `FinderHover/Utilities/Logger.swift`: New comprehensive logging system
+- `FinderHover/App/HoverManager.swift`: Enhanced logging and timer cleanup
+- `FinderHover/Core/FileInfo.swift`: Added error logging for file operations
+- All changes verified with successful builds
+
+## Version 1.2.4.2
 
 ### 🐛 Bug Fixes
 

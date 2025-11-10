@@ -104,25 +104,16 @@ struct FileInfo {
     }
 
     var formattedModificationDate: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        return formatter.string(from: modificationDate)
+        return DateFormatters.formatMediumDateTime(modificationDate)
     }
 
     var formattedLastAccessDate: String {
         guard let date = lastAccessDate else { return "N/A" }
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
+        return DateFormatters.formatShortDateTime(date)
     }
 
     var formattedCreationDate: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .short
-        return formatter.string(from: creationDate)
+        return DateFormatters.formatShortDateTime(creationDate)
     }
 
     var formattedPermissions: String {
@@ -141,7 +132,10 @@ struct FileInfo {
 
     func generateThumbnailAsync(completion: @escaping (NSImage?) -> Void) {
         let url = URL(fileURLWithPath: path)
-        let size = CGSize(width: 128, height: 128)
+        let size = CGSize(
+            width: Constants.Thumbnail.standardSize,
+            height: Constants.Thumbnail.standardSize
+        )
         let scale = NSScreen.main?.backingScaleFactor ?? 2.0
 
         let request = QLThumbnailGenerator.Request(
@@ -162,6 +156,7 @@ struct FileInfo {
         let fileManager = FileManager.default
 
         guard fileManager.fileExists(atPath: path) else {
+            Logger.debug("File does not exist: \(path)", subsystem: .fileSystem)
             return nil
         }
 
@@ -189,6 +184,7 @@ struct FileInfo {
                     let contents = try fileManager.contentsOfDirectory(atPath: path)
                     itemCount = contents.count
                 } catch {
+                    Logger.error("Failed to read directory contents: \(path)", error: error, subsystem: .fileSystem)
                     itemCount = nil
                 }
             }
@@ -230,6 +226,7 @@ struct FileInfo {
                 audioMetadata: audioMetadata
             )
         } catch {
+            Logger.error("Failed to read file attributes: \(path)", error: error, subsystem: .fileSystem)
             return nil
         }
     }
@@ -301,16 +298,7 @@ struct FileInfo {
         // Extract date taken
         var dateTaken: String? = nil
         if let dateString = exifDict?[kCGImagePropertyExifDateTimeOriginal as String] as? String {
-            // Format: "YYYY:MM:DD HH:MM:SS"
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
-            if let date = formatter.date(from: dateString) {
-                formatter.dateStyle = .medium
-                formatter.timeStyle = .short
-                dateTaken = formatter.string(from: date)
-            } else {
-                dateTaken = dateString
-            }
+            dateTaken = DateFormatters.parseAndFormatExifDate(dateString)
         }
 
         // Extract image dimensions

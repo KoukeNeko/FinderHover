@@ -51,15 +51,40 @@ class HoverWindowController: NSWindowController {
 
         let hostingView = NSHostingView(rootView: AnyView(contentView))
 
-        // Set a width constraint for proper height calculation
-        let maxWidth = settings.windowMaxWidth
+        // Calculate required size for the view
+        let fittingSize = calculateViewSize(for: hostingView, maxWidth: settings.windowMaxWidth)
 
-        // Use intrinsicContentSize with proper width constraint
+        // Setup window content with proper styling
+        setupWindowContent(window: window, hostingView: hostingView, size: fittingSize, settings: settings)
+
+        // Set window size
+        window.setContentSize(fittingSize)
+
+        // Position window intelligently near cursor
+        positionWindow(window: window, at: position, settings: settings)
+
+        window.orderFront(nil)
+    }
+
+    func hide() {
+        window?.orderOut(nil)
+    }
+
+    // MARK: - Private Helper Methods
+
+    /// Calculate the required size for the hosting view
+    private func calculateViewSize(for hostingView: NSHostingView<AnyView>, maxWidth: Double) -> NSSize {
+        // Set a width constraint for proper height calculation
         hostingView.frame = NSRect(x: 0, y: 0, width: maxWidth, height: 0)
         hostingView.translatesAutoresizingMaskIntoConstraints = false
 
         // Create temporary container to calculate size
-        let tempContainer = NSView(frame: NSRect(x: 0, y: 0, width: maxWidth, height: 5000))
+        let tempContainer = NSView(frame: NSRect(
+            x: 0,
+            y: 0,
+            width: maxWidth,
+            height: Constants.WindowLayout.tempContainerHeight
+        ))
         tempContainer.addSubview(hostingView)
         NSLayoutConstraint.activate([
             hostingView.leadingAnchor.constraint(equalTo: tempContainer.leadingAnchor),
@@ -77,93 +102,88 @@ class HoverWindowController: NSWindowController {
         hostingView.removeFromSuperview()
         hostingView.translatesAutoresizingMaskIntoConstraints = true
 
-        // Determine corner radius based on UI style
-        let cornerRadius: CGFloat = settings.uiStyle == .windows ? 0 : 10
+        return fittingSize
+    }
 
-        // Check if blur is enabled
+    /// Setup the window content with blur effect or solid background
+    private func setupWindowContent(window: NSWindow, hostingView: NSHostingView<AnyView>, size: NSSize, settings: AppSettings) {
+        let cornerRadius: CGFloat = settings.uiStyle == .windows
+            ? Constants.WindowLayout.windowsCornerRadius
+            : Constants.WindowLayout.macOSCornerRadius
+
         if settings.enableBlur {
-            let osVersion = ProcessInfo.processInfo.operatingSystemVersion
-            // Use container view approach for macOS <= macOS 15.x (where direct cornerRadius doesn't work)
-            let useLegacyBlurLayout = osVersion.majorVersion <= 15
-
-            // Create visual effect view for blur
-            let effectView = NSVisualEffectView()
-            effectView.state = .active
-
-            if useLegacyBlurLayout {
-                // For macOS 15.x, use transparent container with clipping
-                // Direct cornerRadius on NSVisualEffectView doesn't work properly on macOS 15.x
-                effectView.material = .hudWindow
-                effectView.blendingMode = .behindWindow
-                effectView.frame = NSRect(origin: .zero, size: fittingSize)
-
-                hostingView.frame = effectView.bounds
-                hostingView.autoresizingMask = [.width, .height]
-                effectView.addSubview(hostingView)
-
-                // Create transparent clipping container
-                let containerView = NSView(frame: NSRect(origin: .zero, size: fittingSize))
-                containerView.wantsLayer = true
-                containerView.layer?.cornerRadius = cornerRadius
-                containerView.layer?.masksToBounds = true
-
-                // Add subtle border like native macOS HUD windows (only for macOS style)
-                if cornerRadius > 0 {
-                    containerView.layer?.borderWidth = 0.5
-                    containerView.layer?.borderColor = NSColor.systemGray.withAlphaComponent(0.5).cgColor
-                } else {
-                    // Windows style: no border or use light border
-                    containerView.layer?.borderWidth = 0
-                    containerView.layer?.borderColor = nil
-                }
-
-                effectView.autoresizingMask = [.width, .height]
-                containerView.addSubview(effectView)
-                window.contentView = containerView
-            } else {
-                // macOS 26+ support direct cornerRadius on NSVisualEffectView
-                effectView.material = .hudWindow
-                effectView.blendingMode = .behindWindow
-                effectView.wantsLayer = true
-                effectView.layer?.cornerRadius = cornerRadius
-                effectView.layer?.masksToBounds = true
-
-                // Add subtle border like native macOS HUD windows (only for macOS style)
-                if cornerRadius > 0 {
-                    effectView.layer?.borderWidth = 0.5
-                    effectView.layer?.borderColor = NSColor.systemGray.withAlphaComponent(0.5).cgColor
-                } else {
-                    // Windows style: no border
-                    effectView.layer?.borderWidth = 0
-                    effectView.layer?.borderColor = nil
-                }
-
-                effectView.frame = NSRect(origin: .zero, size: fittingSize)
-
-                hostingView.frame = effectView.bounds
-                hostingView.autoresizingMask = [.width, .height]
-                effectView.addSubview(hostingView)
-                window.contentView = effectView
-            }
-
-            self.visualEffectView = effectView
+            setupBlurContent(window: window, hostingView: hostingView, size: size, cornerRadius: cornerRadius)
         } else {
-            // No blur - use solid background
-            let containerView = NSView(frame: NSRect(origin: .zero, size: fittingSize))
+            setupSolidContent(window: window, hostingView: hostingView, size: size, cornerRadius: cornerRadius, opacity: settings.windowOpacity)
+        }
+    }
+
+    /// Setup window content with blur effect
+    private func setupBlurContent(window: NSWindow, hostingView: NSHostingView<AnyView>, size: NSSize, cornerRadius: CGFloat) {
+        let osVersion = ProcessInfo.processInfo.operatingSystemVersion
+        let useLegacyBlurLayout = osVersion.majorVersion <= Constants.Compatibility.blurLayoutChangeVersion
+
+        let effectView = NSVisualEffectView()
+        effectView.state = .active
+        effectView.material = .hudWindow
+        effectView.blendingMode = .behindWindow
+
+        if useLegacyBlurLayout {
+            // For macOS 15.x and earlier, use transparent container with clipping
+            effectView.frame = NSRect(origin: .zero, size: size)
+            hostingView.frame = effectView.bounds
+            hostingView.autoresizingMask = [.width, .height]
+            effectView.addSubview(hostingView)
+
+            // Create transparent clipping container
+            let containerView = NSView(frame: NSRect(origin: .zero, size: size))
             containerView.wantsLayer = true
             containerView.layer?.cornerRadius = cornerRadius
             containerView.layer?.masksToBounds = true
-            containerView.layer?.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(settings.windowOpacity).cgColor
 
-            hostingView.frame = containerView.bounds
-            containerView.addSubview(hostingView)
+            // Add subtle border for macOS style
+            if cornerRadius > 0 {
+                containerView.layer?.borderWidth = Constants.WindowLayout.macOSBorderWidth
+                containerView.layer?.borderColor = NSColor.systemGray.withAlphaComponent(0.5).cgColor
+            } else {
+                // Windows style: no border
+                containerView.layer?.borderWidth = 0
+                containerView.layer?.borderColor = nil
+            }
+
+            effectView.autoresizingMask = [.width, .height]
+            containerView.addSubview(effectView)
             window.contentView = containerView
+        } else {
+            // macOS 16+ supports direct cornerRadius on NSVisualEffectView
+            effectView.wantsLayer = true
+            effectView.layer?.cornerRadius = cornerRadius
+            effectView.layer?.masksToBounds = true
+            effectView.frame = NSRect(origin: .zero, size: size)
+            hostingView.frame = effectView.bounds
+            hostingView.autoresizingMask = [.width, .height]
+            effectView.addSubview(hostingView)
+            window.contentView = effectView
         }
 
-        // Set window size
-        window.setContentSize(fittingSize)
+        self.visualEffectView = effectView
+    }
 
-        // Position window near mouse cursor with smart positioning
+    /// Setup window content with solid background (no blur)
+    private func setupSolidContent(window: NSWindow, hostingView: NSHostingView<AnyView>, size: NSSize, cornerRadius: CGFloat, opacity: Double) {
+        let containerView = NSView(frame: NSRect(origin: .zero, size: size))
+        containerView.wantsLayer = true
+        containerView.layer?.cornerRadius = cornerRadius
+        containerView.layer?.masksToBounds = true
+        containerView.layer?.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(opacity).cgColor
+
+        hostingView.frame = containerView.bounds
+        containerView.addSubview(hostingView)
+        window.contentView = containerView
+    }
+
+    /// Position window near cursor with intelligent screen edge detection
+    private func positionWindow(window: NSWindow, at position: CGPoint, settings: AppSettings) {
         let offsetX: CGFloat = settings.windowOffsetX
         let offsetY: CGFloat = settings.windowOffsetY
         var windowOrigin = CGPoint(
@@ -171,38 +191,33 @@ class HoverWindowController: NSWindowController {
             y: position.y - offsetY - window.frame.height
         )
 
-        // Ensure window stays on screen - find the screen that contains the mouse position
+        // Find the screen that contains the mouse position
         let screen = NSScreen.screens.first { NSMouseInRect(position, $0.frame, false) } ?? NSScreen.main
-        if let screen = screen {
-            let screenFrame = screen.visibleFrame
+        guard let screen = screen else { return }
 
-            // Check right edge
-            if windowOrigin.x + window.frame.width > screenFrame.maxX {
-                windowOrigin.x = position.x - offsetX - window.frame.width
-            }
+        let screenFrame = screen.visibleFrame
 
-            // Check left edge
-            if windowOrigin.x < screenFrame.minX {
-                windowOrigin.x = screenFrame.minX + 10
-            }
+        // Check right edge
+        if windowOrigin.x + window.frame.width > screenFrame.maxX {
+            windowOrigin.x = position.x - offsetX - window.frame.width
+        }
 
-            // Check bottom edge
-            if windowOrigin.y < screenFrame.minY {
-                windowOrigin.y = position.y + offsetY
-            }
+        // Check left edge
+        if windowOrigin.x < screenFrame.minX {
+            windowOrigin.x = screenFrame.minX + Constants.WindowLayout.screenEdgePadding
+        }
 
-            // Check top edge
-            if windowOrigin.y + window.frame.height > screenFrame.maxY {
-                windowOrigin.y = screenFrame.maxY - window.frame.height - 10
-            }
+        // Check bottom edge
+        if windowOrigin.y < screenFrame.minY {
+            windowOrigin.y = position.y + offsetY
+        }
+
+        // Check top edge
+        if windowOrigin.y + window.frame.height > screenFrame.maxY {
+            windowOrigin.y = screenFrame.maxY - window.frame.height - Constants.WindowLayout.screenEdgePadding
         }
 
         window.setFrameOrigin(windowOrigin)
-        window.orderFront(nil)
-    }
-
-    func hide() {
-        window?.orderOut(nil)
     }
 }
 
@@ -217,10 +232,13 @@ struct HoverContentView: View {
             // File icon and name
             HStack(spacing: settings.compactMode ? 8 : 12) {
                 if settings.showIcon {
+                    let iconSize = settings.compactMode
+                        ? Constants.Thumbnail.compactIconSize
+                        : Constants.Thumbnail.normalIconSize
                     Image(nsImage: thumbnail ?? fileInfo.icon)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: settings.compactMode ? 32 : 48, height: settings.compactMode ? 32 : 48)
+                        .frame(width: iconSize, height: iconSize)
                         .onAppear {
                             // Load thumbnail asynchronously
                             fileInfo.generateThumbnailAsync { image in
@@ -251,9 +269,6 @@ struct HoverContentView: View {
             // File details - displayed in order based on settings
             ForEach(settings.displayOrder) { item in
                 displayItemView(for: item)
-            }
-            .onAppear {
-                print("Display order: \(settings.displayOrder.map { $0.rawValue })")
             }
         }
         .padding(settings.compactMode ? 10 : 14)
@@ -476,80 +491,10 @@ struct HoverContentView: View {
     }
 
     private func getFileTypeDescription() -> String {
-        if fileInfo.isDirectory {
-            return "Folder"
-        }
-
-        if let ext = fileInfo.fileExtension {
-            let typeMap: [String: String] = [
-                "pdf": "PDF Document",
-                "doc": "Word Document",
-                "docx": "Word Document",
-                "xls": "Excel Spreadsheet",
-                "xlsx": "Excel Spreadsheet",
-                "ppt": "PowerPoint Presentation",
-                "pptx": "PowerPoint Presentation",
-                "key": "Keynote Presentation",
-                "pages": "Pages Document",
-                "numbers": "Numbers Spreadsheet",
-                "txt": "Text File",
-                "rtf": "Rich Text Document",
-                "md": "Markdown File",
-                "csv": "CSV File",
-                "json": "JSON File",
-                "xml": "XML File",
-                "jpg": "JPEG Image",
-                "jpeg": "JPEG Image",
-                "png": "PNG Image",
-                "gif": "GIF Image",
-                "svg": "SVG Image",
-                "bmp": "Bitmap Image",
-                "tiff": "TIFF Image",
-                "psd": "Photoshop Document",
-                "ai": "Illustrator File",
-                "sketch": "Sketch File",
-                "mp4": "MP4 Video",
-                "mov": "QuickTime Movie",
-                "avi": "AVI Video",
-                "mkv": "MKV Video",
-                "mp3": "MP3 Audio",
-                "wav": "WAV Audio",
-                "aac": "AAC Audio",
-                "flac": "FLAC Audio",
-                "zip": "ZIP Archive",
-                "rar": "RAR Archive",
-                "7z": "7-Zip Archive",
-                "tar": "TAR Archive",
-                "gz": "GZIP Archive",
-                "dmg": "Disk Image",
-                "iso": "ISO Disk Image",
-                "pkg": "macOS Installer",
-                "app": "Application",
-                "swift": "Swift Source",
-                "py": "Python Script",
-                "js": "JavaScript File",
-                "ts": "TypeScript File",
-                "css": "CSS Stylesheet",
-                "html": "HTML Document",
-                "php": "PHP Script",
-                "java": "Java Source",
-                "c": "C Source",
-                "cpp": "C++ Source",
-                "h": "Header File",
-                "sh": "Shell Script"
-            ]
-
-            return typeMap[ext.lowercased()] ?? "\(ext.uppercased()) File"
-        }
-
-        return "File"
-    }
-
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
+        return FileTypeDescriptor.description(
+            fileExtension: fileInfo.fileExtension,
+            isDirectory: fileInfo.isDirectory
+        )
     }
 }
 
@@ -632,39 +577,10 @@ struct WindowsStyleHoverView: View {
     }
 
     private func getFileTypeDescription() -> String {
-        if fileInfo.isDirectory {
-            return "Folder"
-        }
-
-        if let ext = fileInfo.fileExtension {
-            let typeMap: [String: String] = [
-                "pdf": "PDF Document",
-                "doc": "Microsoft Word 97 - 2003 Document",
-                "docx": "Microsoft Word Document",
-                "xls": "Microsoft Excel 97 - 2003 Spreadsheet",
-                "xlsx": "Microsoft Excel Spreadsheet",
-                "ppt": "Microsoft PowerPoint 97 - 2003 Presentation",
-                "pptx": "Microsoft PowerPoint Presentation",
-                "txt": "Text Document",
-                "rtf": "Rich Text Document",
-                "jpg": "JPEG Image",
-                "jpeg": "JPEG Image",
-                "png": "PNG Image",
-                "gif": "GIF Image",
-                "bmp": "Bitmap Image",
-                "mp4": "MP4 Video",
-                "mov": "QuickTime Movie",
-                "avi": "AVI Video",
-                "mp3": "MP3 Audio",
-                "wav": "WAV Audio",
-                "zip": "ZIP Archive",
-                "rar": "RAR Archive"
-            ]
-
-            return typeMap[ext.lowercased()] ?? "\(ext.uppercased()) File"
-        }
-
-        return "File"
+        return FileTypeDescriptor.description(
+            fileExtension: fileInfo.fileExtension,
+            isDirectory: fileInfo.isDirectory
+        )
     }
 }
 

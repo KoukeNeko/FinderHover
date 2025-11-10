@@ -116,7 +116,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let hostingController = NSHostingController(rootView: settingsView)
 
             let window = NSWindow(contentViewController: hostingController)
-            window.title = "Settings"
+            window.title = "FinderHover"
             window.styleMask = [.titled, .closable, .resizable]
             window.minSize = NSSize(width: 650, height: 500)
             window.setContentSize(NSSize(width: 650, height: 500))

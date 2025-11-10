@@ -319,49 +319,49 @@ class AppSettings: ObservableObject {
         }
 
         // Load values from UserDefaults
-        self.hoverDelay = UserDefaults.standard.object(forKey: "hoverDelay") as? Double ?? 0.1
-        self.autoHideEnabled = UserDefaults.standard.object(forKey: "autoHideEnabled") as? Bool ?? true
-        self.launchAtLogin = UserDefaults.standard.object(forKey: "launchAtLogin") as? Bool ?? false
-        self.windowOpacity = UserDefaults.standard.object(forKey: "windowOpacity") as? Double ?? 0.98
-        self.windowMaxWidth = UserDefaults.standard.object(forKey: "windowMaxWidth") as? Double ?? 400
-        self.fontSize = UserDefaults.standard.object(forKey: "fontSize") as? Double ?? 11
-        self.enableBlur = UserDefaults.standard.object(forKey: "enableBlur") as? Bool ?? true
-        self.compactMode = UserDefaults.standard.object(forKey: "compactMode") as? Bool ?? false
-        self.showCreationDate = UserDefaults.standard.object(forKey: "showCreationDate") as? Bool ?? true
-        self.showModificationDate = UserDefaults.standard.object(forKey: "showModificationDate") as? Bool ?? true
-        self.showFileSize = UserDefaults.standard.object(forKey: "showFileSize") as? Bool ?? true
-        self.showFileType = UserDefaults.standard.object(forKey: "showFileType") as? Bool ?? true
-        self.showFilePath = UserDefaults.standard.object(forKey: "showFilePath") as? Bool ?? true
-        self.showIcon = UserDefaults.standard.object(forKey: "showIcon") as? Bool ?? true
-        self.showLastAccessDate = UserDefaults.standard.object(forKey: "showLastAccessDate") as? Bool ?? false
-        self.showPermissions = UserDefaults.standard.object(forKey: "showPermissions") as? Bool ?? false
-        self.showOwner = UserDefaults.standard.object(forKey: "showOwner") as? Bool ?? false
-        self.showItemCount = UserDefaults.standard.object(forKey: "showItemCount") as? Bool ?? true
-        self.showEXIF = UserDefaults.standard.object(forKey: "showEXIF") as? Bool ?? true
-        self.showEXIFCamera = UserDefaults.standard.object(forKey: "showEXIFCamera") as? Bool ?? true
-        self.showEXIFLens = UserDefaults.standard.object(forKey: "showEXIFLens") as? Bool ?? true
-        self.showEXIFSettings = UserDefaults.standard.object(forKey: "showEXIFSettings") as? Bool ?? true
-        self.showEXIFDateTaken = UserDefaults.standard.object(forKey: "showEXIFDateTaken") as? Bool ?? true
-        self.showEXIFDimensions = UserDefaults.standard.object(forKey: "showEXIFDimensions") as? Bool ?? true
-        self.showEXIFGPS = UserDefaults.standard.object(forKey: "showEXIFGPS") as? Bool ?? false
-        self.showVideo = UserDefaults.standard.object(forKey: "showVideo") as? Bool ?? true
-        self.showVideoDuration = UserDefaults.standard.object(forKey: "showVideoDuration") as? Bool ?? true
-        self.showVideoResolution = UserDefaults.standard.object(forKey: "showVideoResolution") as? Bool ?? true
-        self.showVideoCodec = UserDefaults.standard.object(forKey: "showVideoCodec") as? Bool ?? true
-        self.showVideoFrameRate = UserDefaults.standard.object(forKey: "showVideoFrameRate") as? Bool ?? true
-        self.showVideoBitrate = UserDefaults.standard.object(forKey: "showVideoBitrate") as? Bool ?? true
-        self.showAudio = UserDefaults.standard.object(forKey: "showAudio") as? Bool ?? true
-        self.showAudioTitle = UserDefaults.standard.object(forKey: "showAudioTitle") as? Bool ?? true
-        self.showAudioArtist = UserDefaults.standard.object(forKey: "showAudioArtist") as? Bool ?? true
-        self.showAudioAlbum = UserDefaults.standard.object(forKey: "showAudioAlbum") as? Bool ?? true
-        self.showAudioGenre = UserDefaults.standard.object(forKey: "showAudioGenre") as? Bool ?? true
-        self.showAudioYear = UserDefaults.standard.object(forKey: "showAudioYear") as? Bool ?? true
-        self.showAudioDuration = UserDefaults.standard.object(forKey: "showAudioDuration") as? Bool ?? true
-        self.showAudioBitrate = UserDefaults.standard.object(forKey: "showAudioBitrate") as? Bool ?? true
-        self.showAudioSampleRate = UserDefaults.standard.object(forKey: "showAudioSampleRate") as? Bool ?? true
-        self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? true
-        self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? 15
-        self.windowOffsetY = UserDefaults.standard.object(forKey: "windowOffsetY") as? Double ?? 15
+        self.hoverDelay = UserDefaults.standard.object(forKey: "hoverDelay") as? Double ?? Constants.Defaults.hoverDelay
+        self.autoHideEnabled = UserDefaults.standard.object(forKey: "autoHideEnabled") as? Bool ?? Constants.Defaults.autoHideEnabled
+        self.launchAtLogin = UserDefaults.standard.object(forKey: "launchAtLogin") as? Bool ?? Constants.Defaults.launchAtLogin
+        self.windowOpacity = UserDefaults.standard.object(forKey: "windowOpacity") as? Double ?? Constants.Defaults.windowOpacity
+        self.windowMaxWidth = UserDefaults.standard.object(forKey: "windowMaxWidth") as? Double ?? Constants.Defaults.windowMaxWidth
+        self.fontSize = UserDefaults.standard.object(forKey: "fontSize") as? Double ?? Constants.Defaults.fontSize
+        self.enableBlur = UserDefaults.standard.object(forKey: "enableBlur") as? Bool ?? Constants.Defaults.enableBlur
+        self.compactMode = UserDefaults.standard.object(forKey: "compactMode") as? Bool ?? Constants.Defaults.compactMode
+        self.showCreationDate = UserDefaults.standard.object(forKey: "showCreationDate") as? Bool ?? Constants.Defaults.showCreationDate
+        self.showModificationDate = UserDefaults.standard.object(forKey: "showModificationDate") as? Bool ?? Constants.Defaults.showModificationDate
+        self.showFileSize = UserDefaults.standard.object(forKey: "showFileSize") as? Bool ?? Constants.Defaults.showFileSize
+        self.showFileType = UserDefaults.standard.object(forKey: "showFileType") as? Bool ?? Constants.Defaults.showFileType
+        self.showFilePath = UserDefaults.standard.object(forKey: "showFilePath") as? Bool ?? Constants.Defaults.showFilePath
+        self.showIcon = UserDefaults.standard.object(forKey: "showIcon") as? Bool ?? Constants.Defaults.showIcon
+        self.showLastAccessDate = UserDefaults.standard.object(forKey: "showLastAccessDate") as? Bool ?? Constants.Defaults.showLastAccessDate
+        self.showPermissions = UserDefaults.standard.object(forKey: "showPermissions") as? Bool ?? Constants.Defaults.showPermissions
+        self.showOwner = UserDefaults.standard.object(forKey: "showOwner") as? Bool ?? Constants.Defaults.showOwner
+        self.showItemCount = UserDefaults.standard.object(forKey: "showItemCount") as? Bool ?? Constants.Defaults.showItemCount
+        self.showEXIF = UserDefaults.standard.object(forKey: "showEXIF") as? Bool ?? Constants.Defaults.showEXIF
+        self.showEXIFCamera = UserDefaults.standard.object(forKey: "showEXIFCamera") as? Bool ?? Constants.Defaults.showEXIFCamera
+        self.showEXIFLens = UserDefaults.standard.object(forKey: "showEXIFLens") as? Bool ?? Constants.Defaults.showEXIFLens
+        self.showEXIFSettings = UserDefaults.standard.object(forKey: "showEXIFSettings") as? Bool ?? Constants.Defaults.showEXIFSettings
+        self.showEXIFDateTaken = UserDefaults.standard.object(forKey: "showEXIFDateTaken") as? Bool ?? Constants.Defaults.showEXIFDateTaken
+        self.showEXIFDimensions = UserDefaults.standard.object(forKey: "showEXIFDimensions") as? Bool ?? Constants.Defaults.showEXIFDimensions
+        self.showEXIFGPS = UserDefaults.standard.object(forKey: "showEXIFGPS") as? Bool ?? Constants.Defaults.showEXIFGPS
+        self.showVideo = UserDefaults.standard.object(forKey: "showVideo") as? Bool ?? Constants.Defaults.showVideo
+        self.showVideoDuration = UserDefaults.standard.object(forKey: "showVideoDuration") as? Bool ?? Constants.Defaults.showVideoDuration
+        self.showVideoResolution = UserDefaults.standard.object(forKey: "showVideoResolution") as? Bool ?? Constants.Defaults.showVideoResolution
+        self.showVideoCodec = UserDefaults.standard.object(forKey: "showVideoCodec") as? Bool ?? Constants.Defaults.showVideoCodec
+        self.showVideoFrameRate = UserDefaults.standard.object(forKey: "showVideoFrameRate") as? Bool ?? Constants.Defaults.showVideoFrameRate
+        self.showVideoBitrate = UserDefaults.standard.object(forKey: "showVideoBitrate") as? Bool ?? Constants.Defaults.showVideoBitrate
+        self.showAudio = UserDefaults.standard.object(forKey: "showAudio") as? Bool ?? Constants.Defaults.showAudio
+        self.showAudioTitle = UserDefaults.standard.object(forKey: "showAudioTitle") as? Bool ?? Constants.Defaults.showAudioTitle
+        self.showAudioArtist = UserDefaults.standard.object(forKey: "showAudioArtist") as? Bool ?? Constants.Defaults.showAudioArtist
+        self.showAudioAlbum = UserDefaults.standard.object(forKey: "showAudioAlbum") as? Bool ?? Constants.Defaults.showAudioAlbum
+        self.showAudioGenre = UserDefaults.standard.object(forKey: "showAudioGenre") as? Bool ?? Constants.Defaults.showAudioGenre
+        self.showAudioYear = UserDefaults.standard.object(forKey: "showAudioYear") as? Bool ?? Constants.Defaults.showAudioYear
+        self.showAudioDuration = UserDefaults.standard.object(forKey: "showAudioDuration") as? Bool ?? Constants.Defaults.showAudioDuration
+        self.showAudioBitrate = UserDefaults.standard.object(forKey: "showAudioBitrate") as? Bool ?? Constants.Defaults.showAudioBitrate
+        self.showAudioSampleRate = UserDefaults.standard.object(forKey: "showAudioSampleRate") as? Bool ?? Constants.Defaults.showAudioSampleRate
+        self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? Constants.Defaults.followCursor
+        self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? Constants.Defaults.windowOffsetX
+        self.windowOffsetY = UserDefaults.standard.object(forKey: "windowOffsetY") as? Double ?? Constants.Defaults.windowOffsetY
 
         // Load UI style preference
         if let styleString = UserDefaults.standard.string(forKey: "uiStyle"),
@@ -380,7 +380,7 @@ class AppSettings: ObservableObject {
         }
 
         // Load update preferences
-        self.includePrereleases = UserDefaults.standard.object(forKey: "includePrereleases") as? Bool ?? false
+        self.includePrereleases = UserDefaults.standard.object(forKey: "includePrereleases") as? Bool ?? Constants.Defaults.includePrereleases
 
         // Apply language preference on launch
         applyLanguagePreference()
@@ -396,46 +396,46 @@ class AppSettings: ObservableObject {
     }
 
     func resetToDefaults() {
-        hoverDelay = 0.1
-        autoHideEnabled = true
-        launchAtLogin = false
-        windowOpacity = 0.98
-        windowMaxWidth = 400
-        fontSize = 11
-        enableBlur = true
-        compactMode = false
-        showCreationDate = true
-        showModificationDate = true
-        showFileSize = true
-        showFileType = true
-        showFilePath = true
-        showIcon = true
-        showLastAccessDate = false
-        showPermissions = false
-        showOwner = false
-        showItemCount = true
-        showEXIF = true
-        showEXIFCamera = true
-        showEXIFLens = true
-        showEXIFSettings = true
-        showEXIFDateTaken = true
-        showEXIFDimensions = true
-        showEXIFGPS = false
-        showVideo = true
-        showVideoDuration = true
-        showVideoResolution = true
-        showVideoCodec = true
-        showVideoFrameRate = true
-        showVideoBitrate = true
-        showAudio = true
-        showAudioTitle = true
-        showAudioArtist = true
-        showAudioAlbum = true
-        showAudioGenre = true
-        showAudioYear = true
-        showAudioDuration = true
-        showAudioBitrate = true
-        showAudioSampleRate = true
+        hoverDelay = Constants.Defaults.hoverDelay
+        autoHideEnabled = Constants.Defaults.autoHideEnabled
+        launchAtLogin = Constants.Defaults.launchAtLogin
+        windowOpacity = Constants.Defaults.windowOpacity
+        windowMaxWidth = Constants.Defaults.windowMaxWidth
+        fontSize = Constants.Defaults.fontSize
+        enableBlur = Constants.Defaults.enableBlur
+        compactMode = Constants.Defaults.compactMode
+        showCreationDate = Constants.Defaults.showCreationDate
+        showModificationDate = Constants.Defaults.showModificationDate
+        showFileSize = Constants.Defaults.showFileSize
+        showFileType = Constants.Defaults.showFileType
+        showFilePath = Constants.Defaults.showFilePath
+        showIcon = Constants.Defaults.showIcon
+        showLastAccessDate = Constants.Defaults.showLastAccessDate
+        showPermissions = Constants.Defaults.showPermissions
+        showOwner = Constants.Defaults.showOwner
+        showItemCount = Constants.Defaults.showItemCount
+        showEXIF = Constants.Defaults.showEXIF
+        showEXIFCamera = Constants.Defaults.showEXIFCamera
+        showEXIFLens = Constants.Defaults.showEXIFLens
+        showEXIFSettings = Constants.Defaults.showEXIFSettings
+        showEXIFDateTaken = Constants.Defaults.showEXIFDateTaken
+        showEXIFDimensions = Constants.Defaults.showEXIFDimensions
+        showEXIFGPS = Constants.Defaults.showEXIFGPS
+        showVideo = Constants.Defaults.showVideo
+        showVideoDuration = Constants.Defaults.showVideoDuration
+        showVideoResolution = Constants.Defaults.showVideoResolution
+        showVideoCodec = Constants.Defaults.showVideoCodec
+        showVideoFrameRate = Constants.Defaults.showVideoFrameRate
+        showVideoBitrate = Constants.Defaults.showVideoBitrate
+        showAudio = Constants.Defaults.showAudio
+        showAudioTitle = Constants.Defaults.showAudioTitle
+        showAudioArtist = Constants.Defaults.showAudioArtist
+        showAudioAlbum = Constants.Defaults.showAudioAlbum
+        showAudioGenre = Constants.Defaults.showAudioGenre
+        showAudioYear = Constants.Defaults.showAudioYear
+        showAudioDuration = Constants.Defaults.showAudioDuration
+        showAudioBitrate = Constants.Defaults.showAudioBitrate
+        showAudioSampleRate = Constants.Defaults.showAudioSampleRate
         displayOrder = [
             .fileType,
             .fileSize,
@@ -450,11 +450,11 @@ class AppSettings: ObservableObject {
             .audio,
             .filePath
         ]
-        followCursor = true
-        windowOffsetX = 15
-        windowOffsetY = 15
+        followCursor = Constants.Defaults.followCursor
+        windowOffsetX = Constants.Defaults.windowOffsetX
+        windowOffsetY = Constants.Defaults.windowOffsetY
         uiStyle = .macOS
         preferredLanguage = .system
-        includePrereleases = false
+        includePrereleases = Constants.Defaults.includePrereleases
     }
 }

@@ -26,7 +26,6 @@ class HoverManager: ObservableObject {
     private var hoverWindow: HoverWindowController?
     private var cancellables = Set<AnyCancellable>()
     private var displayTimer: Timer?
-    private var hideCheckTimer: Timer?
     private var renamingCheckTimer: Timer?
     private var lastMouseLocation: CGPoint = .zero
     private let settings = AppSettings.shared
@@ -48,7 +47,7 @@ class HoverManager: ObservableObject {
 
         // Monitor mouse location changes with debounce for showing
         mouseTracker.$mouseLocation
-            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+            .debounce(for: .milliseconds(Constants.MouseTracking.hoverDebounceDelay), scheduler: RunLoop.main)
             .sink { [weak self] location in
                 self?.handleMouseLocation(location)
             }
@@ -60,7 +59,7 @@ class HoverManager: ObservableObject {
                 if isDragging {
                     self?.hideHoverWindow()
                     self?.currentFileInfo = nil
-                    self?.displayTimer?.invalidate()
+                    self?.invalidateDisplayTimer()
                 }
             }
             .store(in: &cancellables)
@@ -82,7 +81,7 @@ class HoverManager: ObservableObject {
             if app.bundleIdentifier != "com.apple.finder" {
                 self?.hideHoverWindow()
                 self?.currentFileInfo = nil
-                self?.displayTimer?.invalidate()
+                self?.invalidateDisplayTimer()
             }
         }
 
@@ -101,22 +100,26 @@ class HoverManager: ObservableObject {
             if app.bundleIdentifier == "com.apple.finder" {
                 self?.hideHoverWindow()
                 self?.currentFileInfo = nil
-                self?.displayTimer?.invalidate()
+                self?.invalidateDisplayTimer()
             }
         }
     }
 
     func startMonitoring() {
-        guard isEnabled else { return }
+        guard isEnabled else {
+            Logger.debug("Monitoring not started - disabled by user", subsystem: .mouseTracking)
+            return
+        }
+        Logger.info("Starting mouse tracking", subsystem: .mouseTracking)
         mouseTracker.startTracking()
     }
 
     func stopMonitoring() {
+        Logger.info("Stopping mouse tracking", subsystem: .mouseTracking)
         mouseTracker.stopTracking()
         hideHoverWindow()
-        hideCheckTimer?.invalidate()
-        displayTimer?.invalidate()
-        renamingCheckTimer?.invalidate()
+        invalidateDisplayTimer()
+        invalidateRenamingTimer()
     }
 
     private func checkIfShouldHide(at location: CGPoint) {
@@ -130,7 +133,7 @@ class HoverManager: ObservableObject {
         if FinderInteraction.isRenamingFile() {
             hideHoverWindow()
             currentFileInfo = nil
-            displayTimer?.invalidate()
+            invalidateDisplayTimer()
             return
         }
 
@@ -140,13 +143,13 @@ class HoverManager: ObservableObject {
             if currentPath != currentInfo.path {
                 hideHoverWindow()
                 currentFileInfo = nil
-                displayTimer?.invalidate()
+                invalidateDisplayTimer()
             }
         } else {
             // No file under cursor, hide immediately
             hideHoverWindow()
             currentFileInfo = nil
-            displayTimer?.invalidate()
+            invalidateDisplayTimer()
         }
     }
 
@@ -157,7 +160,7 @@ class HoverManager: ObservableObject {
         guard !mouseTracker.isDragging else { return }
 
         // Check if hovering over Finder and get file info
-        displayTimer?.invalidate()
+        invalidateDisplayTimer()
         displayTimer = Timer.scheduledTimer(withTimeInterval: settings.hoverDelay, repeats: false) { [weak self] _ in
             self?.checkAndDisplayFileInfo(at: location)
         }
@@ -174,6 +177,7 @@ class HoverManager: ObservableObject {
 
             // Only update if it's a different file
             if currentFileInfo?.path != fileInfo.path {
+                Logger.debug("Displaying hover for file: \(fileInfo.name)", subsystem: .ui)
                 currentFileInfo = fileInfo
                 showHoverWindow(at: location, with: fileInfo)
             }
@@ -203,10 +207,13 @@ class HoverManager: ObservableObject {
 
     private func startRenamingCheck() {
         // Stop existing timer
-        renamingCheckTimer?.invalidate()
+        invalidateRenamingTimer()
 
-        // Check every 0.1 seconds if user is renaming
-        renamingCheckTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+        // Check periodically if user is renaming
+        renamingCheckTimer = Timer.scheduledTimer(
+            withTimeInterval: Constants.MouseTracking.renamingCheckInterval,
+            repeats: true
+        ) { [weak self] _ in
             if FinderInteraction.isRenamingFile() {
                 self?.hideHoverWindow()
                 self?.currentFileInfo = nil
@@ -215,6 +222,19 @@ class HoverManager: ObservableObject {
     }
 
     private func stopRenamingCheck() {
+        invalidateRenamingTimer()
+    }
+
+    // MARK: - Timer Management Helpers
+
+    /// Safely invalidate and nil the display timer
+    private func invalidateDisplayTimer() {
+        displayTimer?.invalidate()
+        displayTimer = nil
+    }
+
+    /// Safely invalidate and nil the renaming check timer
+    private func invalidateRenamingTimer() {
         renamingCheckTimer?.invalidate()
         renamingCheckTimer = nil
     }
@@ -224,9 +244,12 @@ class HoverManager: ObservableObject {
         let accessEnabled = AXIsProcessTrustedWithOptions(options)
 
         if !accessEnabled {
+            Logger.warning("Accessibility permissions not granted", subsystem: .accessibility)
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.showAccessibilityAlert()
             }
+        } else {
+            Logger.info("Accessibility permissions granted", subsystem: .accessibility)
         }
     }
 

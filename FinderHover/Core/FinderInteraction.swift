@@ -21,7 +21,7 @@ class FinderInteraction {
         // Get the focused UI element
         var focusedElementRef: CFTypeRef?
         guard AXUIElementCopyAttributeValue(appElement, kAXFocusedUIElementAttribute as CFString, &focusedElementRef) == .success,
-              let focusedElement = focusedElementRef as! AXUIElement? else {
+              let focusedElement = (focusedElementRef as! AXUIElement?) else {
             return false
         }
 
@@ -71,6 +71,8 @@ class FinderInteraction {
         }
 
         // Get the selected rows/items
+        // Note: focusedWindow is CFTypeRef which is bridged to AXUIElement
+        // The force cast is safe here as we confirmed it exists above
         var selectedChildrenRef: CFTypeRef?
         if AXUIElementCopyAttributeValue(focusedWindow as! AXUIElement, kAXSelectedChildrenAttribute as CFString, &selectedChildrenRef) == .success,
            let selectedChildren = selectedChildrenRef as? [AXUIElement] {
@@ -91,6 +93,7 @@ class FinderInteraction {
         if AXUIElementCopyAttributeValue(appElement, kAXFocusedUIElementAttribute as CFString, &focusedElementRef) == .success,
            let focusedElement = focusedElementRef {
 
+            // Note: focusedElement is CFTypeRef bridged to AXUIElement
             var selectedRef: CFTypeRef?
             if AXUIElementCopyAttributeValue(focusedElement as! AXUIElement, kAXSelectedChildrenAttribute as CFString, &selectedRef) == .success,
                let selected = selectedRef as? [AXUIElement] {
@@ -130,6 +133,31 @@ class FinderInteraction {
         guard let app = NSRunningApplication(processIdentifier: pid),
               app.bundleIdentifier == "com.apple.finder" else {
             return nil
+        }
+
+        // Check the element's role to filter out window controls and non-file elements
+        var roleRef: CFTypeRef?
+        if AXUIElementCopyAttributeValue(element, kAXRoleAttribute as CFString, &roleRef) == .success,
+           let role = roleRef as? String {
+            // Ignore window controls, buttons, and other UI elements
+            let ignoredRoles = [
+                "AXButton",
+                "AXCloseButton",
+                "AXMinimizeButton",
+                "AXZoomButton",
+                "AXToolbarButton",
+                "AXWindow",
+                "AXDialog",
+                "AXSheet",
+                "AXScrollBar",
+                "AXScrollArea",
+                "AXStaticText",
+                "AXImage"  // Ignore standalone images in dialogs
+            ]
+
+            if ignoredRoles.contains(role) {
+                return nil
+            }
         }
 
         return getFilePathFromElement(element)
@@ -179,6 +207,7 @@ class FinderInteraction {
         if AXUIElementCopyAttributeValue(element, kAXParentAttribute as CFString, &parentRef) == .success,
            let parent = parentRef {
 
+            // Note: parent is CFTypeRef bridged to AXUIElement
             // Check parent's URL attribute
             var urlRef: CFTypeRef?
             if AXUIElementCopyAttributeValue(parent as! AXUIElement, kAXURLAttribute as CFString, &urlRef) == .success,
@@ -246,6 +275,7 @@ class FinderInteraction {
         }
 
         // Try to get document/URL attribute
+        // Note: focusedWindow is CFTypeRef bridged to AXUIElement
         var documentRef: CFTypeRef?
         if AXUIElementCopyAttributeValue(focusedWindow as! AXUIElement, kAXDocumentAttribute as CFString, &documentRef) == .success,
            let document = documentRef {

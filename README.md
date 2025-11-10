@@ -221,16 +221,30 @@ Then restart to reset to defaults.
 
 ```
 FinderHover/
-├── FinderHoverApp.swift      # Main app & menu bar
-├── AppSettings.swift          # Settings model
-├── SettingsView.swift         # Settings UI
-├── HoverWindow.swift          # Preview window
-├── HoverManager.swift         # Coordination
-├── MouseTracker.swift         # Mouse events
-├── FinderInteraction.swift   # Accessibility API
-├── FileInfo.swift             # File metadata
-├── IconManager.swift          # Centralized SF Symbols management
-└── Resources/                 # Localizations (en, zh-Hant, ja)
+├── App/                       # Application Entry & Coordination
+│   ├── FinderHoverApp.swift  # Main app & menu bar
+│   └── HoverManager.swift    # Coordination layer
+├── UI/                        # User Interface Components
+│   ├── Windows/
+│   │   ├── HoverWindow.swift # Hover preview window
+│   │   └── SettingsView.swift # Settings interface
+│   └── ContentView.swift     # Placeholder view
+├── Core/                      # Core Functionality
+│   ├── MouseTracker.swift    # Mouse event monitoring
+│   ├── FinderInteraction.swift # Accessibility API wrapper
+│   └── FileInfo.swift        # File metadata extraction
+├── Settings/                  # Settings Management
+│   └── AppSettings.swift     # Settings model & persistence
+├── Services/                  # Service Layer
+│   ├── GitHubService.swift   # GitHub API integration
+│   └── LaunchAtLogin.swift   # Login item management
+├── Utilities/                 # Utility Classes
+│   ├── IconManager.swift     # SF Symbols management
+│   └── LocalizationManager.swift # i18n utilities
+└── Resources/                 # Localization Resources
+    ├── en.lproj/             # English
+    ├── zh-Hant.lproj/        # Traditional Chinese
+    └── ja.lproj/             # Japanese
 ```
 
 ## 🤝 Contributing
@@ -246,6 +260,25 @@ Contributions welcome!
 - Inspired by [my final dream ULTIMATE productivity desk setup. (2026)](https://youtu.be/veum1I6G__g?si=CDWpYV9anOszM6ai&t=375)
 - Built with Apple's SwiftUI and Accessibility frameworks
 - Icons from SF Symbols
+
+## 📝 Changelog
+
+### Version 1.2.5
+
+#### Code Quality Improvements
+
+- Refactored magic numbers into centralized `Constants.swift` for better maintainability
+- Improved timer management in `HoverManager` to prevent memory leaks
+- Refactored `HoverWindow.show()` method by splitting into smaller, focused helper methods
+- Added comprehensive logging system (`Logger.swift`) with multiple severity levels and subsystems
+- Enhanced error tracking for file system operations and accessibility API calls
+
+#### Technical Details
+
+- Created `DateFormatters.swift` for reusable date formatter instances
+- Created `FileTypeDescriptor.swift` to eliminate 120+ lines of duplicate code
+- Improved code organization with proper separation of concerns
+- All changes verified with successful builds
 
 ## 📄 License
 
