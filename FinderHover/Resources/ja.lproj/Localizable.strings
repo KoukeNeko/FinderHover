@@ -9,6 +9,7 @@
 "settings.tab.behavior" = "動作";
 "settings.tab.appearance" = "外観";
 "settings.tab.display" = "表示";
+"settings.tab.permissions" = "アクセス許可";
 "settings.tab.about" = "情報";
 
 /* Settings - Behavior */
@@ -83,6 +84,25 @@
 
 "settings.display.order" = "表示順序";
 "settings.display.order.hint" = "項目をドラッグして並べ替えます。EXIF はグループとして移動します。";
+
+/* Settings - Permissions */
+"settings.permissions.title" = "アクセス許可";
+"settings.permissions.accessibility" = "アクセシビリティ";
+"settings.permissions.accessibility.description" = "マウスカーソル下のファイルを検出し、Finder内のマウスの動きを追跡するために必要です";
+"settings.permissions.accessibility.required" = "アクセシビリティ許可が必要です";
+"settings.permissions.accessibility.steps" = "1. 下の「システム設定を開く」をクリック\n2. リストからFinderHoverを見つける\n3. スイッチを切り替えて有効にする";
+"settings.permissions.granted" = "許可済み";
+"settings.permissions.notGranted" = "未許可";
+"settings.permissions.openSystemSettings" = "システム設定を開く";
+"settings.permissions.whyNeeded" = "これらの許可が必要な理由";
+"settings.permissions.reason.mouseTracking" = "マウス位置の追跡";
+"settings.permissions.reason.mouseTracking.description" = "Finder内のファイル上にホバーしているときを検出するためにマウスの動きを監視します";
+"settings.permissions.reason.fileDetection" = "カーソル下のファイル検出";
+"settings.permissions.reason.fileDetection.description" = "アクセシビリティAPIを使用して、現在マウスカーソルの下にあるファイルを識別します";
+"settings.permissions.reason.noInvasion" = "プライバシー第一";
+"settings.permissions.reason.noInvasion.description" = "ファイルのメタデータのみを読み取り、ファイルの内容は読み取りません。ネットワークアクセスなし、分析なし、完全にオープンソースです";
+"settings.permissions.privacy" = "プライバシーは保護されています";
+"settings.permissions.privacy.description" = "FinderHoverは、ファイルのメタデータ（名前、サイズ、日付）のみにアクセスし、ファイルの内容は読み取りません。すべてのデータはMac上に保存されます。インターネットに情報は送信されません。アプリは完全にオープンソースで確認できます。";
 
 /* Settings - About */
 "settings.about.version" = "バージョン %@";
