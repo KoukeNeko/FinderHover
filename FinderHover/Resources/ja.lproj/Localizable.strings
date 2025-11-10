@@ -211,12 +211,12 @@
 "hover.pdf.title" = "PDF情報";
 "hover.pdf.pageCount" = "ページ数";
 "hover.pdf.pageSize" = "ページサイズ";
-"hover.pdf.version" = "PDFバージョン";
+"hover.pdf.version" = "バージョン";
 "hover.pdf.documentTitle" = "タイトル";
 "hover.pdf.author" = "作成者";
 "hover.pdf.subject" = "件名";
-"hover.pdf.creator" = "アプリケーション";
-"hover.pdf.producer" = "PDF作成ソフト";
+"hover.pdf.creator" = "作成元";
+"hover.pdf.producer" = "PDF作成";
 "hover.pdf.creationDate" = "作成日";
 "hover.pdf.modificationDate" = "変更日";
 "hover.pdf.keywords" = "キーワード";
