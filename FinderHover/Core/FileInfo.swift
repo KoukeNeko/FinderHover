@@ -104,25 +104,16 @@ struct FileInfo {
     }
 
     var formattedModificationDate: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        return formatter.string(from: modificationDate)
+        return DateFormatters.formatMediumDateTime(modificationDate)
     }
 
     var formattedLastAccessDate: String {
         guard let date = lastAccessDate else { return "N/A" }
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
+        return DateFormatters.formatShortDateTime(date)
     }
 
     var formattedCreationDate: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        formatter.timeStyle = .short
-        return formatter.string(from: creationDate)
+        return DateFormatters.formatShortDateTime(creationDate)
     }
 
     var formattedPermissions: String {
@@ -301,16 +292,7 @@ struct FileInfo {
         // Extract date taken
         var dateTaken: String? = nil
         if let dateString = exifDict?[kCGImagePropertyExifDateTimeOriginal as String] as? String {
-            // Format: "YYYY:MM:DD HH:MM:SS"
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
-            if let date = formatter.date(from: dateString) {
-                formatter.dateStyle = .medium
-                formatter.timeStyle = .short
-                dateTaken = formatter.string(from: date)
-            } else {
-                dateTaken = dateString
-            }
+            dateTaken = DateFormatters.parseAndFormatExifDate(dateString)
         }
 
         // Extract image dimensions
