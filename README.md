@@ -164,7 +164,15 @@ Press `Cmd+,` to customize:
 <img width="762" height="1002" alt="image" src="https://github.com/user-attachments/assets/8307070f-a13c-434d-9a66-0ed2da98a996" />
 <img width="762" height="1002" alt="image" src="https://github.com/user-attachments/assets/0afda2cb-e26f-4574-b002-6b56a1c06102" />
 
-## 📝 What's New in Version 1.3
+## 📝 What's New
+
+### Version 1.3.1 (Hotfix) - 2025-01-11
+
+🐛 **Bug Fix**: Fixed display settings page freezing when scrolling quickly
+- Reverted LazyVStack optimization that caused spinning wheel/crashes
+- Now uses stable VStack for smooth scrolling experience
+
+### Version 1.3
 
 ### 🆕 New Metadata Support
 
@@ -195,7 +203,7 @@ Press `Cmd+,` to customize:
 - Implemented Template Method Pattern for better maintainability
 - Better code organization with 8 modular files
 - Improved SOLID principles adherence
-- LazyVStack for better rendering performance
+- Optimized rendering performance
 
 📋 [View Full Changelog](CHANGELOG.md)
 
