@@ -26,7 +26,6 @@ class HoverManager: ObservableObject {
     private var hoverWindow: HoverWindowController?
     private var cancellables = Set<AnyCancellable>()
     private var displayTimer: Timer?
-    private var hideCheckTimer: Timer?
     private var renamingCheckTimer: Timer?
     private var lastMouseLocation: CGPoint = .zero
     private let settings = AppSettings.shared
@@ -60,7 +59,7 @@ class HoverManager: ObservableObject {
                 if isDragging {
                     self?.hideHoverWindow()
                     self?.currentFileInfo = nil
-                    self?.displayTimer?.invalidate()
+                    self?.invalidateDisplayTimer()
                 }
             }
             .store(in: &cancellables)
@@ -82,7 +81,7 @@ class HoverManager: ObservableObject {
             if app.bundleIdentifier != "com.apple.finder" {
                 self?.hideHoverWindow()
                 self?.currentFileInfo = nil
-                self?.displayTimer?.invalidate()
+                self?.invalidateDisplayTimer()
             }
         }
 
@@ -101,7 +100,7 @@ class HoverManager: ObservableObject {
             if app.bundleIdentifier == "com.apple.finder" {
                 self?.hideHoverWindow()
                 self?.currentFileInfo = nil
-                self?.displayTimer?.invalidate()
+                self?.invalidateDisplayTimer()
             }
         }
     }
@@ -114,9 +113,8 @@ class HoverManager: ObservableObject {
     func stopMonitoring() {
         mouseTracker.stopTracking()
         hideHoverWindow()
-        hideCheckTimer?.invalidate()
-        displayTimer?.invalidate()
-        renamingCheckTimer?.invalidate()
+        invalidateDisplayTimer()
+        invalidateRenamingTimer()
     }
 
     private func checkIfShouldHide(at location: CGPoint) {
@@ -130,7 +128,7 @@ class HoverManager: ObservableObject {
         if FinderInteraction.isRenamingFile() {
             hideHoverWindow()
             currentFileInfo = nil
-            displayTimer?.invalidate()
+            invalidateDisplayTimer()
             return
         }
 
@@ -140,13 +138,13 @@ class HoverManager: ObservableObject {
             if currentPath != currentInfo.path {
                 hideHoverWindow()
                 currentFileInfo = nil
-                displayTimer?.invalidate()
+                invalidateDisplayTimer()
             }
         } else {
             // No file under cursor, hide immediately
             hideHoverWindow()
             currentFileInfo = nil
-            displayTimer?.invalidate()
+            invalidateDisplayTimer()
         }
     }
 
@@ -157,7 +155,7 @@ class HoverManager: ObservableObject {
         guard !mouseTracker.isDragging else { return }
 
         // Check if hovering over Finder and get file info
-        displayTimer?.invalidate()
+        invalidateDisplayTimer()
         displayTimer = Timer.scheduledTimer(withTimeInterval: settings.hoverDelay, repeats: false) { [weak self] _ in
             self?.checkAndDisplayFileInfo(at: location)
         }
@@ -203,7 +201,7 @@ class HoverManager: ObservableObject {
 
     private func startRenamingCheck() {
         // Stop existing timer
-        renamingCheckTimer?.invalidate()
+        invalidateRenamingTimer()
 
         // Check periodically if user is renaming
         renamingCheckTimer = Timer.scheduledTimer(
@@ -218,6 +216,19 @@ class HoverManager: ObservableObject {
     }
 
     private func stopRenamingCheck() {
+        invalidateRenamingTimer()
+    }
+
+    // MARK: - Timer Management Helpers
+
+    /// Safely invalidate and nil the display timer
+    private func invalidateDisplayTimer() {
+        displayTimer?.invalidate()
+        displayTimer = nil
+    }
+
+    /// Safely invalidate and nil the renaming check timer
+    private func invalidateRenamingTimer() {
         renamingCheckTimer?.invalidate()
         renamingCheckTimer = nil
     }

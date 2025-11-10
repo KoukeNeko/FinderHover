@@ -51,10 +51,30 @@ class HoverWindowController: NSWindowController {
 
         let hostingView = NSHostingView(rootView: AnyView(contentView))
 
-        // Set a width constraint for proper height calculation
-        let maxWidth = settings.windowMaxWidth
+        // Calculate required size for the view
+        let fittingSize = calculateViewSize(for: hostingView, maxWidth: settings.windowMaxWidth)
 
-        // Use intrinsicContentSize with proper width constraint
+        // Setup window content with proper styling
+        setupWindowContent(window: window, hostingView: hostingView, size: fittingSize, settings: settings)
+
+        // Set window size
+        window.setContentSize(fittingSize)
+
+        // Position window intelligently near cursor
+        positionWindow(window: window, at: position, settings: settings)
+
+        window.orderFront(nil)
+    }
+
+    func hide() {
+        window?.orderOut(nil)
+    }
+
+    // MARK: - Private Helper Methods
+
+    /// Calculate the required size for the hosting view
+    private func calculateViewSize(for hostingView: NSHostingView<AnyView>, maxWidth: Double) -> NSSize {
+        // Set a width constraint for proper height calculation
         hostingView.frame = NSRect(x: 0, y: 0, width: maxWidth, height: 0)
         hostingView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -82,83 +102,88 @@ class HoverWindowController: NSWindowController {
         hostingView.removeFromSuperview()
         hostingView.translatesAutoresizingMaskIntoConstraints = true
 
-        // Determine corner radius based on UI style
+        return fittingSize
+    }
+
+    /// Setup the window content with blur effect or solid background
+    private func setupWindowContent(window: NSWindow, hostingView: NSHostingView<AnyView>, size: NSSize, settings: AppSettings) {
         let cornerRadius: CGFloat = settings.uiStyle == .windows
             ? Constants.WindowLayout.windowsCornerRadius
             : Constants.WindowLayout.macOSCornerRadius
 
-        // Check if blur is enabled
         if settings.enableBlur {
-            let osVersion = ProcessInfo.processInfo.operatingSystemVersion
-            // Use container view approach for macOS <= macOS 15.x (where direct cornerRadius doesn't work)
-            let useLegacyBlurLayout = osVersion.majorVersion <= Constants.Compatibility.blurLayoutChangeVersion
-
-            // Create visual effect view for blur
-            let effectView = NSVisualEffectView()
-            effectView.state = .active
-
-            if useLegacyBlurLayout {
-                // For macOS 15.x, use transparent container with clipping
-                // Direct cornerRadius on NSVisualEffectView doesn't work properly on macOS 15.x
-                effectView.material = .hudWindow
-                effectView.blendingMode = .behindWindow
-                effectView.frame = NSRect(origin: .zero, size: fittingSize)
-
-                hostingView.frame = effectView.bounds
-                hostingView.autoresizingMask = [.width, .height]
-                effectView.addSubview(hostingView)
-
-                // Create transparent clipping container
-                let containerView = NSView(frame: NSRect(origin: .zero, size: fittingSize))
-                containerView.wantsLayer = true
-                containerView.layer?.cornerRadius = cornerRadius
-                containerView.layer?.masksToBounds = true
-
-                // Add subtle border like native macOS HUD windows (only for macOS style)
-                if cornerRadius > 0 {
-                    containerView.layer?.borderWidth = Constants.WindowLayout.macOSBorderWidth
-                    containerView.layer?.borderColor = NSColor.systemGray.withAlphaComponent(0.5).cgColor
-                } else {
-                    // Windows style: no border
-                    containerView.layer?.borderWidth = 0
-                    containerView.layer?.borderColor = nil
-                }
-
-                effectView.autoresizingMask = [.width, .height]
-                containerView.addSubview(effectView)
-                window.contentView = containerView
-            } else {
-                // macOS 26+ support direct cornerRadius on NSVisualEffectView
-                effectView.material = .hudWindow
-                effectView.blendingMode = .behindWindow
-                effectView.wantsLayer = true
-                effectView.layer?.cornerRadius = cornerRadius
-                effectView.layer?.masksToBounds = true
-                effectView.frame = NSRect(origin: .zero, size: fittingSize)
-                hostingView.frame = effectView.bounds
-                hostingView.autoresizingMask = [.width, .height]
-                effectView.addSubview(hostingView)
-                window.contentView = effectView
-            }
-
-            self.visualEffectView = effectView
+            setupBlurContent(window: window, hostingView: hostingView, size: size, cornerRadius: cornerRadius)
         } else {
-            // No blur - use solid background
-            let containerView = NSView(frame: NSRect(origin: .zero, size: fittingSize))
+            setupSolidContent(window: window, hostingView: hostingView, size: size, cornerRadius: cornerRadius, opacity: settings.windowOpacity)
+        }
+    }
+
+    /// Setup window content with blur effect
+    private func setupBlurContent(window: NSWindow, hostingView: NSHostingView<AnyView>, size: NSSize, cornerRadius: CGFloat) {
+        let osVersion = ProcessInfo.processInfo.operatingSystemVersion
+        let useLegacyBlurLayout = osVersion.majorVersion <= Constants.Compatibility.blurLayoutChangeVersion
+
+        let effectView = NSVisualEffectView()
+        effectView.state = .active
+        effectView.material = .hudWindow
+        effectView.blendingMode = .behindWindow
+
+        if useLegacyBlurLayout {
+            // For macOS 15.x and earlier, use transparent container with clipping
+            effectView.frame = NSRect(origin: .zero, size: size)
+            hostingView.frame = effectView.bounds
+            hostingView.autoresizingMask = [.width, .height]
+            effectView.addSubview(hostingView)
+
+            // Create transparent clipping container
+            let containerView = NSView(frame: NSRect(origin: .zero, size: size))
             containerView.wantsLayer = true
             containerView.layer?.cornerRadius = cornerRadius
             containerView.layer?.masksToBounds = true
-            containerView.layer?.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(settings.windowOpacity).cgColor
 
-            hostingView.frame = containerView.bounds
-            containerView.addSubview(hostingView)
+            // Add subtle border for macOS style
+            if cornerRadius > 0 {
+                containerView.layer?.borderWidth = Constants.WindowLayout.macOSBorderWidth
+                containerView.layer?.borderColor = NSColor.systemGray.withAlphaComponent(0.5).cgColor
+            } else {
+                // Windows style: no border
+                containerView.layer?.borderWidth = 0
+                containerView.layer?.borderColor = nil
+            }
+
+            effectView.autoresizingMask = [.width, .height]
+            containerView.addSubview(effectView)
             window.contentView = containerView
+        } else {
+            // macOS 16+ supports direct cornerRadius on NSVisualEffectView
+            effectView.wantsLayer = true
+            effectView.layer?.cornerRadius = cornerRadius
+            effectView.layer?.masksToBounds = true
+            effectView.frame = NSRect(origin: .zero, size: size)
+            hostingView.frame = effectView.bounds
+            hostingView.autoresizingMask = [.width, .height]
+            effectView.addSubview(hostingView)
+            window.contentView = effectView
         }
 
-        // Set window size
-        window.setContentSize(fittingSize)
+        self.visualEffectView = effectView
+    }
 
-        // Position window near mouse cursor with smart positioning
+    /// Setup window content with solid background (no blur)
+    private func setupSolidContent(window: NSWindow, hostingView: NSHostingView<AnyView>, size: NSSize, cornerRadius: CGFloat, opacity: Double) {
+        let containerView = NSView(frame: NSRect(origin: .zero, size: size))
+        containerView.wantsLayer = true
+        containerView.layer?.cornerRadius = cornerRadius
+        containerView.layer?.masksToBounds = true
+        containerView.layer?.backgroundColor = NSColor.controlBackgroundColor.withAlphaComponent(opacity).cgColor
+
+        hostingView.frame = containerView.bounds
+        containerView.addSubview(hostingView)
+        window.contentView = containerView
+    }
+
+    /// Position window near cursor with intelligent screen edge detection
+    private func positionWindow(window: NSWindow, at position: CGPoint, settings: AppSettings) {
         let offsetX: CGFloat = settings.windowOffsetX
         let offsetY: CGFloat = settings.windowOffsetY
         var windowOrigin = CGPoint(
@@ -166,38 +191,33 @@ class HoverWindowController: NSWindowController {
             y: position.y - offsetY - window.frame.height
         )
 
-        // Ensure window stays on screen - find the screen that contains the mouse position
+        // Find the screen that contains the mouse position
         let screen = NSScreen.screens.first { NSMouseInRect(position, $0.frame, false) } ?? NSScreen.main
-        if let screen = screen {
-            let screenFrame = screen.visibleFrame
+        guard let screen = screen else { return }
 
-            // Check right edge
-            if windowOrigin.x + window.frame.width > screenFrame.maxX {
-                windowOrigin.x = position.x - offsetX - window.frame.width
-            }
+        let screenFrame = screen.visibleFrame
 
-            // Check left edge
-            if windowOrigin.x < screenFrame.minX {
-                windowOrigin.x = screenFrame.minX + Constants.WindowLayout.screenEdgePadding
-            }
+        // Check right edge
+        if windowOrigin.x + window.frame.width > screenFrame.maxX {
+            windowOrigin.x = position.x - offsetX - window.frame.width
+        }
 
-            // Check bottom edge
-            if windowOrigin.y < screenFrame.minY {
-                windowOrigin.y = position.y + offsetY
-            }
+        // Check left edge
+        if windowOrigin.x < screenFrame.minX {
+            windowOrigin.x = screenFrame.minX + Constants.WindowLayout.screenEdgePadding
+        }
 
-            // Check top edge
-            if windowOrigin.y + window.frame.height > screenFrame.maxY {
-                windowOrigin.y = screenFrame.maxY - window.frame.height - Constants.WindowLayout.screenEdgePadding
-            }
+        // Check bottom edge
+        if windowOrigin.y < screenFrame.minY {
+            windowOrigin.y = position.y + offsetY
+        }
+
+        // Check top edge
+        if windowOrigin.y + window.frame.height > screenFrame.maxY {
+            windowOrigin.y = screenFrame.maxY - window.frame.height - Constants.WindowLayout.screenEdgePadding
         }
 
         window.setFrameOrigin(windowOrigin)
-        window.orderFront(nil)
-    }
-
-    func hide() {
-        window?.orderOut(nil)
     }
 }
 
