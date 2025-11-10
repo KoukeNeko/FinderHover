@@ -62,6 +62,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
     case archive = "Archive Information"
     case ebook = "E-book Information"
     case code = "Code File Information"
+    case font = "Font Information"
     case filePath = "File Path"
 
     var id: String { rawValue }
@@ -84,6 +85,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .archive: return "displayItem.archive".localized
         case .ebook: return "displayItem.ebook".localized
         case .code: return "displayItem.code".localized
+        case .font: return "displayItem.font".localized
         case .filePath: return "displayItem.filePath".localized
         }
     }
@@ -106,6 +108,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .archive: return "doc.zipper"
         case .ebook: return "book.closed"
         case .code: return "chevron.left.forwardslash.chevron.right"
+        case .font: return "textformat"
         case .filePath: return IconManager.FileSystem.folder
         }
     }
@@ -410,6 +413,32 @@ class AppSettings: ObservableObject {
     @Published var showCodeEncoding: Bool {
         didSet { UserDefaults.standard.set(showCodeEncoding, forKey: "showCodeEncoding") }
     }
+    
+    // Font metadata toggles
+    @Published var showFont: Bool {
+        didSet { UserDefaults.standard.set(showFont, forKey: "showFont") }
+    }
+    @Published var showFontName: Bool {
+        didSet { UserDefaults.standard.set(showFontName, forKey: "showFontName") }
+    }
+    @Published var showFontFamily: Bool {
+        didSet { UserDefaults.standard.set(showFontFamily, forKey: "showFontFamily") }
+    }
+    @Published var showFontStyle: Bool {
+        didSet { UserDefaults.standard.set(showFontStyle, forKey: "showFontStyle") }
+    }
+    @Published var showFontVersion: Bool {
+        didSet { UserDefaults.standard.set(showFontVersion, forKey: "showFontVersion") }
+    }
+    @Published var showFontDesigner: Bool {
+        didSet { UserDefaults.standard.set(showFontDesigner, forKey: "showFontDesigner") }
+    }
+    @Published var showFontCopyright: Bool {
+        didSet { UserDefaults.standard.set(showFontCopyright, forKey: "showFontCopyright") }
+    }
+    @Published var showFontGlyphCount: Bool {
+        didSet { UserDefaults.standard.set(showFontGlyphCount, forKey: "showFontGlyphCount") }
+    }
 
     // Display order
     @Published var displayOrder: [DisplayItem] {
@@ -519,6 +548,15 @@ class AppSettings: ObservableObject {
                     decoded.append(.code)
                 }
             }
+            if !decoded.contains(.font) {
+                if let codeIndex = decoded.firstIndex(of: .code) {
+                    decoded.insert(.font, at: codeIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.font, at: filePathIndex)
+                } else {
+                    decoded.append(.font)
+                }
+            }
             self.displayOrder = decoded
         } else {
             // Default order
@@ -539,6 +577,7 @@ class AppSettings: ObservableObject {
                 .archive,
                 .ebook,
                 .code,
+                .font,
                 .filePath
             ]
         }
@@ -634,6 +673,17 @@ class AppSettings: ObservableObject {
         self.showCodeCommentLines = UserDefaults.standard.object(forKey: "showCodeCommentLines") as? Bool ?? Constants.Defaults.showCodeCommentLines
         self.showCodeBlankLines = UserDefaults.standard.object(forKey: "showCodeBlankLines") as? Bool ?? Constants.Defaults.showCodeBlankLines
         self.showCodeEncoding = UserDefaults.standard.object(forKey: "showCodeEncoding") as? Bool ?? Constants.Defaults.showCodeEncoding
+        
+        // Initialize font metadata toggles
+        self.showFont = UserDefaults.standard.object(forKey: "showFont") as? Bool ?? Constants.Defaults.showFont
+        self.showFontName = UserDefaults.standard.object(forKey: "showFontName") as? Bool ?? Constants.Defaults.showFontName
+        self.showFontFamily = UserDefaults.standard.object(forKey: "showFontFamily") as? Bool ?? Constants.Defaults.showFontFamily
+        self.showFontStyle = UserDefaults.standard.object(forKey: "showFontStyle") as? Bool ?? Constants.Defaults.showFontStyle
+        self.showFontVersion = UserDefaults.standard.object(forKey: "showFontVersion") as? Bool ?? Constants.Defaults.showFontVersion
+        self.showFontDesigner = UserDefaults.standard.object(forKey: "showFontDesigner") as? Bool ?? Constants.Defaults.showFontDesigner
+        self.showFontCopyright = UserDefaults.standard.object(forKey: "showFontCopyright") as? Bool ?? Constants.Defaults.showFontCopyright
+        self.showFontGlyphCount = UserDefaults.standard.object(forKey: "showFontGlyphCount") as? Bool ?? Constants.Defaults.showFontGlyphCount
+        
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? Constants.Defaults.followCursor
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? Constants.Defaults.windowOffsetX
         self.windowOffsetY = UserDefaults.standard.object(forKey: "windowOffsetY") as? Double ?? Constants.Defaults.windowOffsetY

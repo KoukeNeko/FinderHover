@@ -147,6 +147,17 @@
 "settings.display.code.encoding" = "檔案編碼";
 "settings.display.code.hint" = "程式碼中繼資料僅顯示於原始碼檔案";
 
+"settings.display.font.title" = "字型資訊";
+"settings.display.font.show" = "顯示字型中繼資料";
+"settings.display.font.name" = "字型名稱";
+"settings.display.font.family" = "字型家族";
+"settings.display.font.style" = "字型樣式";
+"settings.display.font.version" = "版本";
+"settings.display.font.designer" = "設計者";
+"settings.display.font.copyright" = "版權資訊";
+"settings.display.font.glyphCount" = "字形數量";
+"settings.display.font.hint" = "字型中繼資料僅顯示於 TTF、OTF 等字型格式";
+
 "settings.display.order" = "顯示順序";
 "settings.display.order.hint" = "拖曳項目以重新排序。EXIF 作為群組移動。";
 
@@ -218,6 +229,7 @@
 "displayItem.archive" = "壓縮檔資訊";
 "displayItem.ebook" = "電子書資訊";
 "displayItem.code" = "程式碼檔案資訊";
+"displayItem.font" = "字型資訊";
 "displayItem.filePath" = "檔案路徑";
 
 /* Hover Window */
@@ -320,6 +332,16 @@
 "hover.code.commentLines" = "註解";
 "hover.code.blankLines" = "空白";
 "hover.code.encoding" = "編碼";
+
+/* Font Hover */
+"hover.font.title" = "字型";
+"hover.font.name" = "名稱";
+"hover.font.family" = "字型家族";
+"hover.font.style" = "樣式";
+"hover.font.version" = "版本";
+"hover.font.designer" = "設計者";
+"hover.font.copyright" = "版權";
+"hover.font.glyphCount" = "字形數";
 
 /* Common */
 "common.reset" = "重設為預設值";

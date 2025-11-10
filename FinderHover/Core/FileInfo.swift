@@ -168,6 +168,22 @@ struct CodeMetadata {
     }
 }
 
+// MARK: - Font Metadata Structure
+struct FontMetadata {
+    let fontName: String?         // Full font name
+    let fontFamily: String?       // Font family name
+    let fontStyle: String?        // Font style (Regular, Bold, Italic, etc.)
+    let version: String?          // Font version
+    let designer: String?         // Font designer/creator
+    let copyright: String?        // Copyright information
+    let glyphCount: Int?          // Number of glyphs
+
+    var hasData: Bool {
+        return fontName != nil || fontFamily != nil || fontStyle != nil ||
+               version != nil || designer != nil || copyright != nil || glyphCount != nil
+    }
+}
+
 struct FileInfo {
     let name: String
     let path: String
@@ -211,6 +227,9 @@ struct FileInfo {
 
     // Code file metadata
     let codeMetadata: CodeMetadata?
+
+    // Font metadata
+    let fontMetadata: FontMetadata?
 
     var formattedSize: String {
         ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
@@ -332,6 +351,9 @@ struct FileInfo {
             // Extract Code file metadata
             let codeMetadata = extractCodeMetadata(from: url)
 
+            // Extract Font metadata
+            let fontMetadata = extractFontMetadata(from: url)
+
             return FileInfo(
                 name: url.lastPathComponent,
                 path: path,
@@ -356,7 +378,8 @@ struct FileInfo {
                 officeMetadata: officeMetadata,
                 archiveMetadata: archiveMetadata,
                 ebookMetadata: ebookMetadata,
-                codeMetadata: codeMetadata
+                codeMetadata: codeMetadata,
+                fontMetadata: fontMetadata
             )
         } catch {
             Logger.error("Failed to read file attributes: \(path)", error: error, subsystem: .fileSystem)
@@ -1381,6 +1404,52 @@ struct FileInfo {
             return "ISO-8859-1"
         }
         return "Unknown"
+    }
+    
+    private static func extractFontMetadata(from url: URL) -> FontMetadata? {
+        let fontExtensions = ["ttf", "otf", "ttc", "otc", "woff", "woff2", "pfb", "pfm", "fon"]
+        let ext = url.pathExtension.lowercased()
+        guard fontExtensions.contains(ext) else { return nil }
+        
+        // Create CGDataProvider from URL
+        guard let dataProvider = CGDataProvider(url: url as CFURL) else { return nil }
+        
+        // Create CGFont from data provider
+        guard let cgFont = CGFont(dataProvider) else { return nil }
+        
+        // Create CTFont for easier metadata access
+        let ctFont = CTFontCreateWithGraphicsFont(cgFont, 12.0, nil, nil)
+        
+        // Extract font name (full name)
+        let fontName = CTFontCopyFullName(ctFont) as String?
+        
+        // Extract font family
+        let fontFamily = CTFontCopyFamilyName(ctFont) as String?
+        
+        // Extract font style
+        let fontStyle = CTFontCopyName(ctFont, kCTFontStyleNameKey) as String?
+        
+        // Extract version
+        let version = CTFontCopyName(ctFont, kCTFontVersionNameKey) as String?
+        
+        // Extract designer
+        let designer = CTFontCopyName(ctFont, kCTFontDesignerNameKey) as String?
+        
+        // Extract copyright
+        let copyright = CTFontCopyName(ctFont, kCTFontCopyrightNameKey) as String?
+        
+        // Get glyph count
+        let glyphCount = CTFontGetGlyphCount(ctFont)
+        
+        return FontMetadata(
+            fontName: fontName,
+            fontFamily: fontFamily,
+            fontStyle: fontStyle,
+            version: version,
+            designer: designer,
+            copyright: copyright,
+            glyphCount: glyphCount > 0 ? Int(glyphCount) : nil
+        )
     }
 
     // MARK: - Helper Functions

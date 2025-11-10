@@ -339,6 +339,31 @@ enum Constants {
 
         /// Default show Code encoding
         static let showCodeEncoding: Bool = true
+        
+        // Font metadata defaults
+        /// Default show Font information
+        static let showFont: Bool = true
+        
+        /// Default show Font name
+        static let showFontName: Bool = true
+        
+        /// Default show Font family
+        static let showFontFamily: Bool = true
+        
+        /// Default show Font style
+        static let showFontStyle: Bool = true
+        
+        /// Default show Font version
+        static let showFontVersion: Bool = true
+        
+        /// Default show Font designer
+        static let showFontDesigner: Bool = true
+        
+        /// Default show Font copyright
+        static let showFontCopyright: Bool = true
+        
+        /// Default show Font glyph count
+        static let showFontGlyphCount: Bool = true
 
         /// Default follow cursor
         static let followCursor: Bool = true

@@ -147,6 +147,17 @@
 "settings.display.code.encoding" = "ファイルエンコーディング";
 "settings.display.code.hint" = "コードメタデータはソースコードファイルにのみ表示されます";
 
+"settings.display.font.title" = "フォント情報";
+"settings.display.font.show" = "フォントメタデータを表示";
+"settings.display.font.name" = "フォント名";
+"settings.display.font.family" = "フォントファミリー";
+"settings.display.font.style" = "フォントスタイル";
+"settings.display.font.version" = "バージョン";
+"settings.display.font.designer" = "デザイナー";
+"settings.display.font.copyright" = "著作権情報";
+"settings.display.font.glyphCount" = "グリフ数";
+"settings.display.font.hint" = "フォントメタデータはTTF、OTFなどのフォント形式にのみ表示されます";
+
 "settings.display.order" = "表示順序";
 "settings.display.order.hint" = "項目をドラッグして並べ替えます。EXIF はグループとして移動します。";
 
@@ -218,6 +229,7 @@
 "displayItem.archive" = "アーカイブ情報";
 "displayItem.ebook" = "電子書籍情報";
 "displayItem.code" = "コードファイル情報";
+"displayItem.font" = "フォント情報";
 "displayItem.filePath" = "ファイルパス";
 
 /* Hover Window */
@@ -320,6 +332,16 @@
 "hover.code.commentLines" = "コメント";
 "hover.code.blankLines" = "空白";
 "hover.code.encoding" = "エンコーディング";
+
+/* Font Hover */
+"hover.font.title" = "フォント";
+"hover.font.name" = "名前";
+"hover.font.family" = "ファミリー";
+"hover.font.style" = "スタイル";
+"hover.font.version" = "バージョン";
+"hover.font.designer" = "デザイナー";
+"hover.font.copyright" = "著作権";
+"hover.font.glyphCount" = "グリフ数";
 
 /* Common */
 "common.reset" = "デフォルトに戻す";

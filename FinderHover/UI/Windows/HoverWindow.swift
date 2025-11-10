@@ -687,6 +687,45 @@ struct HoverContentView: View {
                         .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
+            
+        case .font:
+            if settings.showFont, let font = fileInfo.fontMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.font.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showFontName, let fontName = font.fontName {
+                        DetailRow(icon: "textformat", label: "hover.font.name".localized, value: fontName, fontSize: settings.fontSize)
+                    }
+                    if settings.showFontFamily, let fontFamily = font.fontFamily {
+                        DetailRow(icon: "textformat.alt", label: "hover.font.family".localized, value: fontFamily, fontSize: settings.fontSize)
+                    }
+                    if settings.showFontStyle, let fontStyle = font.fontStyle {
+                        DetailRow(icon: "italic", label: "hover.font.style".localized, value: fontStyle, fontSize: settings.fontSize)
+                    }
+                    if settings.showFontVersion, let version = font.version {
+                        DetailRow(icon: "number", label: "hover.font.version".localized, value: version, fontSize: settings.fontSize)
+                    }
+                    if settings.showFontDesigner, let designer = font.designer {
+                        DetailRow(icon: "person", label: "hover.font.designer".localized, value: designer, fontSize: settings.fontSize)
+                    }
+                    if settings.showFontCopyright, let copyright = font.copyright {
+                        DetailRow(icon: "c.circle", label: "hover.font.copyright".localized, value: copyright, fontSize: settings.fontSize)
+                    }
+                    if settings.showFontGlyphCount, let glyphCount = font.glyphCount {
+                        DetailRow(icon: "character.textbox", label: "hover.font.glyphCount".localized, value: "\(glyphCount)", fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
 
         case .filePath:
             if settings.showFilePath {

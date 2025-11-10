@@ -905,6 +905,60 @@ struct DisplaySettingsView: View {
                     .foregroundColor(.secondary)
                     .padding(.horizontal, 20)
                     .padding(.top, 8)
+                    
+                    // Font Information
+                    Text("settings.display.font.title".localized)
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(Color(NSColor.labelColor))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 20)
+                        .padding(.top, 16)
+                        .padding(.bottom, 8)
+
+                    VStack(spacing: 0) {
+                        DisplayToggleRow(title: "settings.display.font.show".localized, icon: "textformat", isOn: $settings.showFont)
+
+                        DisplayToggleRow(title: "settings.display.font.name".localized, icon: "textformat", isOn: $settings.showFontName)
+                            .disabled(!settings.showFont)
+                            .opacity(settings.showFont ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.font.family".localized, icon: "textformat.alt", isOn: $settings.showFontFamily)
+                            .disabled(!settings.showFont)
+                            .opacity(settings.showFont ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.font.style".localized, icon: "italic", isOn: $settings.showFontStyle)
+                            .disabled(!settings.showFont)
+                            .opacity(settings.showFont ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.font.version".localized, icon: "number", isOn: $settings.showFontVersion)
+                            .disabled(!settings.showFont)
+                            .opacity(settings.showFont ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.font.designer".localized, icon: "person", isOn: $settings.showFontDesigner)
+                            .disabled(!settings.showFont)
+                            .opacity(settings.showFont ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.font.copyright".localized, icon: "c.circle", isOn: $settings.showFontCopyright)
+                            .disabled(!settings.showFont)
+                            .opacity(settings.showFont ? 1 : 0.5)
+
+                        DisplayToggleRow(title: "settings.display.font.glyphCount".localized, icon: "character.textbox", isOn: $settings.showFontGlyphCount)
+                            .disabled(!settings.showFont)
+                            .opacity(settings.showFont ? 1 : 0.5)
+                    }
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(6)
+                    .padding(.horizontal, 20)
+
+                    HStack(spacing: 6) {
+                        Image(systemName: "info.circle")
+                            .font(.system(size: 11))
+                        Text("settings.display.font.hint".localized)
+                            .font(.system(size: 11))
+                    }
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
 
                     // Display Order Section
                     Text("settings.display.order".localized)

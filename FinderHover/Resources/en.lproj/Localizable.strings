@@ -147,6 +147,17 @@
 "settings.display.code.encoding" = "File Encoding";
 "settings.display.code.hint" = "Code metadata only appears for source code files";
 
+"settings.display.font.title" = "Font Information";
+"settings.display.font.show" = "Show Font Metadata";
+"settings.display.font.name" = "Font Name";
+"settings.display.font.family" = "Font Family";
+"settings.display.font.style" = "Font Style";
+"settings.display.font.version" = "Version";
+"settings.display.font.designer" = "Designer";
+"settings.display.font.copyright" = "Copyright";
+"settings.display.font.glyphCount" = "Glyph Count";
+"settings.display.font.hint" = "Font metadata only appears for TTF, OTF, and other font formats";
+
 "settings.display.order" = "Display Order";
 "settings.display.order.hint" = "Drag items to reorder. EXIF moves as a group.";
 
@@ -218,6 +229,7 @@
 "displayItem.archive" = "Archive Information";
 "displayItem.ebook" = "E-book Information";
 "displayItem.code" = "Code File Information";
+"displayItem.font" = "Font Information";
 "displayItem.filePath" = "File Path";
 
 /* Hover Window */
@@ -320,6 +332,16 @@
 "hover.code.commentLines" = "Comments";
 "hover.code.blankLines" = "Blank";
 "hover.code.encoding" = "Encoding";
+
+/* Font Hover */
+"hover.font.title" = "Font";
+"hover.font.name" = "Name";
+"hover.font.family" = "Family";
+"hover.font.style" = "Style";
+"hover.font.version" = "Version";
+"hover.font.designer" = "Designer";
+"hover.font.copyright" = "Copyright";
+"hover.font.glyphCount" = "Glyphs";
 
 /* Common */
 "common.reset" = "Reset to Defaults";
