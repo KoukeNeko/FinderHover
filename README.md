@@ -34,6 +34,7 @@ A beautiful, highly customizable macOS app that displays rich file information w
 
 - Adjustable window size (300-600px) 
 - Native blur effect or custom opacity (70-100%)
+- Adjustable font size (9pt - 14pt)
 - Compact mode for reduced spacing
 - Launch at login support
 - Recognizes 50+ file types with smart descriptions
