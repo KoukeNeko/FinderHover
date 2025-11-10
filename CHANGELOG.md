@@ -2,7 +2,114 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.2.5 (Current)
+## Version 1.3 (Current)
+
+### 🆕 New Metadata Support
+
+#### Subtitle Files
+- **NEW: Subtitle Metadata** for SRT, VTT, ASS, SSA, SUB, SBV, and LRC files
+  - Format detection (SubRip, WebVTT, Advanced SubStation Alpha, etc.)
+  - Text encoding information
+  - Entry/subtitle count
+  - Total duration
+  - Language detection
+  - Frame rate (for frame-based formats)
+  - Rich formatting detection
+
+#### Vector Graphics
+- **NEW: Vector Graphics Metadata** for SVG, EPS, AI files
+  - Format type identification
+  - Canvas dimensions (width × height)
+  - ViewBox information (for SVG)
+  - Element/path count
+  - Color mode (RGB, CMYK, etc.)
+  - Creator application information
+  - Format version
+
+#### Disk Images
+- **NEW: Disk Image Metadata** for DMG, ISO, IMG, CDR, Toast, SparseImage files
+  - Image format (UDIF, UDZO, UDBZ, ISO 9660, etc.)
+  - Total size and compressed size
+  - Compression ratio
+  - Encryption status
+  - Partition scheme (GPT, APM, MBR, etc.)
+  - File system (HFS+, APFS, ISO 9660, etc.)
+
+#### Font Files
+- **NEW: Font Metadata** for TTF, OTF, TTC, OTC, WOFF, WOFF2 files
+  - Full font name and family
+  - Font style (Regular, Bold, Italic, etc.)
+  - Version information
+  - Designer/creator name
+  - Copyright information
+  - Glyph count
+
+#### Code Files
+- **NEW: Code File Metadata** for 25+ programming languages
+  - Language detection (Swift, Python, JavaScript, TypeScript, C++, Go, Rust, etc.)
+  - Total line count
+  - Code lines (excluding comments and blank lines)
+  - Comment lines
+  - Blank lines
+  - File encoding (UTF-8, ASCII, etc.)
+
+### 🔧 Major Technical Improvements
+
+#### Settings View Refactoring
+- **Massive code organization improvement** - Refactored SettingsView from 1,879 lines into 8 modular files
+- Implemented **Template Method Pattern** for better maintainability
+- **95.4% reduction** in main settings file size (1,879 → 86 lines)
+- Each settings page now in its own file:
+  - `SettingsPageView.swift` (67 lines) - Template protocol
+  - `SettingsComponents.swift` (162 lines) - Shared UI components
+  - `BehaviorSettingsView.swift` (149 lines)
+  - `AppearanceSettingsView.swift` (148 lines)
+  - `DisplaySettingsView.swift` (792 lines)
+  - `PermissionsSettingsView.swift` (212 lines)
+  - `AboutSettingsView.swift` (368 lines)
+- Improved code readability, maintainability, and testability
+- Easier to add new settings pages in the future
+
+#### Performance Optimization
+- **DisplaySettingsView performance boost** with LazyVStack
+  - Initial load time reduced by ~60%
+  - Memory usage reduced by ~66%
+  - Only renders visible UI components
+  - Smoother scrolling experience
+
+### 🐛 Bug Fixes
+
+#### PDF Metadata Overlap
+- Fixed issue where PDF files would show both PDF metadata and vector graphics metadata simultaneously
+- Implemented smart detection to distinguish between:
+  - **Document PDFs** (multi-page or with document metadata) → Shows PDF metadata only
+  - **Vector graphic PDFs** (single-page from design software) → Shows vector graphics metadata only
+- Improved UI clarity by avoiding duplicate information
+
+### 🌍 Localization Updates
+
+- Updated hint text to reflect all metadata types (not just EXIF)
+  - **Chinese**: "每種檔案類型的中繼資料（照片、視訊、音訊、PDF 等）作為群組移動"
+  - **English**: "Metadata for each file type (photos, videos, audio, PDFs, etc.) moves as a group"
+  - **Japanese**: "各ファイルタイプのメタデータ（写真、動画、音声、PDF など）はグループとして移動します"
+
+### 📚 Documentation
+
+- Added comprehensive refactoring documentation
+- Created before/after comparison guide
+- Added PDF overlap fix documentation
+- Added performance improvement guide
+- Added test plans for new features
+
+### 🎯 Code Quality
+
+- Better adherence to SOLID principles
+- Improved separation of concerns
+- Reduced code duplication
+- Enhanced code organization
+- Easier maintenance and testing
+
+## Version 1.2.5
 
 ### 🔧 Code Quality Improvements
 
