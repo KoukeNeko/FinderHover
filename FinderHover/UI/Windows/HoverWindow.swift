@@ -240,9 +240,6 @@ struct HoverContentView: View {
             ForEach(settings.displayOrder) { item in
                 displayItemView(for: item)
             }
-            .onAppear {
-                print("Display order: \(settings.displayOrder.map { $0.rawValue })")
-            }
         }
         .padding(settings.compactMode ? 10 : 14)
         .frame(minWidth: 320, maxWidth: settings.windowMaxWidth)
