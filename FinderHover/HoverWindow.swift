@@ -127,19 +127,7 @@ class HoverWindowController: NSWindowController {
                 effectView.wantsLayer = true
                 effectView.layer?.cornerRadius = cornerRadius
                 effectView.layer?.masksToBounds = true
-
-                // Add subtle border like native macOS HUD windows (only for macOS style)
-                if cornerRadius > 0 {
-                    effectView.layer?.borderWidth = 0.5
-                    effectView.layer?.borderColor = NSColor.systemGray.withAlphaComponent(0.5).cgColor
-                } else {
-                    // Windows style: no border
-                    effectView.layer?.borderWidth = 0
-                    effectView.layer?.borderColor = nil
-                }
-
                 effectView.frame = NSRect(origin: .zero, size: fittingSize)
-
                 hostingView.frame = effectView.bounds
                 hostingView.autoresizingMask = [.width, .height]
                 effectView.addSubview(hostingView)
