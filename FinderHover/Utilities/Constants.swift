@@ -188,6 +188,256 @@ enum Constants {
         /// Default show audio sample rate
         static let showAudioSampleRate: Bool = true
 
+        /// Default show PDF metadata
+        static let showPDF: Bool = true
+
+        /// Default show PDF page count
+        static let showPDFPageCount: Bool = true
+
+        /// Default show PDF page size
+        static let showPDFPageSize: Bool = true
+
+        /// Default show PDF version
+        static let showPDFVersion: Bool = true
+
+        /// Default show PDF title
+        static let showPDFTitle: Bool = true
+
+        /// Default show PDF author
+        static let showPDFAuthor: Bool = true
+
+        /// Default show PDF subject
+        static let showPDFSubject: Bool = true
+
+        /// Default show PDF creator
+        static let showPDFCreator: Bool = true
+
+        /// Default show PDF producer
+        static let showPDFProducer: Bool = true
+
+        /// Default show PDF creation date
+        static let showPDFCreationDate: Bool = true
+
+        /// Default show PDF modification date
+        static let showPDFModificationDate: Bool = true
+
+        /// Default show PDF keywords
+        static let showPDFKeywords: Bool = true
+
+        /// Default show PDF encrypted status
+        static let showPDFEncrypted: Bool = true
+
+        /// Default show Office metadata
+        static let showOffice: Bool = true
+
+        /// Default show Office document title
+        static let showOfficeTitle: Bool = true
+
+        /// Default show Office document author
+        static let showOfficeAuthor: Bool = true
+
+        /// Default show Office document subject
+        static let showOfficeSubject: Bool = true
+
+        /// Default show Office document keywords
+        static let showOfficeKeywords: Bool = true
+
+        /// Default show Office document comment
+        static let showOfficeComment: Bool = true
+
+        /// Default show Office document last modified by
+        static let showOfficeLastModifiedBy: Bool = false
+
+        /// Default show Office document creation date
+        static let showOfficeCreationDate: Bool = true
+
+        /// Default show Office document modification date
+        static let showOfficeModificationDate: Bool = true
+
+        /// Default show Office document page count (Word)
+        static let showOfficePageCount: Bool = true
+
+        /// Default show Office document word count (Word)
+        static let showOfficeWordCount: Bool = true
+
+        /// Default show Office document sheet count (Excel)
+        static let showOfficeSheetCount: Bool = true
+
+        /// Default show Office document slide count (PowerPoint)
+        static let showOfficeSlideCount: Bool = true
+
+        /// Default show Office document company
+        static let showOfficeCompany: Bool = false
+
+        /// Default show Office document category
+        static let showOfficeCategory: Bool = false
+
+        /// Default show Archive metadata
+        static let showArchive: Bool = true
+
+        /// Default show Archive format
+        static let showArchiveFormat: Bool = true
+
+        /// Default show Archive file count
+        static let showArchiveFileCount: Bool = true
+
+        /// Default show Archive uncompressed size
+        static let showArchiveUncompressedSize: Bool = true
+
+        /// Default show Archive compression ratio
+        static let showArchiveCompressionRatio: Bool = true
+
+        /// Default show Archive encrypted status
+        static let showArchiveEncrypted: Bool = true
+
+        // MARK: - E-book Display Defaults
+        /// Default show E-book section
+        static let showEbook: Bool = true
+
+        /// Default show E-book title
+        static let showEbookTitle: Bool = true
+
+        /// Default show E-book author
+        static let showEbookAuthor: Bool = true
+
+        /// Default show E-book publisher
+        static let showEbookPublisher: Bool = true
+
+        /// Default show E-book publication date
+        static let showEbookPublicationDate: Bool = true
+
+        /// Default show E-book ISBN
+        static let showEbookISBN: Bool = true
+
+        /// Default show E-book language
+        static let showEbookLanguage: Bool = true
+
+        /// Default show E-book description
+        static let showEbookDescription: Bool = true
+
+        /// Default show E-book page count
+        static let showEbookPageCount: Bool = true
+
+        // MARK: - Code File Display Defaults
+        /// Default show Code section
+        static let showCode: Bool = true
+
+        /// Default show Code language
+        static let showCodeLanguage: Bool = true
+
+        /// Default show Code line count
+        static let showCodeLineCount: Bool = true
+
+        /// Default show Code lines
+        static let showCodeLines: Bool = true
+
+        /// Default show Code comment lines
+        static let showCodeCommentLines: Bool = true
+
+        /// Default show Code blank lines
+        static let showCodeBlankLines: Bool = true
+
+        /// Default show Code encoding
+        static let showCodeEncoding: Bool = true
+        
+        // Font metadata defaults
+        /// Default show Font information
+        static let showFont: Bool = true
+        
+        /// Default show Font name
+        static let showFontName: Bool = true
+        
+        /// Default show Font family
+        static let showFontFamily: Bool = true
+        
+        /// Default show Font style
+        static let showFontStyle: Bool = true
+        
+        /// Default show Font version
+        static let showFontVersion: Bool = true
+        
+        /// Default show Font designer
+        static let showFontDesigner: Bool = true
+        
+        /// Default show Font copyright
+        static let showFontCopyright: Bool = true
+        
+        /// Default show Font glyph count
+        static let showFontGlyphCount: Bool = true
+        
+        // Disk Image metadata defaults
+        /// Default show Disk Image information
+        static let showDiskImage: Bool = true
+        
+        /// Default show Disk Image format
+        static let showDiskImageFormat: Bool = true
+        
+        /// Default show Disk Image total size
+        static let showDiskImageTotalSize: Bool = true
+        
+        /// Default show Disk Image compressed size
+        static let showDiskImageCompressedSize: Bool = true
+        
+        /// Default show Disk Image compression ratio
+        static let showDiskImageCompressionRatio: Bool = true
+        
+        /// Default show Disk Image encrypted status
+        static let showDiskImageEncrypted: Bool = true
+        
+        /// Default show Disk Image partition scheme
+        static let showDiskImagePartitionScheme: Bool = true
+        
+        /// Default show Disk Image file system
+        static let showDiskImageFileSystem: Bool = true
+        
+        /// Default show Vector Graphics info
+        static let showVectorGraphics: Bool = true
+        
+        /// Default show Vector Graphics format
+        static let showVectorGraphicsFormat: Bool = true
+        
+        /// Default show Vector Graphics dimensions
+        static let showVectorGraphicsDimensions: Bool = true
+        
+        /// Default show Vector Graphics viewBox
+        static let showVectorGraphicsViewBox: Bool = true
+        
+        /// Default show Vector Graphics element count
+        static let showVectorGraphicsElementCount: Bool = true
+        
+        /// Default show Vector Graphics color mode
+        static let showVectorGraphicsColorMode: Bool = true
+        
+        /// Default show Vector Graphics creator
+        static let showVectorGraphicsCreator: Bool = true
+        
+        /// Default show Vector Graphics version
+        static let showVectorGraphicsVersion: Bool = true
+        
+        /// Default show Subtitle info
+        static let showSubtitle: Bool = true
+        
+        /// Default show Subtitle format
+        static let showSubtitleFormat: Bool = true
+        
+        /// Default show Subtitle encoding
+        static let showSubtitleEncoding: Bool = true
+        
+        /// Default show Subtitle entry count
+        static let showSubtitleEntryCount: Bool = true
+        
+        /// Default show Subtitle duration
+        static let showSubtitleDuration: Bool = true
+        
+        /// Default show Subtitle language
+        static let showSubtitleLanguage: Bool = true
+        
+        /// Default show Subtitle frame rate
+        static let showSubtitleFrameRate: Bool = true
+        
+        /// Default show Subtitle formatting
+        static let showSubtitleFormatting: Bool = true
+
         /// Default follow cursor
         static let followCursor: Bool = true
 

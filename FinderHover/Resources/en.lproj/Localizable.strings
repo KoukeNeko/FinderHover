@@ -82,8 +82,117 @@
 "settings.display.audio.samplerate" = "Sample Rate";
 "settings.display.audio.hint" = "Audio metadata only appears for audio files with ID3 tags";
 
+"settings.display.pdf" = "PDF Information";
+"settings.display.pdf.show" = "Show PDF Metadata";
+"settings.display.pdf.pageCount" = "Page Count";
+"settings.display.pdf.pageSize" = "Page Size";
+"settings.display.pdf.version" = "PDF Version";
+"settings.display.pdf.title" = "Document Title";
+"settings.display.pdf.author" = "Author";
+"settings.display.pdf.subject" = "Subject";
+"settings.display.pdf.creator" = "Creator Application";
+"settings.display.pdf.producer" = "PDF Producer";
+"settings.display.pdf.creationDate" = "Creation Date";
+"settings.display.pdf.modificationDate" = "Modification Date";
+"settings.display.pdf.keywords" = "Keywords";
+"settings.display.pdf.encrypted" = "Encryption Status";
+"settings.display.pdf.hint" = "PDF metadata only appears for PDF files";
+
+"settings.display.office" = "Office Document Information";
+"settings.display.office.show" = "Show Office Metadata";
+"settings.display.office.title" = "Document Title";
+"settings.display.office.author" = "Author";
+"settings.display.office.subject" = "Subject";
+"settings.display.office.keywords" = "Keywords";
+"settings.display.office.comment" = "Comment";
+"settings.display.office.lastModifiedBy" = "Last Modified By";
+"settings.display.office.creationDate" = "Creation Date";
+"settings.display.office.modificationDate" = "Modification Date";
+"settings.display.office.pageCount" = "Page Count (Word)";
+"settings.display.office.wordCount" = "Word Count (Word)";
+"settings.display.office.sheetCount" = "Sheet Count (Excel)";
+"settings.display.office.slideCount" = "Slide Count (PowerPoint)";
+"settings.display.office.company" = "Company";
+"settings.display.office.category" = "Category";
+"settings.display.office.hint" = "Office metadata only appears for Microsoft Office documents";
+
+"settings.display.archive" = "Archive Information";
+"settings.display.archive.show" = "Show Archive Metadata";
+"settings.display.archive.format" = "Archive Format";
+"settings.display.archive.fileCount" = "File Count";
+"settings.display.archive.uncompressedSize" = "Uncompressed Size";
+"settings.display.archive.compressionRatio" = "Compression Ratio";
+"settings.display.archive.encrypted" = "Encrypted Status";
+"settings.display.archive.hint" = "Archive metadata only appears for compressed files";
+
+"settings.display.ebook" = "E-book Information";
+"settings.display.ebook.show" = "Show E-book Metadata";
+"settings.display.ebook.title" = "Book Title";
+"settings.display.ebook.author" = "Author";
+"settings.display.ebook.publisher" = "Publisher";
+"settings.display.ebook.publicationDate" = "Publication Date";
+"settings.display.ebook.isbn" = "ISBN";
+"settings.display.ebook.language" = "Language";
+"settings.display.ebook.description" = "Description";
+"settings.display.ebook.pageCount" = "Page Count";
+"settings.display.ebook.hint" = "E-book metadata only appears for EPUB, MOBI, and other e-book formats";
+
+"settings.display.code" = "Code File Information";
+"settings.display.code.show" = "Show Code Metadata";
+"settings.display.code.language" = "Programming Language";
+"settings.display.code.lineCount" = "Total Lines";
+"settings.display.code.codeLines" = "Code Lines";
+"settings.display.code.commentLines" = "Comment Lines";
+"settings.display.code.blankLines" = "Blank Lines";
+"settings.display.code.encoding" = "File Encoding";
+"settings.display.code.hint" = "Code metadata only appears for source code files";
+
+"settings.display.font.title" = "Font Information";
+"settings.display.font.show" = "Show Font Metadata";
+"settings.display.font.name" = "Font Name";
+"settings.display.font.family" = "Font Family";
+"settings.display.font.style" = "Font Style";
+"settings.display.font.version" = "Version";
+"settings.display.font.designer" = "Designer";
+"settings.display.font.copyright" = "Copyright";
+"settings.display.font.glyphCount" = "Glyph Count";
+"settings.display.font.hint" = "Font metadata only appears for TTF, OTF, and other font formats";
+
+"settings.display.diskImage.title" = "Disk Image Information";
+"settings.display.diskImage.show" = "Show Disk Image Metadata";
+"settings.display.diskImage.format" = "Image Format";
+"settings.display.diskImage.totalSize" = "Total Size";
+"settings.display.diskImage.compressedSize" = "Compressed Size";
+"settings.display.diskImage.compressionRatio" = "Compression Ratio";
+"settings.display.diskImage.encrypted" = "Encrypted Status";
+"settings.display.diskImage.partitionScheme" = "Partition Scheme";
+"settings.display.diskImage.fileSystem" = "File System";
+"settings.display.diskImage.hint" = "Disk image metadata only appears for DMG, ISO, and other disk image formats";
+
+"settings.display.vectorGraphics.title" = "Vector Graphics Information";
+"settings.display.vectorGraphics.show" = "Show Vector Graphics Metadata";
+"settings.display.vectorGraphics.format" = "Format Type";
+"settings.display.vectorGraphics.dimensions" = "Dimensions";
+"settings.display.vectorGraphics.viewBox" = "ViewBox";
+"settings.display.vectorGraphics.elementCount" = "Element Count";
+"settings.display.vectorGraphics.colorMode" = "Color Mode";
+"settings.display.vectorGraphics.creator" = "Creator Application";
+"settings.display.vectorGraphics.version" = "Format Version";
+"settings.display.vectorGraphics.hint" = "Vector graphics metadata only appears for SVG, EPS, AI, and vector PDF files";
+
+"settings.display.subtitle.title" = "Subtitle Information";
+"settings.display.subtitle.show" = "Show Subtitle Metadata";
+"settings.display.subtitle.format" = "Subtitle Format";
+"settings.display.subtitle.encoding" = "Text Encoding";
+"settings.display.subtitle.entryCount" = "Entry Count";
+"settings.display.subtitle.duration" = "Duration";
+"settings.display.subtitle.language" = "Language";
+"settings.display.subtitle.frameRate" = "Frame Rate";
+"settings.display.subtitle.hasFormatting" = "Rich Formatting";
+"settings.display.subtitle.hint" = "Subtitle metadata only appears for SRT, VTT, ASS, SSA, SUB, SBV, and LRC files";
+
 "settings.display.order" = "Display Order";
-"settings.display.order.hint" = "Drag items to reorder. EXIF moves as a group.";
+"settings.display.order.hint" = "Drag items to reorder. Metadata for each file type (photos, videos, audio, PDFs, etc.) moves as a group.";
 
 /* Settings - Permissions */
 "settings.permissions.title" = "Permissions";
@@ -148,6 +257,15 @@
 "displayItem.exif" = "Photo Information (EXIF)";
 "displayItem.video" = "Video Information";
 "displayItem.audio" = "Audio Information";
+"displayItem.pdf" = "PDF Information";
+"displayItem.office" = "Office Document Information";
+"displayItem.archive" = "Archive Information";
+"displayItem.ebook" = "E-book Information";
+"displayItem.code" = "Code File Information";
+"displayItem.font" = "Font Information";
+"displayItem.diskImage" = "Disk Image Information";
+"displayItem.vectorGraphics" = "Vector Graphics Information";
+"displayItem.subtitle" = "Subtitle Information";
 "displayItem.filePath" = "File Path";
 
 /* Hover Window */
@@ -189,6 +307,107 @@
 "hover.audio.bitrate" = "Bitrate";
 "hover.audio.samplerate" = "Sample Rate";
 "hover.audio.channels" = "Channels";
+
+/* PDF Information */
+"hover.pdf.title" = "PDF Information";
+"hover.pdf.pageCount" = "Pages";
+"hover.pdf.pageSize" = "Page Size";
+"hover.pdf.version" = "PDF Version";
+"hover.pdf.documentTitle" = "Title";
+"hover.pdf.author" = "Author";
+"hover.pdf.subject" = "Subject";
+"hover.pdf.creator" = "Creator";
+"hover.pdf.producer" = "Producer";
+"hover.pdf.creationDate" = "Created";
+"hover.pdf.modificationDate" = "Modified";
+"hover.pdf.keywords" = "Keywords";
+"hover.pdf.encrypted" = "Encrypted";
+
+/* Office Document Information */
+"hover.office.title" = "Office Document";
+"hover.office.documentTitle" = "Title";
+"hover.office.author" = "Author";
+"hover.office.subject" = "Subject";
+"hover.office.pageCount" = "Pages";
+"hover.office.wordCount" = "Words";
+"hover.office.sheetCount" = "Sheets";
+"hover.office.slideCount" = "Slides";
+"hover.office.keywords" = "Keywords";
+"hover.office.comment" = "Comment";
+"hover.office.lastModifiedBy" = "Modified By";
+"hover.office.creationDate" = "Created";
+"hover.office.modificationDate" = "Modified";
+"hover.office.company" = "Company";
+"hover.office.category" = "Category";
+
+/* Archive Hover */
+"hover.archive.title" = "Archive";
+"hover.archive.format" = "Format";
+"hover.archive.fileCount" = "Files";
+"hover.archive.uncompressedSize" = "Uncompressed";
+"hover.archive.compressionRatio" = "Compression";
+"hover.archive.encrypted" = "Encrypted";
+"hover.archive.yes" = "Yes";
+
+/* E-book Hover */
+"hover.ebook.title" = "E-book";
+"hover.ebook.bookTitle" = "Title";
+"hover.ebook.author" = "Author";
+"hover.ebook.publisher" = "Publisher";
+"hover.ebook.publicationDate" = "Published";
+"hover.ebook.isbn" = "ISBN";
+"hover.ebook.language" = "Language";
+"hover.ebook.description" = "Description";
+"hover.ebook.pageCount" = "Pages";
+
+/* Code File Hover */
+"hover.code.title" = "Code File";
+"hover.code.language" = "Language";
+"hover.code.lineCount" = "Lines";
+"hover.code.codeLines" = "Code";
+"hover.code.commentLines" = "Comments";
+"hover.code.blankLines" = "Blank";
+"hover.code.encoding" = "Encoding";
+
+/* Font Hover */
+"hover.font.title" = "Font";
+"hover.font.name" = "Name";
+"hover.font.family" = "Family";
+"hover.font.style" = "Style";
+"hover.font.version" = "Version";
+"hover.font.designer" = "Designer";
+"hover.font.copyright" = "Copyright";
+"hover.font.glyphCount" = "Glyphs";
+
+/* Disk Image Hover */
+"hover.diskImage.title" = "Disk Image";
+"hover.diskImage.format" = "Format";
+"hover.diskImage.totalSize" = "Total Size";
+"hover.diskImage.compressedSize" = "Compressed";
+"hover.diskImage.compressionRatio" = "Ratio";
+"hover.diskImage.encrypted" = "Encrypted";
+"hover.diskImage.partitionScheme" = "Partition Scheme";
+"hover.diskImage.fileSystem" = "File System";
+
+/* Vector Graphics Hover */
+"hover.vectorGraphics.title" = "Vector Graphics";
+"hover.vectorGraphics.format" = "Format";
+"hover.vectorGraphics.dimensions" = "Dimensions";
+"hover.vectorGraphics.viewBox" = "ViewBox";
+"hover.vectorGraphics.elementCount" = "Elements";
+"hover.vectorGraphics.colorMode" = "Color Mode";
+"hover.vectorGraphics.creator" = "Creator";
+"hover.vectorGraphics.version" = "Version";
+
+/* Subtitle Hover */
+"hover.subtitle.title" = "Subtitle";
+"hover.subtitle.format" = "Format";
+"hover.subtitle.encoding" = "Encoding";
+"hover.subtitle.entryCount" = "Entries";
+"hover.subtitle.duration" = "Duration";
+"hover.subtitle.language" = "Language";
+"hover.subtitle.frameRate" = "Frame Rate";
+"hover.subtitle.hasFormatting" = "Formatting";
 
 /* Common */
 "common.reset" = "Reset to Defaults";

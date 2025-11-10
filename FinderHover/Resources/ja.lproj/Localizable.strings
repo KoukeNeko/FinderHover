@@ -82,8 +82,117 @@
 "settings.display.audio.samplerate" = "サンプリング";
 "settings.display.audio.hint" = "オーディオメタデータは ID3 タグを含むオーディオファイルにのみ表示されます";
 
+"settings.display.pdf" = "PDF情報";
+"settings.display.pdf.show" = "PDFメタデータを表示";
+"settings.display.pdf.pageCount" = "ページ数";
+"settings.display.pdf.pageSize" = "ページサイズ";
+"settings.display.pdf.version" = "PDFバージョン";
+"settings.display.pdf.title" = "文書タイトル";
+"settings.display.pdf.author" = "作成者";
+"settings.display.pdf.subject" = "件名";
+"settings.display.pdf.creator" = "作成アプリケーション";
+"settings.display.pdf.producer" = "PDF作成ソフト";
+"settings.display.pdf.creationDate" = "作成日";
+"settings.display.pdf.modificationDate" = "変更日";
+"settings.display.pdf.keywords" = "キーワード";
+"settings.display.pdf.encrypted" = "暗号化状態";
+"settings.display.pdf.hint" = "PDFメタデータはPDFファイルにのみ表示されます";
+
+"settings.display.office" = "Office文書情報";
+"settings.display.office.show" = "Officeメタデータを表示";
+"settings.display.office.title" = "文書タイトル";
+"settings.display.office.author" = "作成者";
+"settings.display.office.subject" = "件名";
+"settings.display.office.keywords" = "キーワード";
+"settings.display.office.comment" = "コメント";
+"settings.display.office.lastModifiedBy" = "最終更新者";
+"settings.display.office.creationDate" = "作成日";
+"settings.display.office.modificationDate" = "変更日";
+"settings.display.office.pageCount" = "ページ数 (Word)";
+"settings.display.office.wordCount" = "文字数 (Word)";
+"settings.display.office.sheetCount" = "シート数 (Excel)";
+"settings.display.office.slideCount" = "スライド数 (PowerPoint)";
+"settings.display.office.company" = "会社名";
+"settings.display.office.category" = "カテゴリ";
+"settings.display.office.hint" = "OfficeメタデータはMicrosoft Office文書にのみ表示されます";
+
+"settings.display.archive" = "アーカイブ情報";
+"settings.display.archive.show" = "アーカイブメタデータを表示";
+"settings.display.archive.format" = "圧縮形式";
+"settings.display.archive.fileCount" = "ファイル数";
+"settings.display.archive.uncompressedSize" = "展開後のサイズ";
+"settings.display.archive.compressionRatio" = "圧縮率";
+"settings.display.archive.encrypted" = "暗号化状態";
+"settings.display.archive.hint" = "アーカイブメタデータは圧縮ファイルにのみ表示されます";
+
+"settings.display.ebook" = "電子書籍情報";
+"settings.display.ebook.show" = "電子書籍メタデータを表示";
+"settings.display.ebook.title" = "書名";
+"settings.display.ebook.author" = "著者";
+"settings.display.ebook.publisher" = "出版社";
+"settings.display.ebook.publicationDate" = "出版日";
+"settings.display.ebook.isbn" = "ISBN";
+"settings.display.ebook.language" = "言語";
+"settings.display.ebook.description" = "内容紹介";
+"settings.display.ebook.pageCount" = "ページ数";
+"settings.display.ebook.hint" = "電子書籍メタデータはEPUB、MOBIなどの電子書籍形式にのみ表示されます";
+
+"settings.display.code" = "コードファイル情報";
+"settings.display.code.show" = "コードメタデータを表示";
+"settings.display.code.language" = "プログラミング言語";
+"settings.display.code.lineCount" = "総行数";
+"settings.display.code.codeLines" = "コード行数";
+"settings.display.code.commentLines" = "コメント行数";
+"settings.display.code.blankLines" = "空白行数";
+"settings.display.code.encoding" = "ファイルエンコーディング";
+"settings.display.code.hint" = "コードメタデータはソースコードファイルにのみ表示されます";
+
+"settings.display.font.title" = "フォント情報";
+"settings.display.font.show" = "フォントメタデータを表示";
+"settings.display.font.name" = "フォント名";
+"settings.display.font.family" = "フォントファミリー";
+"settings.display.font.style" = "フォントスタイル";
+"settings.display.font.version" = "バージョン";
+"settings.display.font.designer" = "デザイナー";
+"settings.display.font.copyright" = "著作権情報";
+"settings.display.font.glyphCount" = "グリフ数";
+"settings.display.font.hint" = "フォントメタデータはTTF、OTFなどのフォント形式にのみ表示されます";
+
+"settings.display.diskImage.title" = "ディスクイメージ情報";
+"settings.display.diskImage.show" = "ディスクイメージメタデータを表示";
+"settings.display.diskImage.format" = "イメージ形式";
+"settings.display.diskImage.totalSize" = "合計サイズ";
+"settings.display.diskImage.compressedSize" = "圧縮サイズ";
+"settings.display.diskImage.compressionRatio" = "圧縮率";
+"settings.display.diskImage.encrypted" = "暗号化状態";
+"settings.display.diskImage.partitionScheme" = "パーティション方式";
+"settings.display.diskImage.fileSystem" = "ファイルシステム";
+"settings.display.diskImage.hint" = "ディスクイメージメタデータはDMG、ISOなどのディスクイメージ形式にのみ表示されます";
+
+"settings.display.vectorGraphics.title" = "ベクターグラフィックス情報";
+"settings.display.vectorGraphics.show" = "ベクターグラフィックスメタデータを表示";
+"settings.display.vectorGraphics.format" = "形式タイプ";
+"settings.display.vectorGraphics.dimensions" = "寸法";
+"settings.display.vectorGraphics.viewBox" = "ビューボックス";
+"settings.display.vectorGraphics.elementCount" = "要素数";
+"settings.display.vectorGraphics.colorMode" = "カラーモード";
+"settings.display.vectorGraphics.creator" = "作成アプリケーション";
+"settings.display.vectorGraphics.version" = "形式バージョン";
+"settings.display.vectorGraphics.hint" = "ベクターグラフィックスメタデータはSVG、EPS、AI、ベクターPDFファイルにのみ表示されます";
+
+"settings.display.subtitle.title" = "字幕ファイル情報";
+"settings.display.subtitle.show" = "字幕メタデータを表示";
+"settings.display.subtitle.format" = "字幕形式";
+"settings.display.subtitle.encoding" = "テキストエンコーディング";
+"settings.display.subtitle.entryCount" = "エントリ数";
+"settings.display.subtitle.duration" = "再生時間";
+"settings.display.subtitle.language" = "言語";
+"settings.display.subtitle.frameRate" = "フレームレート";
+"settings.display.subtitle.hasFormatting" = "リッチフォーマット";
+"settings.display.subtitle.hint" = "字幕メタデータはSRT、VTT、ASS、SSA、SUB、SBV、LRCファイルにのみ表示されます";
+
 "settings.display.order" = "表示順序";
-"settings.display.order.hint" = "項目をドラッグして並べ替えます。EXIF はグループとして移動します。";
+"settings.display.order.hint" = "項目をドラッグして並べ替えます。各ファイルタイプのメタデータ（写真、動画、音声、PDF など）はグループとして移動します。";
 
 /* Settings - Permissions */
 "settings.permissions.title" = "アクセス許可";
@@ -148,6 +257,15 @@
 "displayItem.exif" = "写真情報（EXIF）";
 "displayItem.video" = "動画情報";
 "displayItem.audio" = "オーディオ情報";
+"displayItem.pdf" = "PDF情報";
+"displayItem.office" = "Office文書情報";
+"displayItem.archive" = "アーカイブ情報";
+"displayItem.ebook" = "電子書籍情報";
+"displayItem.code" = "コードファイル情報";
+"displayItem.font" = "フォント情報";
+"displayItem.diskImage" = "ディスクイメージ情報";
+"displayItem.vectorGraphics" = "ベクターグラフィックス情報";
+"displayItem.subtitle" = "字幕ファイル情報";
 "displayItem.filePath" = "ファイルパス";
 
 /* Hover Window */
@@ -189,6 +307,107 @@
 "hover.audio.bitrate" = "ビットレート";
 "hover.audio.samplerate" = "サンプリング";
 "hover.audio.channels" = "チャンネル";
+
+/* PDF Information */
+"hover.pdf.title" = "PDF情報";
+"hover.pdf.pageCount" = "ページ数";
+"hover.pdf.pageSize" = "ページサイズ";
+"hover.pdf.version" = "バージョン";
+"hover.pdf.documentTitle" = "タイトル";
+"hover.pdf.author" = "作成者";
+"hover.pdf.subject" = "件名";
+"hover.pdf.creator" = "作成元";
+"hover.pdf.producer" = "PDF作成";
+"hover.pdf.creationDate" = "作成日";
+"hover.pdf.modificationDate" = "変更日";
+"hover.pdf.keywords" = "キーワード";
+"hover.pdf.encrypted" = "暗号化";
+
+/* Office Document Hover */
+"hover.office.title" = "Office文書";
+"hover.office.documentTitle" = "タイトル";
+"hover.office.author" = "作成者";
+"hover.office.subject" = "件名";
+"hover.office.pageCount" = "ページ数";
+"hover.office.wordCount" = "文字数";
+"hover.office.sheetCount" = "シート数";
+"hover.office.slideCount" = "スライド数";
+"hover.office.keywords" = "キーワード";
+"hover.office.comment" = "コメント";
+"hover.office.lastModifiedBy" = "最終更新者";
+"hover.office.creationDate" = "作成日";
+"hover.office.modificationDate" = "変更日";
+"hover.office.company" = "会社名";
+"hover.office.category" = "カテゴリ";
+
+/* Archive Hover */
+"hover.archive.title" = "アーカイブ";
+"hover.archive.format" = "形式";
+"hover.archive.fileCount" = "ファイル数";
+"hover.archive.uncompressedSize" = "展開後";
+"hover.archive.compressionRatio" = "圧縮率";
+"hover.archive.encrypted" = "暗号化";
+"hover.archive.yes" = "はい";
+
+/* E-book Hover */
+"hover.ebook.title" = "電子書籍";
+"hover.ebook.bookTitle" = "書名";
+"hover.ebook.author" = "著者";
+"hover.ebook.publisher" = "出版社";
+"hover.ebook.publicationDate" = "出版日";
+"hover.ebook.isbn" = "ISBN";
+"hover.ebook.language" = "言語";
+"hover.ebook.description" = "内容紹介";
+"hover.ebook.pageCount" = "ページ数";
+
+/* Code File Hover */
+"hover.code.title" = "コードファイル";
+"hover.code.language" = "言語";
+"hover.code.lineCount" = "行数";
+"hover.code.codeLines" = "コード";
+"hover.code.commentLines" = "コメント";
+"hover.code.blankLines" = "空白";
+"hover.code.encoding" = "エンコーディング";
+
+/* Font Hover */
+"hover.font.title" = "フォント";
+"hover.font.name" = "名前";
+"hover.font.family" = "ファミリー";
+"hover.font.style" = "スタイル";
+"hover.font.version" = "バージョン";
+"hover.font.designer" = "デザイナー";
+"hover.font.copyright" = "著作権";
+"hover.font.glyphCount" = "グリフ数";
+
+/* Disk Image Hover */
+"hover.diskImage.title" = "ディスクイメージ";
+"hover.diskImage.format" = "フォーマット";
+"hover.diskImage.totalSize" = "合計サイズ";
+"hover.diskImage.compressedSize" = "圧縮サイズ";
+"hover.diskImage.compressionRatio" = "圧縮率";
+"hover.diskImage.encrypted" = "暗号化状態";
+"hover.diskImage.partitionScheme" = "パーティション方式";
+"hover.diskImage.fileSystem" = "ファイルシステム";
+
+/* Vector Graphics Hover */
+"hover.vectorGraphics.title" = "ベクターグラフィックス";
+"hover.vectorGraphics.format" = "形式";
+"hover.vectorGraphics.dimensions" = "寸法";
+"hover.vectorGraphics.viewBox" = "ビューボックス";
+"hover.vectorGraphics.elementCount" = "要素数";
+"hover.vectorGraphics.colorMode" = "カラーモード";
+"hover.vectorGraphics.creator" = "作成者";
+"hover.vectorGraphics.version" = "バージョン";
+
+/* Subtitle Hover */
+"hover.subtitle.title" = "字幕";
+"hover.subtitle.format" = "形式";
+"hover.subtitle.encoding" = "エンコーディング";
+"hover.subtitle.entryCount" = "エントリ数";
+"hover.subtitle.duration" = "再生時間";
+"hover.subtitle.language" = "言語";
+"hover.subtitle.frameRate" = "フレームレート";
+"hover.subtitle.hasFormatting" = "フォーマット";
 
 /* Common */
 "common.reset" = "デフォルトに戻す";

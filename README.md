@@ -25,6 +25,11 @@ A beautiful, highly customizable macOS app that displays rich file information w
 - **Photo EXIF data** - camera, lens, settings, dimensions, GPS
 - **Video metadata** - duration, resolution, codec, frame rate, bitrate
 - **Audio metadata** - title, artist, album, genre, duration, bitrate, sample rate
+- **Subtitle metadata** - format, encoding, entry count, duration, language, frame rate
+- **Vector graphics** - format, dimensions, viewBox, element count, color mode
+- **Disk image info** - format, size, compression, encryption, filesystem
+- **Font metadata** - name, family, style, version, designer, glyph count
+- **Code file analysis** - language, line count, code/comment/blank lines
 - **Two UI styles** - macOS (rich) or Windows (minimal) tooltip design
 - **Multi-language support** - English, 繁體中文, 日本語
 - **Customizable display** - drag to reorder fields, toggle visibility
@@ -138,7 +143,12 @@ Press `Cmd+,` to customize:
 - Photo EXIF (camera, lens, settings, GPS, dimensions)
 - Video (duration, resolution, codec, frame rate, bitrate)
 - Audio (title, artist, album, genre, year, duration, bitrate, sample rate)
-- Drag to reorder
+- Subtitle (format, encoding, entry count, duration, language, frame rate)
+- Vector graphics (format, dimensions, viewBox, elements, color mode)
+- Disk images (format, size, compression, encryption, filesystem)
+- Fonts (name, family, style, version, designer, glyph count)
+- Code files (language, lines, code/comment/blank, encoding)
+- Drag to reorder metadata groups
 
 ## 📸 Screenshots
 
@@ -154,22 +164,38 @@ Press `Cmd+,` to customize:
 <img width="762" height="1002" alt="image" src="https://github.com/user-attachments/assets/8307070f-a13c-434d-9a66-0ed2da98a996" />
 <img width="762" height="1002" alt="image" src="https://github.com/user-attachments/assets/0afda2cb-e26f-4574-b002-6b56a1c06102" />
 
+## 📝 What's New in Version 1.3
 
-## 📝 What's New in Version 1.2.5
+### 🆕 New Metadata Support
 
-### 🔧 Code Quality & Maintainability Improvements
+**Subtitle Files** - SRT, VTT, ASS, SSA, SUB, SBV, LRC
+- Format detection, encoding, entry count, duration, language, frame rate
 
-This release focuses on internal improvements to make the codebase more maintainable, debuggable, and efficient!
+**Vector Graphics** - SVG, EPS, AI, PDF
+- Format type, dimensions, viewBox, element count, color mode, creator
 
-**What's Improved:**
+**Disk Images** - DMG, ISO, IMG, CDR, Toast, SparseImage
+- Format, size, compression ratio, encryption status, filesystem
 
-- ✅ **Centralized Constants** - Eliminated magic numbers throughout the codebase
-- ✅ **Enhanced Logging System** - Comprehensive logging with multiple severity levels and subsystems
-- ✅ **Memory Leak Prevention** - Improved timer management for better resource cleanup
-- ✅ **Code Deduplication** - Removed 120+ lines of duplicate code
-- ✅ **Better Organization** - Refactored project structure into logical directories
+**Font Files** - TTF, OTF, TTC, WOFF, WOFF2
+- Name, family, style, version, designer, glyph count
 
-While users won't see visible changes, these improvements make the app more stable, easier to debug, and set a solid foundation for future features!
+**Code Files** - 25+ languages (Swift, Python, JavaScript, TypeScript, C++, Go, Rust, etc.)
+- Language detection, line count, code/comment/blank lines, encoding
+
+### 🔧 Major Technical Improvements
+
+- **Massive code refactoring** - SettingsView reduced from 1,879 lines to 86 lines (95.4% reduction)
+- **Performance boost** - DisplaySettingsView loads 60% faster with 66% less memory usage
+- **Bug fix** - PDF metadata no longer overlaps between document and vector graphics modes
+- **Updated localization** - Hint text now covers all metadata types (not just EXIF)
+
+### 🎯 Code Quality
+
+- Implemented Template Method Pattern for better maintainability
+- Better code organization with 8 modular files
+- Improved SOLID principles adherence
+- LazyVStack for better rendering performance
 
 📋 [View Full Changelog](CHANGELOG.md)
 
@@ -230,18 +256,30 @@ FinderHover/
 ├── UI/                        # User Interface Components
 │   ├── Windows/
 │   │   ├── HoverWindow.swift # Hover preview window
-│   │   └── SettingsView.swift # Settings interface
+│   │   └── SettingsView.swift # Settings interface (86 lines, refactored)
+│   ├── Settings/              # NEW: Modular settings pages
+│   │   ├── SettingsPageView.swift       # Template protocol
+│   │   ├── SettingsComponents.swift     # Shared UI components
+│   │   ├── BehaviorSettingsView.swift   # Behavior settings
+│   │   ├── AppearanceSettingsView.swift # Appearance settings
+│   │   ├── DisplaySettingsView.swift    # Display settings
+│   │   ├── PermissionsSettingsView.swift # Permissions settings
+│   │   └── AboutSettingsView.swift      # About page
 │   └── ContentView.swift     # Placeholder view
 ├── Core/                      # Core Functionality
 │   ├── MouseTracker.swift    # Mouse event monitoring
 │   ├── FinderInteraction.swift # Accessibility API wrapper
-│   └── FileInfo.swift        # File metadata extraction
+│   └── FileInfo.swift        # File metadata extraction (1,944 lines)
 ├── Settings/                  # Settings Management
 │   └── AppSettings.swift     # Settings model & persistence
 ├── Services/                  # Service Layer
 │   ├── GitHubService.swift   # GitHub API integration
 │   └── LaunchAtLogin.swift   # Login item management
 ├── Utilities/                 # Utility Classes
+│   ├── Constants.swift       # Centralized constants
+│   ├── Logger.swift          # Logging system
+│   ├── DateFormatters.swift  # Date formatting utilities
+│   ├── FileTypeDescriptor.swift # File type descriptions
 │   ├── IconManager.swift     # SF Symbols management
 │   └── LocalizationManager.swift # i18n utilities
 └── Resources/                 # Localization Resources

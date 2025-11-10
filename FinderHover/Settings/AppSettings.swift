@@ -57,6 +57,15 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
     case exif = "Photo Information (EXIF)"
     case video = "Video Information"
     case audio = "Audio Information"
+    case pdf = "PDF Information"
+    case office = "Office Document Information"
+    case archive = "Archive Information"
+    case ebook = "E-book Information"
+    case code = "Code File Information"
+    case font = "Font Information"
+    case diskImage = "Disk Image Information"
+    case vectorGraphics = "Vector Graphics Information"
+    case subtitle = "Subtitle Information"
     case filePath = "File Path"
 
     var id: String { rawValue }
@@ -74,6 +83,15 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .exif: return "displayItem.exif".localized
         case .video: return "displayItem.video".localized
         case .audio: return "displayItem.audio".localized
+        case .pdf: return "displayItem.pdf".localized
+        case .office: return "displayItem.office".localized
+        case .archive: return "displayItem.archive".localized
+        case .ebook: return "displayItem.ebook".localized
+        case .code: return "displayItem.code".localized
+        case .font: return "displayItem.font".localized
+        case .diskImage: return "displayItem.diskImage".localized
+        case .vectorGraphics: return "displayItem.vectorGraphics".localized
+        case .subtitle: return "displayItem.subtitle".localized
         case .filePath: return "displayItem.filePath".localized
         }
     }
@@ -91,6 +109,15 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .exif: return IconManager.Photo.camera
         case .video: return IconManager.Video.video
         case .audio: return IconManager.Audio.music
+        case .pdf: return "doc.richtext"
+        case .office: return "doc.text.fill"
+        case .archive: return "doc.zipper"
+        case .ebook: return "book.closed"
+        case .code: return "chevron.left.forwardslash.chevron.right"
+        case .font: return "textformat"
+        case .diskImage: return "opticaldiscdrive"
+        case .vectorGraphics: return "paintbrush.pointed"
+        case .subtitle: return "captions.bubble"
         case .filePath: return IconManager.FileSystem.folder
         }
     }
@@ -236,6 +263,270 @@ class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(showAudioSampleRate, forKey: "showAudioSampleRate") }
     }
 
+    // PDF metadata display settings
+    @Published var showPDF: Bool {
+        didSet { UserDefaults.standard.set(showPDF, forKey: "showPDF") }
+    }
+    @Published var showPDFPageCount: Bool {
+        didSet { UserDefaults.standard.set(showPDFPageCount, forKey: "showPDFPageCount") }
+    }
+    @Published var showPDFPageSize: Bool {
+        didSet { UserDefaults.standard.set(showPDFPageSize, forKey: "showPDFPageSize") }
+    }
+    @Published var showPDFVersion: Bool {
+        didSet { UserDefaults.standard.set(showPDFVersion, forKey: "showPDFVersion") }
+    }
+    @Published var showPDFTitle: Bool {
+        didSet { UserDefaults.standard.set(showPDFTitle, forKey: "showPDFTitle") }
+    }
+    @Published var showPDFAuthor: Bool {
+        didSet { UserDefaults.standard.set(showPDFAuthor, forKey: "showPDFAuthor") }
+    }
+    @Published var showPDFSubject: Bool {
+        didSet { UserDefaults.standard.set(showPDFSubject, forKey: "showPDFSubject") }
+    }
+    @Published var showPDFCreator: Bool {
+        didSet { UserDefaults.standard.set(showPDFCreator, forKey: "showPDFCreator") }
+    }
+    @Published var showPDFProducer: Bool {
+        didSet { UserDefaults.standard.set(showPDFProducer, forKey: "showPDFProducer") }
+    }
+    @Published var showPDFCreationDate: Bool {
+        didSet { UserDefaults.standard.set(showPDFCreationDate, forKey: "showPDFCreationDate") }
+    }
+    @Published var showPDFModificationDate: Bool {
+        didSet { UserDefaults.standard.set(showPDFModificationDate, forKey: "showPDFModificationDate") }
+    }
+    @Published var showPDFKeywords: Bool {
+        didSet { UserDefaults.standard.set(showPDFKeywords, forKey: "showPDFKeywords") }
+    }
+    @Published var showPDFEncrypted: Bool {
+        didSet { UserDefaults.standard.set(showPDFEncrypted, forKey: "showPDFEncrypted") }
+    }
+
+    // Office document display settings
+    @Published var showOffice: Bool {
+        didSet { UserDefaults.standard.set(showOffice, forKey: "showOffice") }
+    }
+    @Published var showOfficeTitle: Bool {
+        didSet { UserDefaults.standard.set(showOfficeTitle, forKey: "showOfficeTitle") }
+    }
+    @Published var showOfficeAuthor: Bool {
+        didSet { UserDefaults.standard.set(showOfficeAuthor, forKey: "showOfficeAuthor") }
+    }
+    @Published var showOfficeSubject: Bool {
+        didSet { UserDefaults.standard.set(showOfficeSubject, forKey: "showOfficeSubject") }
+    }
+    @Published var showOfficeKeywords: Bool {
+        didSet { UserDefaults.standard.set(showOfficeKeywords, forKey: "showOfficeKeywords") }
+    }
+    @Published var showOfficeComment: Bool {
+        didSet { UserDefaults.standard.set(showOfficeComment, forKey: "showOfficeComment") }
+    }
+    @Published var showOfficeLastModifiedBy: Bool {
+        didSet { UserDefaults.standard.set(showOfficeLastModifiedBy, forKey: "showOfficeLastModifiedBy") }
+    }
+    @Published var showOfficeCreationDate: Bool {
+        didSet { UserDefaults.standard.set(showOfficeCreationDate, forKey: "showOfficeCreationDate") }
+    }
+    @Published var showOfficeModificationDate: Bool {
+        didSet { UserDefaults.standard.set(showOfficeModificationDate, forKey: "showOfficeModificationDate") }
+    }
+    @Published var showOfficePageCount: Bool {
+        didSet { UserDefaults.standard.set(showOfficePageCount, forKey: "showOfficePageCount") }
+    }
+    @Published var showOfficeWordCount: Bool {
+        didSet { UserDefaults.standard.set(showOfficeWordCount, forKey: "showOfficeWordCount") }
+    }
+    @Published var showOfficeSheetCount: Bool {
+        didSet { UserDefaults.standard.set(showOfficeSheetCount, forKey: "showOfficeSheetCount") }
+    }
+    @Published var showOfficeSlideCount: Bool {
+        didSet { UserDefaults.standard.set(showOfficeSlideCount, forKey: "showOfficeSlideCount") }
+    }
+    @Published var showOfficeCompany: Bool {
+        didSet { UserDefaults.standard.set(showOfficeCompany, forKey: "showOfficeCompany") }
+    }
+    @Published var showOfficeCategory: Bool {
+        didSet { UserDefaults.standard.set(showOfficeCategory, forKey: "showOfficeCategory") }
+    }
+
+    // Archive display settings
+    @Published var showArchive: Bool {
+        didSet { UserDefaults.standard.set(showArchive, forKey: "showArchive") }
+    }
+    @Published var showArchiveFormat: Bool {
+        didSet { UserDefaults.standard.set(showArchiveFormat, forKey: "showArchiveFormat") }
+    }
+    @Published var showArchiveFileCount: Bool {
+        didSet { UserDefaults.standard.set(showArchiveFileCount, forKey: "showArchiveFileCount") }
+    }
+    @Published var showArchiveUncompressedSize: Bool {
+        didSet { UserDefaults.standard.set(showArchiveUncompressedSize, forKey: "showArchiveUncompressedSize") }
+    }
+    @Published var showArchiveCompressionRatio: Bool {
+        didSet { UserDefaults.standard.set(showArchiveCompressionRatio, forKey: "showArchiveCompressionRatio") }
+    }
+    @Published var showArchiveEncrypted: Bool {
+        didSet { UserDefaults.standard.set(showArchiveEncrypted, forKey: "showArchiveEncrypted") }
+    }
+
+    // MARK: - E-book Display Settings
+    @Published var showEbook: Bool {
+        didSet { UserDefaults.standard.set(showEbook, forKey: "showEbook") }
+    }
+    @Published var showEbookTitle: Bool {
+        didSet { UserDefaults.standard.set(showEbookTitle, forKey: "showEbookTitle") }
+    }
+    @Published var showEbookAuthor: Bool {
+        didSet { UserDefaults.standard.set(showEbookAuthor, forKey: "showEbookAuthor") }
+    }
+    @Published var showEbookPublisher: Bool {
+        didSet { UserDefaults.standard.set(showEbookPublisher, forKey: "showEbookPublisher") }
+    }
+    @Published var showEbookPublicationDate: Bool {
+        didSet { UserDefaults.standard.set(showEbookPublicationDate, forKey: "showEbookPublicationDate") }
+    }
+    @Published var showEbookISBN: Bool {
+        didSet { UserDefaults.standard.set(showEbookISBN, forKey: "showEbookISBN") }
+    }
+    @Published var showEbookLanguage: Bool {
+        didSet { UserDefaults.standard.set(showEbookLanguage, forKey: "showEbookLanguage") }
+    }
+    @Published var showEbookDescription: Bool {
+        didSet { UserDefaults.standard.set(showEbookDescription, forKey: "showEbookDescription") }
+    }
+    @Published var showEbookPageCount: Bool {
+        didSet { UserDefaults.standard.set(showEbookPageCount, forKey: "showEbookPageCount") }
+    }
+
+    // MARK: - Code File Display Settings
+    @Published var showCode: Bool {
+        didSet { UserDefaults.standard.set(showCode, forKey: "showCode") }
+    }
+    @Published var showCodeLanguage: Bool {
+        didSet { UserDefaults.standard.set(showCodeLanguage, forKey: "showCodeLanguage") }
+    }
+    @Published var showCodeLineCount: Bool {
+        didSet { UserDefaults.standard.set(showCodeLineCount, forKey: "showCodeLineCount") }
+    }
+    @Published var showCodeLines: Bool {
+        didSet { UserDefaults.standard.set(showCodeLines, forKey: "showCodeLines") }
+    }
+    @Published var showCodeCommentLines: Bool {
+        didSet { UserDefaults.standard.set(showCodeCommentLines, forKey: "showCodeCommentLines") }
+    }
+    @Published var showCodeBlankLines: Bool {
+        didSet { UserDefaults.standard.set(showCodeBlankLines, forKey: "showCodeBlankLines") }
+    }
+    @Published var showCodeEncoding: Bool {
+        didSet { UserDefaults.standard.set(showCodeEncoding, forKey: "showCodeEncoding") }
+    }
+    
+    // Font metadata toggles
+    @Published var showFont: Bool {
+        didSet { UserDefaults.standard.set(showFont, forKey: "showFont") }
+    }
+    @Published var showFontName: Bool {
+        didSet { UserDefaults.standard.set(showFontName, forKey: "showFontName") }
+    }
+    @Published var showFontFamily: Bool {
+        didSet { UserDefaults.standard.set(showFontFamily, forKey: "showFontFamily") }
+    }
+    @Published var showFontStyle: Bool {
+        didSet { UserDefaults.standard.set(showFontStyle, forKey: "showFontStyle") }
+    }
+    @Published var showFontVersion: Bool {
+        didSet { UserDefaults.standard.set(showFontVersion, forKey: "showFontVersion") }
+    }
+    @Published var showFontDesigner: Bool {
+        didSet { UserDefaults.standard.set(showFontDesigner, forKey: "showFontDesigner") }
+    }
+    @Published var showFontCopyright: Bool {
+        didSet { UserDefaults.standard.set(showFontCopyright, forKey: "showFontCopyright") }
+    }
+    @Published var showFontGlyphCount: Bool {
+        didSet { UserDefaults.standard.set(showFontGlyphCount, forKey: "showFontGlyphCount") }
+    }
+    
+    // Disk Image metadata toggles
+    @Published var showDiskImage: Bool {
+        didSet { UserDefaults.standard.set(showDiskImage, forKey: "showDiskImage") }
+    }
+    @Published var showDiskImageFormat: Bool {
+        didSet { UserDefaults.standard.set(showDiskImageFormat, forKey: "showDiskImageFormat") }
+    }
+    @Published var showDiskImageTotalSize: Bool {
+        didSet { UserDefaults.standard.set(showDiskImageTotalSize, forKey: "showDiskImageTotalSize") }
+    }
+    @Published var showDiskImageCompressedSize: Bool {
+        didSet { UserDefaults.standard.set(showDiskImageCompressedSize, forKey: "showDiskImageCompressedSize") }
+    }
+    @Published var showDiskImageCompressionRatio: Bool {
+        didSet { UserDefaults.standard.set(showDiskImageCompressionRatio, forKey: "showDiskImageCompressionRatio") }
+    }
+    @Published var showDiskImageEncrypted: Bool {
+        didSet { UserDefaults.standard.set(showDiskImageEncrypted, forKey: "showDiskImageEncrypted") }
+    }
+    @Published var showDiskImagePartitionScheme: Bool {
+        didSet { UserDefaults.standard.set(showDiskImagePartitionScheme, forKey: "showDiskImagePartitionScheme") }
+    }
+    @Published var showDiskImageFileSystem: Bool {
+        didSet { UserDefaults.standard.set(showDiskImageFileSystem, forKey: "showDiskImageFileSystem") }
+    }
+    
+    // Vector Graphics metadata
+    @Published var showVectorGraphics: Bool {
+        didSet { UserDefaults.standard.set(showVectorGraphics, forKey: "showVectorGraphics") }
+    }
+    @Published var showVectorGraphicsFormat: Bool {
+        didSet { UserDefaults.standard.set(showVectorGraphicsFormat, forKey: "showVectorGraphicsFormat") }
+    }
+    @Published var showVectorGraphicsDimensions: Bool {
+        didSet { UserDefaults.standard.set(showVectorGraphicsDimensions, forKey: "showVectorGraphicsDimensions") }
+    }
+    @Published var showVectorGraphicsViewBox: Bool {
+        didSet { UserDefaults.standard.set(showVectorGraphicsViewBox, forKey: "showVectorGraphicsViewBox") }
+    }
+    @Published var showVectorGraphicsElementCount: Bool {
+        didSet { UserDefaults.standard.set(showVectorGraphicsElementCount, forKey: "showVectorGraphicsElementCount") }
+    }
+    @Published var showVectorGraphicsColorMode: Bool {
+        didSet { UserDefaults.standard.set(showVectorGraphicsColorMode, forKey: "showVectorGraphicsColorMode") }
+    }
+    @Published var showVectorGraphicsCreator: Bool {
+        didSet { UserDefaults.standard.set(showVectorGraphicsCreator, forKey: "showVectorGraphicsCreator") }
+    }
+    @Published var showVectorGraphicsVersion: Bool {
+        didSet { UserDefaults.standard.set(showVectorGraphicsVersion, forKey: "showVectorGraphicsVersion") }
+    }
+    
+    // Subtitle metadata
+    @Published var showSubtitle: Bool {
+        didSet { UserDefaults.standard.set(showSubtitle, forKey: "showSubtitle") }
+    }
+    @Published var showSubtitleFormat: Bool {
+        didSet { UserDefaults.standard.set(showSubtitleFormat, forKey: "showSubtitleFormat") }
+    }
+    @Published var showSubtitleEncoding: Bool {
+        didSet { UserDefaults.standard.set(showSubtitleEncoding, forKey: "showSubtitleEncoding") }
+    }
+    @Published var showSubtitleEntryCount: Bool {
+        didSet { UserDefaults.standard.set(showSubtitleEntryCount, forKey: "showSubtitleEntryCount") }
+    }
+    @Published var showSubtitleDuration: Bool {
+        didSet { UserDefaults.standard.set(showSubtitleDuration, forKey: "showSubtitleDuration") }
+    }
+    @Published var showSubtitleLanguage: Bool {
+        didSet { UserDefaults.standard.set(showSubtitleLanguage, forKey: "showSubtitleLanguage") }
+    }
+    @Published var showSubtitleFrameRate: Bool {
+        didSet { UserDefaults.standard.set(showSubtitleFrameRate, forKey: "showSubtitleFrameRate") }
+    }
+    @Published var showSubtitleFormatting: Bool {
+        didSet { UserDefaults.standard.set(showSubtitleFormatting, forKey: "showSubtitleFormatting") }
+    }
+
     // Display order
     @Published var displayOrder: [DisplayItem] {
         didSet {
@@ -299,6 +590,87 @@ class AppSettings: ObservableObject {
                     decoded.append(.audio)
                 }
             }
+            if !decoded.contains(.pdf) {
+                if let audioIndex = decoded.firstIndex(of: .audio) {
+                    decoded.insert(.pdf, at: audioIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.pdf, at: filePathIndex)
+                } else {
+                    decoded.append(.pdf)
+                }
+            }
+            if !decoded.contains(.office) {
+                if let pdfIndex = decoded.firstIndex(of: .pdf) {
+                    decoded.insert(.office, at: pdfIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.office, at: filePathIndex)
+                } else {
+                    decoded.append(.office)
+                }
+            }
+            if !decoded.contains(.archive) {
+                if let officeIndex = decoded.firstIndex(of: .office) {
+                    decoded.insert(.archive, at: officeIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.archive, at: filePathIndex)
+                } else {
+                    decoded.append(.archive)
+                }
+            }
+            if !decoded.contains(.ebook) {
+                if let archiveIndex = decoded.firstIndex(of: .archive) {
+                    decoded.insert(.ebook, at: archiveIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.ebook, at: filePathIndex)
+                } else {
+                    decoded.append(.ebook)
+                }
+            }
+            if !decoded.contains(.code) {
+                if let ebookIndex = decoded.firstIndex(of: .ebook) {
+                    decoded.insert(.code, at: ebookIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.code, at: filePathIndex)
+                } else {
+                    decoded.append(.code)
+                }
+            }
+            if !decoded.contains(.font) {
+                if let codeIndex = decoded.firstIndex(of: .code) {
+                    decoded.insert(.font, at: codeIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.font, at: filePathIndex)
+                } else {
+                    decoded.append(.font)
+                }
+            }
+            if !decoded.contains(.diskImage) {
+                if let fontIndex = decoded.firstIndex(of: .font) {
+                    decoded.insert(.diskImage, at: fontIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.diskImage, at: filePathIndex)
+                } else {
+                    decoded.append(.diskImage)
+                }
+            }
+            if !decoded.contains(.vectorGraphics) {
+                if let diskImageIndex = decoded.firstIndex(of: .diskImage) {
+                    decoded.insert(.vectorGraphics, at: diskImageIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.vectorGraphics, at: filePathIndex)
+                } else {
+                    decoded.append(.vectorGraphics)
+                }
+            }
+            if !decoded.contains(.subtitle) {
+                if let vectorGraphicsIndex = decoded.firstIndex(of: .vectorGraphics) {
+                    decoded.insert(.subtitle, at: vectorGraphicsIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.subtitle, at: filePathIndex)
+                } else {
+                    decoded.append(.subtitle)
+                }
+            }
             self.displayOrder = decoded
         } else {
             // Default order
@@ -314,6 +686,15 @@ class AppSettings: ObservableObject {
                 .exif,
                 .video,
                 .audio,
+                .pdf,
+                .office,
+                .archive,
+                .ebook,
+                .code,
+                .font,
+                .diskImage,
+                .vectorGraphics,
+                .subtitle,
                 .filePath
             ]
         }
@@ -359,6 +740,96 @@ class AppSettings: ObservableObject {
         self.showAudioDuration = UserDefaults.standard.object(forKey: "showAudioDuration") as? Bool ?? Constants.Defaults.showAudioDuration
         self.showAudioBitrate = UserDefaults.standard.object(forKey: "showAudioBitrate") as? Bool ?? Constants.Defaults.showAudioBitrate
         self.showAudioSampleRate = UserDefaults.standard.object(forKey: "showAudioSampleRate") as? Bool ?? Constants.Defaults.showAudioSampleRate
+        self.showPDF = UserDefaults.standard.object(forKey: "showPDF") as? Bool ?? Constants.Defaults.showPDF
+        self.showPDFPageCount = UserDefaults.standard.object(forKey: "showPDFPageCount") as? Bool ?? Constants.Defaults.showPDFPageCount
+        self.showPDFPageSize = UserDefaults.standard.object(forKey: "showPDFPageSize") as? Bool ?? Constants.Defaults.showPDFPageSize
+        self.showPDFVersion = UserDefaults.standard.object(forKey: "showPDFVersion") as? Bool ?? Constants.Defaults.showPDFVersion
+        self.showPDFTitle = UserDefaults.standard.object(forKey: "showPDFTitle") as? Bool ?? Constants.Defaults.showPDFTitle
+        self.showPDFAuthor = UserDefaults.standard.object(forKey: "showPDFAuthor") as? Bool ?? Constants.Defaults.showPDFAuthor
+        self.showPDFSubject = UserDefaults.standard.object(forKey: "showPDFSubject") as? Bool ?? Constants.Defaults.showPDFSubject
+        self.showPDFCreator = UserDefaults.standard.object(forKey: "showPDFCreator") as? Bool ?? Constants.Defaults.showPDFCreator
+        self.showPDFProducer = UserDefaults.standard.object(forKey: "showPDFProducer") as? Bool ?? Constants.Defaults.showPDFProducer
+        self.showPDFCreationDate = UserDefaults.standard.object(forKey: "showPDFCreationDate") as? Bool ?? Constants.Defaults.showPDFCreationDate
+        self.showPDFModificationDate = UserDefaults.standard.object(forKey: "showPDFModificationDate") as? Bool ?? Constants.Defaults.showPDFModificationDate
+        self.showPDFKeywords = UserDefaults.standard.object(forKey: "showPDFKeywords") as? Bool ?? Constants.Defaults.showPDFKeywords
+        self.showPDFEncrypted = UserDefaults.standard.object(forKey: "showPDFEncrypted") as? Bool ?? Constants.Defaults.showPDFEncrypted
+        self.showOffice = UserDefaults.standard.object(forKey: "showOffice") as? Bool ?? Constants.Defaults.showOffice
+        self.showOfficeTitle = UserDefaults.standard.object(forKey: "showOfficeTitle") as? Bool ?? Constants.Defaults.showOfficeTitle
+        self.showOfficeAuthor = UserDefaults.standard.object(forKey: "showOfficeAuthor") as? Bool ?? Constants.Defaults.showOfficeAuthor
+        self.showOfficeSubject = UserDefaults.standard.object(forKey: "showOfficeSubject") as? Bool ?? Constants.Defaults.showOfficeSubject
+        self.showOfficeKeywords = UserDefaults.standard.object(forKey: "showOfficeKeywords") as? Bool ?? Constants.Defaults.showOfficeKeywords
+        self.showOfficeComment = UserDefaults.standard.object(forKey: "showOfficeComment") as? Bool ?? Constants.Defaults.showOfficeComment
+        self.showOfficeLastModifiedBy = UserDefaults.standard.object(forKey: "showOfficeLastModifiedBy") as? Bool ?? Constants.Defaults.showOfficeLastModifiedBy
+        self.showOfficeCreationDate = UserDefaults.standard.object(forKey: "showOfficeCreationDate") as? Bool ?? Constants.Defaults.showOfficeCreationDate
+        self.showOfficeModificationDate = UserDefaults.standard.object(forKey: "showOfficeModificationDate") as? Bool ?? Constants.Defaults.showOfficeModificationDate
+        self.showOfficePageCount = UserDefaults.standard.object(forKey: "showOfficePageCount") as? Bool ?? Constants.Defaults.showOfficePageCount
+        self.showOfficeWordCount = UserDefaults.standard.object(forKey: "showOfficeWordCount") as? Bool ?? Constants.Defaults.showOfficeWordCount
+        self.showOfficeSheetCount = UserDefaults.standard.object(forKey: "showOfficeSheetCount") as? Bool ?? Constants.Defaults.showOfficeSheetCount
+        self.showOfficeSlideCount = UserDefaults.standard.object(forKey: "showOfficeSlideCount") as? Bool ?? Constants.Defaults.showOfficeSlideCount
+        self.showOfficeCompany = UserDefaults.standard.object(forKey: "showOfficeCompany") as? Bool ?? Constants.Defaults.showOfficeCompany
+        self.showOfficeCategory = UserDefaults.standard.object(forKey: "showOfficeCategory") as? Bool ?? Constants.Defaults.showOfficeCategory
+        self.showArchive = UserDefaults.standard.object(forKey: "showArchive") as? Bool ?? Constants.Defaults.showArchive
+        self.showArchiveFormat = UserDefaults.standard.object(forKey: "showArchiveFormat") as? Bool ?? Constants.Defaults.showArchiveFormat
+        self.showArchiveFileCount = UserDefaults.standard.object(forKey: "showArchiveFileCount") as? Bool ?? Constants.Defaults.showArchiveFileCount
+        self.showArchiveUncompressedSize = UserDefaults.standard.object(forKey: "showArchiveUncompressedSize") as? Bool ?? Constants.Defaults.showArchiveUncompressedSize
+        self.showArchiveCompressionRatio = UserDefaults.standard.object(forKey: "showArchiveCompressionRatio") as? Bool ?? Constants.Defaults.showArchiveCompressionRatio
+        self.showArchiveEncrypted = UserDefaults.standard.object(forKey: "showArchiveEncrypted") as? Bool ?? Constants.Defaults.showArchiveEncrypted
+        self.showEbook = UserDefaults.standard.object(forKey: "showEbook") as? Bool ?? Constants.Defaults.showEbook
+        self.showEbookTitle = UserDefaults.standard.object(forKey: "showEbookTitle") as? Bool ?? Constants.Defaults.showEbookTitle
+        self.showEbookAuthor = UserDefaults.standard.object(forKey: "showEbookAuthor") as? Bool ?? Constants.Defaults.showEbookAuthor
+        self.showEbookPublisher = UserDefaults.standard.object(forKey: "showEbookPublisher") as? Bool ?? Constants.Defaults.showEbookPublisher
+        self.showEbookPublicationDate = UserDefaults.standard.object(forKey: "showEbookPublicationDate") as? Bool ?? Constants.Defaults.showEbookPublicationDate
+        self.showEbookISBN = UserDefaults.standard.object(forKey: "showEbookISBN") as? Bool ?? Constants.Defaults.showEbookISBN
+        self.showEbookLanguage = UserDefaults.standard.object(forKey: "showEbookLanguage") as? Bool ?? Constants.Defaults.showEbookLanguage
+        self.showEbookDescription = UserDefaults.standard.object(forKey: "showEbookDescription") as? Bool ?? Constants.Defaults.showEbookDescription
+        self.showEbookPageCount = UserDefaults.standard.object(forKey: "showEbookPageCount") as? Bool ?? Constants.Defaults.showEbookPageCount
+        self.showCode = UserDefaults.standard.object(forKey: "showCode") as? Bool ?? Constants.Defaults.showCode
+        self.showCodeLanguage = UserDefaults.standard.object(forKey: "showCodeLanguage") as? Bool ?? Constants.Defaults.showCodeLanguage
+        self.showCodeLineCount = UserDefaults.standard.object(forKey: "showCodeLineCount") as? Bool ?? Constants.Defaults.showCodeLineCount
+        self.showCodeLines = UserDefaults.standard.object(forKey: "showCodeLines") as? Bool ?? Constants.Defaults.showCodeLines
+        self.showCodeCommentLines = UserDefaults.standard.object(forKey: "showCodeCommentLines") as? Bool ?? Constants.Defaults.showCodeCommentLines
+        self.showCodeBlankLines = UserDefaults.standard.object(forKey: "showCodeBlankLines") as? Bool ?? Constants.Defaults.showCodeBlankLines
+        self.showCodeEncoding = UserDefaults.standard.object(forKey: "showCodeEncoding") as? Bool ?? Constants.Defaults.showCodeEncoding
+        
+        // Initialize font metadata toggles
+        self.showFont = UserDefaults.standard.object(forKey: "showFont") as? Bool ?? Constants.Defaults.showFont
+        self.showFontName = UserDefaults.standard.object(forKey: "showFontName") as? Bool ?? Constants.Defaults.showFontName
+        self.showFontFamily = UserDefaults.standard.object(forKey: "showFontFamily") as? Bool ?? Constants.Defaults.showFontFamily
+        self.showFontStyle = UserDefaults.standard.object(forKey: "showFontStyle") as? Bool ?? Constants.Defaults.showFontStyle
+        self.showFontVersion = UserDefaults.standard.object(forKey: "showFontVersion") as? Bool ?? Constants.Defaults.showFontVersion
+        self.showFontDesigner = UserDefaults.standard.object(forKey: "showFontDesigner") as? Bool ?? Constants.Defaults.showFontDesigner
+        self.showFontCopyright = UserDefaults.standard.object(forKey: "showFontCopyright") as? Bool ?? Constants.Defaults.showFontCopyright
+        self.showFontGlyphCount = UserDefaults.standard.object(forKey: "showFontGlyphCount") as? Bool ?? Constants.Defaults.showFontGlyphCount
+        
+        // Initialize disk image metadata toggles
+        self.showDiskImage = UserDefaults.standard.object(forKey: "showDiskImage") as? Bool ?? Constants.Defaults.showDiskImage
+        self.showDiskImageFormat = UserDefaults.standard.object(forKey: "showDiskImageFormat") as? Bool ?? Constants.Defaults.showDiskImageFormat
+        self.showDiskImageTotalSize = UserDefaults.standard.object(forKey: "showDiskImageTotalSize") as? Bool ?? Constants.Defaults.showDiskImageTotalSize
+        self.showDiskImageCompressedSize = UserDefaults.standard.object(forKey: "showDiskImageCompressedSize") as? Bool ?? Constants.Defaults.showDiskImageCompressedSize
+        self.showDiskImageCompressionRatio = UserDefaults.standard.object(forKey: "showDiskImageCompressionRatio") as? Bool ?? Constants.Defaults.showDiskImageCompressionRatio
+        self.showDiskImageEncrypted = UserDefaults.standard.object(forKey: "showDiskImageEncrypted") as? Bool ?? Constants.Defaults.showDiskImageEncrypted
+        self.showDiskImagePartitionScheme = UserDefaults.standard.object(forKey: "showDiskImagePartitionScheme") as? Bool ?? Constants.Defaults.showDiskImagePartitionScheme
+        self.showDiskImageFileSystem = UserDefaults.standard.object(forKey: "showDiskImageFileSystem") as? Bool ?? Constants.Defaults.showDiskImageFileSystem
+        
+        self.showVectorGraphics = UserDefaults.standard.object(forKey: "showVectorGraphics") as? Bool ?? Constants.Defaults.showVectorGraphics
+        self.showVectorGraphicsFormat = UserDefaults.standard.object(forKey: "showVectorGraphicsFormat") as? Bool ?? Constants.Defaults.showVectorGraphicsFormat
+        self.showVectorGraphicsDimensions = UserDefaults.standard.object(forKey: "showVectorGraphicsDimensions") as? Bool ?? Constants.Defaults.showVectorGraphicsDimensions
+        self.showVectorGraphicsViewBox = UserDefaults.standard.object(forKey: "showVectorGraphicsViewBox") as? Bool ?? Constants.Defaults.showVectorGraphicsViewBox
+        self.showVectorGraphicsElementCount = UserDefaults.standard.object(forKey: "showVectorGraphicsElementCount") as? Bool ?? Constants.Defaults.showVectorGraphicsElementCount
+        self.showVectorGraphicsColorMode = UserDefaults.standard.object(forKey: "showVectorGraphicsColorMode") as? Bool ?? Constants.Defaults.showVectorGraphicsColorMode
+        self.showVectorGraphicsCreator = UserDefaults.standard.object(forKey: "showVectorGraphicsCreator") as? Bool ?? Constants.Defaults.showVectorGraphicsCreator
+        self.showVectorGraphicsVersion = UserDefaults.standard.object(forKey: "showVectorGraphicsVersion") as? Bool ?? Constants.Defaults.showVectorGraphicsVersion
+        
+        // Initialize subtitle metadata toggles
+        self.showSubtitle = UserDefaults.standard.object(forKey: "showSubtitle") as? Bool ?? Constants.Defaults.showSubtitle
+        self.showSubtitleFormat = UserDefaults.standard.object(forKey: "showSubtitleFormat") as? Bool ?? Constants.Defaults.showSubtitleFormat
+        self.showSubtitleEncoding = UserDefaults.standard.object(forKey: "showSubtitleEncoding") as? Bool ?? Constants.Defaults.showSubtitleEncoding
+        self.showSubtitleEntryCount = UserDefaults.standard.object(forKey: "showSubtitleEntryCount") as? Bool ?? Constants.Defaults.showSubtitleEntryCount
+        self.showSubtitleDuration = UserDefaults.standard.object(forKey: "showSubtitleDuration") as? Bool ?? Constants.Defaults.showSubtitleDuration
+        self.showSubtitleLanguage = UserDefaults.standard.object(forKey: "showSubtitleLanguage") as? Bool ?? Constants.Defaults.showSubtitleLanguage
+        self.showSubtitleFrameRate = UserDefaults.standard.object(forKey: "showSubtitleFrameRate") as? Bool ?? Constants.Defaults.showSubtitleFrameRate
+        self.showSubtitleFormatting = UserDefaults.standard.object(forKey: "showSubtitleFormatting") as? Bool ?? Constants.Defaults.showSubtitleFormatting
+        
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? Constants.Defaults.followCursor
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? Constants.Defaults.windowOffsetX
         self.windowOffsetY = UserDefaults.standard.object(forKey: "windowOffsetY") as? Double ?? Constants.Defaults.windowOffsetY

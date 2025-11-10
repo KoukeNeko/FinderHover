@@ -82,8 +82,117 @@
 "settings.display.audio.samplerate" = "取樣率";
 "settings.display.audio.hint" = "音訊中繼資料僅顯示於包含 ID3 標籤的音訊檔案";
 
+"settings.display.pdf" = "PDF 資訊";
+"settings.display.pdf.show" = "顯示 PDF 中繼資料";
+"settings.display.pdf.pageCount" = "頁數";
+"settings.display.pdf.pageSize" = "頁面大小";
+"settings.display.pdf.version" = "PDF 版本";
+"settings.display.pdf.title" = "文件標題";
+"settings.display.pdf.author" = "作者";
+"settings.display.pdf.subject" = "主旨";
+"settings.display.pdf.creator" = "建立應用程式";
+"settings.display.pdf.producer" = "PDF 製作者";
+"settings.display.pdf.creationDate" = "建立日期";
+"settings.display.pdf.modificationDate" = "修改日期";
+"settings.display.pdf.keywords" = "關鍵字";
+"settings.display.pdf.encrypted" = "加密狀態";
+"settings.display.pdf.hint" = "PDF 中繼資料僅顯示於 PDF 檔案";
+
+"settings.display.office" = "Office 文件資訊";
+"settings.display.office.show" = "顯示 Office 中繼資料";
+"settings.display.office.title" = "文件標題";
+"settings.display.office.author" = "作者";
+"settings.display.office.subject" = "主旨";
+"settings.display.office.keywords" = "關鍵字";
+"settings.display.office.comment" = "註解";
+"settings.display.office.lastModifiedBy" = "最後修改者";
+"settings.display.office.creationDate" = "建立日期";
+"settings.display.office.modificationDate" = "修改日期";
+"settings.display.office.pageCount" = "頁數 (Word)";
+"settings.display.office.wordCount" = "字數 (Word)";
+"settings.display.office.sheetCount" = "工作表數 (Excel)";
+"settings.display.office.slideCount" = "投影片數 (PowerPoint)";
+"settings.display.office.company" = "公司";
+"settings.display.office.category" = "類別";
+"settings.display.office.hint" = "Office 中繼資料僅顯示於 Microsoft Office 文件";
+
+"settings.display.archive" = "壓縮檔資訊";
+"settings.display.archive.show" = "顯示壓縮檔中繼資料";
+"settings.display.archive.format" = "壓縮格式";
+"settings.display.archive.fileCount" = "檔案數量";
+"settings.display.archive.uncompressedSize" = "未壓縮大小";
+"settings.display.archive.compressionRatio" = "壓縮率";
+"settings.display.archive.encrypted" = "加密狀態";
+"settings.display.archive.hint" = "壓縮檔中繼資料僅顯示於壓縮檔案";
+
+"settings.display.ebook" = "電子書資訊";
+"settings.display.ebook.show" = "顯示電子書中繼資料";
+"settings.display.ebook.title" = "書名";
+"settings.display.ebook.author" = "作者";
+"settings.display.ebook.publisher" = "出版社";
+"settings.display.ebook.publicationDate" = "出版日期";
+"settings.display.ebook.isbn" = "ISBN";
+"settings.display.ebook.language" = "語言";
+"settings.display.ebook.description" = "內容簡介";
+"settings.display.ebook.pageCount" = "頁數";
+"settings.display.ebook.hint" = "電子書中繼資料僅顯示於 EPUB、MOBI 等電子書格式";
+
+"settings.display.code" = "程式碼檔案資訊";
+"settings.display.code.show" = "顯示程式碼中繼資料";
+"settings.display.code.language" = "程式語言";
+"settings.display.code.lineCount" = "總行數";
+"settings.display.code.codeLines" = "程式碼行數";
+"settings.display.code.commentLines" = "註解行數";
+"settings.display.code.blankLines" = "空白行數";
+"settings.display.code.encoding" = "檔案編碼";
+"settings.display.code.hint" = "程式碼中繼資料僅顯示於原始碼檔案";
+
+"settings.display.font.title" = "字型資訊";
+"settings.display.font.show" = "顯示字型中繼資料";
+"settings.display.font.name" = "字型名稱";
+"settings.display.font.family" = "字型家族";
+"settings.display.font.style" = "字型樣式";
+"settings.display.font.version" = "版本";
+"settings.display.font.designer" = "設計者";
+"settings.display.font.copyright" = "版權資訊";
+"settings.display.font.glyphCount" = "字形數量";
+"settings.display.font.hint" = "字型中繼資料僅顯示於 TTF、OTF 等字型格式";
+
+"settings.display.diskImage.title" = "磁碟映像資訊";
+"settings.display.diskImage.show" = "顯示磁碟映像中繼資料";
+"settings.display.diskImage.format" = "映像格式";
+"settings.display.diskImage.totalSize" = "總大小";
+"settings.display.diskImage.compressedSize" = "壓縮大小";
+"settings.display.diskImage.compressionRatio" = "壓縮率";
+"settings.display.diskImage.encrypted" = "加密狀態";
+"settings.display.diskImage.partitionScheme" = "分割區配置";
+"settings.display.diskImage.fileSystem" = "檔案系統";
+"settings.display.diskImage.hint" = "磁碟映像中繼資料僅顯示於 DMG、ISO 等磁碟映像格式";
+
+"settings.display.vectorGraphics.title" = "向量圖形資訊";
+"settings.display.vectorGraphics.show" = "顯示向量圖形中繼資料";
+"settings.display.vectorGraphics.format" = "格式類型";
+"settings.display.vectorGraphics.dimensions" = "尺寸";
+"settings.display.vectorGraphics.viewBox" = "視圖框";
+"settings.display.vectorGraphics.elementCount" = "元素數量";
+"settings.display.vectorGraphics.colorMode" = "色彩模式";
+"settings.display.vectorGraphics.creator" = "建立應用程式";
+"settings.display.vectorGraphics.version" = "格式版本";
+"settings.display.vectorGraphics.hint" = "向量圖形中繼資料僅顯示於 SVG、EPS、AI 與向量 PDF 檔案";
+
+"settings.display.subtitle.title" = "字幕檔資訊";
+"settings.display.subtitle.show" = "顯示字幕檔中繼資料";
+"settings.display.subtitle.format" = "字幕格式";
+"settings.display.subtitle.encoding" = "文字編碼";
+"settings.display.subtitle.entryCount" = "字幕條目數";
+"settings.display.subtitle.duration" = "時長";
+"settings.display.subtitle.language" = "語言";
+"settings.display.subtitle.frameRate" = "幀率";
+"settings.display.subtitle.hasFormatting" = "豐富格式";
+"settings.display.subtitle.hint" = "字幕檔中繼資料僅顯示於 SRT、VTT、ASS、SSA、SUB、SBV 與 LRC 檔案";
+
 "settings.display.order" = "顯示順序";
-"settings.display.order.hint" = "拖曳項目以重新排序。EXIF 作為群組移動。";
+"settings.display.order.hint" = "拖曳項目以重新排序。每種檔案類型的中繼資料（照片、視訊、音訊、PDF 等）作為群組移動。";
 
 /* Settings - Permissions */
 "settings.permissions.title" = "權限";
@@ -148,6 +257,15 @@
 "displayItem.exif" = "照片資訊（EXIF）";
 "displayItem.video" = "影片資訊";
 "displayItem.audio" = "音訊資訊";
+"displayItem.pdf" = "PDF 資訊";
+"displayItem.office" = "Office 文件資訊";
+"displayItem.archive" = "壓縮檔資訊";
+"displayItem.ebook" = "電子書資訊";
+"displayItem.code" = "程式碼檔案資訊";
+"displayItem.font" = "字型資訊";
+"displayItem.diskImage" = "磁碟映像資訊";
+"displayItem.vectorGraphics" = "向量圖形資訊";
+"displayItem.subtitle" = "字幕檔資訊";
 "displayItem.filePath" = "檔案路徑";
 
 /* Hover Window */
@@ -189,6 +307,107 @@
 "hover.audio.bitrate" = "位元率";
 "hover.audio.samplerate" = "取樣率";
 "hover.audio.channels" = "聲道";
+
+/* PDF Information */
+"hover.pdf.title" = "PDF 資訊";
+"hover.pdf.pageCount" = "頁數";
+"hover.pdf.pageSize" = "頁面大小";
+"hover.pdf.version" = "PDF 版本";
+"hover.pdf.documentTitle" = "標題";
+"hover.pdf.author" = "作者";
+"hover.pdf.subject" = "主旨";
+"hover.pdf.creator" = "建立者";
+"hover.pdf.producer" = "製作者";
+"hover.pdf.creationDate" = "建立時間";
+"hover.pdf.modificationDate" = "修改時間";
+"hover.pdf.keywords" = "關鍵字";
+"hover.pdf.encrypted" = "已加密";
+
+/* Office Document Hover */
+"hover.office.title" = "Office 文件";
+"hover.office.documentTitle" = "標題";
+"hover.office.author" = "作者";
+"hover.office.subject" = "主旨";
+"hover.office.pageCount" = "頁數";
+"hover.office.wordCount" = "字數";
+"hover.office.sheetCount" = "工作表數";
+"hover.office.slideCount" = "投影片數";
+"hover.office.keywords" = "關鍵字";
+"hover.office.comment" = "註解";
+"hover.office.lastModifiedBy" = "修改者";
+"hover.office.creationDate" = "建立時間";
+"hover.office.modificationDate" = "修改時間";
+"hover.office.company" = "公司";
+"hover.office.category" = "類別";
+
+/* Archive Hover */
+"hover.archive.title" = "壓縮檔";
+"hover.archive.format" = "格式";
+"hover.archive.fileCount" = "檔案數";
+"hover.archive.uncompressedSize" = "未壓縮";
+"hover.archive.compressionRatio" = "壓縮率";
+"hover.archive.encrypted" = "已加密";
+"hover.archive.yes" = "是";
+
+/* E-book Hover */
+"hover.ebook.title" = "電子書";
+"hover.ebook.bookTitle" = "書名";
+"hover.ebook.author" = "作者";
+"hover.ebook.publisher" = "出版社";
+"hover.ebook.publicationDate" = "出版日期";
+"hover.ebook.isbn" = "ISBN";
+"hover.ebook.language" = "語言";
+"hover.ebook.description" = "內容簡介";
+"hover.ebook.pageCount" = "頁數";
+
+/* Code File Hover */
+"hover.code.title" = "程式碼檔案";
+"hover.code.language" = "語言";
+"hover.code.lineCount" = "行數";
+"hover.code.codeLines" = "程式碼";
+"hover.code.commentLines" = "註解";
+"hover.code.blankLines" = "空白";
+"hover.code.encoding" = "編碼";
+
+/* Font Hover */
+"hover.font.title" = "字型";
+"hover.font.name" = "名稱";
+"hover.font.family" = "字型家族";
+"hover.font.style" = "樣式";
+"hover.font.version" = "版本";
+"hover.font.designer" = "設計者";
+"hover.font.copyright" = "版權";
+"hover.font.glyphCount" = "字形數";
+
+/* Disk Image Hover */
+"hover.diskImage.title" = "磁碟映像";
+"hover.diskImage.format" = "格式";
+"hover.diskImage.totalSize" = "總大小";
+"hover.diskImage.compressedSize" = "壓縮大小";
+"hover.diskImage.compressionRatio" = "壓縮率";
+"hover.diskImage.encrypted" = "加密狀態";
+"hover.diskImage.partitionScheme" = "分割區配置";
+"hover.diskImage.fileSystem" = "檔案系統";
+
+/* Vector Graphics Hover */
+"hover.vectorGraphics.title" = "向量圖形";
+"hover.vectorGraphics.format" = "格式";
+"hover.vectorGraphics.dimensions" = "尺寸";
+"hover.vectorGraphics.viewBox" = "視圖框";
+"hover.vectorGraphics.elementCount" = "元素數";
+"hover.vectorGraphics.colorMode" = "色彩模式";
+"hover.vectorGraphics.creator" = "建立者";
+"hover.vectorGraphics.version" = "版本";
+
+/* Subtitle Hover */
+"hover.subtitle.title" = "字幕";
+"hover.subtitle.format" = "格式";
+"hover.subtitle.encoding" = "編碼";
+"hover.subtitle.entryCount" = "條目數";
+"hover.subtitle.duration" = "時長";
+"hover.subtitle.language" = "語言";
+"hover.subtitle.frameRate" = "幀率";
+"hover.subtitle.hasFormatting" = "格式化";
 
 /* Common */
 "common.reset" = "重設為預設值";

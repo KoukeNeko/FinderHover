@@ -298,30 +298,4 @@ class AvatarImageLoader: ObservableObject {
 }
 
 // MARK: - Avatar Image View
-struct AvatarImageView: View {
-    let url: URL
-    @StateObject private var loader: AvatarImageLoader
-
-    init(url: URL) {
-        self.url = url
-        _loader = StateObject(wrappedValue: AvatarImageLoader(url: url))
-    }
-
-    var body: some View {
-        Group {
-            if let image = loader.image {
-                Image(nsImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } else {
-                // Placeholder
-                Rectangle()
-                    .fill(Color.gray.opacity(0.3))
-                    .overlay(
-                        Image(systemName: "person.fill")
-                            .foregroundColor(.gray)
-                    )
-            }
-        }
-    }
-}
+// Note: AvatarImageView has been moved to SettingsComponents.swift to avoid duplication
