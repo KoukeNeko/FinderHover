@@ -48,7 +48,7 @@ class HoverManager: ObservableObject {
 
         // Monitor mouse location changes with debounce for showing
         mouseTracker.$mouseLocation
-            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+            .debounce(for: .milliseconds(Constants.MouseTracking.hoverDebounceDelay), scheduler: RunLoop.main)
             .sink { [weak self] location in
                 self?.handleMouseLocation(location)
             }
