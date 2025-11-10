@@ -221,16 +221,30 @@ Then restart to reset to defaults.
 
 ```
 FinderHover/
-├── FinderHoverApp.swift      # Main app & menu bar
-├── AppSettings.swift          # Settings model
-├── SettingsView.swift         # Settings UI
-├── HoverWindow.swift          # Preview window
-├── HoverManager.swift         # Coordination
-├── MouseTracker.swift         # Mouse events
-├── FinderInteraction.swift   # Accessibility API
-├── FileInfo.swift             # File metadata
-├── IconManager.swift          # Centralized SF Symbols management
-└── Resources/                 # Localizations (en, zh-Hant, ja)
+├── App/                       # Application Entry & Coordination
+│   ├── FinderHoverApp.swift  # Main app & menu bar
+│   └── HoverManager.swift    # Coordination layer
+├── UI/                        # User Interface Components
+│   ├── Windows/
+│   │   ├── HoverWindow.swift # Hover preview window
+│   │   └── SettingsView.swift # Settings interface
+│   └── ContentView.swift     # Placeholder view
+├── Core/                      # Core Functionality
+│   ├── MouseTracker.swift    # Mouse event monitoring
+│   ├── FinderInteraction.swift # Accessibility API wrapper
+│   └── FileInfo.swift        # File metadata extraction
+├── Settings/                  # Settings Management
+│   └── AppSettings.swift     # Settings model & persistence
+├── Services/                  # Service Layer
+│   ├── GitHubService.swift   # GitHub API integration
+│   └── LaunchAtLogin.swift   # Login item management
+├── Utilities/                 # Utility Classes
+│   ├── IconManager.swift     # SF Symbols management
+│   └── LocalizationManager.swift # i18n utilities
+└── Resources/                 # Localization Resources
+    ├── en.lproj/             # English
+    ├── zh-Hant.lproj/        # Traditional Chinese
+    └── ja.lproj/             # Japanese
 ```
 
 ## 🤝 Contributing
