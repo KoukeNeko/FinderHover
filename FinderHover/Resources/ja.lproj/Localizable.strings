@@ -91,10 +91,6 @@
 "settings.permissions.accessibility.description" = "マウスカーソル下のファイルを検出し、Finder内のマウスの動きを追跡するために必要です";
 "settings.permissions.accessibility.required" = "アクセシビリティ許可が必要です";
 "settings.permissions.accessibility.steps" = "1. 下の「システム設定を開く」をクリック\n2. リストからFinderHoverを見つける\n3. スイッチを切り替えて有効にする";
-"settings.permissions.fullDiskAccess" = "フルディスクアクセス";
-"settings.permissions.fullDiskAccess.description" = "デスクトップ、書類、ダウンロードを含むすべての場所からファイル情報とメタデータを読み取るために必要です";
-"settings.permissions.fullDiskAccess.required" = "フルディスクアクセス許可が必要です";
-"settings.permissions.fullDiskAccess.steps" = "1. 下の「システム設定を開く」をクリック\n2. リストからFinderHoverを見つける\n3. スイッチを切り替えて有効にする\n4. 変更を有効にするためにアプリを再起動してください";
 "settings.permissions.granted" = "許可済み";
 "settings.permissions.notGranted" = "未許可";
 "settings.permissions.openSystemSettings" = "システム設定を開く";
