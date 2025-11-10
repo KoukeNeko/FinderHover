@@ -15,7 +15,7 @@ struct DisplaySettingsView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
+            LazyVStack(alignment: .leading, spacing: 0) {
                 // Header
                 Text("settings.display.title".localized)
                     .font(.system(size: 20, weight: .semibold))
@@ -26,7 +26,7 @@ struct DisplaySettingsView: View {
                 Divider()
                     .padding(.bottom, 20)
 
-                VStack(alignment: .leading, spacing: 16) {
+                LazyVStack(alignment: .leading, spacing: 16) {
                     Text("settings.display.basicInfo".localized)
                         .font(.system(size: 13, weight: .semibold))
                         .padding(.horizontal, 20)

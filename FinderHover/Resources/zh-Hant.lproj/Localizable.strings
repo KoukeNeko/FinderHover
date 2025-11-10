@@ -192,7 +192,7 @@
 "settings.display.subtitle.hint" = "字幕檔中繼資料僅顯示於 SRT、VTT、ASS、SSA、SUB、SBV 與 LRC 檔案";
 
 "settings.display.order" = "顯示順序";
-"settings.display.order.hint" = "拖曳項目以重新排序。EXIF 作為群組移動。";
+"settings.display.order.hint" = "拖曳項目以重新排序。每種檔案類型的中繼資料（照片、視訊、音訊、PDF 等）作為群組移動。";
 
 /* Settings - Permissions */
 "settings.permissions.title" = "權限";

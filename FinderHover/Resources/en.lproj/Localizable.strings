@@ -192,7 +192,7 @@
 "settings.display.subtitle.hint" = "Subtitle metadata only appears for SRT, VTT, ASS, SSA, SUB, SBV, and LRC files";
 
 "settings.display.order" = "Display Order";
-"settings.display.order.hint" = "Drag items to reorder. EXIF moves as a group.";
+"settings.display.order.hint" = "Drag items to reorder. Metadata for each file type (photos, videos, audio, PDFs, etc.) moves as a group.";
 
 /* Settings - Permissions */
 "settings.permissions.title" = "Permissions";

@@ -192,7 +192,7 @@
 "settings.display.subtitle.hint" = "字幕メタデータはSRT、VTT、ASS、SSA、SUB、SBV、LRCファイルにのみ表示されます";
 
 "settings.display.order" = "表示順序";
-"settings.display.order.hint" = "項目をドラッグして並べ替えます。EXIF はグループとして移動します。";
+"settings.display.order.hint" = "項目をドラッグして並べ替えます。各ファイルタイプのメタデータ（写真、動画、音声、PDF など）はグループとして移動します。";
 
 /* Settings - Permissions */
 "settings.permissions.title" = "アクセス許可";
