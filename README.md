@@ -166,7 +166,7 @@ Press `Cmd+,` to customize:
 
 ## 📝 What's New
 
-### Version 1.3.1 (Hotfix) - 2025-01-11
+### Version 1.3.1 (Hotfix)
 
 🐛 **Bug Fix**: Fixed display settings page freezing when scrolling quickly
 - Reverted LazyVStack optimization that caused spinning wheel/crashes
