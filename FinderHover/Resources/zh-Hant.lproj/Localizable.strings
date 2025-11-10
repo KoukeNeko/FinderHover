@@ -180,6 +180,17 @@
 "settings.display.vectorGraphics.version" = "格式版本";
 "settings.display.vectorGraphics.hint" = "向量圖形中繼資料僅顯示於 SVG、EPS、AI 與向量 PDF 檔案";
 
+"settings.display.subtitle.title" = "字幕檔資訊";
+"settings.display.subtitle.show" = "顯示字幕檔中繼資料";
+"settings.display.subtitle.format" = "字幕格式";
+"settings.display.subtitle.encoding" = "文字編碼";
+"settings.display.subtitle.entryCount" = "字幕條目數";
+"settings.display.subtitle.duration" = "時長";
+"settings.display.subtitle.language" = "語言";
+"settings.display.subtitle.frameRate" = "幀率";
+"settings.display.subtitle.hasFormatting" = "豐富格式";
+"settings.display.subtitle.hint" = "字幕檔中繼資料僅顯示於 SRT、VTT、ASS、SSA、SUB、SBV 與 LRC 檔案";
+
 "settings.display.order" = "顯示順序";
 "settings.display.order.hint" = "拖曳項目以重新排序。EXIF 作為群組移動。";
 
@@ -254,6 +265,7 @@
 "displayItem.font" = "字型資訊";
 "displayItem.diskImage" = "磁碟映像資訊";
 "displayItem.vectorGraphics" = "向量圖形資訊";
+"displayItem.subtitle" = "字幕檔資訊";
 "displayItem.filePath" = "檔案路徑";
 
 /* Hover Window */
@@ -386,6 +398,16 @@
 "hover.vectorGraphics.colorMode" = "色彩模式";
 "hover.vectorGraphics.creator" = "建立者";
 "hover.vectorGraphics.version" = "版本";
+
+/* Subtitle Hover */
+"hover.subtitle.title" = "字幕";
+"hover.subtitle.format" = "格式";
+"hover.subtitle.encoding" = "編碼";
+"hover.subtitle.entryCount" = "條目數";
+"hover.subtitle.duration" = "時長";
+"hover.subtitle.language" = "語言";
+"hover.subtitle.frameRate" = "幀率";
+"hover.subtitle.hasFormatting" = "格式化";
 
 /* Common */
 "common.reset" = "重設為預設值";

@@ -180,6 +180,17 @@
 "settings.display.vectorGraphics.version" = "Format Version";
 "settings.display.vectorGraphics.hint" = "Vector graphics metadata only appears for SVG, EPS, AI, and vector PDF files";
 
+"settings.display.subtitle.title" = "Subtitle Information";
+"settings.display.subtitle.show" = "Show Subtitle Metadata";
+"settings.display.subtitle.format" = "Subtitle Format";
+"settings.display.subtitle.encoding" = "Text Encoding";
+"settings.display.subtitle.entryCount" = "Entry Count";
+"settings.display.subtitle.duration" = "Duration";
+"settings.display.subtitle.language" = "Language";
+"settings.display.subtitle.frameRate" = "Frame Rate";
+"settings.display.subtitle.hasFormatting" = "Rich Formatting";
+"settings.display.subtitle.hint" = "Subtitle metadata only appears for SRT, VTT, ASS, SSA, SUB, SBV, and LRC files";
+
 "settings.display.order" = "Display Order";
 "settings.display.order.hint" = "Drag items to reorder. EXIF moves as a group.";
 
@@ -254,6 +265,7 @@
 "displayItem.font" = "Font Information";
 "displayItem.diskImage" = "Disk Image Information";
 "displayItem.vectorGraphics" = "Vector Graphics Information";
+"displayItem.subtitle" = "Subtitle Information";
 "displayItem.filePath" = "File Path";
 
 /* Hover Window */
@@ -386,6 +398,16 @@
 "hover.vectorGraphics.colorMode" = "Color Mode";
 "hover.vectorGraphics.creator" = "Creator";
 "hover.vectorGraphics.version" = "Version";
+
+/* Subtitle Hover */
+"hover.subtitle.title" = "Subtitle";
+"hover.subtitle.format" = "Format";
+"hover.subtitle.encoding" = "Encoding";
+"hover.subtitle.entryCount" = "Entries";
+"hover.subtitle.duration" = "Duration";
+"hover.subtitle.language" = "Language";
+"hover.subtitle.frameRate" = "Frame Rate";
+"hover.subtitle.hasFormatting" = "Formatting";
 
 /* Common */
 "common.reset" = "Reset to Defaults";

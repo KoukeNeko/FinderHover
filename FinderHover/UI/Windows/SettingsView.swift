@@ -1058,6 +1058,51 @@ struct DisplaySettingsView: View {
                     .foregroundColor(.secondary)
                     .padding(.horizontal, 20)
                     .padding(.top, 8)
+                    
+                    // Subtitle Section
+                    Text("settings.display.subtitle.title".localized)
+                        .font(.system(size: 13, weight: .semibold))
+                        .padding(.horizontal, 20)
+                        .padding(.top, 16)
+
+                    VStack(spacing: 10) {
+                        // Main toggle
+                        DisplayToggleRow(title: "settings.display.subtitle.show".localized, icon: "captions.bubble", isOn: $settings.showSubtitle)
+
+                        // Detail toggles
+                        DisplayToggleRow(title: "settings.display.subtitle.format".localized, icon: "captions.bubble", isOn: $settings.showSubtitleFormat)
+                            .disabled(!settings.showSubtitle)
+                            .opacity(settings.showSubtitle ? 1 : 0.5)
+                        DisplayToggleRow(title: "settings.display.subtitle.encoding".localized, icon: "textformat.abc", isOn: $settings.showSubtitleEncoding)
+                            .disabled(!settings.showSubtitle)
+                            .opacity(settings.showSubtitle ? 1 : 0.5)
+                        DisplayToggleRow(title: "settings.display.subtitle.entryCount".localized, icon: "list.number", isOn: $settings.showSubtitleEntryCount)
+                            .disabled(!settings.showSubtitle)
+                            .opacity(settings.showSubtitle ? 1 : 0.5)
+                        DisplayToggleRow(title: "settings.display.subtitle.duration".localized, icon: "clock", isOn: $settings.showSubtitleDuration)
+                            .disabled(!settings.showSubtitle)
+                            .opacity(settings.showSubtitle ? 1 : 0.5)
+                        DisplayToggleRow(title: "settings.display.subtitle.language".localized, icon: "globe", isOn: $settings.showSubtitleLanguage)
+                            .disabled(!settings.showSubtitle)
+                            .opacity(settings.showSubtitle ? 1 : 0.5)
+                        DisplayToggleRow(title: "settings.display.subtitle.frameRate".localized, icon: "film", isOn: $settings.showSubtitleFrameRate)
+                            .disabled(!settings.showSubtitle)
+                            .opacity(settings.showSubtitle ? 1 : 0.5)
+                        DisplayToggleRow(title: "settings.display.subtitle.hasFormatting".localized, icon: "textformat", isOn: $settings.showSubtitleFormatting)
+                            .disabled(!settings.showSubtitle)
+                            .opacity(settings.showSubtitle ? 1 : 0.5)
+                    }
+                    .padding(.horizontal, 20)
+
+                    HStack(spacing: 6) {
+                        Image(systemName: "info.circle")
+                            .font(.system(size: 11))
+                        Text("settings.display.subtitle.hint".localized)
+                            .font(.system(size: 11))
+                    }
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
 
                     // Display Order Section
                     Text("settings.display.order".localized)

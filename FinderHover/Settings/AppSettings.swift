@@ -65,6 +65,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
     case font = "Font Information"
     case diskImage = "Disk Image Information"
     case vectorGraphics = "Vector Graphics Information"
+    case subtitle = "Subtitle Information"
     case filePath = "File Path"
 
     var id: String { rawValue }
@@ -90,6 +91,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .font: return "displayItem.font".localized
         case .diskImage: return "displayItem.diskImage".localized
         case .vectorGraphics: return "displayItem.vectorGraphics".localized
+        case .subtitle: return "displayItem.subtitle".localized
         case .filePath: return "displayItem.filePath".localized
         }
     }
@@ -115,6 +117,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .font: return "textformat"
         case .diskImage: return "opticaldiscdrive"
         case .vectorGraphics: return "paintbrush.pointed"
+        case .subtitle: return "captions.bubble"
         case .filePath: return IconManager.FileSystem.folder
         }
     }
@@ -497,6 +500,32 @@ class AppSettings: ObservableObject {
     @Published var showVectorGraphicsVersion: Bool {
         didSet { UserDefaults.standard.set(showVectorGraphicsVersion, forKey: "showVectorGraphicsVersion") }
     }
+    
+    // Subtitle metadata
+    @Published var showSubtitle: Bool {
+        didSet { UserDefaults.standard.set(showSubtitle, forKey: "showSubtitle") }
+    }
+    @Published var showSubtitleFormat: Bool {
+        didSet { UserDefaults.standard.set(showSubtitleFormat, forKey: "showSubtitleFormat") }
+    }
+    @Published var showSubtitleEncoding: Bool {
+        didSet { UserDefaults.standard.set(showSubtitleEncoding, forKey: "showSubtitleEncoding") }
+    }
+    @Published var showSubtitleEntryCount: Bool {
+        didSet { UserDefaults.standard.set(showSubtitleEntryCount, forKey: "showSubtitleEntryCount") }
+    }
+    @Published var showSubtitleDuration: Bool {
+        didSet { UserDefaults.standard.set(showSubtitleDuration, forKey: "showSubtitleDuration") }
+    }
+    @Published var showSubtitleLanguage: Bool {
+        didSet { UserDefaults.standard.set(showSubtitleLanguage, forKey: "showSubtitleLanguage") }
+    }
+    @Published var showSubtitleFrameRate: Bool {
+        didSet { UserDefaults.standard.set(showSubtitleFrameRate, forKey: "showSubtitleFrameRate") }
+    }
+    @Published var showSubtitleFormatting: Bool {
+        didSet { UserDefaults.standard.set(showSubtitleFormatting, forKey: "showSubtitleFormatting") }
+    }
 
     // Display order
     @Published var displayOrder: [DisplayItem] {
@@ -633,6 +662,15 @@ class AppSettings: ObservableObject {
                     decoded.append(.vectorGraphics)
                 }
             }
+            if !decoded.contains(.subtitle) {
+                if let vectorGraphicsIndex = decoded.firstIndex(of: .vectorGraphics) {
+                    decoded.insert(.subtitle, at: vectorGraphicsIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.subtitle, at: filePathIndex)
+                } else {
+                    decoded.append(.subtitle)
+                }
+            }
             self.displayOrder = decoded
         } else {
             // Default order
@@ -656,6 +694,7 @@ class AppSettings: ObservableObject {
                 .font,
                 .diskImage,
                 .vectorGraphics,
+                .subtitle,
                 .filePath
             ]
         }
@@ -780,6 +819,16 @@ class AppSettings: ObservableObject {
         self.showVectorGraphicsColorMode = UserDefaults.standard.object(forKey: "showVectorGraphicsColorMode") as? Bool ?? Constants.Defaults.showVectorGraphicsColorMode
         self.showVectorGraphicsCreator = UserDefaults.standard.object(forKey: "showVectorGraphicsCreator") as? Bool ?? Constants.Defaults.showVectorGraphicsCreator
         self.showVectorGraphicsVersion = UserDefaults.standard.object(forKey: "showVectorGraphicsVersion") as? Bool ?? Constants.Defaults.showVectorGraphicsVersion
+        
+        // Initialize subtitle metadata toggles
+        self.showSubtitle = UserDefaults.standard.object(forKey: "showSubtitle") as? Bool ?? Constants.Defaults.showSubtitle
+        self.showSubtitleFormat = UserDefaults.standard.object(forKey: "showSubtitleFormat") as? Bool ?? Constants.Defaults.showSubtitleFormat
+        self.showSubtitleEncoding = UserDefaults.standard.object(forKey: "showSubtitleEncoding") as? Bool ?? Constants.Defaults.showSubtitleEncoding
+        self.showSubtitleEntryCount = UserDefaults.standard.object(forKey: "showSubtitleEntryCount") as? Bool ?? Constants.Defaults.showSubtitleEntryCount
+        self.showSubtitleDuration = UserDefaults.standard.object(forKey: "showSubtitleDuration") as? Bool ?? Constants.Defaults.showSubtitleDuration
+        self.showSubtitleLanguage = UserDefaults.standard.object(forKey: "showSubtitleLanguage") as? Bool ?? Constants.Defaults.showSubtitleLanguage
+        self.showSubtitleFrameRate = UserDefaults.standard.object(forKey: "showSubtitleFrameRate") as? Bool ?? Constants.Defaults.showSubtitleFrameRate
+        self.showSubtitleFormatting = UserDefaults.standard.object(forKey: "showSubtitleFormatting") as? Bool ?? Constants.Defaults.showSubtitleFormatting
         
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? Constants.Defaults.followCursor
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? Constants.Defaults.windowOffsetX

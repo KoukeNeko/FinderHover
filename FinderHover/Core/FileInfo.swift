@@ -216,6 +216,22 @@ struct VectorGraphicsMetadata {
     }
 }
 
+// MARK: - Subtitle Metadata Structure
+struct SubtitleMetadata {
+    let format: String?           // Subtitle format (SRT, VTT, ASS, etc.)
+    let encoding: String?         // Text encoding (UTF-8, etc.)
+    let entryCount: Int?          // Number of subtitle entries
+    let duration: String?         // Total duration
+    let language: String?         // Language code
+    let frameRate: String?        // Frame rate (for frame-based formats)
+    let hasFormatting: Bool?      // Whether subtitles contain rich formatting
+    
+    var hasData: Bool {
+        return format != nil || encoding != nil || entryCount != nil ||
+               duration != nil || language != nil || frameRate != nil || hasFormatting != nil
+    }
+}
+
 struct FileInfo {
     let name: String
     let path: String
@@ -268,6 +284,9 @@ struct FileInfo {
     
     // Vector graphics metadata
     let vectorGraphicsMetadata: VectorGraphicsMetadata?
+    
+    // Subtitle metadata
+    let subtitleMetadata: SubtitleMetadata?
 
     var formattedSize: String {
         ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
@@ -397,6 +416,9 @@ struct FileInfo {
             
             // Extract Vector Graphics metadata
             let vectorGraphicsMetadata = extractVectorGraphicsMetadata(from: url)
+            
+            // Extract Subtitle metadata
+            let subtitleMetadata = extractSubtitleMetadata(from: url)
 
             return FileInfo(
                 name: url.lastPathComponent,
@@ -425,7 +447,8 @@ struct FileInfo {
                 codeMetadata: codeMetadata,
                 fontMetadata: fontMetadata,
                 diskImageMetadata: diskImageMetadata,
-                vectorGraphicsMetadata: vectorGraphicsMetadata
+                vectorGraphicsMetadata: vectorGraphicsMetadata,
+                subtitleMetadata: subtitleMetadata
             )
         } catch {
             Logger.error("Failed to read file attributes: \(path)", error: error, subsystem: .fileSystem)
@@ -1737,6 +1760,173 @@ struct FileInfo {
             colorMode: colorMode,
             creator: creator,
             version: version
+        )
+    }
+    
+    private static func extractSubtitleMetadata(from url: URL) -> SubtitleMetadata? {
+        let subtitleExtensions = ["srt", "vtt", "ass", "ssa", "sub", "sbv", "lrc"]
+        let ext = url.pathExtension.lowercased()
+        guard subtitleExtensions.contains(ext) else { return nil }
+        
+        var format: String?
+        var encoding: String?
+        var entryCount: Int?
+        var duration: String?
+        var language: String?
+        var frameRate: String?
+        var hasFormatting: Bool?
+        
+        // Read file content
+        guard let data = try? Data(contentsOf: url) else { return nil }
+        
+        // Detect encoding
+        var usedEncoding: String.Encoding = .utf8
+        if let detectedString = String(data: data, encoding: .utf8) {
+            encoding = "UTF-8"
+            usedEncoding = .utf8
+        } else if let detectedString = String(data: data, encoding: .utf16) {
+            encoding = "UTF-16"
+            usedEncoding = .utf16
+        } else if let detectedString = String(data: data, encoding: .isoLatin1) {
+            encoding = "ISO-8859-1"
+            usedEncoding = .isoLatin1
+        } else {
+            encoding = "Unknown"
+        }
+        
+        guard let content = String(data: data, encoding: usedEncoding) else { return nil }
+        
+        let lines = content.components(separatedBy: .newlines)
+        
+        switch ext {
+        case "srt":
+            format = "SubRip (SRT)"
+            // Count entries (lines that are just numbers)
+            let entryLines = lines.filter { line in
+                let trimmed = line.trimmingCharacters(in: .whitespaces)
+                return !trimmed.isEmpty && trimmed.allSatisfy { $0.isNumber }
+            }
+            entryCount = entryLines.count
+            
+            // Find last timestamp to calculate duration
+            if let lastTimeline = lines.last(where: { $0.contains("-->") }) {
+                let components = lastTimeline.components(separatedBy: "-->")
+                if components.count == 2 {
+                    let endTime = components[1].trimmingCharacters(in: .whitespaces)
+                    duration = endTime.components(separatedBy: ",").first
+                }
+            }
+            
+            // Check for formatting tags
+            hasFormatting = content.contains("<b>") || content.contains("<i>") || content.contains("<u>")
+            
+        case "vtt":
+            format = "WebVTT"
+            // Count cues (lines with -->)
+            entryCount = lines.filter { $0.contains("-->") }.count
+            
+            // Extract language from header
+            if let langLine = lines.first(where: { $0.hasPrefix("Language:") }) {
+                language = langLine.replacingOccurrences(of: "Language:", with: "").trimmingCharacters(in: .whitespaces)
+            }
+            
+            // Find last timestamp
+            if let lastTimeline = lines.last(where: { $0.contains("-->") }) {
+                let components = lastTimeline.components(separatedBy: "-->")
+                if components.count == 2 {
+                    let endTime = components[1].trimmingCharacters(in: .whitespaces)
+                    duration = endTime.components(separatedBy: ".").first
+                }
+            }
+            
+            hasFormatting = content.contains("<b>") || content.contains("<i>") || content.contains("<c.")
+            
+        case "ass", "ssa":
+            format = ext == "ass" ? "Advanced SubStation Alpha" : "SubStation Alpha"
+            
+            // Count dialogue lines
+            entryCount = lines.filter { $0.hasPrefix("Dialogue:") }.count
+            
+            // Extract PlayResX and PlayResY
+            if let resXLine = lines.first(where: { $0.hasPrefix("PlayResX:") }),
+               let resYLine = lines.first(where: { $0.hasPrefix("PlayResY:") }) {
+                let resX = resXLine.replacingOccurrences(of: "PlayResX:", with: "").trimmingCharacters(in: .whitespaces)
+                let resY = resYLine.replacingOccurrences(of: "PlayResY:", with: "").trimmingCharacters(in: .whitespaces)
+            }
+            
+            // Find last dialogue timestamp
+            if let lastDialogue = lines.last(where: { $0.hasPrefix("Dialogue:") }) {
+                let parts = lastDialogue.components(separatedBy: ",")
+                if parts.count > 2 {
+                    duration = parts[2].trimmingCharacters(in: .whitespaces)
+                }
+            }
+            
+            hasFormatting = true // ASS/SSA always have rich formatting
+            
+        case "sub":
+            format = "MicroDVD"
+            // Count frame-based entries
+            let frameLines = lines.filter { line in
+                line.hasPrefix("{") && line.contains("}{")
+            }
+            entryCount = frameLines.count
+            
+            // Try to extract frame rate from first line
+            if let firstLine = frameLines.first {
+                let pattern = #"\{(\d+)\}\{(\d+)\}"#
+                if let regex = try? NSRegularExpression(pattern: pattern) {
+                    if let match = regex.firstMatch(in: firstLine, range: NSRange(firstLine.startIndex..., in: firstLine)) {
+                        if let endFrameRange = Range(match.range(at: 2), in: firstLine) {
+                            let endFrame = firstLine[endFrameRange]
+                            // Common assumption: 25 fps
+                            frameRate = "25 fps"
+                        }
+                    }
+                }
+            }
+            
+            hasFormatting = content.contains("{Y:") || content.contains("{y:")
+            
+        case "sbv":
+            format = "YouTube SBV"
+            entryCount = lines.filter { $0.contains(",") && $0.contains(":") && !$0.contains(" ") }.count
+            
+            if let lastTimeline = lines.last(where: { $0.contains(",") && $0.contains(":") && !$0.contains(" ") }) {
+                let components = lastTimeline.components(separatedBy: ",")
+                if components.count == 2 {
+                    duration = components[1].trimmingCharacters(in: .whitespaces)
+                }
+            }
+            
+            hasFormatting = false
+            
+        case "lrc":
+            format = "LRC (Lyrics)"
+            entryCount = lines.filter { $0.hasPrefix("[") && $0.contains("]") }.count
+            
+            // Extract metadata
+            if let titleLine = lines.first(where: { $0.hasPrefix("[ti:") }) {
+                // Title metadata available
+            }
+            if let langLine = lines.first(where: { $0.hasPrefix("[la:") }) {
+                language = langLine.replacingOccurrences(of: "[la:", with: "").replacingOccurrences(of: "]", with: "")
+            }
+            
+            hasFormatting = false
+            
+        default:
+            return nil
+        }
+        
+        return SubtitleMetadata(
+            format: format,
+            encoding: encoding,
+            entryCount: entryCount,
+            duration: duration,
+            language: language,
+            frameRate: frameRate,
+            hasFormatting: hasFormatting
         )
     }
 

@@ -413,6 +413,30 @@ enum Constants {
         
         /// Default show Vector Graphics version
         static let showVectorGraphicsVersion: Bool = true
+        
+        /// Default show Subtitle info
+        static let showSubtitle: Bool = true
+        
+        /// Default show Subtitle format
+        static let showSubtitleFormat: Bool = true
+        
+        /// Default show Subtitle encoding
+        static let showSubtitleEncoding: Bool = true
+        
+        /// Default show Subtitle entry count
+        static let showSubtitleEntryCount: Bool = true
+        
+        /// Default show Subtitle duration
+        static let showSubtitleDuration: Bool = true
+        
+        /// Default show Subtitle language
+        static let showSubtitleLanguage: Bool = true
+        
+        /// Default show Subtitle frame rate
+        static let showSubtitleFrameRate: Bool = true
+        
+        /// Default show Subtitle formatting
+        static let showSubtitleFormatting: Bool = true
 
         /// Default follow cursor
         static let followCursor: Bool = true

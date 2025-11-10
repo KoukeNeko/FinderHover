@@ -176,9 +176,20 @@
 "settings.display.vectorGraphics.viewBox" = "ビューボックス";
 "settings.display.vectorGraphics.elementCount" = "要素数";
 "settings.display.vectorGraphics.colorMode" = "カラーモード";
-"settings.display.vectorGraphics.creator" = "作成アプリ";
+"settings.display.vectorGraphics.creator" = "作成アプリケーション";
 "settings.display.vectorGraphics.version" = "形式バージョン";
 "settings.display.vectorGraphics.hint" = "ベクターグラフィックスメタデータはSVG、EPS、AI、ベクターPDFファイルにのみ表示されます";
+
+"settings.display.subtitle.title" = "字幕ファイル情報";
+"settings.display.subtitle.show" = "字幕メタデータを表示";
+"settings.display.subtitle.format" = "字幕形式";
+"settings.display.subtitle.encoding" = "テキストエンコーディング";
+"settings.display.subtitle.entryCount" = "エントリ数";
+"settings.display.subtitle.duration" = "再生時間";
+"settings.display.subtitle.language" = "言語";
+"settings.display.subtitle.frameRate" = "フレームレート";
+"settings.display.subtitle.hasFormatting" = "リッチフォーマット";
+"settings.display.subtitle.hint" = "字幕メタデータはSRT、VTT、ASS、SSA、SUB、SBV、LRCファイルにのみ表示されます";
 
 "settings.display.order" = "表示順序";
 "settings.display.order.hint" = "項目をドラッグして並べ替えます。EXIF はグループとして移動します。";
@@ -254,6 +265,7 @@
 "displayItem.font" = "フォント情報";
 "displayItem.diskImage" = "ディスクイメージ情報";
 "displayItem.vectorGraphics" = "ベクターグラフィックス情報";
+"displayItem.subtitle" = "字幕ファイル情報";
 "displayItem.filePath" = "ファイルパス";
 
 /* Hover Window */
@@ -386,6 +398,16 @@
 "hover.vectorGraphics.colorMode" = "カラーモード";
 "hover.vectorGraphics.creator" = "作成者";
 "hover.vectorGraphics.version" = "バージョン";
+
+/* Subtitle Hover */
+"hover.subtitle.title" = "字幕";
+"hover.subtitle.format" = "形式";
+"hover.subtitle.encoding" = "エンコーディング";
+"hover.subtitle.entryCount" = "エントリ数";
+"hover.subtitle.duration" = "再生時間";
+"hover.subtitle.language" = "言語";
+"hover.subtitle.frameRate" = "フレームレート";
+"hover.subtitle.hasFormatting" = "フォーマット";
 
 /* Common */
 "common.reset" = "デフォルトに戻す";

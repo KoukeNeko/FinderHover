@@ -807,6 +807,46 @@ struct HoverContentView: View {
                         .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
+        
+        case .subtitle:
+            if settings.showSubtitle, let subtitle = fileInfo.subtitleMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.subtitle.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showSubtitleFormat, let format = subtitle.format {
+                        DetailRow(icon: "captions.bubble", label: "hover.subtitle.format".localized, value: format, fontSize: settings.fontSize)
+                    }
+                    if settings.showSubtitleEncoding, let encoding = subtitle.encoding {
+                        DetailRow(icon: "textformat.abc", label: "hover.subtitle.encoding".localized, value: encoding, fontSize: settings.fontSize)
+                    }
+                    if settings.showSubtitleEntryCount, let entryCount = subtitle.entryCount {
+                        DetailRow(icon: "list.number", label: "hover.subtitle.entryCount".localized, value: "\(entryCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showSubtitleDuration, let duration = subtitle.duration {
+                        DetailRow(icon: "clock", label: "hover.subtitle.duration".localized, value: duration, fontSize: settings.fontSize)
+                    }
+                    if settings.showSubtitleLanguage, let language = subtitle.language {
+                        DetailRow(icon: "globe", label: "hover.subtitle.language".localized, value: language, fontSize: settings.fontSize)
+                    }
+                    if settings.showSubtitleFrameRate, let frameRate = subtitle.frameRate {
+                        DetailRow(icon: "film", label: "hover.subtitle.frameRate".localized, value: frameRate, fontSize: settings.fontSize)
+                    }
+                    if settings.showSubtitleFormatting, let hasFormatting = subtitle.hasFormatting {
+                        let status = hasFormatting ? "Yes" : "No"
+                        DetailRow(icon: "textformat", label: "hover.subtitle.hasFormatting".localized, value: status, fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
 
         case .filePath:
             if settings.showFilePath {
