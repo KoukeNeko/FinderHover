@@ -2,29 +2,29 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>NSAppleEventsUsageDescription</key>
-    <string>FinderHover needs to control Finder to detect which file you're hovering over and display its information.</string>
-    <key>NSAppleScriptEnabled</key>
-    <true/>
-    <key>LSUIElement</key>
-    <true/>
-    <key>CFBundleDisplayName</key>
-    <string>FinderHover</string>
-    <key>CFBundleName</key>
-    <string>FinderHover</string>
-    <key>CFBundleIdentifier</key>
-    <string>dev.doeshing.FinderHover</string>
-    <key>CFBundleVersion</key>
-    <string>15</string>
-    <key>CFBundleShortVersionString</key>
-    <string>1.2.4.2</string>
-    <key>CFBundleDevelopmentRegion</key>
-    <string>en</string>
-    <key>CFBundleLocalizations</key>
-    <array>
-        <string>en</string>
-        <string>zh-Hant</string>
-        <string>ja</string>
-    </array>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>FinderHover</string>
+	<key>CFBundleIdentifier</key>
+	<string>dev.doeshing.FinderHover</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>zh-Hant</string>
+		<string>ja</string>
+	</array>
+	<key>CFBundleName</key>
+	<string>FinderHover</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.2.5</string>
+	<key>CFBundleVersion</key>
+	<string>16</string>
+	<key>LSUIElement</key>
+	<true/>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>FinderHover needs to control Finder to detect which file you're hovering over and display its information.</string>
+	<key>NSAppleScriptEnabled</key>
+	<true/>
 </dict>
 </plist>

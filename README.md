@@ -261,6 +261,25 @@ Contributions welcome!
 - Built with Apple's SwiftUI and Accessibility frameworks
 - Icons from SF Symbols
 
+## 📝 Changelog
+
+### Version 1.2.5
+
+#### Code Quality Improvements
+
+- Refactored magic numbers into centralized `Constants.swift` for better maintainability
+- Improved timer management in `HoverManager` to prevent memory leaks
+- Refactored `HoverWindow.show()` method by splitting into smaller, focused helper methods
+- Added comprehensive logging system (`Logger.swift`) with multiple severity levels and subsystems
+- Enhanced error tracking for file system operations and accessibility API calls
+
+#### Technical Details
+
+- Created `DateFormatters.swift` for reusable date formatter instances
+- Created `FileTypeDescriptor.swift` to eliminate 120+ lines of duplicate code
+- Improved code organization with proper separation of concerns
+- All changes verified with successful builds
+
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) file for details.
