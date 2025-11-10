@@ -93,14 +93,6 @@ All notable changes to FinderHover will be documented in this file.
   - **English**: "Metadata for each file type (photos, videos, audio, PDFs, etc.) moves as a group"
   - **Japanese**: "各ファイルタイプのメタデータ（写真、動画、音声、PDF など）はグループとして移動します"
 
-### 📚 Documentation
-
-- Added comprehensive refactoring documentation
-- Created before/after comparison guide
-- Added PDF overlap fix documentation
-- Added performance improvement guide
-- Added test plans for new features
-
 ### 🎯 Code Quality
 
 - Better adherence to SOLID principles
