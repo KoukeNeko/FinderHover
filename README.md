@@ -1,6 +1,6 @@
 # FinderHover
 
-A beautiful, highly customizable macOS menu bar app that displays rich file information when hovering over files in Finder, similar to Windows file preview behavior.
+A beautiful, highly customizable macOS app that displays rich file information when hovering over files in Finder, similar to Windows file preview behavior.
 
 <p align="center">
   <img src="/FinderHover/Assets.xcassets/AppIcon.appiconset/Icon-256.png" alt="Icon-256">
@@ -37,8 +37,9 @@ A beautiful, highly customizable macOS menu bar app that displays rich file info
 
 ### 🎨 Customization
 
-- Adjustable window size (300-600px) and font size (9-14pt)
+- Adjustable window size (300-600px) 
 - Native blur effect or custom opacity (70-100%)
+- Adjustable font size (9pt - 14pt)
 - Compact mode for reduced spacing
 - Launch at login support
 - Recognizes 50+ file types with smart descriptions
@@ -162,7 +163,6 @@ Press `Cmd+,` to customize:
 <img width="762" height="1002" alt="image" src="https://github.com/user-attachments/assets/140accdd-6034-4b2d-b4d9-ccc55a28586c" />
 <img width="762" height="1002" alt="image" src="https://github.com/user-attachments/assets/8307070f-a13c-434d-9a66-0ed2da98a996" />
 <img width="762" height="1002" alt="image" src="https://github.com/user-attachments/assets/0afda2cb-e26f-4574-b002-6b56a1c06102" />
-
 
 ## 📝 What's New in Version 1.3
 
