@@ -235,7 +235,7 @@ Then open the app normally. This removes the quarantine attribute that macOS add
 **Settings not saving?**
 
 ```bash
-defaults delete dev.doeshing.FinderHover
+defaults delete dev.koukeneko.FinderHover
 ```
 
 Then restart to reset to defaults.
