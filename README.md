@@ -166,6 +166,14 @@ Press `Cmd+,` to customize:
 
 ## 📝 What's New
 
+### Version 1.3.2 (Hotfix)
+
+🌍 **Localization**: Shortened field labels for better layout consistency
+
+- English labels reduced to ≤10 characters
+- Japanese/Chinese labels reduced to ≤6 characters
+- Improves display on compact windows and non-English locales
+
 ### Version 1.3.1 (Hotfix)
 
 🐛 **Bug Fix**: Fixed display settings page freezing when scrolling quickly

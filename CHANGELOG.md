@@ -2,7 +2,28 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.3.1 (Current)
+## Version 1.3.2 (Current)
+
+### 🌍 Localization Improvements
+
+#### Shortened Field Labels for Better Layout
+
+- **English labels** reduced to maximum 10 characters
+  - "Uncompressed" → "Unpacked" (8 chars)
+  - "Compression" → "Ratio" (5 chars)
+  - "Partition Scheme" → "Partition" (9 chars)
+- **Japanese labels** reduced to maximum 6 characters
+  - "エンコーディング" → "文字符号" (4 chars)
+  - "パーティション方式" → "方式" (2 chars)
+  - "ファイルシステム" → "形式" (2 chars)
+  - "ビューボックス" → "表示範囲" (4 chars)
+  - "フレームレート" → "レート" (3 chars)
+- **Chinese labels** already optimal (≤6 characters)
+- Improves display consistency in compact windows
+- Better layout for non-English locales
+- Enhanced readability across all supported languages
+
+## Version 1.3.1
 
 ### 🐛 Bug Fixes
 
