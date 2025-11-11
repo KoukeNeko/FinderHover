@@ -344,8 +344,8 @@
 "hover.archive.title" = "Archive";
 "hover.archive.format" = "Format";
 "hover.archive.fileCount" = "Files";
-"hover.archive.uncompressedSize" = "Uncompressed";
-"hover.archive.compressionRatio" = "Compression";
+"hover.archive.uncompressedSize" = "Unpacked";
+"hover.archive.compressionRatio" = "Ratio";
 "hover.archive.encrypted" = "Encrypted";
 "hover.archive.yes" = "Yes";
 
@@ -386,7 +386,7 @@
 "hover.diskImage.compressedSize" = "Compressed";
 "hover.diskImage.compressionRatio" = "Ratio";
 "hover.diskImage.encrypted" = "Encrypted";
-"hover.diskImage.partitionScheme" = "Partition Scheme";
+"hover.diskImage.partitionScheme" = "Partition";
 "hover.diskImage.fileSystem" = "File System";
 
 /* Vector Graphics Hover */

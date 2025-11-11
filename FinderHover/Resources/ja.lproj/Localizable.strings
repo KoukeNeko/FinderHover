@@ -367,7 +367,7 @@
 "hover.code.codeLines" = "コード";
 "hover.code.commentLines" = "コメント";
 "hover.code.blankLines" = "空白";
-"hover.code.encoding" = "エンコーディング";
+"hover.code.encoding" = "文字符号";
 
 /* Font Hover */
 "hover.font.title" = "フォント";
@@ -386,14 +386,14 @@
 "hover.diskImage.compressedSize" = "圧縮サイズ";
 "hover.diskImage.compressionRatio" = "圧縮率";
 "hover.diskImage.encrypted" = "暗号化状態";
-"hover.diskImage.partitionScheme" = "パーティション方式";
-"hover.diskImage.fileSystem" = "ファイルシステム";
+"hover.diskImage.partitionScheme" = "方式";
+"hover.diskImage.fileSystem" = "形式";
 
 /* Vector Graphics Hover */
 "hover.vectorGraphics.title" = "ベクターグラフィックス";
 "hover.vectorGraphics.format" = "形式";
 "hover.vectorGraphics.dimensions" = "寸法";
-"hover.vectorGraphics.viewBox" = "ビューボックス";
+"hover.vectorGraphics.viewBox" = "表示範囲";
 "hover.vectorGraphics.elementCount" = "要素数";
 "hover.vectorGraphics.colorMode" = "カラーモード";
 "hover.vectorGraphics.creator" = "作成者";
@@ -402,11 +402,11 @@
 /* Subtitle Hover */
 "hover.subtitle.title" = "字幕";
 "hover.subtitle.format" = "形式";
-"hover.subtitle.encoding" = "エンコーディング";
+"hover.subtitle.encoding" = "文字符号";
 "hover.subtitle.entryCount" = "エントリ数";
 "hover.subtitle.duration" = "再生時間";
 "hover.subtitle.language" = "言語";
-"hover.subtitle.frameRate" = "フレームレート";
+"hover.subtitle.frameRate" = "レート";
 "hover.subtitle.hasFormatting" = "フォーマット";
 
 /* Common */
