@@ -52,7 +52,19 @@ A beautiful, highly customizable macOS app that displays rich file information w
 
 ## 📦 Installation
 
-### Download Release (Recommended)
+### Homebrew (Recommended)
+
+```bash
+brew install koukeneko/tap/finderhover
+```
+
+This will automatically:
+
+- Download and install the latest version
+- Remove quarantine attributes (no manual `xattr` needed)
+- Set up the app in your Applications folder
+
+### Download Release
 
 1. Download `FinderHover.dmg.zip` from [Releases](../../releases)
 2. Extract and move to Applications folder
