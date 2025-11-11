@@ -383,7 +383,7 @@
 "hover.diskImage.title" = "Disk Image";
 "hover.diskImage.format" = "Format";
 "hover.diskImage.totalSize" = "Total Size";
-"hover.diskImage.compressedSize" = "Compressed";
+"hover.diskImage.compressedSize" = "Packed";
 "hover.diskImage.compressionRatio" = "Ratio";
 "hover.diskImage.encrypted" = "Encrypted";
 "hover.diskImage.partitionScheme" = "Partition";

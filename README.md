@@ -189,8 +189,15 @@ Press `Cmd+,` to customize:
 ### Version 1.3.1 (Hotfix)
 
 🐛 **Bug Fix**: Fixed display settings page freezing when scrolling quickly
+
 - Reverted LazyVStack optimization that caused spinning wheel/crashes
 - Now uses stable VStack for smooth scrolling experience
+
+🌍 **Localization**: Shortened field labels for better layout consistency
+
+- English labels reduced to ≤10 characters
+- Japanese/Chinese labels reduced to ≤6 characters
+- Improves display on compact windows and non-English locales
 
 ### Version 1.3
 
@@ -255,7 +262,7 @@ Then open the app normally. This removes the quarantine attribute that macOS add
 **Settings not saving?**
 
 ```bash
-defaults delete dev.doeshing.FinderHover
+defaults delete dev.koukeneko.FinderHover
 ```
 
 Then restart to reset to defaults.

@@ -28,10 +28,31 @@ All notable changes to FinderHover will be documented in this file.
 ### 🐛 Bug Fixes
 
 #### Display Settings Scroll Performance
+
 - Fixed display settings page freezing/spinning wheel when scrolling quickly
 - Reverted LazyVStack back to VStack for better stability
 - LazyVStack caused excessive view creation/destruction during fast scrolling
 - Now provides smooth scrolling experience without crashes
+
+### 🌍 Localization Improvements
+
+#### Shortened Field Labels for Better Layout
+
+- **English labels** reduced to maximum 10 characters
+  - "Uncompressed" → "Unpacked" (8 chars)
+  - "Compressed" → "Packed" (6 chars)
+  - "Compression" → "Ratio" (5 chars)
+  - "Partition Scheme" → "Partition" (9 chars)
+- **Japanese labels** reduced to maximum 6 characters
+  - "エンコーディング" → "文字符号" (4 chars)
+  - "パーティション方式" → "方式" (2 chars)
+  - "ファイルシステム" → "形式" (2 chars)
+  - "ビューボックス" → "表示範囲" (4 chars)
+  - "フレームレート" → "レート" (3 chars)
+- **Chinese labels** already optimal (≤6 characters)
+- Improves display consistency in compact windows
+- Better layout for non-English locales
+- Enhanced readability across all supported languages
 
 **Technical Details:**
 - LazyVStack was incompatible with 100+ Toggle bindings in DisplaySettingsView

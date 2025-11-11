@@ -7,7 +7,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>FinderHover</string>
 	<key>CFBundleIdentifier</key>
-	<string>dev.doeshing.FinderHover</string>
+	<string>dev.koukeneko.FinderHover</string>
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>en</string>

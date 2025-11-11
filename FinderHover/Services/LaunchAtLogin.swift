@@ -27,7 +27,7 @@ class LaunchAtLogin {
             }
         } else {
             // Fallback for macOS 12 and earlier
-            let success = SMLoginItemSetEnabled("dev.doeshing.FinderHover" as CFString, true)
+            let success = SMLoginItemSetEnabled("dev.koukeneko.FinderHover" as CFString, true)
             if !success {
                 print("Failed to enable login item")
             }
@@ -44,7 +44,7 @@ class LaunchAtLogin {
             }
         } else {
             // Fallback for macOS 12 and earlier
-            let success = SMLoginItemSetEnabled("dev.doeshing.FinderHover" as CFString, false)
+            let success = SMLoginItemSetEnabled("dev.koukeneko.FinderHover" as CFString, false)
             if !success {
                 print("Failed to disable login item")
             }
