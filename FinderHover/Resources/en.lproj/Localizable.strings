@@ -312,7 +312,7 @@
 "hover.pdf.title" = "PDF Information";
 "hover.pdf.pageCount" = "Pages";
 "hover.pdf.pageSize" = "Page Size";
-"hover.pdf.version" = "PDF Version";
+"hover.pdf.version" = "Version";
 "hover.pdf.documentTitle" = "Title";
 "hover.pdf.author" = "Author";
 "hover.pdf.subject" = "Subject";

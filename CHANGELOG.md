@@ -10,8 +10,10 @@ All notable changes to FinderHover will be documented in this file.
 
 - **English labels** reduced to maximum 10 characters
   - "Uncompressed" → "Unpacked" (8 chars)
+  - "Compressed" → "Packed" (6 chars)
   - "Compression" → "Ratio" (5 chars)
   - "Partition Scheme" → "Partition" (9 chars)
+  - "PDF Version" → "Version" (7 chars)
 - **Japanese labels** reduced to maximum 6 characters
   - "エンコーディング" → "文字符号" (4 chars)
   - "パーティション方式" → "方式" (2 chars)
