@@ -53,31 +53,49 @@ struct SettingsView: View {
                     } icon: {
                         Image(systemName: page.icon)
                             .font(.system(size: 16))
-                            .foregroundColor(.accentColor)
+                            .foregroundColor(selectedPage == page ? .white : .accentColor)
                             .frame(width: 20)
                     }
                 }
+                .listRowInsets(EdgeInsets(top: 8, leading: 10, bottom: 8, trailing: 10))
             }
-            .navigationSplitViewColumnWidth(180)
+            .navigationSplitViewColumnWidth(220)
             .listStyle(.sidebar)
+            .frame(minWidth: 200)
         } detail: {
             // Detail view using factory pattern
-            Group {
-                switch selectedPage {
-                case .behavior:
-                    BehaviorSettingsView(settings: settings)
-                case .appearance:
-                    AppearanceSettingsView(settings: settings)
-                case .display:
-                    DisplaySettingsView(settings: settings)
-                case .permissions:
-                    PermissionsSettingsView()
-                case .about:
-                    AboutSettingsView()
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    // Header
+                    HStack {
+                        Text(selectedPage.localizedName)
+                            .font(.system(size: 20, weight: .bold))
+                        Spacer()
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 20)
+                    
+                    Group {
+                        switch selectedPage {
+                        case .behavior:
+                            BehaviorSettingsView(settings: settings)
+                        case .appearance:
+                            AppearanceSettingsView(settings: settings)
+                        case .display:
+                            DisplaySettingsView(settings: settings)
+                        case .permissions:
+                            PermissionsSettingsView()
+                        case .about:
+                            AboutSettingsView()
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 24)
                 }
             }
-            .frame(minWidth: 450, minHeight: 400)
+            .background(Color(NSColor.windowBackgroundColor))
         }
+        .frame(minWidth: 700, minHeight: 500)
     }
 }
 

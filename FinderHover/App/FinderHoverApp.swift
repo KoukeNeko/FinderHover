@@ -117,12 +117,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
             let window = NSWindow(contentViewController: hostingController)
             window.title = "FinderHover"
-            window.styleMask = [.titled, .closable, .resizable]
-            window.minSize = NSSize(width: 650, height: 500)
-            window.setContentSize(NSSize(width: 650, height: 500))
+            window.styleMask = [.titled, .closable, .resizable, .fullSizeContentView]
+            window.minSize = NSSize(width: 700, height: 500)
+            window.setContentSize(NSSize(width: 700, height: 500))
             window.center()
             window.setFrameAutosaveName("FinderHoverSettings")
             window.isReleasedWhenClosed = false
+            
+            // System Settings style
+            window.titlebarAppearsTransparent = true
+            window.titleVisibility = .hidden
+            window.toolbarStyle = .unified
 
             settingsWindow = window
         }
