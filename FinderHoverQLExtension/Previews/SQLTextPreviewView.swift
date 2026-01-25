@@ -478,8 +478,10 @@ class SQLTextPreviewViewModel: ObservableObject {
     let statementCount: Int
     let lineNumbersString: String  // Cached for performance
 
+    // Pre-computed content for instant switching
     @Published var highlightedContent: AttributedString?
-    @Published var isHighlighting = true
+    @Published var plainContent: AttributedString  // Fallback plain text
+    @Published var isReady = false  // All content ready for display
     @Published var tables: [SQLTableDefinition] = []
     @Published var selectedTable: SQLTableDefinition?
     @Published var viewMode: SQLViewMode = .data
@@ -492,46 +494,55 @@ class SQLTextPreviewViewModel: ObservableObject {
         self.lineCount = count
         self.lineNumbersString = (1...max(1, count)).map { String($0) }.joined(separator: "\n")
 
+        // Pre-compute plain content immediately
+        var plain = AttributedString(content)
+        plain.font = .system(size: 12, design: .monospaced)
+        self.plainContent = plain
+
         // Count SQL statements (rough estimate based on semicolons)
         self.statementCount = content.components(separatedBy: ";")
             .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
             .count
 
         // Parse tables and highlight in background
-        Task {
+        Task(priority: .userInitiated) {
             await parseAndHighlight()
         }
     }
 
     func parseAndHighlight() async {
-        // Parse table definitions
-        let parsedTables = await Task.detached { [content] in
-            SQLDDLParser.extractTables(from: content)
+        // Run parsing and highlighting in parallel
+        let contentCopy = content
+
+        async let tablesTask: [SQLTableDefinition] = Task.detached(priority: .userInitiated) {
+            SQLDDLParser.extractTables(from: contentCopy)
         }.value
 
+        async let highlightTask: AttributedString? = Task.detached(priority: .userInitiated) {
+            // Skip highlighting for very large files
+            guard contentCopy.count <= 500_000 else { return nil }
+            return SQLSyntaxHighlighter.highlight(contentCopy)
+        }.value
+
+        // Wait for both to complete
+        let (parsedTables, highlighted) = await (tablesTask, highlightTask)
+
+        // Update tables
         tables = parsedTables
 
         // Auto-select first table if available
         if let firstTable = parsedTables.first {
             selectedTable = firstTable
-            // If table has data, default to data view; otherwise schema view
             viewMode = firstTable.data.isEmpty ? .schema : .data
         }
 
-        // For very large files, skip highlighting
-        if content.count > 500_000 {
-            highlightedContent = AttributedString(content)
-            isHighlighting = false
-            return
+        // Update highlighted content
+        if let highlighted = highlighted {
+            highlightedContent = highlighted
         }
 
-        // Highlight on background thread
-        let highlighted = await Task.detached { [content] in
-            SQLSyntaxHighlighter.highlight(content)
-        }.value
-
-        highlightedContent = highlighted
-        isHighlighting = false
+        // Mark as ready
+        isReady = true
     }
 
     func selectTable(_ table: SQLTableDefinition) {
@@ -542,6 +553,11 @@ class SQLTextPreviewViewModel: ObservableObject {
         let formatter = ByteCountFormatter()
         formatter.countStyle = .file
         return formatter.string(fromByteCount: fileSize)
+    }
+
+    // Get the best available content for source view
+    var sourceContent: AttributedString {
+        highlightedContent ?? plainContent
     }
 }
 
@@ -718,15 +734,21 @@ struct SQLTextPreviewView: View {
                 Divider()
             }
 
-            // Content based on view mode
-            switch viewModel.viewMode {
-            case .schema:
+            // Use ZStack to keep all views in memory for instant switching
+            ZStack {
                 schemaView
-            case .data:
+                    .opacity(viewModel.viewMode == .schema ? 1 : 0)
+                    .allowsHitTesting(viewModel.viewMode == .schema)
+
                 dataTableView
-            case .source:
+                    .opacity(viewModel.viewMode == .data ? 1 : 0)
+                    .allowsHitTesting(viewModel.viewMode == .data)
+
                 sourceCodeView
+                    .opacity(viewModel.viewMode == .source ? 1 : 0)
+                    .allowsHitTesting(viewModel.viewMode == .source)
             }
+            .animation(.easeInOut(duration: 0.15), value: viewModel.viewMode)
         }
     }
 
@@ -792,6 +814,7 @@ struct SQLTextPreviewView: View {
                 noSelectionView
             }
         }
+        .drawingGroup()  // Flatten for better performance
     }
 
     private func schemaColumnRow(_ column: SQLColumnDefinition) -> some View {
@@ -878,6 +901,7 @@ struct SQLTextPreviewView: View {
                         .padding(.horizontal, 12)
                         .padding(.vertical, 8)
                     }
+                    .drawingGroup()  // Flatten for better performance
                 }
             } else {
                 noSelectionView
@@ -1009,46 +1033,22 @@ struct SQLTextPreviewView: View {
     // MARK: - Source Code View
 
     private var sourceCodeView: some View {
-        GeometryReader { geometry in
-            ScrollView([.horizontal, .vertical]) {
-                if viewModel.isHighlighting {
-                    VStack {
-                        ProgressView()
-                        Text("Highlighting...")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                } else if let highlighted = viewModel.highlightedContent {
-                    HStack(alignment: .top, spacing: 0) {
-                        // Line numbers - single Text for performance
-                        lineNumbersText
+        ScrollView([.horizontal, .vertical]) {
+            HStack(alignment: .top, spacing: 0) {
+                // Line numbers - single Text for performance
+                lineNumbersText
 
-                        Divider()
+                Divider()
 
-                        // Code content
-                        Text(highlighted)
-                            .font(.system(size: 12, design: .monospaced))
-                            .textSelection(.enabled)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 8)
-                    }
-                } else {
-                    // Fallback plain text
-                    HStack(alignment: .top, spacing: 0) {
-                        lineNumbersText
-
-                        Divider()
-
-                        Text(viewModel.content)
-                            .font(.system(size: 12, design: .monospaced))
-                            .textSelection(.enabled)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 8)
-                    }
-                }
+                // Code content - use pre-cached content
+                Text(viewModel.sourceContent)
+                    .font(.system(size: 12, design: .monospaced))
+                    .textSelection(.enabled)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
             }
         }
+        .drawingGroup()  // Flatten layer hierarchy for better performance
     }
 
     // Single Text for line numbers - much faster than ForEach
