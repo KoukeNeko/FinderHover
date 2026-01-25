@@ -30,8 +30,12 @@ DMG_NAME="${APP_NAME}-v${VERSION}"
 echo "🧹 Cleaning extended attributes..."
 find . -not -path "./.git/*" -not -path "./build/*" -exec xattr -c {} \; 2>/dev/null || true
 
-# Build Release version (unsigned, for testing)
-echo "🔨 Building Release version (unsigned)..."
+# Read bundle identifier from Info.plist
+BUNDLE_ID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" "$INFO_PLIST")
+echo "📌 Bundle ID: $BUNDLE_ID"
+
+# Build Release version
+echo "🔨 Building Release version..."
 xcodebuild -project FinderHover.xcodeproj \
     -target FinderHover \
     -configuration Release \
@@ -46,6 +50,10 @@ if [ ! -d "build/Release/${APP_NAME}.app" ]; then
     echo "❌ Error: Build failed, cannot find build/Release/${APP_NAME}.app"
     exit 1
 fi
+
+# Ad-hoc sign with correct bundle identifier for TCC compatibility
+echo "🔏 Ad-hoc signing with bundle identifier..."
+codesign --force --deep --sign - --identifier "$BUNDLE_ID" "build/Release/${APP_NAME}.app"
 
 echo "✅ Build completed!"
 
