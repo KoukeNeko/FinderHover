@@ -41,10 +41,35 @@ html {
 
 body {
     font-family: var(--font-family);
-    background-color: var(--color-background);
+    background: var(--color-background);
     color: var(--color-text);
     line-height: 1.5;
     font-size: 17px;
+}
+
+/* Professional gradient background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+    background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(120, 119, 198, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 80% 10%, rgba(0, 113, 227, 0.1) 0%, transparent 40%),
+        radial-gradient(ellipse 50% 30% at 20% 20%, rgba(147, 51, 234, 0.08) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+@media (prefers-color-scheme: dark) {
+    body::before {
+        background:
+            radial-gradient(ellipse 80% 50% at 50% -20%, rgba(120, 119, 198, 0.25) 0%, transparent 50%),
+            radial-gradient(ellipse 60% 40% at 80% 10%, rgba(0, 113, 227, 0.2) 0%, transparent 40%),
+            radial-gradient(ellipse 50% 30% at 20% 20%, rgba(147, 51, 234, 0.15) 0%, transparent 40%);
+    }
 }
 
 /* Navigation */
