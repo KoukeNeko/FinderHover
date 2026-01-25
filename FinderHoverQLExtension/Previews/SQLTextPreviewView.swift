@@ -16,6 +16,8 @@ struct SQLTableDefinition: Identifiable {
     let columns: [SQLColumnDefinition]
     let sourceRange: Range<String.Index>?
     let lineNumber: Int
+    var data: [[String]] = []  // Parsed INSERT data
+    var rowCount: Int { data.count }
 }
 
 struct SQLColumnDefinition: Identifiable {
@@ -69,16 +71,133 @@ struct SQLDDLParser {
 
             let sourceRange = Range(match.range, in: sql)
 
-            let table = SQLTableDefinition(
+            var table = SQLTableDefinition(
                 name: tableName,
                 columns: columns,
                 sourceRange: sourceRange,
                 lineNumber: lineNumber
             )
+
+            // Parse INSERT data for this table
+            table.data = parseInsertData(for: tableName, columns: columns, from: sql)
+
             tables.append(table)
         }
 
         return tables
+    }
+
+    // Parse INSERT statements to extract data
+    static func parseInsertData(for tableName: String, columns: [SQLColumnDefinition], from sql: String) -> [[String]] {
+        var rows: [[String]] = []
+
+        // Pattern to match INSERT INTO statements for this table
+        // Matches: INSERT INTO `tablename` (...) VALUES (...), (...), ...;
+        let pattern = #"INSERT\s+INTO\s+[`"\[]?\#(NSRegularExpression.escapedPattern(for: tableName))[`"\]]?\s*(?:\([^)]*\))?\s*VALUES\s*([\s\S]*?);"#
+
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive]) else {
+            return rows
+        }
+
+        let nsString = sql as NSString
+        let matches = regex.matches(in: sql, options: [], range: NSRange(location: 0, length: nsString.length))
+
+        for match in matches {
+            guard match.numberOfRanges >= 2,
+                  let valuesRange = Range(match.range(at: 1), in: sql) else {
+                continue
+            }
+
+            let valuesStr = String(sql[valuesRange])
+            let parsedRows = parseValueTuples(from: valuesStr)
+            rows.append(contentsOf: parsedRows)
+
+            // Limit to 100 rows for performance
+            if rows.count >= 100 {
+                break
+            }
+        }
+
+        return rows
+    }
+
+    // Parse value tuples like (1, 'hello', 2), (3, 'world', 4)
+    static func parseValueTuples(from str: String) -> [[String]] {
+        var rows: [[String]] = []
+        var currentRow: [String] = []
+        var currentValue = ""
+        var inString = false
+        var stringChar: Character = "'"
+        var depth = 0
+        var escapeNext = false
+
+        for char in str {
+            if escapeNext {
+                currentValue.append(char)
+                escapeNext = false
+                continue
+            }
+
+            if char == "\\" {
+                escapeNext = true
+                continue
+            }
+
+            if !inString {
+                if char == "'" || char == "\"" {
+                    inString = true
+                    stringChar = char
+                    continue
+                }
+
+                if char == "(" {
+                    depth += 1
+                    if depth == 1 {
+                        currentRow = []
+                        currentValue = ""
+                    }
+                    continue
+                }
+
+                if char == ")" {
+                    depth -= 1
+                    if depth == 0 {
+                        // End of tuple
+                        let trimmed = currentValue.trimmingCharacters(in: .whitespaces)
+                        currentRow.append(trimmed.isEmpty ? "NULL" : trimmed)
+                        rows.append(currentRow)
+                        currentRow = []
+                        currentValue = ""
+
+                        // Limit rows
+                        if rows.count >= 100 {
+                            return rows
+                        }
+                    }
+                    continue
+                }
+
+                if char == "," && depth == 1 {
+                    let trimmed = currentValue.trimmingCharacters(in: .whitespaces)
+                    currentRow.append(trimmed.isEmpty ? "NULL" : trimmed)
+                    currentValue = ""
+                    continue
+                }
+
+                if depth >= 1 {
+                    currentValue.append(char)
+                }
+            } else {
+                // Inside string
+                if char == stringChar {
+                    inString = false
+                } else {
+                    currentValue.append(char)
+                }
+            }
+        }
+
+        return rows
     }
 
     private static func parseColumns(from columnsStr: String) -> [SQLColumnDefinition] {
@@ -340,6 +459,14 @@ struct SQLSyntaxHighlighter {
     }
 }
 
+// MARK: - View Mode
+
+enum SQLViewMode: String, CaseIterable {
+    case schema = "Schema"
+    case data = "Data"
+    case source = "Source"
+}
+
 // MARK: - View Model
 
 @MainActor
@@ -354,6 +481,7 @@ class SQLTextPreviewViewModel: ObservableObject {
     @Published var isHighlighting = true
     @Published var tables: [SQLTableDefinition] = []
     @Published var selectedTable: SQLTableDefinition?
+    @Published var viewMode: SQLViewMode = .data
 
     init(fileName: String, fileSize: Int64, content: String) {
         self.fileName = fileName
@@ -383,6 +511,8 @@ class SQLTextPreviewViewModel: ObservableObject {
         // Auto-select first table if available
         if let firstTable = parsedTables.first {
             selectedTable = firstTable
+            // If table has data, default to data view; otherwise schema view
+            viewMode = firstTable.data.isEmpty ? .schema : .data
         }
 
         // For very large files, skip highlighting
@@ -432,8 +562,8 @@ struct SQLTextPreviewView: View {
                         .frame(minWidth: 200, idealWidth: 250, maxWidth: 350)
                 }
 
-                // Right content - SQL source
-                sourceCodeView
+                // Right content - Based on view mode
+                rightContentView
             }
 
             Divider()
@@ -507,21 +637,6 @@ struct SQLTextPreviewView: View {
                         tableRow(table)
                     }
                 }
-
-                // Selected table schema
-                if let selectedTable = viewModel.selectedTable {
-                    Divider()
-
-                    schemaSection(
-                        title: "Schema: \(selectedTable.name)",
-                        icon: "list.bullet.rectangle",
-                        count: selectedTable.columns.count
-                    ) {
-                        ForEach(selectedTable.columns) { column in
-                            columnRow(column)
-                        }
-                    }
-                }
             }
             .padding(12)
         }
@@ -571,7 +686,7 @@ struct SQLTextPreviewView: View {
                         .font(.system(size: 12))
                         .lineLimit(1)
 
-                    Text("\(table.columns.count) columns · Line \(table.lineNumber)")
+                    Text("\(table.columns.count) cols · \(table.rowCount) rows")
                         .font(.system(size: 10))
                         .foregroundColor(viewModel.selectedTable?.id == table.id ? .white.opacity(0.8) : .secondary)
                 }
@@ -590,85 +705,275 @@ struct SQLTextPreviewView: View {
         .buttonStyle(.plain)
     }
 
-    private func columnRow(_ column: SQLColumnDefinition) -> some View {
-        HStack(spacing: 8) {
-            // Column icon based on constraints
-            if column.isPrimaryKey {
-                Image(systemName: "key.fill")
-                    .font(.system(size: 10))
-                    .foregroundColor(.yellow)
-            } else {
-                Image(systemName: "circle.fill")
-                    .font(.system(size: 6))
-                    .foregroundColor(.secondary)
+    // MARK: - Right Content View
+
+    private var rightContentView: some View {
+        VStack(spacing: 0) {
+            // Tab bar for view mode
+            if let selectedTable = viewModel.selectedTable {
+                viewModeTabBar(table: selectedTable)
+                Divider()
             }
 
-            VStack(alignment: .leading, spacing: 1) {
-                HStack(spacing: 4) {
+            // Content based on view mode
+            switch viewModel.viewMode {
+            case .schema:
+                schemaView
+            case .data:
+                dataTableView
+            case .source:
+                sourceCodeView
+            }
+        }
+    }
+
+    private func viewModeTabBar(table: SQLTableDefinition) -> some View {
+        HStack(spacing: 0) {
+            Text("Table: \(table.name)")
+                .font(.headline)
+                .padding(.leading, 16)
+
+            Spacer()
+
+            // View mode tabs
+            HStack(spacing: 2) {
+                ForEach(SQLViewMode.allCases, id: \.self) { mode in
+                    Button(action: {
+                        viewModel.viewMode = mode
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: iconForMode(mode))
+                                .font(.caption)
+                            Text(mode.rawValue)
+                                .font(.caption)
+                        }
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(
+                            viewModel.viewMode == mode
+                                ? Color.accentColor
+                                : Color.secondary.opacity(0.2)
+                        )
+                        .foregroundColor(viewModel.viewMode == mode ? .white : .primary)
+                        .cornerRadius(5)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.trailing, 16)
+        }
+        .padding(.vertical, 8)
+        .background(Color(nsColor: .controlBackgroundColor))
+    }
+
+    private func iconForMode(_ mode: SQLViewMode) -> String {
+        switch mode {
+        case .schema: return "list.bullet.rectangle"
+        case .data: return "tablecells"
+        case .source: return "doc.text"
+        }
+    }
+
+    // MARK: - Schema View
+
+    private var schemaView: some View {
+        ScrollView {
+            if let selectedTable = viewModel.selectedTable {
+                VStack(alignment: .leading, spacing: 12) {
+                    ForEach(selectedTable.columns) { column in
+                        schemaColumnRow(column)
+                    }
+                }
+                .padding(16)
+            } else {
+                noSelectionView
+            }
+        }
+    }
+
+    private func schemaColumnRow(_ column: SQLColumnDefinition) -> some View {
+        HStack(spacing: 12) {
+            // Column icon
+            if column.isPrimaryKey {
+                Image(systemName: "key.fill")
+                    .font(.system(size: 14))
+                    .foregroundColor(.yellow)
+                    .frame(width: 20)
+            } else {
+                Image(systemName: "circle.fill")
+                    .font(.system(size: 8))
+                    .foregroundColor(.secondary)
+                    .frame(width: 20)
+            }
+
+            VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: 6) {
                     Text(column.name)
-                        .font(.system(size: 11, weight: column.isPrimaryKey ? .semibold : .regular))
-                        .lineLimit(1)
+                        .font(.system(size: 13, weight: column.isPrimaryKey ? .semibold : .regular, design: .monospaced))
 
                     if column.isNotNull {
-                        Text("*")
-                            .font(.system(size: 10))
+                        Text("NOT NULL")
+                            .font(.system(size: 9))
+                            .padding(.horizontal, 4)
+                            .padding(.vertical, 2)
+                            .background(Color.red.opacity(0.2))
                             .foregroundColor(.red)
+                            .cornerRadius(3)
+                    }
+
+                    if column.isUnique && !column.isPrimaryKey {
+                        Text("UNIQUE")
+                            .font(.system(size: 9))
+                            .padding(.horizontal, 4)
+                            .padding(.vertical, 2)
+                            .background(Color.orange.opacity(0.2))
+                            .foregroundColor(.orange)
+                            .cornerRadius(3)
+                    }
+
+                    if column.isPrimaryKey {
+                        Text("PRIMARY KEY")
+                            .font(.system(size: 9))
+                            .padding(.horizontal, 4)
+                            .padding(.vertical, 2)
+                            .background(Color.yellow.opacity(0.2))
+                            .foregroundColor(.yellow)
+                            .cornerRadius(3)
                     }
                 }
 
                 Text(column.type)
-                    .font(.system(size: 10))
+                    .font(.system(size: 11))
                     .foregroundColor(.green)
             }
 
             Spacer()
+        }
+        .padding(.vertical, 6)
+        .padding(.horizontal, 12)
+        .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
+        .cornerRadius(6)
+    }
 
-            // Constraint badges
-            if column.isUnique && !column.isPrimaryKey {
-                Text("UQ")
-                    .font(.system(size: 9))
-                    .padding(.horizontal, 4)
-                    .padding(.vertical, 2)
-                    .background(Color.orange.opacity(0.2))
-                    .foregroundColor(.orange)
-                    .cornerRadius(3)
+    // MARK: - Data Table View
+
+    private var dataTableView: some View {
+        Group {
+            if let selectedTable = viewModel.selectedTable {
+                if selectedTable.data.isEmpty {
+                    emptyDataView
+                } else {
+                    ScrollView([.horizontal, .vertical]) {
+                        VStack(alignment: .leading, spacing: 0) {
+                            // Column headers
+                            HStack(spacing: 0) {
+                                ForEach(selectedTable.columns) { column in
+                                    columnHeader(column)
+                                }
+                            }
+                            .background(Color(nsColor: .controlBackgroundColor))
+
+                            Divider()
+
+                            // Data rows
+                            ForEach(Array(selectedTable.data.enumerated()), id: \.offset) { index, row in
+                                HStack(spacing: 0) {
+                                    ForEach(Array(row.enumerated()), id: \.offset) { colIndex, value in
+                                        dataCell(value: value)
+                                    }
+                                    // Fill remaining columns if row is shorter
+                                    if row.count < selectedTable.columns.count {
+                                        ForEach(row.count..<selectedTable.columns.count, id: \.self) { _ in
+                                            dataCell(value: "NULL")
+                                        }
+                                    }
+                                }
+                                .background(
+                                    index % 2 == 0
+                                        ? Color.clear
+                                        : Color.secondary.opacity(0.05)
+                                )
+                            }
+                        }
+                    }
+                }
+            } else {
+                noSelectionView
             }
         }
+    }
+
+    private func columnHeader(_ column: SQLColumnDefinition) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            HStack(spacing: 4) {
+                if column.isPrimaryKey {
+                    Image(systemName: "key.fill")
+                        .font(.system(size: 9))
+                        .foregroundColor(.yellow)
+                }
+
+                Text(column.name)
+                    .font(.system(size: 11, weight: .semibold))
+                    .lineLimit(1)
+            }
+
+            Text(column.type.isEmpty ? "ANY" : column.type)
+                .font(.system(size: 9))
+                .foregroundColor(.secondary)
+        }
+        .frame(width: 150, alignment: .leading)
         .padding(.horizontal, 8)
-        .padding(.vertical, 4)
+        .padding(.vertical, 6)
+        .border(Color.secondary.opacity(0.2), width: 0.5)
+    }
+
+    private func dataCell(value: String) -> some View {
+        Text(value)
+            .font(.system(size: 11, design: .monospaced))
+            .foregroundColor(value == "NULL" ? .secondary : .primary)
+            .lineLimit(2)
+            .frame(width: 150, alignment: .leading)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .border(Color.secondary.opacity(0.1), width: 0.5)
+    }
+
+    private var emptyDataView: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "tray")
+                .font(.title)
+                .foregroundColor(.secondary)
+
+            Text("No Data")
+                .font(.headline)
+
+            Text("No INSERT statements found for this table")
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    private var noSelectionView: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "hand.point.left")
+                .font(.title)
+                .foregroundColor(.secondary)
+
+            Text("Select a table")
+                .font(.headline)
+                .foregroundColor(.secondary)
+
+            Text("Choose a table from the sidebar")
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     // MARK: - Source Code View
 
     private var sourceCodeView: some View {
-        VStack(spacing: 0) {
-            // Source header
-            HStack {
-                Text("SQL Source")
-                    .font(.headline)
-
-                Spacer()
-
-                if viewModel.isHighlighting {
-                    ProgressView()
-                        .scaleEffect(0.7)
-                    Text("Highlighting...")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
-            .background(Color(nsColor: .controlBackgroundColor))
-
-            Divider()
-
-            // Content
-            contentView
-        }
-    }
-
-    private var contentView: some View {
         ScrollView([.horizontal, .vertical]) {
             if viewModel.isHighlighting {
                 VStack {
@@ -735,6 +1040,12 @@ struct SQLTextPreviewView: View {
                 .background(Color.blue.opacity(0.2))
                 .foregroundColor(.blue)
                 .cornerRadius(3)
+
+            if let selectedTable = viewModel.selectedTable, viewModel.viewMode == .data {
+                Text("\(selectedTable.rowCount) rows (max 100)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
 
             Spacer()
 
