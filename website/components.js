@@ -40,6 +40,7 @@ class SiteNav extends HTMLElement {
           <div class="nav-links">
             <a href="${featuresLink}" data-i18n="nav.features">功能</a>
             <a href="formats.html" data-i18n="nav.formats">格式</a>
+            <a href="docs.html" data-i18n="nav.docs">文件</a>
             <a href="changelog.html" data-i18n="nav.changelog">更新日誌</a>
             <div class="lang-switcher">
               <button class="lang-current" aria-label="Change language">
@@ -132,7 +133,6 @@ class SiteFooter extends HTMLElement {
             <a href="https://github.com/KoukeNeko/FinderHover" data-i18n="footer.github">GitHub</a>
             <a href="changelog.html" data-i18n="footer.changelog">更新日誌</a>
             <a href="license.html" data-i18n="footer.license">授權條款</a>
-            <a href="docs.html" data-i18n="footer.docs">文件</a>
           </div>
           <p class="footer-copyright" data-i18n="footer.copyright">
             © ${year} KoukeNeko. 依 MIT 授權條款釋出。
