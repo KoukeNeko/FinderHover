@@ -567,7 +567,7 @@ This release introduces a DMG disk image installer for easier installation and d
   - Fixed display order not persisting to UserDefaults
   - Improved compatibility with older macOS versions (pre-11.0) for blur effects
 
-## Version 1.0
+## Version 1.0.0
 
 - ✨ Initial release
 - 🎯 Smart hover preview with adjustable delay (default: 0.1s)
