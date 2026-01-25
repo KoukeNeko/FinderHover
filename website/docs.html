@@ -57,112 +57,110 @@
         <!-- Main Content -->
         <main class="docs-content">
           <article id="setup" class="docs-article">
-            <h2>初次設定</h2>
-            <p>安裝 FinderHover 後，首次啟動需要完成以下設定：</p>
+            <h2 data-i18n="docs.setup.title">初次設定</h2>
+            <p data-i18n="docs.setup.intro">安裝 FinderHover 後，首次啟動需要完成以下設定：</p>
             <ol>
-              <li>從 Launchpad 或應用程式資料夾開啟 FinderHover</li>
-              <li>App 會自動出現在選單列（Menu Bar）</li>
-              <li>系統會提示你授予輔助使用權限</li>
-              <li>完成授權後，將滑鼠移到 Finder 中的任何檔案上即可看到預覽</li>
+              <li data-i18n="docs.setup.step1">從 Launchpad 或應用程式資料夾開啟 FinderHover</li>
+              <li data-i18n="docs.setup.step2">App 會自動出現在選單列（Menu Bar）</li>
+              <li data-i18n="docs.setup.step3">系統會提示你授予輔助使用權限</li>
+              <li data-i18n="docs.setup.step4">完成授權後，將滑鼠移到 Finder 中的任何檔案上即可看到預覽</li>
             </ol>
             <div class="docs-tip">
-              <strong>提示：</strong>你可以在設定中啟用「登入時啟動」，讓
-              FinderHover 在每次開機時自動執行。
+              <strong data-i18n="docs.tip">提示：</strong><span data-i18n="docs.setup.tip">你可以在設定中啟用「登入時啟動」，讓 FinderHover 在每次開機時自動執行。</span>
             </div>
           </article>
 
           <article id="permissions" class="docs-article">
-            <h2>授予權限</h2>
-            <p>
+            <h2 data-i18n="docs.permissions.title">授予權限</h2>
+            <p data-i18n="docs.permissions.intro">
               FinderHover 需要輔助使用權限才能偵測你目前指向的檔案。這是 macOS
               的安全機制，確保只有經過授權的 App 才能存取這些資訊。
             </p>
 
-            <h3>手動授予權限</h3>
+            <h3 data-i18n="docs.permissions.manualTitle">手動授予權限</h3>
             <ol>
-              <li>開啟「系統設定」(System Settings)</li>
-              <li>前往「隱私與安全性」>「輔助使用」</li>
-              <li>找到 FinderHover 並開啟開關</li>
-              <li>如果看不到 FinderHover，點擊「+」按鈕手動加入</li>
+              <li data-i18n="docs.permissions.step1">開啟「系統設定」(System Settings)</li>
+              <li data-i18n="docs.permissions.step2">前往「隱私與安全性」>「輔助使用」</li>
+              <li data-i18n="docs.permissions.step3">找到 FinderHover 並開啟開關</li>
+              <li data-i18n="docs.permissions.step4">如果看不到 FinderHover，點擊「+」按鈕手動加入</li>
             </ol>
 
             <div class="docs-warning">
-              <strong>注意：</strong>授予權限後可能需要重新啟動 FinderHover
-              才能生效。
+              <strong data-i18n="docs.warning">注意：</strong><span data-i18n="docs.permissions.warning">授予權限後可能需要重新啟動 FinderHover 才能生效。</span>
             </div>
           </article>
 
           <article id="hover" class="docs-article">
-            <h2>懸停預覽</h2>
-            <p>
+            <h2 data-i18n="docs.hover.title">懸停預覽</h2>
+            <p data-i18n="docs.hover.intro">
               FinderHover 的核心功能是在你將滑鼠停留在 Finder
               中的檔案時，自動顯示該檔案的詳細資訊。
             </p>
 
-            <h3>運作方式</h3>
+            <h3 data-i18n="docs.hover.howTitle">運作方式</h3>
             <ul>
-              <li>將滑鼠移到 Finder 視窗中的任何檔案或資料夾</li>
-              <li>等待設定的延遲時間（預設 0.5 秒）</li>
-              <li>預覽視窗會自動出現在滑鼠旁邊</li>
-              <li>移動滑鼠到其他檔案會更新預覽內容</li>
-              <li>移出 Finder 視窗或移到空白區域會隱藏預覽</li>
+              <li data-i18n="docs.hover.how1">將滑鼠移到 Finder 視窗中的任何檔案或資料夾</li>
+              <li data-i18n="docs.hover.how2">等待設定的延遲時間（預設 0.5 秒）</li>
+              <li data-i18n="docs.hover.how3">預覽視窗會自動出現在滑鼠旁邊</li>
+              <li data-i18n="docs.hover.how4">移動滑鼠到其他檔案會更新預覽內容</li>
+              <li data-i18n="docs.hover.how5">移出 Finder 視窗或移到空白區域會隱藏預覽</li>
             </ul>
 
-            <h3>智慧偵測</h3>
-            <p>FinderHover 會自動偵測以下情況並暫時隱藏預覽：</p>
+            <h3 data-i18n="docs.hover.smartTitle">智慧偵測</h3>
+            <p data-i18n="docs.hover.smartIntro">FinderHover 會自動偵測以下情況並暫時隱藏預覽：</p>
             <ul>
-              <li>正在重新命名檔案</li>
-              <li>正在拖曳檔案</li>
-              <li>正在使用右鍵選單</li>
+              <li data-i18n="docs.hover.smart1">正在重新命名檔案</li>
+              <li data-i18n="docs.hover.smart2">正在拖曳檔案</li>
+              <li data-i18n="docs.hover.smart3">正在使用右鍵選單</li>
             </ul>
           </article>
 
           <article id="settings" class="docs-article">
-            <h2>偏好設定</h2>
-            <p>
+            <h2 data-i18n="docs.settings.title">偏好設定</h2>
+            <p data-i18n="docs.settings.intro">
               點擊選單列圖示，然後選擇「偏好設定...」或按 <kbd>⌘</kbd> +
               <kbd>,</kbd> 開啟設定視窗。
             </p>
 
-            <h3>一般設定</h3>
+            <h3 data-i18n="docs.settings.generalTitle">一般設定</h3>
             <table class="docs-table">
               <tr>
-                <td><strong>登入時啟動</strong></td>
-                <td>開機時自動啟動 FinderHover</td>
+                <td><strong data-i18n="docs.settings.launchAtLogin">登入時啟動</strong></td>
+                <td data-i18n="docs.settings.launchAtLoginDesc">開機時自動啟動 FinderHover</td>
               </tr>
               <tr>
-                <td><strong>懸停延遲</strong></td>
-                <td>滑鼠停留多久後顯示預覽（0.1 - 2.0 秒）</td>
+                <td><strong data-i18n="docs.settings.hoverDelay">懸停延遲</strong></td>
+                <td data-i18n="docs.settings.hoverDelayDesc">滑鼠停留多久後顯示預覽（0.1 - 2.0 秒）</td>
               </tr>
               <tr>
-                <td><strong>視窗大小</strong></td>
-                <td>調整預覽視窗的尺寸</td>
+                <td><strong data-i18n="docs.settings.windowSize">視窗大小</strong></td>
+                <td data-i18n="docs.settings.windowSizeDesc">調整預覽視窗的尺寸</td>
               </tr>
               <tr>
-                <td><strong>透明度</strong></td>
-                <td>調整預覽視窗的透明度（70% - 100%）</td>
+                <td><strong data-i18n="docs.settings.opacity">透明度</strong></td>
+                <td data-i18n="docs.settings.opacityDesc">調整預覽視窗的透明度（70% - 100%）</td>
               </tr>
               <tr>
-                <td><strong>字體縮放</strong></td>
-                <td>調整預覽視窗中的文字大小</td>
+                <td><strong data-i18n="docs.settings.fontScale">字體縮放</strong></td>
+                <td data-i18n="docs.settings.fontScaleDesc">調整預覽視窗中的文字大小</td>
               </tr>
             </table>
           </article>
 
           <article id="styles" class="docs-article">
-            <h2>介面風格</h2>
-            <p>FinderHover 提供兩種預覽視窗風格：</p>
+            <h2 data-i18n="docs.styles.title">介面風格</h2>
+            <p data-i18n="docs.styles.intro">FinderHover 提供兩種預覽視窗風格：</p>
 
             <div class="docs-grid">
               <div class="docs-card">
-                <h4>macOS 風格</h4>
-                <p>
+                <h4 data-i18n="docs.styles.macosTitle">macOS 風格</h4>
+                <p data-i18n="docs.styles.macosDesc">
                   豐富的視覺呈現，包含縮圖預覽、圖示和完整的中繼資料。適合需要詳細檔案資訊的使用者。
                 </p>
               </div>
               <div class="docs-card">
-                <h4>Windows 風格</h4>
-                <p>
+                <h4 data-i18n="docs.styles.windowsTitle">Windows 風格</h4>
+                <p data-i18n="docs.styles.windowsDesc">
                   簡約的工具提示樣式，只顯示基本資訊。適合偏好簡潔介面的使用者。
                 </p>
               </div>
@@ -170,71 +168,71 @@
           </article>
 
           <article id="metadata-fields" class="docs-article">
-            <h2>中繼資料欄位</h2>
-            <p>
+            <h2 data-i18n="docs.metadata.title">中繼資料欄位</h2>
+            <p data-i18n="docs.metadata.intro">
               你可以在設定中自訂要顯示哪些中繼資料欄位。以下是各類檔案支援的欄位：
             </p>
 
-            <h3>圖片檔案</h3>
+            <h3 data-i18n="docs.metadata.imageTitle">圖片檔案</h3>
             <ul>
-              <li>相機型號、鏡頭資訊</li>
-              <li>ISO、光圈、快門速度</li>
-              <li>GPS 座標</li>
-              <li>IPTC/XMP 中繼資料（作者、版權等）</li>
+              <li data-i18n="docs.metadata.image1">相機型號、鏡頭資訊</li>
+              <li data-i18n="docs.metadata.image2">ISO、光圈、快門速度</li>
+              <li data-i18n="docs.metadata.image3">GPS 座標</li>
+              <li data-i18n="docs.metadata.image4">IPTC/XMP 中繼資料（作者、版權等）</li>
             </ul>
 
-            <h3>影片檔案</h3>
+            <h3 data-i18n="docs.metadata.videoTitle">影片檔案</h3>
             <ul>
-              <li>影片編碼（H.264、HEVC 等）</li>
-              <li>解析度、幀率</li>
-              <li>位元率</li>
-              <li>音訊取樣率、聲道數</li>
+              <li data-i18n="docs.metadata.video1">影片編碼（H.264、HEVC 等）</li>
+              <li data-i18n="docs.metadata.video2">解析度、幀率</li>
+              <li data-i18n="docs.metadata.video3">位元率</li>
+              <li data-i18n="docs.metadata.video4">音訊取樣率、聲道數</li>
             </ul>
 
-            <h3>程式碼檔案</h3>
+            <h3 data-i18n="docs.metadata.codeTitle">程式碼檔案</h3>
             <ul>
-              <li>程式語言偵測</li>
-              <li>行數統計</li>
-              <li>檔案編碼</li>
+              <li data-i18n="docs.metadata.code1">程式語言偵測</li>
+              <li data-i18n="docs.metadata.code2">行數統計</li>
+              <li data-i18n="docs.metadata.code3">檔案編碼</li>
             </ul>
 
-            <h3>更多類型</h3>
-            <p>
+            <h3 data-i18n="docs.metadata.moreTitle">更多類型</h3>
+            <p data-i18n="docs.metadata.moreDesc">
               FinderHover 支援超過 50 種檔案格式，包括
               Markdown、HTML、JSON/YAML/TOML、PSD、SQLite 資料庫、Git 儲存庫等。
             </p>
           </article>
 
           <article id="troubleshooting" class="docs-article">
-            <h2>疑難排解</h2>
+            <h2 data-i18n="docs.troubleshooting.title">疑難排解</h2>
 
-            <h3>預覽視窗沒有出現</h3>
+            <h3 data-i18n="docs.troubleshooting.noPreviewTitle">預覽視窗沒有出現</h3>
             <ol>
-              <li>確認 FinderHover 正在執行（選單列應該有圖示）</li>
-              <li>確認已授予輔助使用權限</li>
-              <li>嘗試重新啟動 FinderHover</li>
-              <li>確認滑鼠停留時間超過設定的延遲時間</li>
+              <li data-i18n="docs.troubleshooting.noPreview1">確認 FinderHover 正在執行（選單列應該有圖示）</li>
+              <li data-i18n="docs.troubleshooting.noPreview2">確認已授予輔助使用權限</li>
+              <li data-i18n="docs.troubleshooting.noPreview3">嘗試重新啟動 FinderHover</li>
+              <li data-i18n="docs.troubleshooting.noPreview4">確認滑鼠停留時間超過設定的延遲時間</li>
             </ol>
 
-            <h3>權限授予後仍無法使用</h3>
+            <h3 data-i18n="docs.troubleshooting.permissionTitle">權限授予後仍無法使用</h3>
             <ol>
-              <li>完全退出 FinderHover</li>
-              <li>在系統設定中移除 FinderHover 的權限</li>
-              <li>重新開啟 FinderHover</li>
-              <li>重新授予權限</li>
+              <li data-i18n="docs.troubleshooting.permission1">完全退出 FinderHover</li>
+              <li data-i18n="docs.troubleshooting.permission2">在系統設定中移除 FinderHover 的權限</li>
+              <li data-i18n="docs.troubleshooting.permission3">重新開啟 FinderHover</li>
+              <li data-i18n="docs.troubleshooting.permission4">重新授予權限</li>
             </ol>
 
-            <h3>預覽視窗位置不正確</h3>
-            <p>
+            <h3 data-i18n="docs.troubleshooting.positionTitle">預覽視窗位置不正確</h3>
+            <p data-i18n="docs.troubleshooting.positionDesc">
               預覽視窗會自動調整位置以避免超出螢幕邊界。如果你使用多螢幕配置，可能會在某些邊界情況下出現位置問題。請回報此問題讓我們改進。
             </p>
 
             <div class="docs-tip">
-              <strong>仍有問題？</strong>請到
+              <strong data-i18n="docs.troubleshooting.stillIssue">仍有問題？</strong><span data-i18n="docs.troubleshooting.stillIssueDesc">請到
               <a href="https://github.com/KoukeNeko/FinderHover/issues"
                 >GitHub Issues</a
               >
-              回報問題，我們會盡快協助你。
+              回報問題，我們會盡快協助你。</span>
             </div>
           </article>
         </main>

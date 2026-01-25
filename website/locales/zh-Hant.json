@@ -354,6 +354,102 @@
       "advanced": "進階",
       "metadataFields": "中繼資料欄位",
       "troubleshooting": "疑難排解"
-    }
+    },
+    "setup": {
+      "title": "初次設定",
+      "intro": "安裝 FinderHover 後，首次啟動需要完成以下設定：",
+      "step1": "從 Launchpad 或應用程式資料夾開啟 FinderHover",
+      "step2": "App 會自動出現在選單列（Menu Bar）",
+      "step3": "系統會提示你授予輔助使用權限",
+      "step4": "完成授權後，將滑鼠移到 Finder 中的任何檔案上即可看到預覽",
+      "tip": "你可以在設定中啟用「登入時啟動」，讓 FinderHover 在每次開機時自動執行。"
+    },
+    "permissions": {
+      "title": "授予權限",
+      "intro": "FinderHover 需要輔助使用權限才能偵測你目前指向的檔案。這是 macOS 的安全機制，確保只有經過授權的 App 才能存取這些資訊。",
+      "manualTitle": "手動授予權限",
+      "step1": "開啟「系統設定」(System Settings)",
+      "step2": "前往「隱私與安全性」>「輔助使用」",
+      "step3": "找到 FinderHover 並開啟開關",
+      "step4": "如果看不到 FinderHover，點擊「+」按鈕手動加入",
+      "warning": "授予權限後可能需要重新啟動 FinderHover 才能生效。"
+    },
+    "hover": {
+      "title": "懸停預覽",
+      "intro": "FinderHover 的核心功能是在你將滑鼠停留在 Finder 中的檔案時，自動顯示該檔案的詳細資訊。",
+      "howTitle": "運作方式",
+      "how1": "將滑鼠移到 Finder 視窗中的任何檔案或資料夾",
+      "how2": "等待設定的延遲時間（預設 0.5 秒）",
+      "how3": "預覽視窗會自動出現在滑鼠旁邊",
+      "how4": "移動滑鼠到其他檔案會更新預覽內容",
+      "how5": "移出 Finder 視窗或移到空白區域會隱藏預覽",
+      "smartTitle": "智慧偵測",
+      "smartIntro": "FinderHover 會自動偵測以下情況並暫時隱藏預覽：",
+      "smart1": "正在重新命名檔案",
+      "smart2": "正在拖曳檔案",
+      "smart3": "正在使用右鍵選單"
+    },
+    "settings": {
+      "title": "偏好設定",
+      "intro": "點擊選單列圖示，然後選擇「偏好設定...」或按 <kbd>⌘</kbd> + <kbd>,</kbd> 開啟設定視窗。",
+      "generalTitle": "一般設定",
+      "launchAtLogin": "登入時啟動",
+      "launchAtLoginDesc": "開機時自動啟動 FinderHover",
+      "hoverDelay": "懸停延遲",
+      "hoverDelayDesc": "滑鼠停留多久後顯示預覽（0.1 - 2.0 秒）",
+      "windowSize": "視窗大小",
+      "windowSizeDesc": "調整預覽視窗的尺寸",
+      "opacity": "透明度",
+      "opacityDesc": "調整預覽視窗的透明度（70% - 100%）",
+      "fontScale": "字體縮放",
+      "fontScaleDesc": "調整預覽視窗中的文字大小"
+    },
+    "styles": {
+      "title": "介面風格",
+      "intro": "FinderHover 提供兩種預覽視窗風格：",
+      "macosTitle": "macOS 風格",
+      "macosDesc": "豐富的視覺呈現，包含縮圖預覽、圖示和完整的中繼資料。適合需要詳細檔案資訊的使用者。",
+      "windowsTitle": "Windows 風格",
+      "windowsDesc": "簡約的工具提示樣式，只顯示基本資訊。適合偏好簡潔介面的使用者。"
+    },
+    "metadata": {
+      "title": "中繼資料欄位",
+      "intro": "你可以在設定中自訂要顯示哪些中繼資料欄位。以下是各類檔案支援的欄位：",
+      "imageTitle": "圖片檔案",
+      "image1": "相機型號、鏡頭資訊",
+      "image2": "ISO、光圈、快門速度",
+      "image3": "GPS 座標",
+      "image4": "IPTC/XMP 中繼資料（作者、版權等）",
+      "videoTitle": "影片檔案",
+      "video1": "影片編碼（H.264、HEVC 等）",
+      "video2": "解析度、幀率",
+      "video3": "位元率",
+      "video4": "音訊取樣率、聲道數",
+      "codeTitle": "程式碼檔案",
+      "code1": "程式語言偵測",
+      "code2": "行數統計",
+      "code3": "檔案編碼",
+      "moreTitle": "更多類型",
+      "moreDesc": "FinderHover 支援超過 50 種檔案格式，包括 Markdown、HTML、JSON/YAML/TOML、PSD、SQLite 資料庫、Git 儲存庫等。"
+    },
+    "troubleshooting": {
+      "title": "疑難排解",
+      "noPreviewTitle": "預覽視窗沒有出現",
+      "noPreview1": "確認 FinderHover 正在執行（選單列應該有圖示）",
+      "noPreview2": "確認已授予輔助使用權限",
+      "noPreview3": "嘗試重新啟動 FinderHover",
+      "noPreview4": "確認滑鼠停留時間超過設定的延遲時間",
+      "permissionTitle": "權限授予後仍無法使用",
+      "permission1": "完全退出 FinderHover",
+      "permission2": "在系統設定中移除 FinderHover 的權限",
+      "permission3": "重新開啟 FinderHover",
+      "permission4": "重新授予權限",
+      "positionTitle": "預覽視窗位置不正確",
+      "positionDesc": "預覽視窗會自動調整位置以避免超出螢幕邊界。如果你使用多螢幕配置，可能會在某些邊界情況下出現位置問題。請回報此問題讓我們改進。",
+      "stillIssue": "仍有問題？",
+      "stillIssueDesc": "請到 <a href=\"https://github.com/KoukeNeko/FinderHover/issues\">GitHub Issues</a> 回報問題，我們會盡快協助你。"
+    },
+    "tip": "提示：",
+    "warning": "注意："
   }
 }

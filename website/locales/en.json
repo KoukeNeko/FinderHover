@@ -354,6 +354,102 @@
       "advanced": "Advanced",
       "metadataFields": "Metadata Fields",
       "troubleshooting": "Troubleshooting"
-    }
+    },
+    "setup": {
+      "title": "Initial Setup",
+      "intro": "After installing FinderHover, complete the following steps on first launch:",
+      "step1": "Open FinderHover from Launchpad or Applications folder",
+      "step2": "The app will automatically appear in the Menu Bar",
+      "step3": "System will prompt you to grant Accessibility permission",
+      "step4": "Once authorized, hover over any file in Finder to see the preview",
+      "tip": "You can enable \"Launch at Login\" in settings to have FinderHover start automatically on boot."
+    },
+    "permissions": {
+      "title": "Grant Permissions",
+      "intro": "FinderHover requires Accessibility permission to detect which file you're pointing at. This is a macOS security mechanism to ensure only authorized apps can access this information.",
+      "manualTitle": "Manually Grant Permission",
+      "step1": "Open System Settings",
+      "step2": "Go to Privacy & Security > Accessibility",
+      "step3": "Find FinderHover and toggle it on",
+      "step4": "If you don't see FinderHover, click the \"+\" button to add it manually",
+      "warning": "You may need to restart FinderHover after granting permission for it to take effect."
+    },
+    "hover": {
+      "title": "Hover Preview",
+      "intro": "FinderHover's core feature is automatically displaying detailed file information when you hover over files in Finder.",
+      "howTitle": "How It Works",
+      "how1": "Move your mouse over any file or folder in a Finder window",
+      "how2": "Wait for the configured delay (default 0.5 seconds)",
+      "how3": "Preview window appears automatically near your cursor",
+      "how4": "Moving to another file updates the preview content",
+      "how5": "Moving outside Finder or to empty space hides the preview",
+      "smartTitle": "Smart Detection",
+      "smartIntro": "FinderHover automatically detects these situations and temporarily hides the preview:",
+      "smart1": "Renaming a file",
+      "smart2": "Dragging files",
+      "smart3": "Using context menu"
+    },
+    "settings": {
+      "title": "Preferences",
+      "intro": "Click the menu bar icon, then select \"Preferences...\" or press <kbd>⌘</kbd> + <kbd>,</kbd> to open settings.",
+      "generalTitle": "General Settings",
+      "launchAtLogin": "Launch at Login",
+      "launchAtLoginDesc": "Automatically start FinderHover at boot",
+      "hoverDelay": "Hover Delay",
+      "hoverDelayDesc": "How long to wait before showing preview (0.1 - 2.0 seconds)",
+      "windowSize": "Window Size",
+      "windowSizeDesc": "Adjust the preview window dimensions",
+      "opacity": "Opacity",
+      "opacityDesc": "Adjust preview window transparency (70% - 100%)",
+      "fontScale": "Font Scale",
+      "fontScaleDesc": "Adjust text size in the preview window"
+    },
+    "styles": {
+      "title": "Interface Styles",
+      "intro": "FinderHover offers two preview window styles:",
+      "macosTitle": "macOS Style",
+      "macosDesc": "Rich visual presentation with thumbnail preview, icons, and complete metadata. Ideal for users who need detailed file information.",
+      "windowsTitle": "Windows Style",
+      "windowsDesc": "Minimal tooltip style showing only basic information. Ideal for users who prefer a clean interface."
+    },
+    "metadata": {
+      "title": "Metadata Fields",
+      "intro": "You can customize which metadata fields to display in settings. Here are the supported fields for each file type:",
+      "imageTitle": "Image Files",
+      "image1": "Camera model, lens info",
+      "image2": "ISO, aperture, shutter speed",
+      "image3": "GPS coordinates",
+      "image4": "IPTC/XMP metadata (author, copyright, etc.)",
+      "videoTitle": "Video Files",
+      "video1": "Video codec (H.264, HEVC, etc.)",
+      "video2": "Resolution, frame rate",
+      "video3": "Bitrate",
+      "video4": "Audio sample rate, channels",
+      "codeTitle": "Code Files",
+      "code1": "Programming language detection",
+      "code2": "Line count statistics",
+      "code3": "File encoding",
+      "moreTitle": "More Types",
+      "moreDesc": "FinderHover supports over 50 file formats, including Markdown, HTML, JSON/YAML/TOML, PSD, SQLite databases, Git repositories, and more."
+    },
+    "troubleshooting": {
+      "title": "Troubleshooting",
+      "noPreviewTitle": "Preview Window Not Appearing",
+      "noPreview1": "Confirm FinderHover is running (icon should be in menu bar)",
+      "noPreview2": "Confirm Accessibility permission is granted",
+      "noPreview3": "Try restarting FinderHover",
+      "noPreview4": "Confirm mouse hover time exceeds the configured delay",
+      "permissionTitle": "Still Not Working After Granting Permission",
+      "permission1": "Completely quit FinderHover",
+      "permission2": "Remove FinderHover's permission in System Settings",
+      "permission3": "Reopen FinderHover",
+      "permission4": "Grant permission again",
+      "positionTitle": "Preview Window Position Incorrect",
+      "positionDesc": "The preview window automatically adjusts position to avoid going off-screen. If you use multiple monitors, position issues may occur in some edge cases. Please report this issue so we can improve.",
+      "stillIssue": "Still having issues?",
+      "stillIssueDesc": "Please report issues on <a href=\"https://github.com/KoukeNeko/FinderHover/issues\">GitHub Issues</a> and we'll help you as soon as possible."
+    },
+    "tip": "Tip:",
+    "warning": "Note:"
   }
 }
