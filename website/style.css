@@ -422,76 +422,75 @@ body::before {
   padding: 0 24px;
 }
 
-/* Marquee Animation */
+/* Marquee Animation - Apple Style */
 .marquee-container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 20px 0;
+  gap: 16px;
+  padding: 40px 0;
   width: 100%;
-  max-width: 100vw;
   overflow: hidden;
+  position: relative;
+}
+
+/* Elegant edge fade - Apple style */
+.marquee-container::before,
+.marquee-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 20%;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.marquee-container::before {
+  left: 0;
+  background: linear-gradient(to right, var(--color-background) 0%, transparent 100%);
+}
+
+.marquee-container::after {
+  right: 0;
+  background: linear-gradient(to left, var(--color-background) 0%, transparent 100%);
 }
 
 .marquee-row {
   display: flex;
-  width: 100%;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(
-    90deg,
-    transparent,
-    black 10%,
-    black 90%,
-    transparent
-  );
-  mask-image: linear-gradient(
-    90deg,
-    transparent,
-    black 10%,
-    black 90%,
-    transparent
-  );
+  width: max-content;
+  overflow: visible;
 }
 
 .marquee-content {
   display: flex;
-  gap: 12px;
-  padding-right: 12px;
-  animation: marquee-left 40s linear infinite;
+  gap: 16px;
+  padding-right: 16px;
+  animation: marquee-scroll 60s linear infinite;
 }
 
 .marquee-row[data-direction="right"] .marquee-content {
-  animation: marquee-right 40s linear infinite;
+  animation-direction: reverse;
 }
 
 /* Speed variations */
 .marquee-row[data-speed="slow"] .marquee-content {
-  animation-duration: 50s;
+  animation-duration: 80s;
 }
 
 .marquee-row[data-speed="medium"] .marquee-content {
-  animation-duration: 35s;
+  animation-duration: 60s;
 }
 
 .marquee-row[data-speed="fast"] .marquee-content {
-  animation-duration: 25s;
+  animation-duration: 45s;
 }
 
-@keyframes marquee-left {
+@keyframes marquee-scroll {
   0% {
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-100%);
-  }
-}
-
-@keyframes marquee-right {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(0);
+    transform: translateX(-50%);
   }
 }
 
@@ -504,195 +503,160 @@ body::before {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border-radius: 100px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
+  letter-spacing: -0.01em;
   white-space: nowrap;
-  background: var(--color-background);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  transition: all 0.3s ease;
-}
-
-.format-tag {
-  font-family: var(--font-family-mono);
-}
-
-.format-info {
-  font-family: var(--font-family);
-  padding: 8px 16px;
-  font-size: 13px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .format-tag:hover,
 .format-info:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: scale(1.02);
 }
 
-/* Format tag colors */
+.format-tag {
+  font-family: var(--font-family-mono);
+  font-size: 14px;
+}
+
+.format-info {
+  font-family: var(--font-family);
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+/* Format tag colors - Subtle Apple-style */
 .format-tag.photo,
 .format-info.photo {
-  background: linear-gradient(135deg, #ff6b6b20, #ee5a2420);
-  border-color: #ff6b6b40;
-  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.12);
+  border-color: rgba(255, 107, 107, 0.25);
+  color: #ff8a8a;
 }
 
 .format-tag.video,
 .format-info.video {
-  background: linear-gradient(135deg, #ff922b20, #fd7e1420);
-  border-color: #ff922b40;
-  color: #ff922b;
+  background: rgba(255, 146, 43, 0.12);
+  border-color: rgba(255, 146, 43, 0.25);
+  color: #ffaa5c;
 }
 
 .format-tag.audio,
 .format-info.audio {
-  background: linear-gradient(135deg, #fcc41920, #fab00520);
-  border-color: #fcc41940;
-  color: #e6ac00;
+  background: rgba(252, 196, 25, 0.12);
+  border-color: rgba(252, 196, 25, 0.25);
+  color: #ffd24d;
 }
 
 .format-tag.code,
 .format-info.code {
-  background: linear-gradient(135deg, #51cf6620, #40c05720);
-  border-color: #51cf6640;
-  color: #51cf66;
+  background: rgba(81, 207, 102, 0.12);
+  border-color: rgba(81, 207, 102, 0.25);
+  color: #7ddb8f;
 }
 
 .format-tag.doc,
 .format-info.doc {
-  background: linear-gradient(135deg, #339af020, #228be620);
-  border-color: #339af040;
-  color: #339af0;
+  background: rgba(51, 154, 240, 0.12);
+  border-color: rgba(51, 154, 240, 0.25);
+  color: #66b3ff;
 }
 
 .format-tag.config,
 .format-info.config {
-  background: linear-gradient(135deg, #845ef720, #7950f220);
-  border-color: #845ef740;
-  color: #845ef7;
+  background: rgba(132, 94, 247, 0.12);
+  border-color: rgba(132, 94, 247, 0.25);
+  color: #a88bff;
 }
 
 .format-tag.design,
 .format-info.design {
-  background: linear-gradient(135deg, #f0659520, #e6457020);
-  border-color: #f0659540;
-  color: #f06595;
+  background: rgba(240, 101, 149, 0.12);
+  border-color: rgba(240, 101, 149, 0.25);
+  color: #ff8ab4;
 }
 
 .format-tag.font,
 .format-info.font {
-  background: linear-gradient(135deg, #20c99720, #12b88620);
-  border-color: #20c99740;
-  color: #20c997;
+  background: rgba(32, 201, 151, 0.12);
+  border-color: rgba(32, 201, 151, 0.25);
+  color: #4ddbb5;
 }
 
 .format-tag.system,
 .format-info.system {
-  background: linear-gradient(135deg, #74c0fc20, #4dabf720);
-  border-color: #74c0fc40;
-  color: #74c0fc;
+  background: rgba(116, 192, 252, 0.12);
+  border-color: rgba(116, 192, 252, 0.25);
+  color: #96cfff;
 }
 
 .format-tag.archive,
 .format-info.archive {
-  background: linear-gradient(135deg, #a9e34b20, #94d82d20);
-  border-color: #a9e34b40;
-  color: #a9e34b;
+  background: rgba(169, 227, 75, 0.12);
+  border-color: rgba(169, 227, 75, 0.25);
+  color: #c4f07d;
 }
 
 .format-tag.data,
 .format-info.data {
-  background: linear-gradient(135deg, #ffa94d20, #ff922b20);
-  border-color: #ffa94d40;
-  color: #ffa94d;
+  background: rgba(255, 169, 77, 0.12);
+  border-color: rgba(255, 169, 77, 0.25);
+  color: #ffb870;
 }
 
 .format-tag.git,
 .format-info.git {
-  background: linear-gradient(135deg, #f0652020, #e6481820);
-  border-color: #f0652040;
-  color: #f06520;
+  background: rgba(240, 101, 32, 0.12);
+  border-color: rgba(240, 101, 32, 0.25);
+  color: #ff8a5c;
 }
 
 .format-tag.subtitle,
 .format-info.subtitle {
-  background: linear-gradient(135deg, #748ffc20, #5c7cfa20);
-  border-color: #748ffc40;
-  color: #748ffc;
+  background: rgba(116, 143, 252, 0.12);
+  border-color: rgba(116, 143, 252, 0.25);
+  color: #96a8ff;
 }
 
-@media (prefers-color-scheme: dark) {
+/* Light mode adjustments */
+@media (prefers-color-scheme: light) {
+  .marquee-container::before {
+    background: linear-gradient(to right, var(--color-background) 0%, transparent 100%);
+  }
+  
+  .marquee-container::after {
+    background: linear-gradient(to left, var(--color-background) 0%, transparent 100%);
+  }
+
   .format-tag,
   .format-info {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.08);
+    color: var(--color-text-secondary);
   }
 
-  .format-tag.photo,
-  .format-info.photo {
-    background: rgba(255, 107, 107, 0.15);
-  }
-
-  .format-tag.video,
-  .format-info.video {
-    background: rgba(255, 146, 43, 0.15);
-  }
-
-  .format-tag.audio,
-  .format-info.audio {
-    background: rgba(252, 196, 25, 0.15);
-  }
-
-  .format-tag.code,
-  .format-info.code {
-    background: rgba(81, 207, 102, 0.15);
-  }
-
-  .format-tag.doc,
-  .format-info.doc {
-    background: rgba(51, 154, 240, 0.15);
-  }
-
-  .format-tag.config,
-  .format-info.config {
-    background: rgba(132, 94, 247, 0.15);
-  }
-
-  .format-tag.design,
-  .format-info.design {
-    background: rgba(240, 101, 149, 0.15);
-  }
-
-  .format-tag.font,
-  .format-info.font {
-    background: rgba(32, 201, 151, 0.15);
-  }
-
-  .format-tag.system,
-  .format-info.system {
-    background: rgba(116, 192, 252, 0.15);
-  }
-
-  .format-tag.archive,
-  .format-info.archive {
-    background: rgba(169, 227, 75, 0.15);
-  }
-
-  .format-tag.data,
-  .format-info.data {
-    background: rgba(255, 169, 77, 0.15);
-  }
-
-  .format-tag.git,
-  .format-info.git {
-    background: rgba(240, 101, 32, 0.15);
-  }
-
-  .format-tag.subtitle,
-  .format-info.subtitle {
-    background: rgba(116, 143, 252, 0.15);
-  }
+  .format-tag.photo, .format-info.photo { background: rgba(255, 107, 107, 0.1); color: #dc4343; }
+  .format-tag.video, .format-info.video { background: rgba(255, 146, 43, 0.1); color: #d97706; }
+  .format-tag.audio, .format-info.audio { background: rgba(252, 196, 25, 0.1); color: #b8860b; }
+  .format-tag.code, .format-info.code { background: rgba(81, 207, 102, 0.1); color: #22a339; }
+  .format-tag.doc, .format-info.doc { background: rgba(51, 154, 240, 0.1); color: #2563eb; }
+  .format-tag.config, .format-info.config { background: rgba(132, 94, 247, 0.1); color: #7c3aed; }
+  .format-tag.design, .format-info.design { background: rgba(240, 101, 149, 0.1); color: #db2777; }
+  .format-tag.font, .format-info.font { background: rgba(32, 201, 151, 0.1); color: #059669; }
+  .format-tag.system, .format-info.system { background: rgba(116, 192, 252, 0.1); color: #0284c7; }
+  .format-tag.archive, .format-info.archive { background: rgba(169, 227, 75, 0.1); color: #65a30d; }
+  .format-tag.data, .format-info.data { background: rgba(255, 169, 77, 0.1); color: #c2410c; }
+  .format-tag.git, .format-info.git { background: rgba(240, 101, 32, 0.1); color: #c2410c; }
+  .format-tag.subtitle, .format-info.subtitle { background: rgba(116, 143, 252, 0.1); color: #4f46e5; }
 }
 
 .formats-cta {
