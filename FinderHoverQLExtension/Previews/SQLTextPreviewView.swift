@@ -501,6 +501,10 @@ class SQLTextPreviewViewModel: ObservableObject {
     @Published var selectedTable: SQLTableDefinition?
     @Published var viewMode: SQLViewMode = .data
 
+    // Pre-cached NSAttributedString for Source view (created in background)
+    var cachedPlainNSAttributedString: NSAttributedString?
+    var cachedHighlightedNSAttributedString: NSAttributedString?
+
     init(fileName: String, fileSize: Int64, content: String) {
         self.fileName = fileName
         self.fileSize = fileSize
@@ -539,8 +543,21 @@ class SQLTextPreviewViewModel: ObservableObject {
             return SQLSyntaxHighlighter.highlight(contentCopy)
         }.value
 
+        // Pre-cache plain NSAttributedString in background
+        async let plainNSTask: NSAttributedString = Task.detached(priority: .userInitiated) {
+            let font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
+            let attributes: [NSAttributedString.Key: Any] = [
+                .font: font,
+                .foregroundColor: NSColor.labelColor
+            ]
+            return NSAttributedString(string: contentCopy, attributes: attributes)
+        }.value
+
         // Wait for both to complete
         let (parsedTables, highlighted) = await (tablesTask, highlightTask)
+
+        // Cache plain NSAttributedString
+        cachedPlainNSAttributedString = await plainNSTask
 
         // Update tables
         tables = parsedTables
@@ -551,9 +568,17 @@ class SQLTextPreviewViewModel: ObservableObject {
             viewMode = firstTable.data.isEmpty ? .schema : .data
         }
 
-        // Update highlighted content
+        // Update highlighted content and cache NSAttributedString
         if let highlighted = highlighted {
             highlightedContent = highlighted
+
+            // Convert to NSAttributedString in background
+            Task.detached(priority: .userInitiated) {
+                let nsAttrString = NSAttributedString(highlighted)
+                await MainActor.run {
+                    self.cachedHighlightedNSAttributedString = nsAttrString
+                }
+            }
         }
 
         // Mark as ready
@@ -749,21 +774,18 @@ struct SQLTextPreviewView: View {
                 Divider()
             }
 
-            // Use ZStack to keep all views in memory for instant switching
-            ZStack {
-                schemaView
-                    .opacity(viewModel.viewMode == .schema ? 1 : 0)
-                    .allowsHitTesting(viewModel.viewMode == .schema)
-
-                dataTableView
-                    .opacity(viewModel.viewMode == .data ? 1 : 0)
-                    .allowsHitTesting(viewModel.viewMode == .data)
-
-                sourceCodeView
-                    .opacity(viewModel.viewMode == .source ? 1 : 0)
-                    .allowsHitTesting(viewModel.viewMode == .source)
+            // Conditional rendering - only render active view
+            Group {
+                switch viewModel.viewMode {
+                case .schema:
+                    schemaView
+                case .data:
+                    dataTableView
+                case .source:
+                    sourceCodeView
+                }
             }
-            .animation(.easeInOut(duration: 0.15), value: viewModel.viewMode)
+            .animation(.easeInOut(duration: 0.1), value: viewModel.viewMode)
         }
     }
 
@@ -1049,8 +1071,9 @@ struct SQLTextPreviewView: View {
 
     private var sourceCodeView: some View {
         SourceCodeTextView(
-            content: viewModel.content,
-            highlightedContent: viewModel.highlightedContent
+            cachedPlainNS: viewModel.cachedPlainNSAttributedString,
+            cachedHighlightedNS: viewModel.cachedHighlightedNSAttributedString,
+            fallbackContent: viewModel.content
         )
     }
 
@@ -1087,8 +1110,19 @@ struct SQLTextPreviewView: View {
 // MARK: - Native Source Code View (NSTextView for performance)
 
 struct SourceCodeTextView: NSViewRepresentable {
-    let content: String
-    let highlightedContent: AttributedString?
+    // Pre-cached NSAttributedStrings from ViewModel (already created in background)
+    let cachedPlainNS: NSAttributedString?
+    let cachedHighlightedNS: NSAttributedString?
+    let fallbackContent: String  // Only used if no cache available
+
+    class Coordinator {
+        var hasSetContent = false
+        var hasAppliedHighlight = false
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
 
     func makeNSView(context: Context) -> NSScrollView {
         let scrollView = NSScrollView()
@@ -1121,23 +1155,33 @@ struct SourceCodeTextView: NSViewRepresentable {
     func updateNSView(_ scrollView: NSScrollView, context: Context) {
         guard let textView = scrollView.documentView as? LineNumberTextView else { return }
 
-        // Only update if content changed
-        let currentText = textView.string
-        if currentText != content {
-            // Use highlighted content if available, otherwise plain
-            if let highlighted = highlightedContent {
-                let nsAttrString = NSAttributedString(highlighted)
-                textView.textStorage?.setAttributedString(nsAttrString)
+        let coordinator = context.coordinator
+
+        // If highlighted content is available and not yet applied, use it
+        if let highlighted = cachedHighlightedNS, !coordinator.hasAppliedHighlight {
+            textView.textStorage?.setAttributedString(highlighted)
+            textView.updateLineNumbers()
+            coordinator.hasSetContent = true
+            coordinator.hasAppliedHighlight = true
+            return
+        }
+
+        // If no content set yet, use plain cached or fallback
+        if !coordinator.hasSetContent {
+            if let plain = cachedPlainNS {
+                textView.textStorage?.setAttributedString(plain)
             } else {
+                // Fallback: create plain content (should rarely happen)
                 let font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
                 let attributes: [NSAttributedString.Key: Any] = [
                     .font: font,
                     .foregroundColor: NSColor.labelColor
                 ]
-                let attrString = NSAttributedString(string: content, attributes: attributes)
+                let attrString = NSAttributedString(string: fallbackContent, attributes: attributes)
                 textView.textStorage?.setAttributedString(attrString)
             }
             textView.updateLineNumbers()
+            coordinator.hasSetContent = true
         }
     }
 }
