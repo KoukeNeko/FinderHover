@@ -2,11 +2,188 @@
 //  SQLTextPreviewView.swift
 //  FinderHoverQLExtension
 //
-//  SwiftUI view for SQL text file preview with syntax highlighting
+//  SwiftUI view for SQL text file preview with syntax highlighting and table extraction
 //
 
 import SwiftUI
 import Combine
+
+// MARK: - SQL Table Definition Parser
+
+struct SQLTableDefinition: Identifiable {
+    let id = UUID()
+    let name: String
+    let columns: [SQLColumnDefinition]
+    let sourceRange: Range<String.Index>?
+    let lineNumber: Int
+}
+
+struct SQLColumnDefinition: Identifiable {
+    let id = UUID()
+    let name: String
+    let type: String
+    let constraints: [String]
+
+    var isPrimaryKey: Bool {
+        constraints.contains { $0.uppercased().contains("PRIMARY KEY") }
+    }
+
+    var isNotNull: Bool {
+        constraints.contains { $0.uppercased().contains("NOT NULL") }
+    }
+
+    var isUnique: Bool {
+        constraints.contains { $0.uppercased().contains("UNIQUE") }
+    }
+}
+
+struct SQLDDLParser {
+    static func extractTables(from sql: String) -> [SQLTableDefinition] {
+        var tables: [SQLTableDefinition] = []
+
+        // Pattern to match CREATE TABLE statements
+        let pattern = #"CREATE\s+(?:TEMPORARY\s+)?TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?[`"\[]?(\w+)[`"\]]?\s*\(([\s\S]*?)\)\s*(?:ENGINE|DEFAULT|;|$)"#
+
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive]) else {
+            return tables
+        }
+
+        let nsString = sql as NSString
+        let matches = regex.matches(in: sql, options: [], range: NSRange(location: 0, length: nsString.length))
+
+        for match in matches {
+            guard match.numberOfRanges >= 3,
+                  let tableNameRange = Range(match.range(at: 1), in: sql),
+                  let columnsRange = Range(match.range(at: 2), in: sql) else {
+                continue
+            }
+
+            let tableName = String(sql[tableNameRange])
+            let columnsStr = String(sql[columnsRange])
+
+            // Calculate line number
+            let lineNumber = sql[..<tableNameRange.lowerBound].filter { $0 == "\n" }.count + 1
+
+            // Parse columns
+            let columns = parseColumns(from: columnsStr)
+
+            let sourceRange = Range(match.range, in: sql)
+
+            let table = SQLTableDefinition(
+                name: tableName,
+                columns: columns,
+                sourceRange: sourceRange,
+                lineNumber: lineNumber
+            )
+            tables.append(table)
+        }
+
+        return tables
+    }
+
+    private static func parseColumns(from columnsStr: String) -> [SQLColumnDefinition] {
+        var columns: [SQLColumnDefinition] = []
+
+        // Split by comma but be careful with nested parentheses
+        let parts = splitColumnDefinitions(columnsStr)
+
+        for part in parts {
+            let trimmed = part.trimmingCharacters(in: .whitespacesAndNewlines)
+
+            // Skip constraints like PRIMARY KEY(...), FOREIGN KEY(...), etc.
+            let upperTrimmed = trimmed.uppercased()
+            if upperTrimmed.hasPrefix("PRIMARY KEY") ||
+               upperTrimmed.hasPrefix("FOREIGN KEY") ||
+               upperTrimmed.hasPrefix("UNIQUE") ||
+               upperTrimmed.hasPrefix("CHECK") ||
+               upperTrimmed.hasPrefix("CONSTRAINT") ||
+               upperTrimmed.hasPrefix("INDEX") ||
+               upperTrimmed.hasPrefix("KEY ") {
+                continue
+            }
+
+            // Parse column: name type [constraints...]
+            if let column = parseColumn(from: trimmed) {
+                columns.append(column)
+            }
+        }
+
+        return columns
+    }
+
+    private static func splitColumnDefinitions(_ str: String) -> [String] {
+        var parts: [String] = []
+        var current = ""
+        var depth = 0
+
+        for char in str {
+            if char == "(" {
+                depth += 1
+                current.append(char)
+            } else if char == ")" {
+                depth -= 1
+                current.append(char)
+            } else if char == "," && depth == 0 {
+                parts.append(current)
+                current = ""
+            } else {
+                current.append(char)
+            }
+        }
+
+        if !current.isEmpty {
+            parts.append(current)
+        }
+
+        return parts
+    }
+
+    private static func parseColumn(from str: String) -> SQLColumnDefinition? {
+        // Remove backticks, quotes, brackets from column name
+        let cleanStr = str.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        // Pattern: [name] [type] [constraints...]
+        let pattern = #"^[`"\[]?(\w+)[`"\]]?\s+(\w+(?:\([^)]*\))?)\s*(.*)?$"#
+
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive]),
+              let match = regex.firstMatch(in: cleanStr, options: [], range: NSRange(location: 0, length: cleanStr.count)) else {
+            // Try simpler pattern for just name and type
+            let simplePattern = #"^[`"\[]?(\w+)[`"\]]?\s+(\w+)"#
+            guard let simpleRegex = try? NSRegularExpression(pattern: simplePattern, options: [.caseInsensitive]),
+                  let simpleMatch = simpleRegex.firstMatch(in: cleanStr, options: [], range: NSRange(location: 0, length: cleanStr.count)),
+                  simpleMatch.numberOfRanges >= 3,
+                  let nameRange = Range(simpleMatch.range(at: 1), in: cleanStr),
+                  let typeRange = Range(simpleMatch.range(at: 2), in: cleanStr) else {
+                return nil
+            }
+
+            return SQLColumnDefinition(
+                name: String(cleanStr[nameRange]),
+                type: String(cleanStr[typeRange]),
+                constraints: []
+            )
+        }
+
+        guard match.numberOfRanges >= 3,
+              let nameRange = Range(match.range(at: 1), in: cleanStr),
+              let typeRange = Range(match.range(at: 2), in: cleanStr) else {
+            return nil
+        }
+
+        let name = String(cleanStr[nameRange])
+        let type = String(cleanStr[typeRange])
+
+        var constraints: [String] = []
+        if match.numberOfRanges >= 4, let constraintRange = Range(match.range(at: 3), in: cleanStr) {
+            let constraintStr = String(cleanStr[constraintRange])
+            if !constraintStr.isEmpty {
+                constraints.append(constraintStr)
+            }
+        }
+
+        return SQLColumnDefinition(name: name, type: type, constraints: constraints)
+    }
+}
 
 // MARK: - SQL Syntax Highlighter
 
@@ -23,7 +200,7 @@ struct SQLSyntaxHighlighter {
         "UNION", "ALL", "EXCEPT", "INTERSECT", "CASE", "WHEN", "THEN", "ELSE", "END",
         "BEGIN", "COMMIT", "ROLLBACK", "TRANSACTION", "PRAGMA", "EXPLAIN", "ANALYZE",
         "REPLACE", "IGNORE", "CONFLICT", "ABORT", "FAIL", "CONSTRAINT", "TEMPORARY",
-        "TEMP", "WITH", "RECURSIVE", "VACUUM", "REINDEX", "ATTACH", "DETACH"
+        "TEMP", "WITH", "RECURSIVE", "VACUUM", "REINDEX", "ATTACH", "DETACH", "COMMENT"
     ]
 
     // SQL Data Types
@@ -51,7 +228,6 @@ struct SQLSyntaxHighlighter {
             var currentIndex = line.startIndex
             var inString = false
             var stringChar: Character = "\""
-            var inComment = false
 
             while currentIndex < line.endIndex {
                 let remaining = String(line[currentIndex...])
@@ -65,7 +241,7 @@ struct SQLSyntaxHighlighter {
                 }
 
                 // Check for string start/end
-                if (remaining.first == "'" || remaining.first == "\"") && !inComment {
+                if (remaining.first == "'" || remaining.first == "\"") {
                     if inString && remaining.first == stringChar {
                         // End of string
                         var charStr = AttributedString(String(remaining.first!))
@@ -176,6 +352,8 @@ class SQLTextPreviewViewModel: ObservableObject {
 
     @Published var highlightedContent: AttributedString?
     @Published var isHighlighting = true
+    @Published var tables: [SQLTableDefinition] = []
+    @Published var selectedTable: SQLTableDefinition?
 
     init(fileName: String, fileSize: Int64, content: String) {
         self.fileName = fileName
@@ -188,13 +366,25 @@ class SQLTextPreviewViewModel: ObservableObject {
             .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
             .count
 
-        // Highlight in background for large files
+        // Parse tables and highlight in background
         Task {
-            await highlightContent()
+            await parseAndHighlight()
         }
     }
 
-    func highlightContent() async {
+    func parseAndHighlight() async {
+        // Parse table definitions
+        let parsedTables = await Task.detached { [content] in
+            SQLDDLParser.extractTables(from: content)
+        }.value
+
+        tables = parsedTables
+
+        // Auto-select first table if available
+        if let firstTable = parsedTables.first {
+            selectedTable = firstTable
+        }
+
         // For very large files, skip highlighting
         if content.count > 500_000 {
             highlightedContent = AttributedString(content)
@@ -209,6 +399,10 @@ class SQLTextPreviewViewModel: ObservableObject {
 
         highlightedContent = highlighted
         isHighlighting = false
+    }
+
+    func selectTable(_ table: SQLTableDefinition) {
+        selectedTable = table
     }
 
     var formattedFileSize: String {
@@ -230,8 +424,17 @@ struct SQLTextPreviewView: View {
 
             Divider()
 
-            // Content
-            contentView
+            // Main content with split view
+            HSplitView {
+                // Left sidebar - Tables (only show if tables found)
+                if !viewModel.tables.isEmpty {
+                    tableSidebar
+                        .frame(minWidth: 200, idealWidth: 250, maxWidth: 350)
+                }
+
+                // Right content - SQL source
+                sourceCodeView
+            }
 
             Divider()
 
@@ -254,7 +457,7 @@ struct SQLTextPreviewView: View {
                     .font(.headline)
                     .lineLimit(1)
 
-                Text("SQL Script \u{00B7} \(viewModel.formattedFileSize)")
+                Text("SQL Script · \(viewModel.formattedFileSize)")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -265,6 +468,9 @@ struct SQLTextPreviewView: View {
             HStack(spacing: 16) {
                 statBadge(icon: "text.alignleft", value: "\(viewModel.lineCount)", label: "lines")
                 statBadge(icon: "command", value: "\(viewModel.statementCount)", label: "statements")
+                if !viewModel.tables.isEmpty {
+                    statBadge(icon: "tablecells", value: "\(viewModel.tables.count)", label: "tables")
+                }
             }
         }
         .padding(.horizontal, 16)
@@ -286,7 +492,181 @@ struct SQLTextPreviewView: View {
         }
     }
 
-    // MARK: - Content
+    // MARK: - Table Sidebar
+
+    private var tableSidebar: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                // Tables section
+                schemaSection(
+                    title: "Tables",
+                    icon: "tablecells",
+                    count: viewModel.tables.count
+                ) {
+                    ForEach(viewModel.tables) { table in
+                        tableRow(table)
+                    }
+                }
+
+                // Selected table schema
+                if let selectedTable = viewModel.selectedTable {
+                    Divider()
+
+                    schemaSection(
+                        title: "Schema: \(selectedTable.name)",
+                        icon: "list.bullet.rectangle",
+                        count: selectedTable.columns.count
+                    ) {
+                        ForEach(selectedTable.columns) { column in
+                            columnRow(column)
+                        }
+                    }
+                }
+            }
+            .padding(12)
+        }
+        .background(Color(nsColor: .windowBackgroundColor))
+    }
+
+    private func schemaSection<Content: View>(
+        title: String,
+        icon: String,
+        count: Int,
+        @ViewBuilder content: @escaping () -> Content
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 6) {
+                Image(systemName: icon)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                Text(title)
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.secondary)
+                    .lineLimit(1)
+
+                Spacer()
+
+                Text("\(count)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+
+            content()
+        }
+    }
+
+    private func tableRow(_ table: SQLTableDefinition) -> some View {
+        Button(action: {
+            viewModel.selectTable(table)
+        }) {
+            HStack(spacing: 8) {
+                Image(systemName: "tablecells")
+                    .font(.caption)
+                    .foregroundColor(viewModel.selectedTable?.id == table.id ? .white : .secondary)
+
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(table.name)
+                        .font(.system(size: 12))
+                        .lineLimit(1)
+
+                    Text("\(table.columns.count) columns · Line \(table.lineNumber)")
+                        .font(.system(size: 10))
+                        .foregroundColor(viewModel.selectedTable?.id == table.id ? .white.opacity(0.8) : .secondary)
+                }
+
+                Spacer()
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 6)
+            .background(
+                viewModel.selectedTable?.id == table.id
+                    ? Color.accentColor
+                    : Color.clear
+            )
+            .cornerRadius(6)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func columnRow(_ column: SQLColumnDefinition) -> some View {
+        HStack(spacing: 8) {
+            // Column icon based on constraints
+            if column.isPrimaryKey {
+                Image(systemName: "key.fill")
+                    .font(.system(size: 10))
+                    .foregroundColor(.yellow)
+            } else {
+                Image(systemName: "circle.fill")
+                    .font(.system(size: 6))
+                    .foregroundColor(.secondary)
+            }
+
+            VStack(alignment: .leading, spacing: 1) {
+                HStack(spacing: 4) {
+                    Text(column.name)
+                        .font(.system(size: 11, weight: column.isPrimaryKey ? .semibold : .regular))
+                        .lineLimit(1)
+
+                    if column.isNotNull {
+                        Text("*")
+                            .font(.system(size: 10))
+                            .foregroundColor(.red)
+                    }
+                }
+
+                Text(column.type)
+                    .font(.system(size: 10))
+                    .foregroundColor(.green)
+            }
+
+            Spacer()
+
+            // Constraint badges
+            if column.isUnique && !column.isPrimaryKey {
+                Text("UQ")
+                    .font(.system(size: 9))
+                    .padding(.horizontal, 4)
+                    .padding(.vertical, 2)
+                    .background(Color.orange.opacity(0.2))
+                    .foregroundColor(.orange)
+                    .cornerRadius(3)
+            }
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+    }
+
+    // MARK: - Source Code View
+
+    private var sourceCodeView: some View {
+        VStack(spacing: 0) {
+            // Source header
+            HStack {
+                Text("SQL Source")
+                    .font(.headline)
+
+                Spacer()
+
+                if viewModel.isHighlighting {
+                    ProgressView()
+                        .scaleEffect(0.7)
+                    Text("Highlighting...")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+            .background(Color(nsColor: .controlBackgroundColor))
+
+            Divider()
+
+            // Content
+            contentView
+        }
+    }
 
     private var contentView: some View {
         ScrollView([.horizontal, .vertical]) {
