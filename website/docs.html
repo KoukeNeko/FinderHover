@@ -7,32 +7,14 @@
     <meta name="description" content="FinderHover 使用說明與設定指南。" />
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" type="image/png" href="assets/icon.png" />
+    <script src="components.js" defer></script>
   </head>
   <body>
     <!-- Navigation -->
-    <nav class="nav">
-      <div class="nav-content">
-        <a href="index.html" class="nav-logo">
-          <img src="assets/icon.png" alt="FinderHover" />
-          <span>FinderHover</span>
-        </a>
-        <div class="nav-links">
-          <a href="index.html#features">功能特色</a>
-          <a href="formats.html">支援格式</a>
-          <a href="docs.html">使用說明</a>
-          <a href="https://github.com/KoukeNeko/FinderHover" target="_blank"
-            >GitHub</a
-          >
-        </div>
-        <a href="download.html" class="nav-cta">下載</a>
-      </div>
-    </nav>
+    <site-nav></site-nav>
 
     <!-- Docs Hero -->
-    <section class="page-hero">
-      <h1 class="page-headline">使用說明</h1>
-      <p class="page-subheadline">快速上手 FinderHover</p>
-    </section>
+    <page-hero title="使用說明" subtitle="快速上手 FinderHover"></page-hero>
 
     <!-- Docs Content -->
     <section class="docs-section">
@@ -241,22 +223,9 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-content">
-        <div class="footer-links">
-          <a href="https://github.com/KoukeNeko/FinderHover">GitHub</a>
-          <a href="https://github.com/KoukeNeko/FinderHover/issues">問題回報</a>
-          <a href="license.html">授權條款</a>
-          <a href="changelog.html">更新日誌</a>
-        </div>
-        <p class="footer-copyright">
-          Copyright © <span id="year"></span> KoukeNeko. 以 MIT 授權釋出。
-        </p>
-      </div>
-    </footer>
+    <site-footer></site-footer>
 
     <script>
-      document.getElementById("year").textContent = new Date().getFullYear();
 
       // Smooth scroll for sidebar links
       document.querySelectorAll(".docs-nav a").forEach((link) => {
