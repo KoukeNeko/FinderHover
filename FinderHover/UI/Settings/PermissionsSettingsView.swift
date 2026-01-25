@@ -9,7 +9,6 @@ import SwiftUI
 
 struct PermissionsSettingsView: View {
     @State private var accessibilityEnabled = AXIsProcessTrusted()
-    @State private var refreshTimer: Timer?
 
     var body: some View {
         ScrollView {
@@ -160,28 +159,18 @@ struct PermissionsSettingsView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .onAppear {
-            startRefreshTimer()
-        }
-        .onDisappear {
-            stopRefreshTimer()
+        .task {
+            // Use async task which automatically cancels when view disappears
+            while !Task.isCancelled {
+                accessibilityEnabled = AXIsProcessTrusted()
+                try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
+            }
         }
     }
 
     private func openAccessibilitySettings() {
         let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!
         NSWorkspace.shared.open(url)
-    }
-
-    private func startRefreshTimer() {
-        refreshTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            accessibilityEnabled = AXIsProcessTrusted()
-        }
-    }
-
-    private func stopRefreshTimer() {
-        refreshTimer?.invalidate()
-        refreshTimer = nil
     }
 }
 

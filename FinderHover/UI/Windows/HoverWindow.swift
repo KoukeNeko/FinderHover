@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AppKit
+import QuickLookThumbnailing
 
 class HoverWindowController: NSWindowController {
     private var visualEffectView: NSVisualEffectView?
@@ -225,6 +226,7 @@ struct HoverContentView: View {
     let fileInfo: FileInfo
     @State private var isExpanded = false
     @State private var thumbnail: NSImage?
+    @State private var thumbnailRequest: QLThumbnailGenerator.Request?
     @ObservedObject var settings = AppSettings.shared
 
     var body: some View {
@@ -240,11 +242,18 @@ struct HoverContentView: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: iconSize, height: iconSize)
                         .onAppear {
-                            // Load thumbnail asynchronously
-                            fileInfo.generateThumbnailAsync { image in
+                            // Load thumbnail asynchronously with cancellation support
+                            thumbnailRequest = fileInfo.generateThumbnailAsync { image in
                                 if let image = image {
                                     thumbnail = image
                                 }
+                            }
+                        }
+                        .onDisappear {
+                            // Cancel pending thumbnail generation to prevent resource accumulation
+                            if let request = thumbnailRequest {
+                                FileInfo.cancelThumbnailGeneration(request)
+                                thumbnailRequest = nil
                             }
                         }
                 }
@@ -687,7 +696,7 @@ struct HoverContentView: View {
                         .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
-            
+
         case .font:
             if settings.showFont, let font = fileInfo.fontMetadata {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
@@ -726,7 +735,7 @@ struct HoverContentView: View {
                         .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
-            
+
         case .diskImage:
             if settings.showDiskImage, let diskImage = fileInfo.diskImageMetadata {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
@@ -768,7 +777,7 @@ struct HoverContentView: View {
                         .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
-        
+
         case .vectorGraphics:
             if settings.showVectorGraphics, let vectorGraphics = fileInfo.vectorGraphicsMetadata {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
@@ -807,7 +816,7 @@ struct HoverContentView: View {
                         .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
-        
+
         case .subtitle:
             if settings.showSubtitle, let subtitle = fileInfo.subtitleMetadata {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {

@@ -30,6 +30,10 @@ class HoverManager: ObservableObject {
     private var lastMouseLocation: CGPoint = .zero
     private let settings = AppSettings.shared
 
+    // Store observer tokens for cleanup
+    private var appActivateObserver: NSObjectProtocol?
+    private var appDeactivateObserver: NSObjectProtocol?
+
     init() {
         setupSubscriptions()
         setupAppSwitchObserver()
@@ -67,7 +71,7 @@ class HoverManager: ObservableObject {
 
     private func setupAppSwitchObserver() {
         // Monitor when any application becomes active
-        NSWorkspace.shared.notificationCenter.addObserver(
+        appActivateObserver = NSWorkspace.shared.notificationCenter.addObserver(
             forName: NSWorkspace.didActivateApplicationNotification,
             object: nil,
             queue: .main
@@ -86,7 +90,7 @@ class HoverManager: ObservableObject {
         }
 
         // Monitor when any application is deactivated
-        NSWorkspace.shared.notificationCenter.addObserver(
+        appDeactivateObserver = NSWorkspace.shared.notificationCenter.addObserver(
             forName: NSWorkspace.didDeactivateApplicationNotification,
             object: nil,
             queue: .main
@@ -102,6 +106,17 @@ class HoverManager: ObservableObject {
                 self?.currentFileInfo = nil
                 self?.invalidateDisplayTimer()
             }
+        }
+    }
+
+    private func removeAppSwitchObservers() {
+        if let observer = appActivateObserver {
+            NSWorkspace.shared.notificationCenter.removeObserver(observer)
+            appActivateObserver = nil
+        }
+        if let observer = appDeactivateObserver {
+            NSWorkspace.shared.notificationCenter.removeObserver(observer)
+            appDeactivateObserver = nil
         }
     }
 
@@ -270,6 +285,7 @@ class HoverManager: ObservableObject {
 
     deinit {
         stopMonitoring()
+        removeAppSwitchObservers()
         cancellables.removeAll()
     }
 }
