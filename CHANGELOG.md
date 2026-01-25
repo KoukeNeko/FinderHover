@@ -38,30 +38,35 @@ All notable changes to FinderHover will be documented in this file.
 ### 🆕 Major Metadata Update - 9 New File Types
 
 #### HTML/Web Files
+
 - Page title and meta description
 - Keywords and author
 - Language attribute
 - Supports `.html`, `.htm`, `.xhtml` files
 
 #### Extended Image Metadata (IPTC/XMP)
+
 - Creator and creator tool
 - Headline and description
 - Copyright information
 - Enhanced metadata beyond basic EXIF
 
 #### Markdown Files
+
 - Title detection from frontmatter or first heading
 - Frontmatter presence indicator
 - Heading, image, link, and code block counts
 - Supports `.md`, `.markdown` files
 
 #### Config Files (JSON/YAML/TOML)
+
 - Key count and nesting depth
 - Array count detection
 - Format-specific parsing
 - Supports `.json`, `.yaml`, `.yml`, `.toml` files
 
 #### PSD Files
+
 - Layer count
 - Color mode (RGB, CMYK, etc.)
 - Bit depth
@@ -69,6 +74,7 @@ All notable changes to FinderHover will be documented in this file.
 - Transparency support
 
 #### Executable Files (Mach-O)
+
 - Architecture detection (arm64, x86_64, Universal)
 - Code signing status
 - Minimum OS version
@@ -76,6 +82,7 @@ All notable changes to FinderHover will be documented in this file.
 - File type (executable, dylib, bundle)
 
 #### App Bundles (.app)
+
 - Bundle ID
 - App version and build number
 - Minimum macOS version
@@ -83,6 +90,7 @@ All notable changes to FinderHover will be documented in this file.
 - Entitlements count
 
 #### SQLite Databases
+
 - Table, index, trigger, and view counts
 - Total row count across all tables
 - Schema version
@@ -90,6 +98,7 @@ All notable changes to FinderHover will be documented in this file.
 - Native SQLite3 C API for better performance
 
 #### Git Repositories
+
 - Current branch name
 - Total commit count
 - Remote URL
@@ -157,6 +166,7 @@ All notable changes to FinderHover will be documented in this file.
 - Enhanced readability across all supported languages
 
 **Technical Details:**
+
 - LazyVStack was incompatible with 100+ Toggle bindings in DisplaySettingsView
 - Frequent view recycling during fast scroll caused main thread blocking
 - VStack provides stable view references and better performance in this scenario
@@ -166,6 +176,7 @@ All notable changes to FinderHover will be documented in this file.
 ### 🆕 New Metadata Support
 
 #### Subtitle Files
+
 - **NEW: Subtitle Metadata** for SRT, VTT, ASS, SSA, SUB, SBV, and LRC files
   - Format detection (SubRip, WebVTT, Advanced SubStation Alpha, etc.)
   - Text encoding information
@@ -176,6 +187,7 @@ All notable changes to FinderHover will be documented in this file.
   - Rich formatting detection
 
 #### Vector Graphics
+
 - **NEW: Vector Graphics Metadata** for SVG, EPS, AI files
   - Format type identification
   - Canvas dimensions (width × height)
@@ -186,6 +198,7 @@ All notable changes to FinderHover will be documented in this file.
   - Format version
 
 #### Disk Images
+
 - **NEW: Disk Image Metadata** for DMG, ISO, IMG, CDR, Toast, SparseImage files
   - Image format (UDIF, UDZO, UDBZ, ISO 9660, etc.)
   - Total size and compressed size
@@ -195,6 +208,7 @@ All notable changes to FinderHover will be documented in this file.
   - File system (HFS+, APFS, ISO 9660, etc.)
 
 #### Font Files
+
 - **NEW: Font Metadata** for TTF, OTF, TTC, OTC, WOFF, WOFF2 files
   - Full font name and family
   - Font style (Regular, Bold, Italic, etc.)
@@ -204,6 +218,7 @@ All notable changes to FinderHover will be documented in this file.
   - Glyph count
 
 #### Code Files
+
 - **NEW: Code File Metadata** for 25+ programming languages
   - Language detection (Swift, Python, JavaScript, TypeScript, C++, Go, Rust, etc.)
   - Total line count
@@ -215,6 +230,7 @@ All notable changes to FinderHover will be documented in this file.
 ### 🔧 Major Technical Improvements
 
 #### Settings View Refactoring
+
 - **Massive code organization improvement** - Refactored SettingsView from 1,879 lines into 8 modular files
 - Implemented **Template Method Pattern** for better maintainability
 - **95.4% reduction** in main settings file size (1,879 → 86 lines)
@@ -230,6 +246,7 @@ All notable changes to FinderHover will be documented in this file.
 - Easier to add new settings pages in the future
 
 #### Performance Optimization
+
 - **DisplaySettingsView performance boost** with LazyVStack
   - Initial load time reduced by ~60%
   - Memory usage reduced by ~66%
@@ -239,6 +256,7 @@ All notable changes to FinderHover will be documented in this file.
 ### 🐛 Bug Fixes
 
 #### PDF Metadata Overlap
+
 - Fixed issue where PDF files would show both PDF metadata and vector graphics metadata simultaneously
 - Implemented smart detection to distinguish between:
   - **Document PDFs** (multi-page or with document metadata) → Shows PDF metadata only
@@ -313,15 +331,18 @@ All notable changes to FinderHover will be documented in this file.
 Fixed hover window positioning offset issue when using multiple displays with different DPI/resolution settings.
 
 **Problem:**
+
 - When the mouse cursor was on an external display (e.g., 1080p) while the main display had different DPI (e.g., 3.5K Retina), the hover window would appear at incorrect positions
 - The issue was caused by always using `NSScreen.main` for coordinate conversion and window boundary checking
 
 **Solution:**
+
 - Use `NSMouseInRect` to detect which screen actually contains the mouse cursor
 - Perform coordinate conversion and window positioning calculations based on the correct display
 - Ensures accurate positioning across all connected displays regardless of resolution or DPI scaling
 
 **Technical Changes:**
+
 - `FinderInteraction.swift`: Updated Accessibility API coordinate conversion to use the actual screen containing the mouse position
 - `HoverWindow.swift`: Updated window boundary checking to use the screen containing the mouse position instead of always using main screen
 
