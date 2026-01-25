@@ -198,8 +198,25 @@
         return result.join("\n");
       }
 
-      // Load changelog when page loads
-      document.addEventListener("DOMContentLoaded", loadChangelog);
+      // Wait for i18n to be ready before loading changelog
+      async function waitForI18n(maxWait = 3000) {
+        const start = Date.now();
+        while (Date.now() - start < maxWait) {
+          if (window.i18n &&
+              window.i18n.translations &&
+              window.i18n.translations.changelog) {
+            return true;
+          }
+          await new Promise(resolve => setTimeout(resolve, 50));
+        }
+        return false;
+      }
+
+      // Load changelog when page loads, after i18n is ready
+      document.addEventListener("DOMContentLoaded", async () => {
+        await waitForI18n();
+        loadChangelog();
+      });
     </script>
 
     <style>

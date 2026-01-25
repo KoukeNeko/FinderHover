@@ -2,7 +2,24 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.4.4 (Current)
+## Version 1.4.5 (Current)
+
+### 🐛 Bug Fixes
+
+#### Multi-Monitor Positioning
+
+- Fixed hover window appearing at incorrect position on secondary monitors
+- Root cause: Coordinate conversion was using the current screen's height instead of the primary screen's height
+- The Accessibility API uses a coordinate system with origin at the top-left of the primary screen, requiring primary screen height for correct conversion
+- Improved screen detection logic for better multi-display support
+
+#### Localization Fixes
+
+- Fixed 40+ missing localization keys in Settings UI
+- Added translations for all new metadata types (HTML, Markdown, Config, PSD, Executable, App Bundle, SQLite, Git)
+- Full localization coverage for English, Traditional Chinese, and Japanese
+
+## Version 1.4.4
 
 ### 🐛 Bug Fixes
 
