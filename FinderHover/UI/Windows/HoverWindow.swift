@@ -424,6 +424,9 @@ struct HoverContentView: View {
                     if settings.showVideoBitrate, let bitrate = video.bitrate {
                         DetailRow(icon: IconManager.Video.bitrate, label: "hover.video.bitrate".localized, value: bitrate, fontSize: settings.fontSize)
                     }
+                    if settings.showVideoHDR, let hdrFormat = video.hdrFormat, hdrFormat != "SDR" {
+                        DetailRow(icon: "sparkles", label: "hover.video.hdr".localized, value: hdrFormat, fontSize: settings.fontSize)
+                    }
                 }
             }
 
@@ -1146,6 +1149,87 @@ struct HoverContentView: View {
                     }
                     if settings.showGitTagCount, let tagCount = git.tagCount {
                         DetailRow(icon: "tag", label: "hover.git.tagCount".localized, value: "\(tagCount)", fontSize: settings.fontSize)
+                    }
+                }
+            }
+
+        case .systemMetadata:
+            if settings.showSystemMetadata, let systemMeta = fileInfo.systemMetadata, systemMeta.hasData {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.systemMetadata.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    // Finder Tags
+                    if settings.showFinderTags, let tags = systemMeta.finderTags, !tags.isEmpty {
+                        DetailRow(icon: "tag", label: "hover.systemMetadata.tags".localized, value: tags.joined(separator: ", "), fontSize: settings.fontSize)
+                    }
+
+                    // Where From (Download Source)
+                    if settings.showWhereFroms, let whereFroms = systemMeta.whereFroms, !whereFroms.isEmpty {
+                        let source = whereFroms.first ?? ""
+                        DetailRow(icon: "arrow.down.circle", label: "hover.systemMetadata.whereFrom".localized, value: source, fontSize: settings.fontSize)
+                    }
+
+                    // Quarantine Info
+                    if settings.showQuarantineInfo, let quarantine = systemMeta.quarantineInfo, quarantine.hasData {
+                        if quarantine.isQuarantined {
+                            if let downloadDate = quarantine.downloadDate {
+                                DetailRow(icon: "exclamationmark.shield", label: "hover.systemMetadata.quarantineDate".localized, value: downloadDate, fontSize: settings.fontSize)
+                            }
+                            if let sourceApp = quarantine.sourceApp {
+                                DetailRow(icon: "app.badge", label: "hover.systemMetadata.downloadedBy".localized, value: sourceApp, fontSize: settings.fontSize)
+                            }
+                        }
+                    }
+
+                    // Link Info
+                    if settings.showLinkInfo, let linkInfo = systemMeta.linkInfo, linkInfo.hasData {
+                        if linkInfo.isSymlink, let target = linkInfo.symlinkTarget {
+                            DetailRow(icon: "link", label: "hover.systemMetadata.symlinkTarget".localized, value: target, fontSize: settings.fontSize)
+                        }
+                        if linkInfo.hardLinkCount > 1 {
+                            DetailRow(icon: "doc.on.doc", label: "hover.systemMetadata.hardLinks".localized, value: "\(linkInfo.hardLinkCount)", fontSize: settings.fontSize)
+                        }
+                    }
+
+                    // Usage Stats
+                    if settings.showUsageStats, let usage = systemMeta.usageStats, usage.hasData {
+                        if let useCount = usage.useCount {
+                            DetailRow(icon: "chart.bar", label: "hover.systemMetadata.useCount".localized, value: "\(useCount)", fontSize: settings.fontSize)
+                        }
+                        if let lastUsed = usage.lastUsedDate {
+                            DetailRow(icon: "clock.arrow.circlepath", label: "hover.systemMetadata.lastUsed".localized, value: lastUsed, fontSize: settings.fontSize)
+                        }
+                    }
+
+                    // iCloud Status
+                    if settings.showiCloudStatus, let iCloudStatus = systemMeta.iCloudStatus {
+                        DetailRow(icon: "icloud", label: "hover.systemMetadata.iCloud".localized, value: iCloudStatus, fontSize: settings.fontSize)
+                    }
+
+                    // Finder Comment
+                    if settings.showFinderComment, let comment = systemMeta.finderComment {
+                        DetailRow(icon: "text.bubble", label: "hover.systemMetadata.comment".localized, value: comment, fontSize: settings.fontSize)
+                    }
+
+                    // UTI
+                    if settings.showUTI, let uti = systemMeta.uti {
+                        DetailRow(icon: "doc.badge.gearshape", label: "hover.systemMetadata.uti".localized, value: uti, fontSize: settings.fontSize)
+                    }
+
+                    // Extended Attributes
+                    if settings.showExtendedAttributes, let xattrs = systemMeta.extendedAttributes, !xattrs.isEmpty {
+                        DetailRow(icon: "list.bullet", label: "hover.systemMetadata.xattr".localized, value: "\(xattrs.count)", fontSize: settings.fontSize)
+                    }
+
+                    // Alias Target
+                    if settings.showAliasTarget, systemMeta.isAliasFile, let target = systemMeta.aliasTarget {
+                        DetailRow(icon: "arrow.turn.up.right", label: "hover.systemMetadata.aliasTarget".localized, value: target, fontSize: settings.fontSize)
                     }
                 }
             }
