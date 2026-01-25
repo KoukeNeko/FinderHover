@@ -1,6 +1,6 @@
 /**
  * FinderHover Website - Web Components
- * 減少頁面間的重複程式碼
+ * Reduces duplicate code between pages
  */
 
 // ============================================
@@ -12,6 +12,11 @@ class SiteNav extends HTMLElement {
         const homeLink = isHome ? '#' : 'index.html';
         const featuresLink = isHome ? '#features' : 'index.html#features';
 
+        // Get current language from i18n if available
+        const langNames = { 'zh-Hant': '繁', 'ja': '日', 'en': 'EN' };
+        const currentLang = window.i18n?.currentLang || 'zh-Hant';
+        const currentLangDisplay = langNames[currentLang] || '繁';
+
         this.innerHTML = `
       <nav class="nav">
         <div class="nav-content">
@@ -20,15 +25,59 @@ class SiteNav extends HTMLElement {
             <span>FinderHover</span>
           </a>
           <div class="nav-links">
-            <a href="${featuresLink}">功能特色</a>
-            <a href="formats.html">支援格式</a>
-            <a href="docs.html">使用說明</a>
-            <a href="https://github.com/KoukeNeko/FinderHover" target="_blank">GitHub</a>
+            <a href="${featuresLink}" data-i18n="nav.features">功能</a>
+            <a href="formats.html" data-i18n="nav.formats">格式</a>
+            <a href="changelog.html" data-i18n="nav.changelog">更新日誌</a>
+            <div class="lang-switcher">
+              <button class="lang-current" aria-label="Change language">${currentLangDisplay}</button>
+              <div class="lang-dropdown">
+                <button class="lang-option${currentLang === 'zh-Hant' ? ' active' : ''}" data-lang="zh-Hant">繁體中文</button>
+                <button class="lang-option${currentLang === 'ja' ? ' active' : ''}" data-lang="ja">日本語</button>
+                <button class="lang-option${currentLang === 'en' ? ' active' : ''}" data-lang="en">English</button>
+              </div>
+            </div>
           </div>
-          <a href="download.html" class="nav-cta">下載</a>
+          <a href="download.html" class="nav-cta" data-i18n="nav.download">下載</a>
         </div>
       </nav>
     `;
+
+        // Setup language switcher
+        this.setupLangSwitcher();
+
+        // Apply translations if i18n is ready
+        if (window.i18n?.translations && Object.keys(window.i18n.translations).length > 0) {
+            window.i18n.applyTranslations();
+        }
+    }
+
+    setupLangSwitcher() {
+        const switcher = this.querySelector('.lang-switcher');
+        const current = this.querySelector('.lang-current');
+        const dropdown = this.querySelector('.lang-dropdown');
+
+        // Toggle dropdown
+        current.addEventListener('click', (e) => {
+            e.stopPropagation();
+            switcher.classList.toggle('open');
+        });
+
+        // Close on outside click
+        document.addEventListener('click', () => {
+            switcher.classList.remove('open');
+        });
+
+        // Language selection
+        this.querySelectorAll('.lang-option').forEach(opt => {
+            opt.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const lang = opt.getAttribute('data-lang');
+                if (window.i18n) {
+                    window.i18n.switchTo(lang);
+                }
+                switcher.classList.remove('open');
+            });
+        });
     }
 }
 
@@ -43,13 +92,13 @@ class SiteFooter extends HTMLElement {
       <footer class="footer">
         <div class="footer-content">
           <div class="footer-links">
-            <a href="https://github.com/KoukeNeko/FinderHover">GitHub</a>
-            <a href="https://github.com/KoukeNeko/FinderHover/issues">問題回報</a>
-            <a href="license.html">授權條款</a>
-            <a href="changelog.html">更新日誌</a>
+            <a href="https://github.com/KoukeNeko/FinderHover" data-i18n="footer.github">GitHub</a>
+            <a href="changelog.html" data-i18n="footer.changelog">更新日誌</a>
+            <a href="license.html" data-i18n="footer.license">授權條款</a>
+            <a href="docs.html" data-i18n="footer.docs">文件</a>
           </div>
-          <p class="footer-copyright">
-            Copyright © ${year} KoukeNeko. 以 MIT 授權釋出。
+          <p class="footer-copyright" data-i18n="footer.copyright">
+            © ${year} KoukeNeko. 依 MIT 授權條款釋出。
           </p>
         </div>
       </footer>

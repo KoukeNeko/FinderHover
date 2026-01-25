@@ -1,0 +1,143 @@
+{
+  "meta": {
+    "title": "FinderHover - macOS ファイルプレビューツール",
+    "description": "Finder でホバーするだけで、50 種類以上のファイル形式の詳細なメタデータを表示できます。"
+  },
+  "nav": {
+    "features": "機能",
+    "formats": "形式",
+    "changelog": "更新履歴",
+    "download": "ダウンロード"
+  },
+  "hero": {
+    "headline": "すべてを一目で。<br>手の届くところに。",
+    "subheadline": "FinderHover を使えば、Finder でホバーするだけで<br>ファイルのすべての詳細が見えます。写真の EXIF、<br>動画のコーデック、コードの行数まで。",
+    "copyBtn": "インストールコマンドをコピー",
+    "copied": "コピーしました！",
+    "or": "または",
+    "directDownload": "直接ダウンロード",
+    "viewOnGithub": "GitHub で見る",
+    "requirement": "macOS Sonoma 14.0 以降が必要です"
+  },
+  "features": {
+    "headline": "macOS のために設計",
+    "subheadline": "Swift ネイティブ開発とシステム API の統合で、スムーズな体験を。",
+    "instant": {
+      "title": "即時プレビュー",
+      "desc": "ホバー遅延は 0.1 秒から 2 秒まで調整可能。ファイル名の変更やドラッグ時には自動で非表示に。"
+    },
+    "privacy": {
+      "title": "プライバシー優先",
+      "desc": "すべての処理はローカルで行われ、インターネット接続は不要。AppleScript ではなく macOS アクセシビリティ API を使用。"
+    },
+    "customizable": {
+      "title": "高度なカスタマイズ",
+      "desc": "リッチな macOS スタイルとシンプルな Windows ツールチップスタイルから選択。サイズ、透明度、フォントスケールの調整も。"
+    }
+  },
+  "metadata": {
+    "headline": "50 種類以上の形式に対応",
+    "subheadline": "あらゆるファイルのメタデータを深く解析。開かなくてもすべてがわかります。",
+    "viewAll": "すべての形式を見る →",
+    "info": {
+      "cameraModel": "カメラモデル",
+      "lensInfo": "レンズ情報",
+      "iso": "ISO",
+      "aperture": "絞り",
+      "shutterSpeed": "シャッター速度",
+      "gps": "GPS",
+      "videoCodec": "動画コーデック",
+      "resolution": "解像度",
+      "frameRate": "フレームレート",
+      "artist": "アーティスト",
+      "album": "アルバム",
+      "sampleRate": "サンプルレート",
+      "language": "言語",
+      "totalLines": "総行数",
+      "codeLines": "コード行数",
+      "pdfPages": "PDF ページ数",
+      "docTitle": "ドキュメントタイトル",
+      "author": "作者",
+      "wordCount": "文字数",
+      "keyCount": "キー数",
+      "nestingDepth": "ネスト深度",
+      "layerCount": "レイヤー数",
+      "colorMode": "カラーモード",
+      "fontName": "フォント名",
+      "fontFamily": "フォントファミリー",
+      "bundleId": "Bundle ID",
+      "version": "バージョン",
+      "codeSign": "コード署名",
+      "archiveFormat": "アーカイブ形式",
+      "compressionRatio": "圧縮率",
+      "tableCount": "テーブル数",
+      "indexCount": "インデックス数",
+      "currentBranch": "現在のブランチ",
+      "commitCount": "コミット数"
+    }
+  },
+  "gallery": {
+    "headline": "実際の画面",
+    "subheadline": "FinderHover の日常的な使用シーンをご覧ください。",
+    "screenshot": "スクリーンショット"
+  },
+  "faq": {
+    "headline": "よくある質問",
+    "q1": {
+      "question": "なぜアクセシビリティ権限が必要ですか？",
+      "answer": "FinderHover は macOS アクセシビリティ API を使用して、マウスが指しているファイルを検出します。これは Finder 内のファイルをリアルタイムで追跡する唯一の方法であり、すべてのデータはローカルで処理され、サーバーに送信されることはありません。"
+    },
+    "q2": {
+      "question": "なぜ Homebrew でのインストールが推奨ですか？",
+      "answer": "Homebrew でインストールすると Gatekeeper の検証が自動的に処理され、セキュリティ制限を手動で解除する手間が省けます。直接ダウンロードの場合は「システム設定 → プライバシーとセキュリティ」で手動で許可する必要があります。"
+    },
+    "q3": {
+      "question": "対応している macOS バージョンは？",
+      "answer": "FinderHover には macOS Sonoma 14.0 以降が必要です。Sonoma で導入された新しい API を使用して、より良いパフォーマンスと安定性を実現しています。"
+    },
+    "q4": {
+      "question": "システムパフォーマンスに影響しますか？",
+      "answer": "いいえ。FinderHover は Combine フレームワークの debounce メカニズムを使用し、マウスがホバーしている時のみデータを処理します。CPU 使用率はほぼゼロです。Finder を使用していない時は、システムリソースを一切消費しません。"
+    }
+  },
+  "footer": {
+    "github": "GitHub",
+    "changelog": "更新履歴",
+    "license": "ライセンス",
+    "docs": "ドキュメント",
+    "copyright": "© 2025 KoukeNeko. MIT ライセンスの下でリリース。"
+  },
+  "download": {
+    "pageTitle": "ダウンロード",
+    "pageSubtitle": "最適なインストール方法を選択してください",
+    "recommended": "推奨",
+    "homebrew": {
+      "title": "Homebrew",
+      "desc": "ワンコマンド、自動更新、Gatekeeper の手間なし"
+    },
+    "dmg": {
+      "title": "DMG ダウンロード",
+      "desc": "従来の方法、Gatekeeper の手動承認が必要",
+      "download": "最新版をダウンロード",
+      "note": "ダウンロード後、「システム設定 → プライバシーとセキュリティ」で許可してください"
+    }
+  },
+  "changelog": {
+    "pageTitle": "更新履歴",
+    "pageSubtitle": "FinderHover のすべての改善を追跡",
+    "loading": "更新履歴を読み込み中...",
+    "error": "更新履歴の読み込みに失敗しました"
+  },
+  "formats": {
+    "pageTitle": "対応形式",
+    "pageSubtitle": "120 種類以上のファイル形式、完全なメタデータサポート"
+  },
+  "docs": {
+    "pageTitle": "ドキュメント",
+    "pageSubtitle": "FinderHover を使い始める"
+  },
+  "license": {
+    "pageTitle": "ライセンス",
+    "pageSubtitle": "MIT License"
+  }
+}

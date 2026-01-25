@@ -1,0 +1,143 @@
+{
+  "meta": {
+    "title": "FinderHover - macOS File Preview Tool",
+    "description": "Hover over files in Finder to display rich file information with deep metadata parsing for 50+ file formats."
+  },
+  "nav": {
+    "features": "Features",
+    "formats": "Formats",
+    "changelog": "Changelog",
+    "download": "Download"
+  },
+  "hero": {
+    "headline": "See everything.<br>At a glance.",
+    "subheadline": "FinderHover lets you peek at every detail<br>with just a hover in Finder. EXIF data, video codecs,<br>lines of code — all instantly visible.",
+    "copyBtn": "Copy Install Command",
+    "copied": "Copied!",
+    "or": "or",
+    "directDownload": "Direct Download",
+    "viewOnGithub": "View on GitHub",
+    "requirement": "Requires macOS Sonoma 14.0 or later"
+  },
+  "features": {
+    "headline": "Built for macOS",
+    "subheadline": "Native Swift development with system API integration for a seamless experience.",
+    "instant": {
+      "title": "Instant Preview",
+      "desc": "Adjustable hover delay from 0.1 to 2 seconds. Auto-hides when renaming or dragging files."
+    },
+    "privacy": {
+      "title": "Privacy First",
+      "desc": "All processing happens locally, no internet required. Uses macOS Accessibility API, not AppleScript."
+    },
+    "customizable": {
+      "title": "Highly Customizable",
+      "desc": "Choose between rich macOS style or minimal Windows tooltip style. Adjust size, opacity, and font scaling."
+    }
+  },
+  "metadata": {
+    "headline": "50+ Formats Supported",
+    "subheadline": "Deep metadata parsing for all types of files, so you know everything without opening them.",
+    "viewAll": "View All Formats →",
+    "info": {
+      "cameraModel": "Camera Model",
+      "lensInfo": "Lens Info",
+      "iso": "ISO",
+      "aperture": "Aperture",
+      "shutterSpeed": "Shutter Speed",
+      "gps": "GPS",
+      "videoCodec": "Video Codec",
+      "resolution": "Resolution",
+      "frameRate": "Frame Rate",
+      "artist": "Artist",
+      "album": "Album",
+      "sampleRate": "Sample Rate",
+      "language": "Language",
+      "totalLines": "Total Lines",
+      "codeLines": "Code Lines",
+      "pdfPages": "PDF Pages",
+      "docTitle": "Document Title",
+      "author": "Author",
+      "wordCount": "Word Count",
+      "keyCount": "Key Count",
+      "nestingDepth": "Nesting Depth",
+      "layerCount": "Layers",
+      "colorMode": "Color Mode",
+      "fontName": "Font Name",
+      "fontFamily": "Font Family",
+      "bundleId": "Bundle ID",
+      "version": "Version",
+      "codeSign": "Code Signature",
+      "archiveFormat": "Archive Format",
+      "compressionRatio": "Compression Ratio",
+      "tableCount": "Tables",
+      "indexCount": "Indexes",
+      "currentBranch": "Current Branch",
+      "commitCount": "Commits"
+    }
+  },
+  "gallery": {
+    "headline": "In Action",
+    "subheadline": "See FinderHover in everyday use.",
+    "screenshot": "Screenshot"
+  },
+  "faq": {
+    "headline": "Questions? Answers.",
+    "q1": {
+      "question": "Why does it need Accessibility permission?",
+      "answer": "FinderHover uses the macOS Accessibility API to detect which file your mouse is pointing at. This is the only way to track files in Finder in real-time, and all data is processed locally without being sent to any server."
+    },
+    "q2": {
+      "question": "Why is Homebrew recommended?",
+      "answer": "Installing via Homebrew automatically handles Gatekeeper verification, saving you from manually bypassing security restrictions. Direct downloads require manual approval in System Settings → Privacy & Security."
+    },
+    "q3": {
+      "question": "Which macOS versions are supported?",
+      "answer": "FinderHover requires macOS Sonoma 14.0 or later. We use new APIs introduced in Sonoma for better performance and stability."
+    },
+    "q4": {
+      "question": "Will it affect system performance?",
+      "answer": "No. FinderHover uses Combine framework's debounce mechanism, only processing data when the mouse hovers. CPU usage is virtually zero. When you're not using Finder, it consumes no system resources."
+    }
+  },
+  "footer": {
+    "github": "GitHub",
+    "changelog": "Changelog",
+    "license": "License",
+    "docs": "Documentation",
+    "copyright": "© 2025 KoukeNeko. Released under MIT License."
+  },
+  "download": {
+    "pageTitle": "Download",
+    "pageSubtitle": "Choose the installation method that works for you",
+    "recommended": "Recommended",
+    "homebrew": {
+      "title": "Homebrew",
+      "desc": "One command, auto-updates, no Gatekeeper hassle"
+    },
+    "dmg": {
+      "title": "DMG Download",
+      "desc": "Traditional method, requires manual Gatekeeper approval",
+      "download": "Download Latest",
+      "note": "After downloading, allow it in System Settings → Privacy & Security"
+    }
+  },
+  "changelog": {
+    "pageTitle": "Changelog",
+    "pageSubtitle": "Track every improvement to FinderHover",
+    "loading": "Loading changelog...",
+    "error": "Failed to load changelog"
+  },
+  "formats": {
+    "pageTitle": "Supported Formats",
+    "pageSubtitle": "Over 120 file formats with full metadata support"
+  },
+  "docs": {
+    "pageTitle": "Documentation",
+    "pageSubtitle": "Get started with FinderHover"
+  },
+  "license": {
+    "pageTitle": "License",
+    "pageSubtitle": "MIT License"
+  }
+}

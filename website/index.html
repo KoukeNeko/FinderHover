@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" type="image/png" href="assets/icon.png" />
     <script src="components.js" defer></script>
+    <script src="i18n.js" defer></script>
   </head>
   <body>
     <!-- Navigation -->
@@ -19,8 +20,8 @@
     <!-- Hero Section -->
     <section class="hero">
       <div class="hero-content">
-        <h1 class="hero-headline">一覽無遺，<br />觸手可及。</h1>
-        <p class="hero-subheadline">
+        <h1 class="hero-headline" data-i18n="hero.headline">一覽無遺，<br />觸手可及。</h1>
+        <p class="hero-subheadline" data-i18n="hero.subheadline">
           FinderHover 讓你在 Finder 中輕輕一指，<br />
           就能看見檔案的所有細節。照片的 EXIF、<br />
           影片的編碼、程式碼的行數，通通一目了然。
@@ -40,24 +41,25 @@
                 d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
               />
             </svg>
-            <span class="hero-btn-text">複製安裝指令</span>
+            <span class="hero-btn-text" data-i18n="hero.copyBtn">複製安裝指令</span>
           </button>
           <p class="hero-brew-hint">
             <code>brew install koukeneko/tap/finderhover</code>
           </p>
           <div class="hero-alt-install">
-            <span>或</span>
+            <span data-i18n="hero.or">或</span>
             <a
               href="https://github.com/KoukeNeko/FinderHover/releases/latest"
               class="hero-link"
+              data-i18n="hero.directDownload"
               >直接下載</a
             >
             <span>·</span>
             <a href="https://github.com/KoukeNeko/FinderHover" class="hero-link"
-              >在 GitHub 上查看</a
+              data-i18n="hero.viewOnGithub">在 GitHub 上查看</a
             >
           </div>
-          <p class="hero-requirement">適用於 macOS Sonoma 14.0 或更新版本</p>
+          <p class="hero-requirement" data-i18n="hero.requirement">適用於 macOS Sonoma 14.0 或更新版本</p>
         </div>
       </div>
       <div class="hero-image">
@@ -71,8 +73,8 @@
     <!-- Features Section -->
     <section id="features" class="features-section">
       <div class="section-intro">
-        <h2 class="section-headline">為 macOS 精心打造</h2>
-        <p class="section-subheadline">
+        <h2 class="section-headline" data-i18n="features.headline">為 macOS 精心打造</h2>
+        <p class="section-subheadline" data-i18n="features.subheadline">
           原生 Swift 開發，整合系統 API，帶來流暢體驗。
         </p>
       </div>
@@ -91,8 +93,8 @@
               <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
             </svg>
           </div>
-          <h3>即時預覽</h3>
-          <p>
+          <h3 data-i18n="features.instant.title">即時預覽</h3>
+          <p data-i18n="features.instant.desc">
             可調整的懸停延遲，從 0.1 秒到 2
             秒。當你重新命名或拖曳檔案時，自動隱藏。
           </p>
@@ -111,8 +113,8 @@
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
             </svg>
           </div>
-          <h3>隱私優先</h3>
-          <p>
+          <h3 data-i18n="features.privacy.title">隱私優先</h3>
+          <p data-i18n="features.privacy.desc">
             所有處理都在本機進行，無需網路連線。使用 macOS 輔助使用 API，不使用
             AppleScript。
           </p>
@@ -134,8 +136,8 @@
               />
             </svg>
           </div>
-          <h3>高度自訂</h3>
-          <p>
+          <h3 data-i18n="features.customizable.title">高度自訂</h3>
+          <p data-i18n="features.customizable.desc">
             在豐富的 macOS 風格與簡約的 Windows
             提示風格之間選擇。調整大小、透明度和字體縮放。
           </p>
@@ -146,8 +148,8 @@
     <!-- Metadata Section -->
     <section id="metadata" class="metadata-section">
       <div class="section-intro">
-        <h2 class="section-headline">支援超過 50 種格式</h2>
-        <p class="section-subheadline">
+        <h2 class="section-headline" data-i18n="metadata.headline">支援超過 50 種格式</h2>
+        <p class="section-subheadline" data-i18n="metadata.subheadline">
           深度解析各類檔案的中繼資料，讓你不用開啟檔案就能了解一切。
         </p>
       </div>
@@ -232,18 +234,18 @@
         <!-- Row 2 - Metadata info -->
         <div class="marquee-row" data-direction="right" data-speed="medium">
           <div class="marquee-content">
-            <span class="format-info photo">相機型號</span>
-            <span class="format-info photo">鏡頭資訊</span>
+            <span class="format-info photo" data-i18n="metadata.info.cameraModel">相機型號</span>
+            <span class="format-info photo" data-i18n="metadata.info.lensInfo">鏡頭資訊</span>
             <span class="format-info photo">ISO</span>
-            <span class="format-info photo">光圈</span>
-            <span class="format-info photo">快門速度</span>
+            <span class="format-info photo" data-i18n="metadata.info.aperture">光圈</span>
+            <span class="format-info photo" data-i18n="metadata.info.shutterSpeed">快門速度</span>
             <span class="format-info photo">GPS</span>
-            <span class="format-info video">影片編碼</span>
-            <span class="format-info video">解析度</span>
-            <span class="format-info video">幀率</span>
-            <span class="format-info audio">演出者</span>
-            <span class="format-info audio">專輯</span>
-            <span class="format-info audio">取樣率</span>
+            <span class="format-info video" data-i18n="metadata.info.videoCodec">影片編碼</span>
+            <span class="format-info video" data-i18n="metadata.info.resolution">解析度</span>
+            <span class="format-info video" data-i18n="metadata.info.frameRate">幀率</span>
+            <span class="format-info audio" data-i18n="metadata.info.artist">演出者</span>
+            <span class="format-info audio" data-i18n="metadata.info.album">專輯</span>
+            <span class="format-info audio" data-i18n="metadata.info.sampleRate">取樣率</span>
           </div>
           <div class="marquee-content" aria-hidden="true">
             <span class="format-info photo">相機型號</span>
@@ -360,17 +362,17 @@
         <!-- Row 4 - More metadata -->
         <div class="marquee-row" data-direction="right" data-speed="fast">
           <div class="marquee-content">
-            <span class="format-info code">程式語言</span>
-            <span class="format-info code">總行數</span>
-            <span class="format-info code">程式碼行數</span>
-            <span class="format-info doc">PDF 頁數</span>
-            <span class="format-info doc">文件標題</span>
-            <span class="format-info doc">作者</span>
-            <span class="format-info doc">字數統計</span>
-            <span class="format-info config">鍵值數量</span>
-            <span class="format-info config">巢狀深度</span>
-            <span class="format-info design">圖層數</span>
-            <span class="format-info design">色彩模式</span>
+            <span class="format-info code" data-i18n="metadata.info.language">程式語言</span>
+            <span class="format-info code" data-i18n="metadata.info.totalLines">總行數</span>
+            <span class="format-info code" data-i18n="metadata.info.codeLines">程式碼行數</span>
+            <span class="format-info doc" data-i18n="metadata.info.pdfPages">PDF 頁數</span>
+            <span class="format-info doc" data-i18n="metadata.info.docTitle">文件標題</span>
+            <span class="format-info doc" data-i18n="metadata.info.author">作者</span>
+            <span class="format-info doc" data-i18n="metadata.info.wordCount">字數統計</span>
+            <span class="format-info config" data-i18n="metadata.info.keyCount">鍵值數量</span>
+            <span class="format-info config" data-i18n="metadata.info.nestingDepth">巢狀深度</span>
+            <span class="format-info design" data-i18n="metadata.info.layerCount">圖層數</span>
+            <span class="format-info design" data-i18n="metadata.info.colorMode">色彩模式</span>
           </div>
           <div class="marquee-content" aria-hidden="true">
             <span class="format-info code">程式語言</span>
@@ -484,17 +486,17 @@
         <!-- Row 6 - Final metadata -->
         <div class="marquee-row" data-direction="right" data-speed="medium">
           <div class="marquee-content">
-            <span class="format-info font">字型名稱</span>
-            <span class="format-info font">字型家族</span>
+            <span class="format-info font" data-i18n="metadata.info.fontName">字型名稱</span>
+            <span class="format-info font" data-i18n="metadata.info.fontFamily">字型家族</span>
             <span class="format-info system">Bundle ID</span>
-            <span class="format-info system">版本</span>
-            <span class="format-info system">程式碼簽章</span>
-            <span class="format-info archive">壓縮格式</span>
-            <span class="format-info archive">壓縮率</span>
-            <span class="format-info data">資料表數</span>
-            <span class="format-info data">索引數</span>
-            <span class="format-info git">目前分支</span>
-            <span class="format-info git">提交次數</span>
+            <span class="format-info system" data-i18n="metadata.info.version">版本</span>
+            <span class="format-info system" data-i18n="metadata.info.codeSign">程式碼簽章</span>
+            <span class="format-info archive" data-i18n="metadata.info.archiveFormat">壓縮格式</span>
+            <span class="format-info archive" data-i18n="metadata.info.compressionRatio">壓縮率</span>
+            <span class="format-info data" data-i18n="metadata.info.tableCount">資料表數</span>
+            <span class="format-info data" data-i18n="metadata.info.indexCount">索引數</span>
+            <span class="format-info git" data-i18n="metadata.info.currentBranch">目前分支</span>
+            <span class="format-info git" data-i18n="metadata.info.commitCount">提交次數</span>
           </div>
           <div class="marquee-content" aria-hidden="true">
             <span class="format-info font">字型名稱</span>
@@ -539,15 +541,15 @@
       </div>
 
       <p class="formats-cta">
-        <a href="formats.html" class="formats-link">查看完整格式清單 →</a>
+        <a href="formats.html" class="formats-link" data-i18n="metadata.viewAll">查看完整格式清單 →</a>
       </p>
     </section>
 
     <!-- Gallery Section -->
     <section id="gallery" class="gallery-section">
       <div class="section-intro">
-        <h2 class="section-headline">實際畫面</h2>
-        <p class="section-subheadline">看看 FinderHover 在日常使用中的表現。</p>
+        <h2 class="section-headline" data-i18n="gallery.headline">實際畫面</h2>
+        <p class="section-subheadline" data-i18n="gallery.subheadline">看看 FinderHover 在日常使用中的表現。</p>
       </div>
 
       <div class="gallery-grid">
@@ -584,34 +586,34 @@
 
     <!-- FAQ Section -->
     <section id="faq" class="faq-section">
-      <h2 class="faq-headline">有問？有答。</h2>
+      <h2 class="faq-headline" data-i18n="faq.headline">有問？有答。</h2>
       <div class="faq-list">
         <details class="faq-item" open>
-          <summary>為什麼需要輔助使用權限？</summary>
-          <p>
+          <summary data-i18n="faq.q1.question">為什麼需要輔助使用權限？</summary>
+          <p data-i18n="faq.q1.answer">
             FinderHover 使用 macOS 輔助使用 API
             來偵測你的滑鼠目前指向哪個檔案。這是唯一能夠即時追蹤 Finder
             中檔案的方式，且所有資料都在本機處理，不會傳送到任何伺服器。
           </p>
         </details>
         <details class="faq-item">
-          <summary>為什麼推薦用 Homebrew 安裝？</summary>
-          <p>
+          <summary data-i18n="faq.q2.question">為什麼推薦用 Homebrew 安裝？</summary>
+          <p data-i18n="faq.q2.answer">
             透過 Homebrew 安裝會自動處理 Gatekeeper
             驗證，省去手動解除安全性限制的步驟。直接下載的 .app
             檔案需要在「系統設定 → 隱私與安全性」中手動允許執行。
           </p>
         </details>
         <details class="faq-item">
-          <summary>支援哪些 macOS 版本？</summary>
-          <p>
+          <summary data-i18n="faq.q3.question">支援哪些 macOS 版本？</summary>
+          <p data-i18n="faq.q3.answer">
             FinderHover 需要 macOS Sonoma 14.0 或更新版本。我們使用了 Sonoma
             引入的新 API 來提供更好的效能和穩定性。
           </p>
         </details>
         <details class="faq-item">
-          <summary>會影響系統效能嗎？</summary>
-          <p>
+          <summary data-i18n="faq.q4.question">會影響系統效能嗎？</summary>
+          <p data-i18n="faq.q4.answer">
             不會。FinderHover 使用 Combine 框架的 debounce
             機制，只在滑鼠停留時才處理資料，CPU 使用率幾乎為零。當你不使用
             Finder 時，它完全不會消耗系統資源。
@@ -629,7 +631,8 @@
         navigator.clipboard.writeText(command).then(() => {
           const btnText = document.querySelector(".hero-btn-text");
           const originalText = btnText.textContent;
-          btnText.textContent = "已複製！";
+          const copiedText = window.i18n ? window.i18n.t('hero.copied') : '已複製！';
+          btnText.textContent = copiedText;
           setTimeout(() => {
             btnText.textContent = originalText;
           }, 2000);
