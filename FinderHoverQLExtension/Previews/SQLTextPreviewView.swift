@@ -476,6 +476,7 @@ class SQLTextPreviewViewModel: ObservableObject {
     let content: String
     let lineCount: Int
     let statementCount: Int
+    let lineNumbersString: String  // Cached for performance
 
     @Published var highlightedContent: AttributedString?
     @Published var isHighlighting = true
@@ -487,7 +488,9 @@ class SQLTextPreviewViewModel: ObservableObject {
         self.fileName = fileName
         self.fileSize = fileSize
         self.content = content
-        self.lineCount = content.components(separatedBy: "\n").count
+        let count = content.components(separatedBy: "\n").count
+        self.lineCount = count
+        self.lineNumbersString = (1...max(1, count)).map { String($0) }.joined(separator: "\n")
 
         // Count SQL statements (rough estimate based on semicolons)
         self.statementCount = content.components(separatedBy: ";")
@@ -559,7 +562,7 @@ struct SQLTextPreviewView: View {
                 // Left sidebar - Tables (only show if tables found)
                 if !viewModel.tables.isEmpty {
                     tableSidebar
-                        .frame(minWidth: 200, idealWidth: 250, maxWidth: 350)
+                        .frame(minWidth: 180, idealWidth: 200, maxWidth: 300)
                 }
 
                 // Right content - Based on view mode
@@ -865,13 +868,15 @@ struct SQLTextPreviewView: View {
                 } else {
                     ScrollView([.horizontal, .vertical]) {
                         LazyVStack(alignment: .leading, spacing: 0, pinnedViews: [.sectionHeaders]) {
-                            Section(header: columnHeaderRow(columns: selectedTable.columns)) {
+                            Section(header: columnHeaderRow(columns: selectedTable.columns, table: selectedTable)) {
                                 // Data rows
                                 ForEach(Array(selectedTable.data.enumerated()), id: \.offset) { index, row in
-                                    dataRow(row: row, columns: selectedTable.columns, index: index)
+                                    dataRow(row: row, columns: selectedTable.columns, index: index, table: selectedTable)
                                 }
                             }
                         }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
                     }
                 }
             } else {
@@ -880,24 +885,24 @@ struct SQLTextPreviewView: View {
         }
     }
 
-    private func columnHeaderRow(columns: [SQLColumnDefinition]) -> some View {
+    private func columnHeaderRow(columns: [SQLColumnDefinition], table: SQLTableDefinition) -> some View {
         HStack(spacing: 0) {
-            ForEach(columns) { column in
-                columnHeader(column)
+            ForEach(Array(columns.enumerated()), id: \.offset) { index, column in
+                columnHeader(column, width: columnWidth(for: index, in: table))
             }
         }
         .background(Color(nsColor: .controlBackgroundColor))
     }
 
-    private func dataRow(row: [String], columns: [SQLColumnDefinition], index: Int) -> some View {
+    private func dataRow(row: [String], columns: [SQLColumnDefinition], index: Int, table: SQLTableDefinition) -> some View {
         HStack(spacing: 0) {
             ForEach(Array(row.enumerated()), id: \.offset) { colIndex, value in
-                dataCell(value: value)
+                dataCell(value: value, width: columnWidth(for: colIndex, in: table))
             }
             // Fill remaining columns if row is shorter
             if row.count < columns.count {
-                ForEach(row.count..<columns.count, id: \.self) { _ in
-                    dataCell(value: "NULL")
+                ForEach(row.count..<columns.count, id: \.self) { colIndex in
+                    dataCell(value: "NULL", width: columnWidth(for: colIndex, in: table))
                 }
             }
         }
@@ -908,7 +913,7 @@ struct SQLTextPreviewView: View {
         )
     }
 
-    private func columnHeader(_ column: SQLColumnDefinition) -> some View {
+    private func columnHeader(_ column: SQLColumnDefinition, width: CGFloat) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             HStack(spacing: 4) {
                 if column.isPrimaryKey {
@@ -926,21 +931,46 @@ struct SQLTextPreviewView: View {
                 .font(.system(size: 9))
                 .foregroundColor(.secondary)
         }
-        .frame(width: 150, alignment: .leading)
+        .frame(width: width, alignment: .leading)
         .padding(.horizontal, 8)
         .padding(.vertical, 6)
         .border(Color.secondary.opacity(0.2), width: 0.5)
     }
 
-    private func dataCell(value: String) -> some View {
+    private func dataCell(value: String, width: CGFloat) -> some View {
         Text(value)
             .font(.system(size: 11, design: .monospaced))
             .foregroundColor(value == "NULL" ? .secondary : .primary)
             .lineLimit(2)
-            .frame(width: 150, alignment: .leading)
+            .frame(width: width, alignment: .leading)
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             .border(Color.secondary.opacity(0.1), width: 0.5)
+    }
+
+    // Calculate optimal column width based on content
+    private func columnWidth(for columnIndex: Int, in table: SQLTableDefinition) -> CGFloat {
+        let minWidth: CGFloat = 60
+        let maxWidth: CGFloat = 250
+
+        guard columnIndex < table.columns.count else { return minWidth }
+
+        let column = table.columns[columnIndex]
+
+        // Start with column name length
+        var maxLength = column.name.count
+
+        // Check data values (sample first 20 rows)
+        for row in table.data.prefix(20) {
+            if columnIndex < row.count {
+                maxLength = max(maxLength, row[columnIndex].count)
+            }
+        }
+
+        // Calculate width: ~7 points per character + padding
+        let calculatedWidth = CGFloat(maxLength) * 7 + 24
+
+        return min(max(calculatedWidth, minWidth), maxWidth)
     }
 
     private var emptyDataView: some View {
@@ -991,7 +1021,7 @@ struct SQLTextPreviewView: View {
                     .frame(width: geometry.size.width, height: geometry.size.height)
                 } else if let highlighted = viewModel.highlightedContent {
                     HStack(alignment: .top, spacing: 0) {
-                        // Line numbers - simplified for performance
+                        // Line numbers - single Text for performance
                         lineNumbersText
 
                         Divider()
@@ -1021,19 +1051,15 @@ struct SQLTextPreviewView: View {
         }
     }
 
-    // Use a single Text view for line numbers instead of ForEach
+    // Single Text for line numbers - much faster than ForEach
     private var lineNumbersText: some View {
-        Text(lineNumbersString)
-            .font(.system(size: 11, design: .monospaced))
+        Text(viewModel.lineNumbersString)
+            .font(.system(size: 12, design: .monospaced))
             .foregroundColor(.secondary)
             .multilineTextAlignment(.trailing)
             .padding(.horizontal, 8)
             .padding(.vertical, 8)
             .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
-    }
-
-    private var lineNumbersString: String {
-        (1...max(1, viewModel.lineCount)).map { String($0) }.joined(separator: "\n")
     }
 
     // MARK: - Footer

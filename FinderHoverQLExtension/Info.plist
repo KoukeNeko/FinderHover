@@ -11,10 +11,8 @@
 			<key>QLSupportedContentTypes</key>
 			<array>
 				<string>dev.koukeneko.sqlite-database</string>
-				<string>public.database</string>
-				<string>public.plain-text</string>
-				<string>public.source-code</string>
 				<string>dev.koukeneko.sql-script</string>
+				<string>public.database</string>
 			</array>
 			<key>QLSupportsSearchableItems</key>
 			<false/>

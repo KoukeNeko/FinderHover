@@ -29,6 +29,12 @@ class PreviewViewController: NSViewController, QLPreviewingController {
         self.view = NSView()
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Set preferred content size - wider format for table preview
+        self.preferredContentSize = NSSize(width: 1600, height: 900)
+    }
+
     // MARK: - QLPreviewingController
 
     func preparePreviewOfFile(at url: URL) async throws {
