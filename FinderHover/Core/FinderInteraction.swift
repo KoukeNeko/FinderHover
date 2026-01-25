@@ -148,10 +148,13 @@ class FinderInteraction {
     private static func getFilePathAtPosition(_ position: CGPoint) -> String? {
         let systemWideElement = AXUIElementCreateSystemWide()
 
-        // Convert screen coordinates - find the screen that contains the mouse position
-        let screen = NSScreen.screens.first { NSMouseInRect(position, $0.frame, false) } ?? NSScreen.main
-        let screenHeight = screen?.frame.height ?? 0
-        let axPosition = CGPoint(x: position.x, y: screenHeight - position.y)
+        // Convert Cocoa coordinates to Accessibility API coordinates
+        // Cocoa: origin at bottom-left of primary screen, Y increases upward
+        // AX/Quartz: origin at top-left of primary screen, Y increases downward
+        // The conversion requires the PRIMARY screen's height, not the current screen
+        let primaryScreen = NSScreen.screens.first { $0.frame.origin == .zero } ?? NSScreen.main
+        let primaryScreenHeight = primaryScreen?.frame.height ?? 0
+        let axPosition = CGPoint(x: position.x, y: primaryScreenHeight - position.y)
 
         var elementRef: AXUIElement?
         let result = AXUIElementCopyElementAtPosition(

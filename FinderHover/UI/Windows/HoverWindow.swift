@@ -187,33 +187,42 @@ class HoverWindowController: NSWindowController {
     private func positionWindow(window: NSWindow, at position: CGPoint, settings: AppSettings) {
         let offsetX: CGFloat = settings.windowOffsetX
         let offsetY: CGFloat = settings.windowOffsetY
+
+        // Find the screen that contains the mouse position using a more robust method
+        // NSMouseInRect can fail with certain monitor configurations
+        let screen = NSScreen.screens.first { screen in
+            let frame = screen.frame
+            return position.x >= frame.minX && position.x < frame.maxX &&
+                   position.y >= frame.minY && position.y < frame.maxY
+        } ?? NSScreen.main
+
+        guard let screen = screen else { return }
+
+        let screenFrame = screen.visibleFrame
+
+        // Calculate initial window position relative to cursor
+        // Position below and to the right of the cursor by default
         var windowOrigin = CGPoint(
             x: position.x + offsetX,
             y: position.y - offsetY - window.frame.height
         )
 
-        // Find the screen that contains the mouse position
-        let screen = NSScreen.screens.first { NSMouseInRect(position, $0.frame, false) } ?? NSScreen.main
-        guard let screen = screen else { return }
-
-        let screenFrame = screen.visibleFrame
-
-        // Check right edge
+        // Check right edge - flip to left side of cursor if needed
         if windowOrigin.x + window.frame.width > screenFrame.maxX {
             windowOrigin.x = position.x - offsetX - window.frame.width
         }
 
-        // Check left edge
+        // Check left edge - ensure window stays within screen
         if windowOrigin.x < screenFrame.minX {
             windowOrigin.x = screenFrame.minX + Constants.WindowLayout.screenEdgePadding
         }
 
-        // Check bottom edge
+        // Check bottom edge - flip to above cursor if needed
         if windowOrigin.y < screenFrame.minY {
             windowOrigin.y = position.y + offsetY
         }
 
-        // Check top edge
+        // Check top edge - ensure window stays within screen
         if windowOrigin.y + window.frame.height > screenFrame.maxY {
             windowOrigin.y = screenFrame.maxY - window.frame.height - Constants.WindowLayout.screenEdgePadding
         }
