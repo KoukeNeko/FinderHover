@@ -2,7 +2,7 @@
 //  PreviewViewController.swift
 //  FinderHoverQLExtension
 //
-//  Quick Look Preview Extension for SQLite databases
+//  Quick Look Preview Extension for SQLite databases and SQL files
 //
 //  Created by doeshing on 2026/1/25.
 //
@@ -15,8 +15,7 @@ class PreviewViewController: NSViewController, QLPreviewingController {
 
     // MARK: - Properties
 
-    private var hostingView: NSHostingView<SQLitePreviewView>?
-    private var errorHostingView: NSHostingView<ErrorPreviewView>?
+    private var hostingView: NSView?
 
     // MARK: - Lifecycle
 
@@ -37,20 +36,37 @@ class PreviewViewController: NSViewController, QLPreviewingController {
         guard FileManager.default.fileExists(atPath: url.path) else {
             await showError(
                 title: "File Not Found",
-                message: "The database file could not be found."
+                message: "The file could not be found."
             )
-            throw SQLiteError.cannotOpen("File not found")
+            throw PreviewError.fileNotFound
         }
 
-        // Verify it's a SQLite file
-        guard SQLiteDatabase.isSQLiteFile(at: url.path) else {
+        let fileExtension = url.pathExtension.lowercased()
+
+        // Supported SQL text file extensions
+        let sqlTextExtensions = ["sql"]
+
+        // Supported SQLite database extensions
+        let sqliteExtensions = ["db", "sqlite", "sqlite3", "db3"]
+
+        // Determine file type and show appropriate preview
+        if sqlTextExtensions.contains(fileExtension) {
+            try await prepareSQLTextPreview(at: url)
+        } else if sqliteExtensions.contains(fileExtension) || SQLiteDatabase.isSQLiteFile(at: url.path) {
+            try await prepareSQLitePreview(at: url)
+        } else {
+            // Unsupported file type
             await showError(
-                title: "Invalid Database",
-                message: "This file is not a valid SQLite database."
+                title: "Unsupported Format",
+                message: "This file type is not supported by FinderHover Quick Look."
             )
-            throw SQLiteError.invalidDatabase
+            throw PreviewError.unsupportedFormat
         }
+    }
 
+    // MARK: - SQLite Database Preview
+
+    private func prepareSQLitePreview(at url: URL) async throws {
         do {
             // Open database
             let database = try SQLiteDatabase(path: url.path)
@@ -74,21 +90,7 @@ class PreviewViewController: NSViewController, QLPreviewingController {
             // Update UI on main thread
             await MainActor.run {
                 let previewView = SQLitePreviewView(viewModel: viewModel)
-                let hosting = NSHostingView(rootView: previewView)
-                hosting.translatesAutoresizingMaskIntoConstraints = false
-
-                // Remove any existing subviews
-                view.subviews.forEach { $0.removeFromSuperview() }
-
-                view.addSubview(hosting)
-                NSLayoutConstraint.activate([
-                    hosting.topAnchor.constraint(equalTo: view.topAnchor),
-                    hosting.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                    hosting.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                    hosting.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-                ])
-
-                self.hostingView = hosting
+                embedHostingView(previewView)
             }
 
         } catch let error as SQLiteError {
@@ -106,25 +108,101 @@ class PreviewViewController: NSViewController, QLPreviewingController {
         }
     }
 
+    // MARK: - SQL Text File Preview
+
+    private func prepareSQLTextPreview(at url: URL) async throws {
+        do {
+            // Get file attributes
+            let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
+            let fileSize = attributes[.size] as? Int64 ?? 0
+
+            // Read file content (limit to 2MB for performance)
+            let maxSize: Int64 = 2 * 1024 * 1024
+            let content: String
+
+            if fileSize > maxSize {
+                // Read only first 2MB
+                let fileHandle = try FileHandle(forReadingFrom: url)
+                defer { try? fileHandle.close() }
+
+                if let data = try fileHandle.read(upToCount: Int(maxSize)),
+                   let text = String(data: data, encoding: .utf8) {
+                    content = text + "\n\n... (file truncated, showing first 2MB)"
+                } else {
+                    throw PreviewError.cannotReadFile
+                }
+            } else {
+                content = try String(contentsOf: url, encoding: .utf8)
+            }
+
+            // Create view model
+            let viewModel = SQLTextPreviewViewModel(
+                fileName: url.lastPathComponent,
+                fileSize: fileSize,
+                content: content
+            )
+
+            // Update UI on main thread
+            await MainActor.run {
+                let previewView = SQLTextPreviewView(viewModel: viewModel)
+                embedHostingView(previewView)
+            }
+
+        } catch {
+            await showError(
+                title: "Error Reading File",
+                message: error.localizedDescription
+            )
+            throw error
+        }
+    }
+
+    // MARK: - Helper Methods
+
+    @MainActor
+    private func embedHostingView<V: View>(_ view: V) {
+        let hosting = NSHostingView(rootView: view)
+        hosting.translatesAutoresizingMaskIntoConstraints = false
+
+        // Remove any existing subviews
+        self.view.subviews.forEach { $0.removeFromSuperview() }
+
+        self.view.addSubview(hosting)
+        NSLayoutConstraint.activate([
+            hosting.topAnchor.constraint(equalTo: self.view.topAnchor),
+            hosting.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            hosting.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            hosting.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        ])
+
+        self.hostingView = hosting
+    }
+
     // MARK: - Error Handling
 
     @MainActor
     private func showError(title: String, message: String) {
         let errorView = ErrorPreviewView(title: title, message: message)
-        let hosting = NSHostingView(rootView: errorView)
-        hosting.translatesAutoresizingMaskIntoConstraints = false
+        embedHostingView(errorView)
+    }
+}
 
-        view.subviews.forEach { $0.removeFromSuperview() }
-        view.addSubview(hosting)
+// MARK: - Preview Error
 
-        NSLayoutConstraint.activate([
-            hosting.topAnchor.constraint(equalTo: view.topAnchor),
-            hosting.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            hosting.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            hosting.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+enum PreviewError: LocalizedError {
+    case fileNotFound
+    case cannotReadFile
+    case unsupportedFormat
 
-        self.errorHostingView = hosting
+    var errorDescription: String? {
+        switch self {
+        case .fileNotFound:
+            return "The file could not be found."
+        case .cannotReadFile:
+            return "The file could not be read."
+        case .unsupportedFormat:
+            return "This file format is not supported."
+        }
     }
 }
 

@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		C8455BCC2F26581F000724A8 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8455BCB2F26581F000724A8 /* Quartz.framework */; };
 		C8455BD82F265820000724A8 /* FinderHoverQLExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C8455BC92F26581F000724A8 /* FinderHoverQLExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		C8455BEF2F2659CE000724A8 /* SQLiteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8455BED2F2659CE000724A8 /* SQLiteParser.swift */; };
-		C8455BF02F2659CE000724A8 /* SQLiteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8455BED2F2659CE000724A8 /* SQLiteParser.swift */; };
+		C8455BF72F266040000724A8 /* SQLiteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8455BF62F266040000724A8 /* SQLiteParser.swift */; };
+		C8455BF82F266040000724A8 /* SQLiteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8455BF62F266040000724A8 /* SQLiteParser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,13 +40,27 @@
 /* Begin PBXFileReference section */
 		C8455BC92F26581F000724A8 /* FinderHoverQLExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FinderHoverQLExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8455BCB2F26581F000724A8 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
-		C8455BED2F2659CE000724A8 /* SQLiteParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteParser.swift; sourceTree = "<group>"; };
+		C8455BF62F266040000724A8 /* SQLiteParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteParser.swift; sourceTree = "<group>"; };
 		C8BAE64F2EB86F1C0007FB19 /* FinderHover.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinderHover.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C8455BF42F265F04000724A8 /* Exceptions for "FinderHoverQLExtension" folder in "FinderHover" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Previews/SQLitePreviewView.swift,
+				Previews/SQLTextPreviewView.swift,
+			);
+			target = C8BAE64E2EB86F1C0007FB19 /* FinderHover */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C8455BCD2F26581F000724A8 /* FinderHoverQLExtension */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C8455BF42F265F04000724A8 /* Exceptions for "FinderHoverQLExtension" folder in "FinderHover" target */,
+			);
 			path = FinderHoverQLExtension;
 			sourceTree = "<group>";
 		};
@@ -84,18 +98,10 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		C8455BEE2F2659CE000724A8 /* Shared 2 */ = {
-			isa = PBXGroup;
-			children = (
-				C8455BED2F2659CE000724A8 /* SQLiteParser.swift */,
-			);
-			path = "Shared 2";
-			sourceTree = "<group>";
-		};
 		C8BAE6462EB86F1C0007FB19 = {
 			isa = PBXGroup;
 			children = (
-				C8455BEE2F2659CE000724A8 /* Shared 2 */,
+				C8455BF62F266040000724A8 /* SQLiteParser.swift */,
 				C8BAE6512EB86F1C0007FB19 /* FinderHover */,
 				C8455BCD2F26581F000724A8 /* FinderHoverQLExtension */,
 				C8455BCA2F26581F000724A8 /* Frameworks */,
@@ -223,7 +229,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C8455BEF2F2659CE000724A8 /* SQLiteParser.swift in Sources */,
+				C8455BF72F266040000724A8 /* SQLiteParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,7 +237,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C8455BF02F2659CE000724A8 /* SQLiteParser.swift in Sources */,
+				C8455BF82F266040000724A8 /* SQLiteParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

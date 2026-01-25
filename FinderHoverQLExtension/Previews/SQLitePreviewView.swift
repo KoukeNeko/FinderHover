@@ -63,7 +63,12 @@ class SQLitePreviewViewModel: ObservableObject {
     }
 
     func selectTable(_ table: TableInfo) {
+        // Immediately clear old data and show loading state
         selectedTable = table
+        tableData = []
+        isLoadingData = true
+        dataError = nil
+
         Task {
             await loadTableData(for: table)
         }
@@ -86,7 +91,7 @@ struct SQLitePreviewView: View {
             HSplitView {
                 // Left sidebar - Schema
                 schemaSidebar
-                    .frame(minWidth: 180, idealWidth: 220, maxWidth: 300)
+                    .frame(minWidth: 200, idealWidth: 250, maxWidth: 350)
 
                 // Right content - Data preview
                 dataPreviewArea
@@ -457,7 +462,7 @@ struct SQLitePreviewView: View {
                 .font(.system(size: 9))
                 .foregroundColor(.secondary)
         }
-        .frame(width: 120, alignment: .leading)
+        .frame(width: 160, alignment: .leading)
         .padding(.horizontal, 8)
         .padding(.vertical, 6)
         .border(Color.secondary.opacity(0.2), width: 0.5)
@@ -468,7 +473,7 @@ struct SQLitePreviewView: View {
             .font(.system(size: 11, design: .monospaced))
             .foregroundColor(value == "NULL" ? .secondary : .primary)
             .lineLimit(1)
-            .frame(width: 120, alignment: .leading)
+            .frame(width: 160, alignment: .leading)
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             .border(Color.secondary.opacity(0.1), width: 0.5)
