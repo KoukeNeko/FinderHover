@@ -538,6 +538,9 @@
 "hover.config.format" = "格式";
 "hover.config.keyCount" = "鍵值數";
 "hover.config.isValid" = "有效";
+"hover.config.maxDepth" = "深度";
+"hover.config.hasComments" = "註解";
+"hover.config.encoding" = "編碼";
 "hover.config.yes" = "是";
 "hover.config.no" = "否";
 
