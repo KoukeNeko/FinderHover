@@ -155,16 +155,84 @@ body {
     margin-bottom: 40px;
 }
 
-.hero-cta {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
+.hero-cta-card {
+    display: inline-block;
+    background: linear-gradient(135deg, #1d1d1f 0%, #2d2d30 100%);
+    border-radius: 20px;
+    padding: 24px 32px;
+    position: relative;
+    overflow: hidden;
 }
 
-.hero-version {
-    font-size: 14px;
-    color: var(--color-text-secondary);
+.hero-cta-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(0, 113, 227, 0.2) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.cta-card-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.cta-card-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.cta-card-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.cta-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: left;
+}
+
+.cta-card-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.cta-card-subtitle {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.cta-card-btn {
+    background: var(--color-accent);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 980px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all var(--transition-default);
+    flex-shrink: 0;
+}
+
+.cta-card-btn:hover {
+    background: var(--color-accent-hover);
+    transform: scale(1.02);
 }
 
 .hero-image {
@@ -582,6 +650,20 @@ body {
 
     .hero-headline {
         font-size: 36px;
+    }
+
+    .hero-cta-card {
+        padding: 20px;
+    }
+
+    .cta-card-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+    }
+
+    .cta-card-info {
+        text-align: center;
     }
 
     .gallery-grid {
