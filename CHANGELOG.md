@@ -2,7 +2,50 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.4.4 (Current)
+## Version 1.5.0-beta.1 (Beta)
+
+### 🆕 New Features
+
+#### Quick Look Extension
+
+- **NEW: SQLite Database Preview** - Press spacebar in Finder to preview SQLite files
+  - View database schema (tables, views, indexes, triggers)
+  - Browse table data with column headers and row counts
+  - Support for `.db`, `.sqlite`, `.sqlite3`, `.db3` files
+  - Native SQLite3 API for fast and reliable parsing
+
+- **NEW: SQL Script Preview** - Syntax-highlighted preview for `.sql` files
+  - SQL syntax highlighting with keywords, functions, and data types
+  - Schema extraction from CREATE TABLE statements
+  - Data preview from INSERT statements
+  - View modes: Schema, Data, Source
+  - Line numbers in source view
+
+#### Preview Settings
+
+- **NEW: Preview Settings Page** in Settings > Preview
+  - Configure max rows to display in table preview
+  - Toggle SQL syntax highlighting
+  - Toggle line numbers
+  - Set default view mode (Schema/Data/Source)
+
+### 🌐 Localization
+
+- Full localization support for Quick Look extension
+  - English
+  - 繁體中文 (Traditional Chinese)
+  - 日本語 (Japanese)
+
+### 🔧 Technical Details
+
+- Quick Look Preview Extension (`com.apple.quicklook.preview`)
+- Embedded in main application bundle
+- Uses SwiftUI for preview UI
+- Pre-caches NSAttributedString for instant tab switching
+
+---
+
+## Version 1.4.4
 
 ### 🐛 Bug Fixes
 
