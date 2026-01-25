@@ -513,25 +513,35 @@
 "hover.html.ogDescription" = "OG 描述";
 "hover.html.ogImage" = "OG 圖片";
 "hover.html.twitterCard" = "Twitter Card";
+"hover.html.keywords" = "關鍵字";
+"hover.html.author" = "作者";
+"hover.html.language" = "語言";
 
 /* Extended Image Hover */
 "hover.imageExtended.title" = "延伸影像資訊";
 "hover.imageExtended.copyright" = "版權";
 "hover.imageExtended.artist" = "作者";
+"hover.imageExtended.creator" = "創作者";
 "hover.imageExtended.description" = "描述";
 "hover.imageExtended.keywords" = "關鍵字";
 "hover.imageExtended.rating" = "評分";
 "hover.imageExtended.colorProfile" = "色彩描述檔";
+"hover.imageExtended.creatorTool" = "創作工具";
+"hover.imageExtended.headline" = "標題";
 
 /* Markdown Hover */
 "hover.markdown.title" = "Markdown";
 "hover.markdown.docTitle" = "標題";
+"hover.markdown.mdTitle" = "標題";
+"hover.markdown.frontmatter" = "Frontmatter";
 "hover.markdown.author" = "作者";
 "hover.markdown.date" = "日期";
 "hover.markdown.tags" = "標籤";
 "hover.markdown.wordCount" = "字數";
 "hover.markdown.headingCount" = "標題數";
 "hover.markdown.linkCount" = "連結數";
+"hover.markdown.imageCount" = "圖片數";
+"hover.markdown.codeBlockCount" = "程式碼區塊";
 
 /* Config File Hover */
 "hover.config.title" = "設定檔";
@@ -551,23 +561,33 @@
 "hover.psd.bitDepth" = "位元深度";
 "hover.psd.layerCount" = "圖層數";
 "hover.psd.hasAlpha" = "透明通道";
+"hover.psd.resolution" = "解析度";
+"hover.psd.transparency" = "透明度";
 
 /* Executable Hover */
 "hover.executable.title" = "可執行檔";
 "hover.executable.architecture" = "架構";
 "hover.executable.isUniversal" = "通用二進位";
 "hover.executable.isSigned" = "已簽章";
+"hover.executable.codeSigned" = "已簽章";
 "hover.executable.signingAuthority" = "簽章單位";
+"hover.executable.minimumOS" = "最低 OS";
+"hover.executable.sdkVersion" = "SDK";
+"hover.executable.fileType" = "檔案類型";
 
 /* App Bundle Hover */
 "hover.appBundle.title" = "應用程式";
 "hover.appBundle.bundleId" = "套件 ID";
+"hover.appBundle.bundleID" = "套件 ID";
 "hover.appBundle.version" = "版本";
 "hover.appBundle.buildNumber" = "建置號";
 "hover.appBundle.minOS" = "最低 macOS";
+"hover.appBundle.minimumOS" = "最低 macOS";
 "hover.appBundle.category" = "類別";
 "hover.appBundle.copyright" = "版權";
 "hover.appBundle.isSandboxed" = "沙盒";
+"hover.appBundle.codeSigned" = "已簽章";
+"hover.appBundle.entitlements" = "權限";
 
 /* SQLite Hover */
 "hover.sqlite.title" = "SQLite 資料庫";
@@ -575,6 +595,11 @@
 "hover.sqlite.indexCount" = "索引數";
 "hover.sqlite.version" = "版本";
 "hover.sqlite.pageSize" = "頁面大小";
+"hover.sqlite.triggerCount" = "觸發器數";
+"hover.sqlite.viewCount" = "視圖數";
+"hover.sqlite.totalRows" = "總列數";
+"hover.sqlite.schemaVersion" = "架構版本";
+"hover.sqlite.encoding" = "編碼";
 
 /* Git Repository Hover */
 "hover.git.title" = "Git 儲存庫";
@@ -584,7 +609,10 @@
 "hover.git.lastCommitDate" = "最後提交";
 "hover.git.lastCommitMessage" = "訊息";
 "hover.git.remoteUrl" = "遠端";
+"hover.git.remoteURL" = "遠端";
 "hover.git.hasUncommitted" = "未提交";
+"hover.git.uncommittedChanges" = "未提交";
+"hover.git.tagCount" = "標籤數";
 
 /* Common */
 "common.reset" = "重設為預設值";
