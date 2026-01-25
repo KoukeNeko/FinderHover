@@ -591,7 +591,7 @@
 "hover.config.isValid" = "有効";
 "hover.config.maxDepth" = "深度";
 "hover.config.hasComments" = "コメント";
-"hover.config.encoding" = "エンコーディング";
+"hover.config.encoding" = "文字符号";
 "hover.config.yes" = "はい";
 "hover.config.no" = "いいえ";
 
@@ -718,3 +718,7 @@
 "settings.language.english" = "English";
 "settings.language.chinese" = "繁體中文";
 "settings.language.japanese" = "日本語";
+
+/* Copy Feature */
+"hover.copy.copy" = "コピー";
+"hover.copy.copied" = "コピー済";

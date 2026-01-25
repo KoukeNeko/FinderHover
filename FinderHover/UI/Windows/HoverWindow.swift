@@ -7,10 +7,46 @@
 
 import SwiftUI
 import AppKit
+import Combine
 import QuickLookThumbnailing
+
+// MARK: - Shared State for Lock Mode
+class HoverWindowState: ObservableObject {
+    static let shared = HoverWindowState()
+    @Published var isLocked: Bool = false
+    @Published var copiedValue: String?  // For "Copied!" feedback
+
+    private init() {}
+
+    /// Copy value to clipboard and show feedback
+    /// - Parameters:
+    ///   - value: The actual text to copy to clipboard
+    ///   - key: Unique identifier for tracking which row was copied
+    func copyToClipboard(_ value: String, key: String) {
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(value, forType: .string)
+
+        // Show "Copied!" feedback briefly using the unique key
+        copiedValue = key
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            if self?.copiedValue == key {
+                self?.copiedValue = nil
+            }
+        }
+    }
+}
 
 class HoverWindowController: NSWindowController {
     private var visualEffectView: NSVisualEffectView?
+    private var flagsMonitor: Any?
+    private var keyDownMonitor: Any?
+    private let windowState = HoverWindowState.shared
+
+    /// Whether the window is locked (Option key is pressed)
+    var isLocked: Bool {
+        windowState.isLocked
+    }
 
     convenience init() {
         let window = NSWindow(
@@ -65,10 +101,80 @@ class HoverWindowController: NSWindowController {
         positionWindow(window: window, at: position, settings: settings)
 
         window.orderFront(nil)
+
+        // Start monitoring Option key
+        startKeyMonitoring()
     }
 
     func hide() {
+        // Don't hide if locked
+        guard !windowState.isLocked else { return }
+
         window?.orderOut(nil)
+        stopKeyMonitoring()
+    }
+
+    /// Force hide the window, ignoring lock state
+    func forceHide() {
+        windowState.isLocked = false
+        windowState.copiedValue = nil
+        window?.ignoresMouseEvents = true
+        window?.orderOut(nil)
+        stopKeyMonitoring()
+    }
+
+    // MARK: - Key Monitoring
+
+    private func startKeyMonitoring() {
+        // Avoid duplicate monitors
+        stopKeyMonitoring()
+
+        // Monitor Option key (flags changed)
+        flagsMonitor = NSEvent.addGlobalMonitorForEvents(matching: .flagsChanged) { [weak self] event in
+            self?.handleFlagsChanged(event)
+        }
+
+        // Monitor Escape key to unlock
+        keyDownMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            if event.keyCode == 53 && self?.windowState.isLocked == true {  // 53 = Escape
+                self?.unlock()
+            }
+        }
+    }
+
+    private func stopKeyMonitoring() {
+        if let monitor = flagsMonitor {
+            NSEvent.removeMonitor(monitor)
+            flagsMonitor = nil
+        }
+        if let monitor = keyDownMonitor {
+            NSEvent.removeMonitor(monitor)
+            keyDownMonitor = nil
+        }
+    }
+
+    private func handleFlagsChanged(_ event: NSEvent) {
+        let optionPressed = event.modifierFlags.contains(.option)
+
+        if optionPressed && !windowState.isLocked {
+            // Lock the window
+            windowState.isLocked = true
+            window?.ignoresMouseEvents = false  // Allow mouse interaction
+        } else if !optionPressed && windowState.isLocked {
+            // Unlock the window
+            unlock()
+        }
+    }
+
+    /// Unlock the window and reset state
+    private func unlock() {
+        windowState.isLocked = false
+        windowState.copiedValue = nil
+        window?.ignoresMouseEvents = true
+    }
+
+    deinit {
+        stopKeyMonitoring()
     }
 
     // MARK: - Private Helper Methods
@@ -237,11 +343,18 @@ struct HoverContentView: View {
     @State private var thumbnail: NSImage?
     @State private var thumbnailRequest: QLThumbnailGenerator.Request?
     @ObservedObject var settings = AppSettings.shared
+    @ObservedObject private var windowState = HoverWindowState.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: settings.compactMode ? 6 : 10) {
             // File icon and name
             HStack(spacing: settings.compactMode ? 8 : 12) {
+                // Lock indicator when window is locked
+                if windowState.isLocked {
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: 10))
+                        .foregroundColor(.secondary)
+                }
                 if settings.showIcon {
                     let iconSize = settings.compactMode
                         ? Constants.Thumbnail.compactIconSize
@@ -1237,26 +1350,7 @@ struct HoverContentView: View {
         case .filePath:
             if settings.showFilePath {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
-                    HStack(alignment: .top, spacing: 8) {
-                        Image(systemName: "folder")
-                            .font(.system(size: settings.fontSize))
-                            .foregroundColor(.secondary)
-                            .frame(width: 14, alignment: .center)
-
-                        Text("hover.label.location".localized + ":")
-                            .font(.system(size: settings.fontSize))
-                            .foregroundColor(.secondary)
-                            .lineLimit(1)
-                            .frame(minWidth: 75, alignment: .trailing)
-
-                        Text(fileInfo.path)
-                            .font(.system(size: settings.fontSize, design: .monospaced))
-                            .fontWeight(.medium)
-                            .lineLimit(nil)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .textSelection(.enabled)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
+                    DetailRow(icon: "folder", label: "hover.label.location".localized, value: fileInfo.path, fontSize: settings.fontSize)
                 }
             }
         }
@@ -1275,6 +1369,8 @@ struct DetailRow: View {
     let label: String
     let value: String
     let fontSize: Double
+    @ObservedObject private var windowState = HoverWindowState.shared
+    @State private var isHoveringCopy = false
 
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
@@ -1295,7 +1391,45 @@ struct DetailRow: View {
                 .lineLimit(nil)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
+
+            // Copy button - shown when locked
+            if windowState.isLocked {
+                CopyButton(uniqueKey: label + ":" + value, value: value, fontSize: fontSize)
+            }
         }
+    }
+}
+
+// MARK: - Copy Button
+struct CopyButton: View {
+    let uniqueKey: String  // Unique identifier for this row
+    let value: String      // Actual value to copy
+    let fontSize: Double
+    @ObservedObject private var windowState = HoverWindowState.shared
+    @State private var isHovering = false
+
+    private var isCopied: Bool {
+        windowState.copiedValue == uniqueKey
+    }
+
+    var body: some View {
+        Button(action: {
+            windowState.copyToClipboard(value, key: uniqueKey)
+        }) {
+            Image(systemName: isCopied ? "checkmark" : "doc.on.doc")
+                .font(.system(size: fontSize - 2))
+                .foregroundColor(isCopied ? .green : (isHovering ? .primary : .secondary))
+        }
+        .buttonStyle(.plain)
+        .frame(width: 16, height: 16)
+        .background(
+            RoundedRectangle(cornerRadius: 3)
+                .fill(isHovering ? Color.gray.opacity(0.2) : Color.clear)
+        )
+        .onHover { hovering in
+            isHovering = hovering
+        }
+        .help(isCopied ? "hover.copy.copied".localized : "hover.copy.copy".localized)
     }
 }
 

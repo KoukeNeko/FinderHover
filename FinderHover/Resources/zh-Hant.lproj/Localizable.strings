@@ -718,3 +718,7 @@
 "settings.language.english" = "English";
 "settings.language.chinese" = "繁體中文";
 "settings.language.japanese" = "日本語";
+
+/* Copy Feature */
+"hover.copy.copy" = "複製";
+"hover.copy.copied" = "已複製！";

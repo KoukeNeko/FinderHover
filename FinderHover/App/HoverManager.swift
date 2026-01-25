@@ -225,6 +225,9 @@ class HoverManager: ObservableObject {
     }
 
     private func hideHoverWindow() {
+        // Don't hide if window is locked (Option key pressed)
+        guard hoverWindow?.isLocked != true else { return }
+
         hoverWindow?.hide()
 
         // Stop periodic check

@@ -2,7 +2,34 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.5.1 (Current)
+## Version 1.6.1 (Current)
+
+### 🐛 Bug Fixes
+
+- Fixed copy button causing row height to increase
+- Fixed clicking copy marking multiple rows with same value as copied
+
+---
+
+## Version 1.6.0
+
+### 🆕 New Feature: Copy Metadata Values
+
+Press **Option (⌥)** key while the hover window is visible to:
+- Lock the window in place (won't disappear on mouse movement)
+- Show copy icons on the right side of each metadata value
+- Click any copy icon to copy that value to clipboard
+- Visual feedback when copying (checkmark icon)
+
+Release Option key or press Escape to unlock and return to normal behavior.
+
+### 🌐 Localization
+
+- Added translations for copy feature in all supported languages
+
+---
+
+## Version 1.5.1
 
 ### 🎨 UI Improvements
 
