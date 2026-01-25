@@ -161,6 +161,9 @@ enum Constants {
         /// Default show video bitrate
         static let showVideoBitrate: Bool = true
 
+        /// Default show video HDR
+        static let showVideoHDR: Bool = true
+
         /// Default show audio
         static let showAudio: Bool = true
 
@@ -665,6 +668,40 @@ enum Constants {
 
         /// Default show Git tag count
         static let showGitTagCount: Bool = true
+
+        // MARK: - System Metadata Defaults
+        /// Default show system metadata
+        static let showSystemMetadata: Bool = true
+
+        /// Default show Finder tags
+        static let showFinderTags: Bool = true
+
+        /// Default show where froms (download source)
+        static let showWhereFroms: Bool = true
+
+        /// Default show quarantine info
+        static let showQuarantineInfo: Bool = true
+
+        /// Default show link info
+        static let showLinkInfo: Bool = true
+
+        /// Default show usage stats
+        static let showUsageStats: Bool = true
+
+        /// Default show iCloud status
+        static let showiCloudStatus: Bool = true
+
+        /// Default show Finder comment
+        static let showFinderComment: Bool = true
+
+        /// Default show UTI
+        static let showUTI: Bool = true
+
+        /// Default show extended attributes
+        static let showExtendedAttributes: Bool = false
+
+        /// Default show alias target
+        static let showAliasTarget: Bool = true
 
         /// Default follow cursor
         static let followCursor: Bool = true

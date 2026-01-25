@@ -75,6 +75,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
     case appBundle = "App Bundle Information"
     case sqlite = "SQLite Information"
     case git = "Git Repository Information"
+    case systemMetadata = "System Metadata"
     case filePath = "File Path"
 
     var id: String { rawValue }
@@ -110,6 +111,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .appBundle: return "displayItem.appBundle".localized
         case .sqlite: return "displayItem.sqlite".localized
         case .git: return "displayItem.git".localized
+        case .systemMetadata: return "displayItem.systemMetadata".localized
         case .filePath: return "displayItem.filePath".localized
         }
     }
@@ -145,6 +147,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .appBundle: return "app.badge"
         case .sqlite: return "cylinder"
         case .git: return "arrow.triangle.branch"
+        case .systemMetadata: return "info.circle"
         case .filePath: return IconManager.FileSystem.folder
         }
     }
@@ -259,6 +262,9 @@ class AppSettings: ObservableObject {
     }
     @Published var showVideoBitrate: Bool {
         didSet { UserDefaults.standard.set(showVideoBitrate, forKey: "showVideoBitrate") }
+    }
+    @Published var showVideoHDR: Bool {
+        didSet { UserDefaults.standard.set(showVideoHDR, forKey: "showVideoHDR") }
     }
 
     // Audio information display
@@ -791,6 +797,41 @@ class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(showGitTagCount, forKey: "showGitTagCount") }
     }
 
+    // System metadata display settings
+    @Published var showSystemMetadata: Bool {
+        didSet { UserDefaults.standard.set(showSystemMetadata, forKey: "showSystemMetadata") }
+    }
+    @Published var showFinderTags: Bool {
+        didSet { UserDefaults.standard.set(showFinderTags, forKey: "showFinderTags") }
+    }
+    @Published var showWhereFroms: Bool {
+        didSet { UserDefaults.standard.set(showWhereFroms, forKey: "showWhereFroms") }
+    }
+    @Published var showQuarantineInfo: Bool {
+        didSet { UserDefaults.standard.set(showQuarantineInfo, forKey: "showQuarantineInfo") }
+    }
+    @Published var showLinkInfo: Bool {
+        didSet { UserDefaults.standard.set(showLinkInfo, forKey: "showLinkInfo") }
+    }
+    @Published var showUsageStats: Bool {
+        didSet { UserDefaults.standard.set(showUsageStats, forKey: "showUsageStats") }
+    }
+    @Published var showiCloudStatus: Bool {
+        didSet { UserDefaults.standard.set(showiCloudStatus, forKey: "showiCloudStatus") }
+    }
+    @Published var showFinderComment: Bool {
+        didSet { UserDefaults.standard.set(showFinderComment, forKey: "showFinderComment") }
+    }
+    @Published var showUTI: Bool {
+        didSet { UserDefaults.standard.set(showUTI, forKey: "showUTI") }
+    }
+    @Published var showExtendedAttributes: Bool {
+        didSet { UserDefaults.standard.set(showExtendedAttributes, forKey: "showExtendedAttributes") }
+    }
+    @Published var showAliasTarget: Bool {
+        didSet { UserDefaults.standard.set(showAliasTarget, forKey: "showAliasTarget") }
+    }
+
     // Display order
     @Published var displayOrder: [DisplayItem] {
         didSet {
@@ -1017,6 +1058,15 @@ class AppSettings: ObservableObject {
                     decoded.append(.git)
                 }
             }
+            if !decoded.contains(.systemMetadata) {
+                if let gitIndex = decoded.firstIndex(of: .git) {
+                    decoded.insert(.systemMetadata, at: gitIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.systemMetadata, at: filePathIndex)
+                } else {
+                    decoded.append(.systemMetadata)
+                }
+            }
             self.displayOrder = decoded
         } else {
             // Default order
@@ -1050,6 +1100,7 @@ class AppSettings: ObservableObject {
                 .appBundle,
                 .sqlite,
                 .git,
+                .systemMetadata,
                 .filePath
             ]
         }
@@ -1086,6 +1137,7 @@ class AppSettings: ObservableObject {
         self.showVideoCodec = UserDefaults.standard.object(forKey: "showVideoCodec") as? Bool ?? Constants.Defaults.showVideoCodec
         self.showVideoFrameRate = UserDefaults.standard.object(forKey: "showVideoFrameRate") as? Bool ?? Constants.Defaults.showVideoFrameRate
         self.showVideoBitrate = UserDefaults.standard.object(forKey: "showVideoBitrate") as? Bool ?? Constants.Defaults.showVideoBitrate
+        self.showVideoHDR = UserDefaults.standard.object(forKey: "showVideoHDR") as? Bool ?? Constants.Defaults.showVideoHDR
         self.showAudio = UserDefaults.standard.object(forKey: "showAudio") as? Bool ?? Constants.Defaults.showAudio
         self.showAudioTitle = UserDefaults.standard.object(forKey: "showAudioTitle") as? Bool ?? Constants.Defaults.showAudioTitle
         self.showAudioArtist = UserDefaults.standard.object(forKey: "showAudioArtist") as? Bool ?? Constants.Defaults.showAudioArtist
@@ -1276,6 +1328,19 @@ class AppSettings: ObservableObject {
         self.showGitUncommittedChanges = UserDefaults.standard.object(forKey: "showGitUncommittedChanges") as? Bool ?? Constants.Defaults.showGitUncommittedChanges
         self.showGitTagCount = UserDefaults.standard.object(forKey: "showGitTagCount") as? Bool ?? Constants.Defaults.showGitTagCount
 
+        // Initialize System metadata toggles
+        self.showSystemMetadata = UserDefaults.standard.object(forKey: "showSystemMetadata") as? Bool ?? Constants.Defaults.showSystemMetadata
+        self.showFinderTags = UserDefaults.standard.object(forKey: "showFinderTags") as? Bool ?? Constants.Defaults.showFinderTags
+        self.showWhereFroms = UserDefaults.standard.object(forKey: "showWhereFroms") as? Bool ?? Constants.Defaults.showWhereFroms
+        self.showQuarantineInfo = UserDefaults.standard.object(forKey: "showQuarantineInfo") as? Bool ?? Constants.Defaults.showQuarantineInfo
+        self.showLinkInfo = UserDefaults.standard.object(forKey: "showLinkInfo") as? Bool ?? Constants.Defaults.showLinkInfo
+        self.showUsageStats = UserDefaults.standard.object(forKey: "showUsageStats") as? Bool ?? Constants.Defaults.showUsageStats
+        self.showiCloudStatus = UserDefaults.standard.object(forKey: "showiCloudStatus") as? Bool ?? Constants.Defaults.showiCloudStatus
+        self.showFinderComment = UserDefaults.standard.object(forKey: "showFinderComment") as? Bool ?? Constants.Defaults.showFinderComment
+        self.showUTI = UserDefaults.standard.object(forKey: "showUTI") as? Bool ?? Constants.Defaults.showUTI
+        self.showExtendedAttributes = UserDefaults.standard.object(forKey: "showExtendedAttributes") as? Bool ?? Constants.Defaults.showExtendedAttributes
+        self.showAliasTarget = UserDefaults.standard.object(forKey: "showAliasTarget") as? Bool ?? Constants.Defaults.showAliasTarget
+
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? Constants.Defaults.followCursor
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? Constants.Defaults.windowOffsetX
         self.windowOffsetY = UserDefaults.standard.object(forKey: "windowOffsetY") as? Double ?? Constants.Defaults.windowOffsetY
@@ -1344,6 +1409,7 @@ class AppSettings: ObservableObject {
         showVideoCodec = Constants.Defaults.showVideoCodec
         showVideoFrameRate = Constants.Defaults.showVideoFrameRate
         showVideoBitrate = Constants.Defaults.showVideoBitrate
+        showVideoHDR = Constants.Defaults.showVideoHDR
         showAudio = Constants.Defaults.showAudio
         showAudioTitle = Constants.Defaults.showAudioTitle
         showAudioArtist = Constants.Defaults.showAudioArtist
@@ -1445,6 +1511,18 @@ class AppSettings: ObservableObject {
         showGitUncommittedChanges = Constants.Defaults.showGitUncommittedChanges
         showGitTagCount = Constants.Defaults.showGitTagCount
 
+        showSystemMetadata = Constants.Defaults.showSystemMetadata
+        showFinderTags = Constants.Defaults.showFinderTags
+        showWhereFroms = Constants.Defaults.showWhereFroms
+        showQuarantineInfo = Constants.Defaults.showQuarantineInfo
+        showLinkInfo = Constants.Defaults.showLinkInfo
+        showUsageStats = Constants.Defaults.showUsageStats
+        showiCloudStatus = Constants.Defaults.showiCloudStatus
+        showFinderComment = Constants.Defaults.showFinderComment
+        showUTI = Constants.Defaults.showUTI
+        showExtendedAttributes = Constants.Defaults.showExtendedAttributes
+        showAliasTarget = Constants.Defaults.showAliasTarget
+
         displayOrder = [
             .fileType,
             .fileSize,
@@ -1475,6 +1553,7 @@ class AppSettings: ObservableObject {
             .appBundle,
             .sqlite,
             .git,
+            .systemMetadata,
             .filePath
         ]
         followCursor = Constants.Defaults.followCursor
