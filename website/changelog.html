@@ -36,18 +36,19 @@
     <script>
       // Fetch and parse CHANGELOG.md from GitHub
       async function loadChangelog() {
-        const container = document.getElementById('changelog-content');
-        const rawUrl = 'https://raw.githubusercontent.com/KoukeNeko/FinderHover/main/CHANGELOG.md';
-        
+        const container = document.getElementById("changelog-content");
+        const rawUrl =
+          "https://raw.githubusercontent.com/KoukeNeko/FinderHover/main/CHANGELOG.md";
+
         try {
           const response = await fetch(rawUrl);
-          if (!response.ok) throw new Error('Failed to fetch changelog');
-          
+          if (!response.ok) throw new Error("Failed to fetch changelog");
+
           const markdown = await response.text();
           const html = parseChangelog(markdown);
           container.innerHTML = html;
         } catch (error) {
-          console.error('Error loading changelog:', error);
+          console.error("Error loading changelog:", error);
           container.innerHTML = `
             <div class="changelog-error">
               <p>無法載入更新日誌</p>
@@ -67,47 +68,51 @@
 
       function parseChangelog(markdown) {
         // Split by version headers (## [x.x.x])
-        const versionRegex = /^## \[(\d+\.\d+\.\d+)\](?: - (\d{4}-\d{2}-\d{2}))?/gm;
+        const versionRegex =
+          /^## \[(\d+\.\d+\.\d+)\](?: - (\d{4}-\d{2}-\d{2}))?/gm;
         const versions = [];
         let match;
         let lastIndex = 0;
-        
+
         // Find all version headers
         const matches = [...markdown.matchAll(versionRegex)];
-        
+
         matches.forEach((match, i) => {
           const version = match[1];
-          const date = match[2] || '';
+          const date = match[2] || "";
           const startIndex = match.index + match[0].length;
           const endIndex = matches[i + 1]?.index || markdown.length;
           const content = markdown.slice(startIndex, endIndex).trim();
-          
+
           versions.push({ version, date, content });
         });
-        
+
         // Get the latest version from Info.plist or first in list
         const latestVersion = versions[0]?.version;
-        
+
         // Convert to HTML
-        let html = versions.map((v, index) => {
-          const isMajor = v.version.endsWith('.0') && !v.version.endsWith('.0.0');
-          const isLatest = index === 0;
-          
-          return `
-            <article class="changelog-entry${isMajor ? ' major' : ''}">
+        let html = versions
+          .map((v, index) => {
+            const isMajor =
+              v.version.endsWith(".0") && !v.version.endsWith(".0.0");
+            const isLatest = index === 0;
+
+            return `
+            <article class="changelog-entry${isMajor ? " major" : ""}">
               <div class="changelog-header">
                 <span class="changelog-version">${v.version}</span>
-                ${isLatest ? '<span class="changelog-badge current">目前版本</span>' : ''}
-                ${isMajor && !isLatest ? '<span class="changelog-badge major">重大更新</span>' : ''}
-                ${v.date ? `<span class="changelog-date">${v.date}</span>` : ''}
+                ${isLatest ? '<span class="changelog-badge current">目前版本</span>' : ""}
+                ${isMajor && !isLatest ? '<span class="changelog-badge major">重大更新</span>' : ""}
+                ${v.date ? `<span class="changelog-date">${v.date}</span>` : ""}
               </div>
               <div class="changelog-content">
                 ${parseMarkdownContent(v.content)}
               </div>
             </article>
           `;
-        }).join('');
-        
+          })
+          .join("");
+
         // Add footer
         html += `
           <div class="changelog-footer">
@@ -122,59 +127,59 @@
             </a>
           </div>
         `;
-        
+
         return html;
       }
 
       function parseMarkdownContent(content) {
         // Parse markdown sections into HTML
         let html = content;
-        
+
         // Convert ### headers to h3
-        html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
-        
+        html = html.replace(/^### (.+)$/gm, "<h3>$1</h3>");
+
         // Convert #### headers to h4
-        html = html.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
-        
+        html = html.replace(/^#### (.+)$/gm, "<h4>$1</h4>");
+
         // Convert bullet points to list items
         // First, wrap consecutive list items in <ul>
-        const lines = html.split('\n');
+        const lines = html.split("\n");
         let result = [];
         let inList = false;
-        
+
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i];
-          const isListItem = line.trim().startsWith('- ');
-          
+          const isListItem = line.trim().startsWith("- ");
+
           if (isListItem && !inList) {
-            result.push('<ul>');
+            result.push("<ul>");
             inList = true;
-          } else if (!isListItem && inList && line.trim() !== '') {
-            result.push('</ul>');
+          } else if (!isListItem && inList && line.trim() !== "") {
+            result.push("</ul>");
             inList = false;
           }
-          
+
           if (isListItem) {
             const text = line.trim().substring(2);
             // Convert inline code
             const escapedText = text
-              .replace(/`([^`]+)`/g, '<code>$1</code>')
-              .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+              .replace(/`([^`]+)`/g, "<code>$1</code>")
+              .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
             result.push(`<li>${escapedText}</li>`);
-          } else if (line.trim() !== '' || !inList) {
+          } else if (line.trim() !== "" || !inList) {
             result.push(line);
           }
         }
-        
+
         if (inList) {
-          result.push('</ul>');
+          result.push("</ul>");
         }
-        
-        return result.join('\n');
+
+        return result.join("\n");
       }
 
       // Load changelog when page loads
-      document.addEventListener('DOMContentLoaded', loadChangelog);
+      document.addEventListener("DOMContentLoaded", loadChangelog);
     </script>
 
     <style>
@@ -186,7 +191,7 @@
         padding: 4rem 2rem;
         color: var(--text-secondary);
       }
-      
+
       .loading-spinner {
         width: 40px;
         height: 40px;
@@ -196,21 +201,23 @@
         animation: spin 1s linear infinite;
         margin-bottom: 1rem;
       }
-      
+
       @keyframes spin {
-        to { transform: rotate(360deg); }
+        to {
+          transform: rotate(360deg);
+        }
       }
-      
+
       .changelog-error {
         text-align: center;
         padding: 4rem 2rem;
         color: var(--text-secondary);
       }
-      
+
       .changelog-error p {
         margin-bottom: 1rem;
       }
-      
+
       .changelog-date {
         font-size: 0.85rem;
         color: var(--text-secondary);
