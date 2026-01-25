@@ -655,6 +655,35 @@
 "hover.git.uncommittedChanges" = "未提交";
 "hover.git.tagCount" = "標籤數";
 
+/* System Metadata Hover Labels */
+"hover.systemMetadata.title" = "系統資訊";
+"hover.systemMetadata.tags" = "標籤";
+"hover.systemMetadata.whereFrom" = "下載來源";
+"hover.systemMetadata.quarantineDate" = "下載日期";
+"hover.systemMetadata.downloadedBy" = "下載程式";
+"hover.systemMetadata.symlinkTarget" = "連結目標";
+"hover.systemMetadata.hardLinks" = "硬連結數";
+"hover.systemMetadata.useCount" = "開啟次數";
+"hover.systemMetadata.lastUsed" = "最後使用";
+"hover.systemMetadata.iCloud" = "iCloud 狀態";
+"hover.systemMetadata.comment" = "註解";
+"hover.systemMetadata.uti" = "類型識別碼";
+"hover.systemMetadata.xattr" = "擴展屬性";
+"hover.systemMetadata.aliasTarget" = "原始檔案";
+
+/* iCloud Status */
+"iCloud.downloaded" = "已下載";
+"iCloud.cloudOnly" = "僅在 iCloud";
+"iCloud.downloading" = "下載中...";
+"iCloud.uploading" = "上傳中...";
+"iCloud.unknown" = "未知";
+
+/* Video HDR */
+"hover.video.hdr" = "HDR";
+
+/* Display Item - System Metadata */
+"displayItem.systemMetadata" = "系統資訊";
+
 /* Common */
 "common.reset" = "重設為預設值";
 "common.cancel" = "取消";

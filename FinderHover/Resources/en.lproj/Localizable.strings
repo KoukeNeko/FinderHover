@@ -655,6 +655,35 @@
 "hover.git.uncommittedChanges" = "Uncommitted";
 "hover.git.tagCount" = "Tags";
 
+/* System Metadata Hover Labels */
+"hover.systemMetadata.title" = "System Info";
+"hover.systemMetadata.tags" = "Tags";
+"hover.systemMetadata.whereFrom" = "Downloaded From";
+"hover.systemMetadata.quarantineDate" = "Download Date";
+"hover.systemMetadata.downloadedBy" = "Downloaded By";
+"hover.systemMetadata.symlinkTarget" = "Link Target";
+"hover.systemMetadata.hardLinks" = "Hard Links";
+"hover.systemMetadata.useCount" = "Open Count";
+"hover.systemMetadata.lastUsed" = "Last Used";
+"hover.systemMetadata.iCloud" = "iCloud Status";
+"hover.systemMetadata.comment" = "Comment";
+"hover.systemMetadata.uti" = "Type ID";
+"hover.systemMetadata.xattr" = "Attributes";
+"hover.systemMetadata.aliasTarget" = "Original";
+
+/* iCloud Status */
+"iCloud.downloaded" = "Downloaded";
+"iCloud.cloudOnly" = "In iCloud";
+"iCloud.downloading" = "Downloading...";
+"iCloud.uploading" = "Uploading...";
+"iCloud.unknown" = "Unknown";
+
+/* Video HDR */
+"hover.video.hdr" = "HDR";
+
+/* Display Item - System Metadata */
+"displayItem.systemMetadata" = "System Metadata";
+
 /* Common */
 "common.reset" = "Reset to Defaults";
 "common.cancel" = "Cancel";

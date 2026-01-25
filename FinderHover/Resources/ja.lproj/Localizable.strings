@@ -655,6 +655,35 @@
 "hover.git.uncommittedChanges" = "未コミット";
 "hover.git.tagCount" = "タグ数";
 
+/* System Metadata Hover Labels */
+"hover.systemMetadata.title" = "システム情報";
+"hover.systemMetadata.tags" = "タグ";
+"hover.systemMetadata.whereFrom" = "ダウンロード元";
+"hover.systemMetadata.quarantineDate" = "ダウンロード日";
+"hover.systemMetadata.downloadedBy" = "ダウンローダー";
+"hover.systemMetadata.symlinkTarget" = "リンク先";
+"hover.systemMetadata.hardLinks" = "ハードリンク数";
+"hover.systemMetadata.useCount" = "使用回数";
+"hover.systemMetadata.lastUsed" = "最終使用";
+"hover.systemMetadata.iCloud" = "iCloud 状態";
+"hover.systemMetadata.comment" = "コメント";
+"hover.systemMetadata.uti" = "タイプ ID";
+"hover.systemMetadata.xattr" = "拡張属性";
+"hover.systemMetadata.aliasTarget" = "オリジナル";
+
+/* iCloud Status */
+"iCloud.downloaded" = "ダウンロード済み";
+"iCloud.cloudOnly" = "iCloud のみ";
+"iCloud.downloading" = "ダウンロード中...";
+"iCloud.uploading" = "アップロード中...";
+"iCloud.unknown" = "不明";
+
+/* Video HDR */
+"hover.video.hdr" = "HDR";
+
+/* Display Item - System Metadata */
+"displayItem.systemMetadata" = "システム情報";
+
 /* Common */
 "common.reset" = "デフォルトに戻す";
 "common.cancel" = "キャンセル";
