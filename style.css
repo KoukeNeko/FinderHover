@@ -389,9 +389,16 @@ body {
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
 }
 
-.metadata-emoji {
-    font-size: 40px;
-    margin-bottom: 16px;
+.metadata-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 16px;
+    color: var(--color-accent);
+}
+
+.metadata-icon svg {
+    width: 100%;
+    height: 100%;
 }
 
 .metadata-card h3 {
