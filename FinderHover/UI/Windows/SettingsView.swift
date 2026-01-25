@@ -64,35 +64,21 @@ struct SettingsView: View {
             .frame(minWidth: 200)
         } detail: {
             // Detail view using factory pattern
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    // Header
-                    HStack {
-                        Text(selectedPage.localizedName)
-                            .font(.system(size: 20, weight: .bold))
-                        Spacer()
-                    }
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 20)
-                    
-                    Group {
-                        switch selectedPage {
-                        case .behavior:
-                            BehaviorSettingsView(settings: settings)
-                        case .appearance:
-                            AppearanceSettingsView(settings: settings)
-                        case .display:
-                            DisplaySettingsView(settings: settings)
-                        case .permissions:
-                            PermissionsSettingsView()
-                        case .about:
-                            AboutSettingsView()
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.bottom, 24)
+            Group {
+                switch selectedPage {
+                case .behavior:
+                    BehaviorSettingsView(settings: settings)
+                case .appearance:
+                    AppearanceSettingsView(settings: settings)
+                case .display:
+                    DisplaySettingsView(settings: settings)
+                case .permissions:
+                    PermissionsSettingsView()
+                case .about:
+                    AboutSettingsView()
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .background(Color(NSColor.windowBackgroundColor))
         }
         .frame(minWidth: 700, minHeight: 500)
