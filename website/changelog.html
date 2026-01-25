@@ -68,8 +68,7 @@
 
       function parseChangelog(markdown) {
         // Split by version headers (## Version x.x.x)
-        const versionRegex =
-          /^## Version (\d+\.\d+\.\d+)(?: \(Current\))?/gm;
+        const versionRegex = /^## Version (\d+\.\d+\.\d+)(?: \(Current\))?/gm;
         const versions = [];
 
         // Find all version headers

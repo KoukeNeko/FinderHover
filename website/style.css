@@ -436,7 +436,7 @@ body::before {
 /* Elegant edge fade - Apple style */
 .marquee-container::before,
 .marquee-container::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   bottom: 0;
@@ -447,12 +447,22 @@ body::before {
 
 .marquee-container::before {
   left: 0;
-  background: linear-gradient(to right, var(--color-background) 0%, transparent 100%);
+  background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
 }
 
 .marquee-container::after {
   right: 0;
-  background: linear-gradient(to left, var(--color-background) 0%, transparent 100%);
+  background: linear-gradient(to left, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+@media (prefers-color-scheme: dark) {
+  .marquee-container::before {
+    background: linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+  }
+
+  .marquee-container::after {
+    background: linear-gradient(to left, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+  }
 }
 
 .marquee-row {
@@ -628,14 +638,6 @@ body::before {
 
 /* Light mode adjustments */
 @media (prefers-color-scheme: light) {
-  .marquee-container::before {
-    background: linear-gradient(to right, var(--color-background) 0%, transparent 100%);
-  }
-  
-  .marquee-container::after {
-    background: linear-gradient(to left, var(--color-background) 0%, transparent 100%);
-  }
-
   .format-tag,
   .format-info {
     background: rgba(0, 0, 0, 0.04);
@@ -643,19 +645,71 @@ body::before {
     color: var(--color-text-secondary);
   }
 
-  .format-tag.photo, .format-info.photo { background: rgba(255, 107, 107, 0.1); color: #dc4343; }
-  .format-tag.video, .format-info.video { background: rgba(255, 146, 43, 0.1); color: #d97706; }
-  .format-tag.audio, .format-info.audio { background: rgba(252, 196, 25, 0.1); color: #b8860b; }
-  .format-tag.code, .format-info.code { background: rgba(81, 207, 102, 0.1); color: #22a339; }
-  .format-tag.doc, .format-info.doc { background: rgba(51, 154, 240, 0.1); color: #2563eb; }
-  .format-tag.config, .format-info.config { background: rgba(132, 94, 247, 0.1); color: #7c3aed; }
-  .format-tag.design, .format-info.design { background: rgba(240, 101, 149, 0.1); color: #db2777; }
-  .format-tag.font, .format-info.font { background: rgba(32, 201, 151, 0.1); color: #059669; }
-  .format-tag.system, .format-info.system { background: rgba(116, 192, 252, 0.1); color: #0284c7; }
-  .format-tag.archive, .format-info.archive { background: rgba(169, 227, 75, 0.1); color: #65a30d; }
-  .format-tag.data, .format-info.data { background: rgba(255, 169, 77, 0.1); color: #c2410c; }
-  .format-tag.git, .format-info.git { background: rgba(240, 101, 32, 0.1); color: #c2410c; }
-  .format-tag.subtitle, .format-info.subtitle { background: rgba(116, 143, 252, 0.1); color: #4f46e5; }
+  .format-tag.photo,
+  .format-info.photo {
+    background: rgba(255, 107, 107, 0.1);
+    color: #dc4343;
+  }
+  .format-tag.video,
+  .format-info.video {
+    background: rgba(255, 146, 43, 0.1);
+    color: #d97706;
+  }
+  .format-tag.audio,
+  .format-info.audio {
+    background: rgba(252, 196, 25, 0.1);
+    color: #b8860b;
+  }
+  .format-tag.code,
+  .format-info.code {
+    background: rgba(81, 207, 102, 0.1);
+    color: #22a339;
+  }
+  .format-tag.doc,
+  .format-info.doc {
+    background: rgba(51, 154, 240, 0.1);
+    color: #2563eb;
+  }
+  .format-tag.config,
+  .format-info.config {
+    background: rgba(132, 94, 247, 0.1);
+    color: #7c3aed;
+  }
+  .format-tag.design,
+  .format-info.design {
+    background: rgba(240, 101, 149, 0.1);
+    color: #db2777;
+  }
+  .format-tag.font,
+  .format-info.font {
+    background: rgba(32, 201, 151, 0.1);
+    color: #059669;
+  }
+  .format-tag.system,
+  .format-info.system {
+    background: rgba(116, 192, 252, 0.1);
+    color: #0284c7;
+  }
+  .format-tag.archive,
+  .format-info.archive {
+    background: rgba(169, 227, 75, 0.1);
+    color: #65a30d;
+  }
+  .format-tag.data,
+  .format-info.data {
+    background: rgba(255, 169, 77, 0.1);
+    color: #c2410c;
+  }
+  .format-tag.git,
+  .format-info.git {
+    background: rgba(240, 101, 32, 0.1);
+    color: #c2410c;
+  }
+  .format-tag.subtitle,
+  .format-info.subtitle {
+    background: rgba(116, 143, 252, 0.1);
+    color: #4f46e5;
+  }
 }
 
 .formats-cta {
