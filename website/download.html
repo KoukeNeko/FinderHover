@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>下載 - FinderHover</title>
+    <meta
+      name="description"
+      content="下載並安裝 FinderHover，透過 Homebrew 或直接下載。"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/png" href="assets/icon.png" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-content">
+        <a href="index.html" class="nav-logo">
+          <img src="assets/icon.png" alt="FinderHover" />
+          <span>FinderHover</span>
+        </a>
+        <div class="nav-links">
+          <a href="index.html#features">功能特色</a>
+          <a href="index.html#metadata">支援格式</a>
+          <a href="docs.html">使用說明</a>
+          <a href="https://github.com/KoukeNeko/FinderHover" target="_blank">GitHub</a>
+        </div>
+        <a href="download.html" class="nav-cta">下載</a>
+      </div>
+    </nav>
+
+    <!-- Download Hero -->
+    <section class="page-hero">
+      <h1 class="page-headline">取得 FinderHover</h1>
+      <p class="page-subheadline">選擇最適合你的安裝方式</p>
+    </section>
+
+    <!-- Download Options -->
+    <section class="download-section">
+      <div class="download-grid">
+        <!-- Homebrew -->
+        <div class="download-card recommended">
+          <div class="download-badge">推薦</div>
+          <div class="download-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <h2>Homebrew</h2>
+          <p class="download-desc">使用 macOS 套件管理器安裝，自動處理 Gatekeeper 驗證，更新更方便。</p>
+          <div class="download-code">
+            <code>brew install koukeneko/tap/finderhover</code>
+            <button class="copy-btn" onclick="copyCommand(this, 'brew install koukeneko/tap/finderhover')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+            </button>
+          </div>
+          <div class="download-steps">
+            <h4>安裝步驟</h4>
+            <ol>
+              <li>開啟終端機 (Terminal)</li>
+              <li>貼上上方指令並按 Enter</li>
+              <li>等待安裝完成</li>
+              <li>在 Launchpad 中開啟 FinderHover</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Direct Download -->
+        <div class="download-card">
+          <div class="download-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+          </div>
+          <h2>直接下載</h2>
+          <p class="download-desc">從 GitHub Releases 下載最新版本的 .app 檔案。</p>
+          <a href="https://github.com/KoukeNeko/FinderHover/releases/latest" class="download-btn">
+            下載 FinderHover.app.zip
+          </a>
+          <div class="download-steps">
+            <h4>安裝步驟</h4>
+            <ol>
+              <li>下載並解壓縮 .zip 檔案</li>
+              <li>將 FinderHover.app 拖曳到「應用程式」資料夾</li>
+              <li>首次開啟時，右鍵點擊選擇「打開」</li>
+              <li>在彈出視窗中點擊「打開」以略過 Gatekeeper</li>
+            </ol>
+          </div>
+          <div class="download-note">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="16" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            <span>由於 App 未經 Apple 公證，需要手動允許執行</span>
+          </div>
+        </div>
+
+        <!-- Build from Source -->
+        <div class="download-card">
+          <div class="download-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg>
+          </div>
+          <h2>從原始碼建置</h2>
+          <p class="download-desc">適合開發者或想要自訂功能的使用者。</p>
+          <div class="download-code">
+            <code>git clone https://github.com/KoukeNeko/FinderHover.git</code>
+            <button class="copy-btn" onclick="copyCommand(this, 'git clone https://github.com/KoukeNeko/FinderHover.git')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+            </button>
+          </div>
+          <div class="download-steps">
+            <h4>建置步驟</h4>
+            <ol>
+              <li>確保已安裝 Xcode 15 或更新版本</li>
+              <li>Clone 儲存庫</li>
+              <li>執行 <code>xcodebuild -scheme FinderHover -configuration Release</code></li>
+              <li>或在 Xcode 中開啟專案並按 ⌘B 建置</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- System Requirements -->
+    <section class="requirements-section">
+      <h2 class="section-headline">系統需求</h2>
+      <div class="requirements-grid">
+        <div class="requirement-item">
+          <div class="requirement-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </div>
+          <h3>macOS Sonoma 14.0+</h3>
+          <p>需要 macOS Sonoma 或更新版本</p>
+        </div>
+        <div class="requirement-item">
+          <div class="requirement-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h3>輔助使用權限</h3>
+          <p>需要授予輔助使用權限以偵測滑鼠位置</p>
+        </div>
+        <div class="requirement-item">
+          <div class="requirement-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <h3>Apple Silicon / Intel</h3>
+          <p>支援 M1/M2/M3 及 Intel 處理器</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="https://github.com/KoukeNeko/FinderHover">GitHub</a>
+          <a href="https://github.com/KoukeNeko/FinderHover/issues">問題回報</a>
+          <a href="https://github.com/KoukeNeko/FinderHover/blob/main/LICENSE">授權條款</a>
+          <a href="changelog.html">更新日誌</a>
+        </div>
+        <p class="footer-copyright">
+          Copyright © <span id="year"></span> KoukeNeko. 以 MIT 授權釋出。
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      function copyCommand(btn, command) {
+        navigator.clipboard.writeText(command).then(() => {
+          const originalHTML = btn.innerHTML;
+          btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.innerHTML = originalHTML;
+            btn.classList.remove('copied');
+          }, 2000);
+        });
+      }
+    </script>
+  </body>
+</html>
