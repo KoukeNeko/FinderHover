@@ -24,6 +24,17 @@ class SiteNav extends HTMLElement {
             <img src="assets/icon.png" alt="FinderHover" />
             <span>FinderHover</span>
           </a>
+          <button class="nav-menu-toggle" aria-label="Toggle menu">
+            <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+            <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
           <div class="nav-links">
             <a href="${featuresLink}" data-i18n="nav.features">功能</a>
             <a href="formats.html" data-i18n="nav.formats">格式</a>
@@ -36,6 +47,7 @@ class SiteNav extends HTMLElement {
                 <button class="lang-option${currentLang === 'en' ? ' active' : ''}" data-lang="en">English</button>
               </div>
             </div>
+            <a href="download.html" class="nav-cta-mobile" data-i18n="nav.download">下載</a>
           </div>
           <a href="download.html" class="nav-cta" data-i18n="nav.download">下載</a>
         </div>
@@ -44,6 +56,9 @@ class SiteNav extends HTMLElement {
 
         // Setup language switcher
         this.setupLangSwitcher();
+
+        // Setup mobile menu toggle
+        this.setupMobileMenu();
 
         // Apply translations if i18n is ready
         if (window.i18n?.translations && Object.keys(window.i18n.translations).length > 0) {
@@ -76,6 +91,23 @@ class SiteNav extends HTMLElement {
                     window.i18n.switchTo(lang);
                 }
                 switcher.classList.remove('open');
+            });
+        });
+    }
+
+    setupMobileMenu() {
+        const toggle = this.querySelector('.nav-menu-toggle');
+        const navLinks = this.querySelector('.nav-links');
+        const nav = this.querySelector('.nav');
+
+        toggle.addEventListener('click', () => {
+            nav.classList.toggle('menu-open');
+        });
+
+        // Close menu when clicking a link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('menu-open');
             });
         });
     }
