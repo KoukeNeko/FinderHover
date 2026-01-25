@@ -31,7 +31,7 @@
       "desc": "所有處理都在本機進行，無需網路連線。使用 macOS 輔助使用 API，不使用 AppleScript。"
     },
     "customizable": {
-      "title": "高度自訂",
+      "title": "完整自訂",
       "desc": "在豐富的 macOS 風格與簡約的 Windows 提示風格之間選擇。調整大小、透明度和字體縮放。"
     }
   },
@@ -170,7 +170,155 @@
   },
   "formats": {
     "pageTitle": "支援格式",
-    "pageSubtitle": "超過 120 種檔案格式，完整的中繼資料支援"
+    "pageSubtitle": "超過 120 種檔案格式，完整的中繼資料支援",
+    "metadataReadable": "可讀取的中繼資料",
+    "categories": {
+      "image": {
+        "title": "影像檔案",
+        "desc": "支援 EXIF、IPTC、XMP 完整中繼資料讀取",
+        "meta1": "相機型號、鏡頭資訊、焦距",
+        "meta2": "光圈、快門速度、ISO",
+        "meta3": "拍攝日期、色彩空間",
+        "meta4": "GPS 座標",
+        "meta5": "IPTC/XMP（作者、版權、關鍵字、評分）"
+      },
+      "video": {
+        "title": "影片檔案",
+        "desc": "支援各種影音編碼格式的詳細資訊",
+        "meta1": "影片時長、解析度",
+        "meta2": "影片編碼（H.264、HEVC 等）",
+        "meta3": "幀率、位元率",
+        "meta4": "影音軌道數量"
+      },
+      "audio": {
+        "title": "音訊檔案",
+        "desc": "支援 ID3 標籤與音訊技術參數",
+        "meta1": "曲目名稱、演出者、專輯",
+        "meta2": "專輯演出者、類型、年份",
+        "meta3": "時長、位元率",
+        "meta4": "取樣率、聲道數"
+      },
+      "document": {
+        "title": "文件檔案",
+        "desc": "支援 PDF 與 Microsoft Office 文件",
+        "meta1": "文件標題、作者、主旨",
+        "meta2": "關鍵字、建立/修改日期",
+        "meta3": "頁數、字數（Word）",
+        "meta4": "工作表數（Excel）、投影片數（PowerPoint）",
+        "meta5": "PDF 版本、加密狀態、頁面尺寸"
+      },
+      "code": {
+        "title": "程式碼檔案",
+        "desc": "支援 38 種程式語言的行數統計",
+        "meta1": "程式語言自動偵測",
+        "meta2": "總行數、程式碼行數",
+        "meta3": "註解行數、空白行數",
+        "meta4": "檔案編碼（UTF-8、ASCII 等）"
+      },
+      "config": {
+        "title": "設定檔與資料格式",
+        "desc": "支援結構分析與語法驗證",
+        "meta1": "格式類型、語法有效性",
+        "meta2": "鍵值數量、最大巢狀深度",
+        "meta3": "是否包含註解",
+        "meta4": "檔案編碼"
+      },
+      "markdown": {
+        "title": "Markdown 檔案",
+        "desc": "支援 Frontmatter 與內容結構分析",
+        "meta1": "Frontmatter 內容（YAML/TOML/JSON）",
+        "meta2": "文件標題（H1 或 Frontmatter）",
+        "meta3": "字數、標題數量",
+        "meta4": "連結數量、圖片數量、程式碼區塊數量"
+      },
+      "web": {
+        "title": "網頁檔案",
+        "desc": "支援 Meta 標籤與 Open Graph 資訊",
+        "meta1": "頁面標題、描述、關鍵字",
+        "meta2": "作者、語言、字元編碼",
+        "meta3": "Open Graph（og:title, og:description, og:image）",
+        "meta4": "Twitter Card 類型"
+      },
+      "archive": {
+        "title": "壓縮檔案",
+        "desc": "支援多種壓縮格式的內容預覽",
+        "meta1": "壓縮格式類型",
+        "meta2": "檔案數量、解壓縮後大小",
+        "meta3": "壓縮比例",
+        "meta4": "是否加密"
+      },
+      "ebook": {
+        "title": "電子書檔案",
+        "desc": "支援 EPUB 與 Kindle 格式",
+        "meta1": "書名、作者、出版商",
+        "meta2": "出版日期、ISBN",
+        "meta3": "語言、書籍描述"
+      },
+      "font": {
+        "title": "字型檔案",
+        "desc": "支援桌面與網頁字型格式",
+        "meta1": "字型全名、字型家族",
+        "meta2": "字型風格（Regular、Bold 等）",
+        "meta3": "版本、設計師",
+        "meta4": "版權資訊、字符數量"
+      },
+      "vector": {
+        "title": "向量圖形與設計檔案",
+        "desc": "支援 SVG、EPS 與 Adobe 格式",
+        "meta1": "格式類型、尺寸",
+        "meta2": "ViewBox（SVG）、元素數量",
+        "meta3": "色彩模式（RGB、CMYK）",
+        "meta4": "圖層數量（PSD）、位元深度",
+        "meta5": "解析度、透明度支援"
+      },
+      "subtitle": {
+        "title": "字幕檔案",
+        "desc": "支援多種字幕格式的內容分析",
+        "meta1": "字幕格式、文字編碼",
+        "meta2": "字幕條目數量、總時長",
+        "meta3": "語言代碼",
+        "meta4": "是否包含格式化樣式"
+      },
+      "diskImage": {
+        "title": "磁碟映像檔",
+        "desc": "支援 macOS 與 ISO 映像",
+        "meta1": "映像格式（UDIF、ISO 9660 等）",
+        "meta2": "總大小、壓縮後大小",
+        "meta3": "壓縮比例、加密狀態",
+        "meta4": "分割區架構、檔案系統"
+      },
+      "database": {
+        "title": "資料庫檔案",
+        "desc": "支援 SQLite 資料庫結構分析",
+        "meta1": "資料表數量、索引數量",
+        "meta2": "觸發器數量、檢視數量",
+        "meta3": "Schema 版本、頁面大小",
+        "meta4": "資料庫編碼"
+      },
+      "appBundle": {
+        "title": "應用程式套件",
+        "desc": "支援 macOS App 與可執行檔資訊",
+        "meta1": "Bundle ID、版本號、Build 號",
+        "meta2": "最低 macOS 版本需求",
+        "meta3": "應用程式類別、版權",
+        "meta4": "程式碼簽章狀態、Entitlements",
+        "meta5": "架構（arm64、x86_64、Universal）"
+      },
+      "git": {
+        "title": "Git 儲存庫",
+        "desc": "支援 Git 版本控制資訊",
+        "meta1": "目前分支、分支數量",
+        "meta2": "Commit 數量、標籤數量",
+        "meta3": "最後 Commit 日期與訊息",
+        "meta4": "遠端 URL",
+        "meta5": "未提交的變更狀態"
+      }
+    },
+    "stats": {
+      "formats": "支援格式",
+      "categories": "檔案類別",
+      "languages": "程式語言"
+    }
   },
   "docs": {
     "pageTitle": "使用說明",

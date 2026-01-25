@@ -31,7 +31,7 @@
       "desc": "All processing happens locally, no internet required. Uses macOS Accessibility API, not AppleScript."
     },
     "customizable": {
-      "title": "Highly Customizable",
+      "title": "Fully Customizable",
       "desc": "Choose between rich macOS style or minimal Windows tooltip style. Adjust size, opacity, and font scaling."
     }
   },
@@ -170,7 +170,155 @@
   },
   "formats": {
     "pageTitle": "Supported Formats",
-    "pageSubtitle": "Over 120 file formats with full metadata support"
+    "pageSubtitle": "Over 120 file formats with full metadata support",
+    "metadataReadable": "Readable Metadata",
+    "categories": {
+      "image": {
+        "title": "Image Files",
+        "desc": "Full EXIF, IPTC, XMP metadata support",
+        "meta1": "Camera model, lens info, focal length",
+        "meta2": "Aperture, shutter speed, ISO",
+        "meta3": "Capture date, color space",
+        "meta4": "GPS coordinates",
+        "meta5": "IPTC/XMP (author, copyright, keywords, rating)"
+      },
+      "video": {
+        "title": "Video Files",
+        "desc": "Detailed info for various video codecs",
+        "meta1": "Video duration, resolution",
+        "meta2": "Video codec (H.264, HEVC, etc.)",
+        "meta3": "Frame rate, bitrate",
+        "meta4": "Audio/video track count"
+      },
+      "audio": {
+        "title": "Audio Files",
+        "desc": "ID3 tags and audio technical parameters",
+        "meta1": "Track name, artist, album",
+        "meta2": "Album artist, genre, year",
+        "meta3": "Duration, bitrate",
+        "meta4": "Sample rate, channels"
+      },
+      "document": {
+        "title": "Document Files",
+        "desc": "PDF and Microsoft Office documents",
+        "meta1": "Document title, author, subject",
+        "meta2": "Keywords, created/modified date",
+        "meta3": "Page count, word count (Word)",
+        "meta4": "Sheet count (Excel), slide count (PowerPoint)",
+        "meta5": "PDF version, encryption status, page size"
+      },
+      "code": {
+        "title": "Code Files",
+        "desc": "Line count statistics for 38 languages",
+        "meta1": "Auto language detection",
+        "meta2": "Total lines, code lines",
+        "meta3": "Comment lines, blank lines",
+        "meta4": "File encoding (UTF-8, ASCII, etc.)"
+      },
+      "config": {
+        "title": "Config & Data Formats",
+        "desc": "Structure analysis and syntax validation",
+        "meta1": "Format type, syntax validity",
+        "meta2": "Key count, max nesting depth",
+        "meta3": "Contains comments",
+        "meta4": "File encoding"
+      },
+      "markdown": {
+        "title": "Markdown Files",
+        "desc": "Frontmatter and content structure analysis",
+        "meta1": "Frontmatter content (YAML/TOML/JSON)",
+        "meta2": "Document title (H1 or frontmatter)",
+        "meta3": "Word count, heading count",
+        "meta4": "Link count, image count, code block count"
+      },
+      "web": {
+        "title": "Web Files",
+        "desc": "Meta tags and Open Graph info",
+        "meta1": "Page title, description, keywords",
+        "meta2": "Author, language, charset",
+        "meta3": "Open Graph (og:title, og:description, og:image)",
+        "meta4": "Twitter Card type"
+      },
+      "archive": {
+        "title": "Archive Files",
+        "desc": "Content preview for various compression formats",
+        "meta1": "Compression format type",
+        "meta2": "File count, uncompressed size",
+        "meta3": "Compression ratio",
+        "meta4": "Encrypted"
+      },
+      "ebook": {
+        "title": "E-book Files",
+        "desc": "EPUB and Kindle formats",
+        "meta1": "Title, author, publisher",
+        "meta2": "Publication date, ISBN",
+        "meta3": "Language, book description"
+      },
+      "font": {
+        "title": "Font Files",
+        "desc": "Desktop and web font formats",
+        "meta1": "Font full name, font family",
+        "meta2": "Font style (Regular, Bold, etc.)",
+        "meta3": "Version, designer",
+        "meta4": "Copyright info, glyph count"
+      },
+      "vector": {
+        "title": "Vector & Design Files",
+        "desc": "SVG, EPS and Adobe formats",
+        "meta1": "Format type, dimensions",
+        "meta2": "ViewBox (SVG), element count",
+        "meta3": "Color mode (RGB, CMYK)",
+        "meta4": "Layer count (PSD), bit depth",
+        "meta5": "Resolution, transparency support"
+      },
+      "subtitle": {
+        "title": "Subtitle Files",
+        "desc": "Content analysis for various subtitle formats",
+        "meta1": "Subtitle format, text encoding",
+        "meta2": "Entry count, total duration",
+        "meta3": "Language code",
+        "meta4": "Contains formatting styles"
+      },
+      "diskImage": {
+        "title": "Disk Images",
+        "desc": "macOS and ISO images",
+        "meta1": "Image format (UDIF, ISO 9660, etc.)",
+        "meta2": "Total size, compressed size",
+        "meta3": "Compression ratio, encryption status",
+        "meta4": "Partition scheme, file system"
+      },
+      "database": {
+        "title": "Database Files",
+        "desc": "SQLite database structure analysis",
+        "meta1": "Table count, index count",
+        "meta2": "Trigger count, view count",
+        "meta3": "Schema version, page size",
+        "meta4": "Database encoding"
+      },
+      "appBundle": {
+        "title": "App Bundles",
+        "desc": "macOS apps and executable info",
+        "meta1": "Bundle ID, version, build number",
+        "meta2": "Minimum macOS version",
+        "meta3": "App category, copyright",
+        "meta4": "Code signature status, entitlements",
+        "meta5": "Architecture (arm64, x86_64, Universal)"
+      },
+      "git": {
+        "title": "Git Repositories",
+        "desc": "Git version control info",
+        "meta1": "Current branch, branch count",
+        "meta2": "Commit count, tag count",
+        "meta3": "Last commit date and message",
+        "meta4": "Remote URL",
+        "meta5": "Uncommitted changes status"
+      }
+    },
+    "stats": {
+      "formats": "Supported Formats",
+      "categories": "File Categories",
+      "languages": "Languages"
+    }
   },
   "docs": {
     "pageTitle": "Documentation",
