@@ -926,7 +926,6 @@ body::before {
   border-radius: 20px;
   padding: 32px;
   position: relative;
-  overflow: hidden;
   transition:
     transform var(--transition-default),
     box-shadow var(--transition-default);
@@ -1476,7 +1475,7 @@ body::before {
   }
 
   .download-section {
-    padding: 0 16px 100px;
+    padding: 0 32px 100px;
   }
 
   .download-grid {
