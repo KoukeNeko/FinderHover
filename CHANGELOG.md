@@ -2,7 +2,16 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.5.0 (Current)
+## Version 1.5.1 (Current)
+
+### 🎨 UI Improvements
+
+- Widened label column for better readability (65 → 75 points)
+- Fixed Japanese localization for "Hard Links" label
+
+---
+
+## Version 1.5.0
 
 ### 🆕 New Feature: System Metadata
 
