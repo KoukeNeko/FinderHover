@@ -189,7 +189,8 @@
         "meta1": "影片時長、解析度",
         "meta2": "影片編碼（H.264、HEVC 等）",
         "meta3": "幀率、位元率",
-        "meta4": "影音軌道數量"
+        "meta4": "影音軌道數量",
+        "meta5": "HDR 格式（Dolby Vision、HDR10、HLG）"
       },
       "audio": {
         "title": "音訊檔案",
@@ -313,6 +314,18 @@
         "meta3": "最後 Commit 日期與訊息",
         "meta4": "遠端 URL",
         "meta5": "未提交的變更狀態"
+      },
+      "systemMeta": {
+        "title": "系統中繼資料",
+        "desc": "支援 macOS 特有的檔案屬性與擴充資訊",
+        "meta1": "Finder 標籤（顏色與自訂標籤）",
+        "meta2": "下載來源（來自哪個網站或應用程式）",
+        "meta3": "隔離資訊（Gatekeeper 狀態）",
+        "meta4": "連結資訊（符號連結、硬連結）",
+        "meta5": "使用統計（開啟次數、最後使用日期）",
+        "meta6": "iCloud 狀態（同步、下載中、僅在雲端）",
+        "meta7": "Finder 註解、UTI 類型識別碼",
+        "meta8": "延伸屬性列表、替身目標路徑"
       }
     },
     "stats": {

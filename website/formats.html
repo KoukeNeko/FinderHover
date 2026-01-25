@@ -150,6 +150,9 @@
               </li>
               <li data-i18n="formats.categories.video.meta3">幀率、位元率</li>
               <li data-i18n="formats.categories.video.meta4">影音軌道數量</li>
+              <li data-i18n="formats.categories.video.meta5">
+                HDR 格式（Dolby Vision、HDR10、HLG）
+              </li>
             </ul>
           </div>
         </article>
@@ -942,6 +945,67 @@
             </ul>
           </div>
         </article>
+
+        <!-- System Metadata -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 20h9" />
+                <path
+                  d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
+                />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.systemMeta.title">
+                系統中繼資料
+              </h2>
+              <p data-i18n="formats.categories.systemMeta.desc">
+                支援 macOS 特有的檔案屬性與擴充資訊
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag special">所有檔案</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.systemMeta.meta1">
+                Finder 標籤（顏色與自訂標籤）
+              </li>
+              <li data-i18n="formats.categories.systemMeta.meta2">
+                下載來源（來自哪個網站或應用程式）
+              </li>
+              <li data-i18n="formats.categories.systemMeta.meta3">
+                隔離資訊（Gatekeeper 狀態）
+              </li>
+              <li data-i18n="formats.categories.systemMeta.meta4">
+                連結資訊（符號連結、硬連結）
+              </li>
+              <li data-i18n="formats.categories.systemMeta.meta5">
+                使用統計（開啟次數、最後使用日期）
+              </li>
+              <li data-i18n="formats.categories.systemMeta.meta6">
+                iCloud 狀態（同步、下載中、僅在雲端）
+              </li>
+              <li data-i18n="formats.categories.systemMeta.meta7">
+                Finder 註解、UTI 類型識別碼
+              </li>
+              <li data-i18n="formats.categories.systemMeta.meta8">
+                延伸屬性列表、替身目標路徑
+              </li>
+            </ul>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -955,7 +1019,7 @@
           >
         </div>
         <div class="stat-item">
-          <span class="stat-number">17</span>
+          <span class="stat-number">18</span>
           <span class="stat-label" data-i18n="formats.stats.categories"
             >檔案類別</span
           >

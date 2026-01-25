@@ -189,7 +189,8 @@
         "meta1": "Video duration, resolution",
         "meta2": "Video codec (H.264, HEVC, etc.)",
         "meta3": "Frame rate, bitrate",
-        "meta4": "Audio/video track count"
+        "meta4": "Audio/video track count",
+        "meta5": "HDR format (Dolby Vision, HDR10, HLG)"
       },
       "audio": {
         "title": "Audio Files",
@@ -313,6 +314,18 @@
         "meta3": "Last commit date and message",
         "meta4": "Remote URL",
         "meta5": "Uncommitted changes status"
+      },
+      "systemMeta": {
+        "title": "System Metadata",
+        "desc": "macOS-specific file attributes and extended information",
+        "meta1": "Finder tags (colors and custom labels)",
+        "meta2": "Download source (website or app origin)",
+        "meta3": "Quarantine info (Gatekeeper status)",
+        "meta4": "Link info (symlinks, hard links)",
+        "meta5": "Usage stats (open count, last used date)",
+        "meta6": "iCloud status (synced, downloading, cloud-only)",
+        "meta7": "Finder comments, UTI type identifier",
+        "meta8": "Extended attributes list, alias target path"
       }
     },
     "stats": {
