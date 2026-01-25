@@ -1247,7 +1247,7 @@ struct HoverContentView: View {
                             .font(.system(size: settings.fontSize))
                             .foregroundColor(.secondary)
                             .lineLimit(1)
-                            .frame(minWidth: 65, alignment: .trailing)
+                            .frame(minWidth: 75, alignment: .trailing)
 
                         Text(fileInfo.path)
                             .font(.system(size: settings.fontSize, design: .monospaced))
@@ -1287,7 +1287,7 @@ struct DetailRow: View {
                 .font(.system(size: fontSize))
                 .foregroundColor(.secondary)
                 .lineLimit(1)
-                .frame(minWidth: 65, alignment: .trailing)
+                .frame(minWidth: 75, alignment: .trailing)
 
             Text(value)
                 .font(.system(size: fontSize))

@@ -662,7 +662,7 @@
 "hover.systemMetadata.quarantineDate" = "ダウンロード日";
 "hover.systemMetadata.downloadedBy" = "ダウンローダー";
 "hover.systemMetadata.symlinkTarget" = "リンク先";
-"hover.systemMetadata.hardLinks" = "ハードリンク数";
+"hover.systemMetadata.hardLinks" = "ハードリンク";
 "hover.systemMetadata.useCount" = "使用回数";
 "hover.systemMetadata.lastUsed" = "最終使用";
 "hover.systemMetadata.iCloud" = "iCloud 状態";
