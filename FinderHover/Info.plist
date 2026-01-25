@@ -26,5 +26,29 @@
 	<string>FinderHover needs to control Finder to detect which file you're hovering over and display its information.</string>
 	<key>NSAppleScriptEnabled</key>
 	<true/>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>dev.koukeneko.sqlite-database</string>
+			<key>UTTypeDescription</key>
+			<string>SQLite Database</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.database</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>db</string>
+					<string>sqlite</string>
+					<string>sqlite3</string>
+					<string>db3</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>

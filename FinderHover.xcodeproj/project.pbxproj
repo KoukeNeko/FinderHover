@@ -6,11 +6,50 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C8455BCC2F26581F000724A8 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8455BCB2F26581F000724A8 /* Quartz.framework */; };
+		C8455BD82F265820000724A8 /* FinderHoverQLExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C8455BC92F26581F000724A8 /* FinderHoverQLExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C8455BEF2F2659CE000724A8 /* SQLiteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8455BED2F2659CE000724A8 /* SQLiteParser.swift */; };
+		C8455BF02F2659CE000724A8 /* SQLiteParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8455BED2F2659CE000724A8 /* SQLiteParser.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C8455BD62F265820000724A8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C8BAE6472EB86F1C0007FB19 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C8455BC82F26581F000724A8;
+			remoteInfo = FinderHoverQLExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C8455BD92F265820000724A8 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				C8455BD82F265820000724A8 /* FinderHoverQLExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		C8455BC92F26581F000724A8 /* FinderHoverQLExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FinderHoverQLExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		C8455BCB2F26581F000724A8 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		C8455BED2F2659CE000724A8 /* SQLiteParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteParser.swift; sourceTree = "<group>"; };
 		C8BAE64F2EB86F1C0007FB19 /* FinderHover.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinderHover.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		C8455BCD2F26581F000724A8 /* FinderHoverQLExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FinderHoverQLExtension;
+			sourceTree = "<group>";
+		};
 		C8BAE6512EB86F1C0007FB19 /* FinderHover */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = FinderHover;
@@ -19,6 +58,14 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C8455BC62F26581F000724A8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C8455BCC2F26581F000724A8 /* Quartz.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C8BAE64C2EB86F1C0007FB19 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -29,10 +76,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C8455BCA2F26581F000724A8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C8455BCB2F26581F000724A8 /* Quartz.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C8455BEE2F2659CE000724A8 /* Shared 2 */ = {
+			isa = PBXGroup;
+			children = (
+				C8455BED2F2659CE000724A8 /* SQLiteParser.swift */,
+			);
+			path = "Shared 2";
+			sourceTree = "<group>";
+		};
 		C8BAE6462EB86F1C0007FB19 = {
 			isa = PBXGroup;
 			children = (
+				C8455BEE2F2659CE000724A8 /* Shared 2 */,
 				C8BAE6512EB86F1C0007FB19 /* FinderHover */,
+				C8455BCD2F26581F000724A8 /* FinderHoverQLExtension */,
+				C8455BCA2F26581F000724A8 /* Frameworks */,
 				C8BAE6502EB86F1C0007FB19 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				C8BAE64F2EB86F1C0007FB19 /* FinderHover.app */,
+				C8455BC92F26581F000724A8 /* FinderHoverQLExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,6 +115,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		C8455BC82F26581F000724A8 /* FinderHoverQLExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C8455BDD2F265820000724A8 /* Build configuration list for PBXNativeTarget "FinderHoverQLExtension" */;
+			buildPhases = (
+				C8455BC52F26581F000724A8 /* Sources */,
+				C8455BC62F26581F000724A8 /* Frameworks */,
+				C8455BC72F26581F000724A8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				C8455BCD2F26581F000724A8 /* FinderHoverQLExtension */,
+			);
+			name = FinderHoverQLExtension;
+			packageProductDependencies = (
+			);
+			productName = FinderHoverQLExtension;
+			productReference = C8455BC92F26581F000724A8 /* FinderHoverQLExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		C8BAE64E2EB86F1C0007FB19 /* FinderHover */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C8BAE65A2EB86F1F0007FB19 /* Build configuration list for PBXNativeTarget "FinderHover" */;
@@ -55,10 +144,12 @@
 				C8BAE64B2EB86F1C0007FB19 /* Sources */,
 				C8BAE64C2EB86F1C0007FB19 /* Frameworks */,
 				C8BAE64D2EB86F1C0007FB19 /* Resources */,
+				C8455BD92F265820000724A8 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C8455BD72F265820000724A8 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				C8BAE6512EB86F1C0007FB19 /* FinderHover */,
@@ -77,9 +168,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2600;
+				LastSwiftUpdateCheck = 2620;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
+					C8455BC82F26581F000724A8 = {
+						CreatedOnToolsVersion = 26.2;
+					};
 					C8BAE64E2EB86F1C0007FB19 = {
 						CreatedOnToolsVersion = 26.0.1;
 					};
@@ -102,11 +196,19 @@
 			projectRoot = "";
 			targets = (
 				C8BAE64E2EB86F1C0007FB19 /* FinderHover */,
+				C8455BC82F26581F000724A8 /* FinderHoverQLExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		C8455BC72F26581F000724A8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C8BAE64D2EB86F1C0007FB19 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -117,16 +219,95 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C8455BC52F26581F000724A8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C8455BEF2F2659CE000724A8 /* SQLiteParser.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C8BAE64B2EB86F1C0007FB19 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C8455BF02F2659CE000724A8 /* SQLiteParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		C8455BD72F265820000724A8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C8455BC82F26581F000724A8 /* FinderHoverQLExtension */;
+			targetProxy = C8455BD62F265820000724A8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		C8455BDA2F265820000724A8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 33832Z66QU;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FinderHoverQLExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FinderHoverQLExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.7;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.koukeneko.FinderHover.FinderHoverQLExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C8455BDB2F265820000724A8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 33832Z66QU;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FinderHoverQLExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FinderHoverQLExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.7;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.koukeneko.FinderHover.FinderHoverQLExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		C8BAE6582EB86F1F0007FB19 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -320,6 +501,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C8455BDD2F265820000724A8 /* Build configuration list for PBXNativeTarget "FinderHoverQLExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C8455BDA2F265820000724A8 /* Debug */,
+				C8455BDB2F265820000724A8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C8BAE64A2EB86F1C0007FB19 /* Build configuration list for PBXProject "FinderHover" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
