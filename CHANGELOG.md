@@ -2,7 +2,16 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.6.1 (Current)
+## Version 1.6.2 (Current)
+
+### 🐛 Bug Fixes
+
+- Fixed copy button still causing row height to increase
+- Removed lock icon indicator
+
+---
+
+## Version 1.6.1
 
 ### 🐛 Bug Fixes
 

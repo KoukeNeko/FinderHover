@@ -349,12 +349,6 @@ struct HoverContentView: View {
         VStack(alignment: .leading, spacing: settings.compactMode ? 6 : 10) {
             // File icon and name
             HStack(spacing: settings.compactMode ? 8 : 12) {
-                // Lock indicator when window is locked
-                if windowState.isLocked {
-                    Image(systemName: "lock.fill")
-                        .font(.system(size: 10))
-                        .foregroundColor(.secondary)
-                }
                 if settings.showIcon {
                     let iconSize = settings.compactMode
                         ? Constants.Thumbnail.compactIconSize
@@ -1417,15 +1411,12 @@ struct CopyButton: View {
             windowState.copyToClipboard(value, key: uniqueKey)
         }) {
             Image(systemName: isCopied ? "checkmark" : "doc.on.doc")
-                .font(.system(size: fontSize - 2))
+                .font(.system(size: fontSize))
                 .foregroundColor(isCopied ? .green : (isHovering ? .primary : .secondary))
+                .frame(width: 14, alignment: .center)
         }
         .buttonStyle(.plain)
-        .frame(width: 16, height: 16)
-        .background(
-            RoundedRectangle(cornerRadius: 3)
-                .fill(isHovering ? Color.gray.opacity(0.2) : Color.clear)
-        )
+        .contentShape(Rectangle())
         .onHover { hovering in
             isHovering = hovering
         }
