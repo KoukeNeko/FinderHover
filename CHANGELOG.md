@@ -171,7 +171,7 @@ All notable changes to FinderHover will be documented in this file.
 - Frequent view recycling during fast scroll caused main thread blocking
 - VStack provides stable view references and better performance in this scenario
 
-## Version 1.3
+## Version 1.3.0
 
 ### 🆕 New Metadata Support
 
