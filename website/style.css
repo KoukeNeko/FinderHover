@@ -454,11 +454,24 @@ body::before {
   display: flex;
   gap: 12px;
   padding-right: 12px;
-  animation: marquee-left 30s linear infinite;
+  animation: marquee-left 40s linear infinite;
 }
 
 .marquee-row[data-direction="right"] .marquee-content {
-  animation: marquee-right 30s linear infinite;
+  animation: marquee-right 40s linear infinite;
+}
+
+/* Speed variations */
+.marquee-row[data-speed="slow"] .marquee-content {
+  animation-duration: 50s;
+}
+
+.marquee-row[data-speed="medium"] .marquee-content {
+  animation-duration: 35s;
+}
+
+.marquee-row[data-speed="fast"] .marquee-content {
+  animation-duration: 25s;
 }
 
 @keyframes marquee-left {
@@ -483,14 +496,14 @@ body::before {
   animation-play-state: paused;
 }
 
-.format-tag {
+.format-tag,
+.format-info {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 10px 20px;
   border-radius: 100px;
-  font-family: var(--font-family-mono);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
   background: var(--color-background);
@@ -499,144 +512,182 @@ body::before {
   transition: all 0.3s ease;
 }
 
-.format-tag:hover {
+.format-tag {
+  font-family: var(--font-family-mono);
+}
+
+.format-info {
+  font-family: var(--font-family);
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+.format-tag:hover,
+.format-info:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 /* Format tag colors */
-.format-tag.photo {
+.format-tag.photo,
+.format-info.photo {
   background: linear-gradient(135deg, #ff6b6b20, #ee5a2420);
   border-color: #ff6b6b40;
   color: #ff6b6b;
 }
 
-.format-tag.video {
+.format-tag.video,
+.format-info.video {
   background: linear-gradient(135deg, #ff922b20, #fd7e1420);
   border-color: #ff922b40;
   color: #ff922b;
 }
 
-.format-tag.audio {
+.format-tag.audio,
+.format-info.audio {
   background: linear-gradient(135deg, #fcc41920, #fab00520);
   border-color: #fcc41940;
   color: #e6ac00;
 }
 
-.format-tag.code {
+.format-tag.code,
+.format-info.code {
   background: linear-gradient(135deg, #51cf6620, #40c05720);
   border-color: #51cf6640;
   color: #51cf66;
 }
 
-.format-tag.doc {
+.format-tag.doc,
+.format-info.doc {
   background: linear-gradient(135deg, #339af020, #228be620);
   border-color: #339af040;
   color: #339af0;
 }
 
-.format-tag.config {
+.format-tag.config,
+.format-info.config {
   background: linear-gradient(135deg, #845ef720, #7950f220);
   border-color: #845ef740;
   color: #845ef7;
 }
 
-.format-tag.design {
-  background: linear-gradient(135deg, #f06595 20, #e6457020);
+.format-tag.design,
+.format-info.design {
+  background: linear-gradient(135deg, #f0659520, #e6457020);
   border-color: #f0659540;
   color: #f06595;
 }
 
-.format-tag.font {
+.format-tag.font,
+.format-info.font {
   background: linear-gradient(135deg, #20c99720, #12b88620);
   border-color: #20c99740;
   color: #20c997;
 }
 
-.format-tag.system {
-  background: linear-gradient(135deg, #74c0fc 20, #4dabf720);
+.format-tag.system,
+.format-info.system {
+  background: linear-gradient(135deg, #74c0fc20, #4dabf720);
   border-color: #74c0fc40;
   color: #74c0fc;
 }
 
-.format-tag.archive {
+.format-tag.archive,
+.format-info.archive {
   background: linear-gradient(135deg, #a9e34b20, #94d82d20);
   border-color: #a9e34b40;
   color: #a9e34b;
 }
 
-.format-tag.data {
+.format-tag.data,
+.format-info.data {
   background: linear-gradient(135deg, #ffa94d20, #ff922b20);
   border-color: #ffa94d40;
   color: #ffa94d;
 }
 
-.format-tag.git {
+.format-tag.git,
+.format-info.git {
   background: linear-gradient(135deg, #f0652020, #e6481820);
   border-color: #f0652040;
   color: #f06520;
 }
 
-.format-tag.subtitle {
+.format-tag.subtitle,
+.format-info.subtitle {
   background: linear-gradient(135deg, #748ffc20, #5c7cfa20);
   border-color: #748ffc40;
   color: #748ffc;
 }
 
 @media (prefers-color-scheme: dark) {
-  .format-tag {
+  .format-tag,
+  .format-info {
     background: rgba(255, 255, 255, 0.05);
   }
 
-  .format-tag.photo {
+  .format-tag.photo,
+  .format-info.photo {
     background: rgba(255, 107, 107, 0.15);
   }
 
-  .format-tag.video {
+  .format-tag.video,
+  .format-info.video {
     background: rgba(255, 146, 43, 0.15);
   }
 
-  .format-tag.audio {
+  .format-tag.audio,
+  .format-info.audio {
     background: rgba(252, 196, 25, 0.15);
   }
 
-  .format-tag.code {
+  .format-tag.code,
+  .format-info.code {
     background: rgba(81, 207, 102, 0.15);
   }
 
-  .format-tag.doc {
+  .format-tag.doc,
+  .format-info.doc {
     background: rgba(51, 154, 240, 0.15);
   }
 
-  .format-tag.config {
+  .format-tag.config,
+  .format-info.config {
     background: rgba(132, 94, 247, 0.15);
   }
 
-  .format-tag.design {
+  .format-tag.design,
+  .format-info.design {
     background: rgba(240, 101, 149, 0.15);
   }
 
-  .format-tag.font {
+  .format-tag.font,
+  .format-info.font {
     background: rgba(32, 201, 151, 0.15);
   }
 
-  .format-tag.system {
+  .format-tag.system,
+  .format-info.system {
     background: rgba(116, 192, 252, 0.15);
   }
 
-  .format-tag.archive {
+  .format-tag.archive,
+  .format-info.archive {
     background: rgba(169, 227, 75, 0.15);
   }
 
-  .format-tag.data {
+  .format-tag.data,
+  .format-info.data {
     background: rgba(255, 169, 77, 0.15);
   }
 
-  .format-tag.git {
+  .format-tag.git,
+  .format-info.git {
     background: rgba(240, 101, 32, 0.15);
   }
 
-  .format-tag.subtitle {
+  .format-tag.subtitle,
+  .format-info.subtitle {
     background: rgba(116, 143, 252, 0.15);
   }
 }

@@ -153,8 +153,8 @@
       </div>
 
       <div class="marquee-container">
-        <!-- Row 1 - Left -->
-        <div class="marquee-row" data-direction="left">
+        <!-- Row 1 - Photo formats -->
+        <div class="marquee-row" data-direction="left" data-speed="slow">
           <div class="marquee-content">
             <span class="format-tag photo">.jpg</span>
             <span class="format-tag photo">.jpeg</span>
@@ -170,6 +170,10 @@
             <span class="format-tag photo">.gif</span>
             <span class="format-tag photo">.bmp</span>
             <span class="format-tag photo">.ico</span>
+            <span class="format-tag photo">.raf</span>
+            <span class="format-tag photo">.orf</span>
+            <span class="format-tag photo">.rw2</span>
+            <span class="format-tag photo">.pef</span>
           </div>
           <div class="marquee-content" aria-hidden="true">
             <span class="format-tag photo">.jpg</span>
@@ -186,17 +190,66 @@
             <span class="format-tag photo">.gif</span>
             <span class="format-tag photo">.bmp</span>
             <span class="format-tag photo">.ico</span>
+            <span class="format-tag photo">.raf</span>
+            <span class="format-tag photo">.orf</span>
+            <span class="format-tag photo">.rw2</span>
+            <span class="format-tag photo">.pef</span>
           </div>
         </div>
 
-        <!-- Row 2 - Right -->
-        <div class="marquee-row" data-direction="right">
+        <!-- Row 2 - Metadata descriptions (left) -->
+        <div class="marquee-row" data-direction="right" data-speed="medium">
+          <div class="marquee-content">
+            <span class="format-info photo">📷 相機型號</span>
+            <span class="format-info photo">📷 鏡頭資訊</span>
+            <span class="format-info photo">📷 ISO 感光度</span>
+            <span class="format-info photo">📷 光圈值</span>
+            <span class="format-info photo">📷 快門速度</span>
+            <span class="format-info photo">📷 GPS 座標</span>
+            <span class="format-info photo">📷 拍攝日期</span>
+            <span class="format-info photo">📷 IPTC/XMP</span>
+            <span class="format-info video">🎬 影片編碼</span>
+            <span class="format-info video">🎬 解析度</span>
+            <span class="format-info video">🎬 位元率</span>
+            <span class="format-info video">🎬 幀率</span>
+            <span class="format-info video">🎬 時長</span>
+            <span class="format-info audio">🎵 演出者</span>
+            <span class="format-info audio">🎵 專輯</span>
+            <span class="format-info audio">🎵 取樣率</span>
+            <span class="format-info audio">🎵 位元率</span>
+          </div>
+          <div class="marquee-content" aria-hidden="true">
+            <span class="format-info photo">📷 相機型號</span>
+            <span class="format-info photo">📷 鏡頭資訊</span>
+            <span class="format-info photo">📷 ISO 感光度</span>
+            <span class="format-info photo">📷 光圈值</span>
+            <span class="format-info photo">📷 快門速度</span>
+            <span class="format-info photo">📷 GPS 座標</span>
+            <span class="format-info photo">📷 拍攝日期</span>
+            <span class="format-info photo">📷 IPTC/XMP</span>
+            <span class="format-info video">🎬 影片編碼</span>
+            <span class="format-info video">🎬 解析度</span>
+            <span class="format-info video">🎬 位元率</span>
+            <span class="format-info video">🎬 幀率</span>
+            <span class="format-info video">🎬 時長</span>
+            <span class="format-info audio">🎵 演出者</span>
+            <span class="format-info audio">🎵 專輯</span>
+            <span class="format-info audio">🎵 取樣率</span>
+            <span class="format-info audio">🎵 位元率</span>
+          </div>
+        </div>
+
+        <!-- Row 3 - Video and Audio formats -->
+        <div class="marquee-row" data-direction="left" data-speed="medium">
           <div class="marquee-content">
             <span class="format-tag video">.mp4</span>
             <span class="format-tag video">.mov</span>
             <span class="format-tag video">.avi</span>
             <span class="format-tag video">.mkv</span>
             <span class="format-tag video">.webm</span>
+            <span class="format-tag video">.m4v</span>
+            <span class="format-tag video">.wmv</span>
+            <span class="format-tag video">.flv</span>
             <span class="format-tag audio">.mp3</span>
             <span class="format-tag audio">.wav</span>
             <span class="format-tag audio">.flac</span>
@@ -204,6 +257,8 @@
             <span class="format-tag audio">.m4a</span>
             <span class="format-tag audio">.ogg</span>
             <span class="format-tag audio">.aiff</span>
+            <span class="format-tag audio">.wma</span>
+            <span class="format-tag audio">.opus</span>
           </div>
           <div class="marquee-content" aria-hidden="true">
             <span class="format-tag video">.mp4</span>
@@ -211,6 +266,9 @@
             <span class="format-tag video">.avi</span>
             <span class="format-tag video">.mkv</span>
             <span class="format-tag video">.webm</span>
+            <span class="format-tag video">.m4v</span>
+            <span class="format-tag video">.wmv</span>
+            <span class="format-tag video">.flv</span>
             <span class="format-tag audio">.mp3</span>
             <span class="format-tag audio">.wav</span>
             <span class="format-tag audio">.flac</span>
@@ -218,19 +276,25 @@
             <span class="format-tag audio">.m4a</span>
             <span class="format-tag audio">.ogg</span>
             <span class="format-tag audio">.aiff</span>
+            <span class="format-tag audio">.wma</span>
+            <span class="format-tag audio">.opus</span>
           </div>
         </div>
 
-        <!-- Row 3 - Left -->
-        <div class="marquee-row" data-direction="left">
+        <!-- Row 4 - Code formats -->
+        <div class="marquee-row" data-direction="right" data-speed="fast">
           <div class="marquee-content">
             <span class="format-tag code">.swift</span>
             <span class="format-tag code">.js</span>
             <span class="format-tag code">.ts</span>
+            <span class="format-tag code">.jsx</span>
+            <span class="format-tag code">.tsx</span>
             <span class="format-tag code">.py</span>
             <span class="format-tag code">.java</span>
             <span class="format-tag code">.c</span>
             <span class="format-tag code">.cpp</span>
+            <span class="format-tag code">.h</span>
+            <span class="format-tag code">.hpp</span>
             <span class="format-tag code">.go</span>
             <span class="format-tag code">.rs</span>
             <span class="format-tag code">.rb</span>
@@ -238,15 +302,27 @@
             <span class="format-tag code">.kt</span>
             <span class="format-tag code">.scala</span>
             <span class="format-tag code">.sh</span>
+            <span class="format-tag code">.zsh</span>
+            <span class="format-tag code">.bash</span>
+            <span class="format-tag code">.lua</span>
+            <span class="format-tag code">.r</span>
+            <span class="format-tag code">.m</span>
+            <span class="format-tag code">.cs</span>
+            <span class="format-tag code">.vue</span>
+            <span class="format-tag code">.svelte</span>
           </div>
           <div class="marquee-content" aria-hidden="true">
             <span class="format-tag code">.swift</span>
             <span class="format-tag code">.js</span>
             <span class="format-tag code">.ts</span>
+            <span class="format-tag code">.jsx</span>
+            <span class="format-tag code">.tsx</span>
             <span class="format-tag code">.py</span>
             <span class="format-tag code">.java</span>
             <span class="format-tag code">.c</span>
             <span class="format-tag code">.cpp</span>
+            <span class="format-tag code">.h</span>
+            <span class="format-tag code">.hpp</span>
             <span class="format-tag code">.go</span>
             <span class="format-tag code">.rs</span>
             <span class="format-tag code">.rb</span>
@@ -254,14 +330,59 @@
             <span class="format-tag code">.kt</span>
             <span class="format-tag code">.scala</span>
             <span class="format-tag code">.sh</span>
+            <span class="format-tag code">.zsh</span>
+            <span class="format-tag code">.bash</span>
+            <span class="format-tag code">.lua</span>
+            <span class="format-tag code">.r</span>
+            <span class="format-tag code">.m</span>
+            <span class="format-tag code">.cs</span>
+            <span class="format-tag code">.vue</span>
+            <span class="format-tag code">.svelte</span>
           </div>
         </div>
 
-        <!-- Row 4 - Right -->
-        <div class="marquee-row" data-direction="right">
+        <!-- Row 5 - More metadata descriptions -->
+        <div class="marquee-row" data-direction="left" data-speed="medium">
+          <div class="marquee-content">
+            <span class="format-info code">💻 程式語言</span>
+            <span class="format-info code">💻 總行數</span>
+            <span class="format-info code">💻 程式碼行數</span>
+            <span class="format-info code">💻 註解行數</span>
+            <span class="format-info code">💻 檔案編碼</span>
+            <span class="format-info doc">📄 PDF 頁數</span>
+            <span class="format-info doc">📄 文件標題</span>
+            <span class="format-info doc">📄 作者</span>
+            <span class="format-info doc">📄 字數統計</span>
+            <span class="format-info doc">📄 投影片數</span>
+            <span class="format-info doc">📄 工作表數</span>
+            <span class="format-info config">⚙️ 鍵值數量</span>
+            <span class="format-info config">⚙️ 巢狀深度</span>
+            <span class="format-info config">⚙️ 驗證狀態</span>
+          </div>
+          <div class="marquee-content" aria-hidden="true">
+            <span class="format-info code">💻 程式語言</span>
+            <span class="format-info code">💻 總行數</span>
+            <span class="format-info code">💻 程式碼行數</span>
+            <span class="format-info code">💻 註解行數</span>
+            <span class="format-info code">💻 檔案編碼</span>
+            <span class="format-info doc">📄 PDF 頁數</span>
+            <span class="format-info doc">📄 文件標題</span>
+            <span class="format-info doc">📄 作者</span>
+            <span class="format-info doc">📄 字數統計</span>
+            <span class="format-info doc">📄 投影片數</span>
+            <span class="format-info doc">📄 工作表數</span>
+            <span class="format-info config">⚙️ 鍵值數量</span>
+            <span class="format-info config">⚙️ 巢狀深度</span>
+            <span class="format-info config">⚙️ 驗證狀態</span>
+          </div>
+        </div>
+
+        <!-- Row 6 - Document formats -->
+        <div class="marquee-row" data-direction="right" data-speed="slow">
           <div class="marquee-content">
             <span class="format-tag doc">.md</span>
             <span class="format-tag doc">.html</span>
+            <span class="format-tag doc">.htm</span>
             <span class="format-tag doc">.pdf</span>
             <span class="format-tag doc">.doc</span>
             <span class="format-tag doc">.docx</span>
@@ -270,12 +391,17 @@
             <span class="format-tag doc">.ppt</span>
             <span class="format-tag doc">.pptx</span>
             <span class="format-tag doc">.epub</span>
+            <span class="format-tag doc">.mobi</span>
             <span class="format-tag doc">.txt</span>
             <span class="format-tag doc">.rtf</span>
+            <span class="format-tag doc">.pages</span>
+            <span class="format-tag doc">.numbers</span>
+            <span class="format-tag doc">.key</span>
           </div>
           <div class="marquee-content" aria-hidden="true">
             <span class="format-tag doc">.md</span>
             <span class="format-tag doc">.html</span>
+            <span class="format-tag doc">.htm</span>
             <span class="format-tag doc">.pdf</span>
             <span class="format-tag doc">.doc</span>
             <span class="format-tag doc">.docx</span>
@@ -284,13 +410,17 @@
             <span class="format-tag doc">.ppt</span>
             <span class="format-tag doc">.pptx</span>
             <span class="format-tag doc">.epub</span>
+            <span class="format-tag doc">.mobi</span>
             <span class="format-tag doc">.txt</span>
             <span class="format-tag doc">.rtf</span>
+            <span class="format-tag doc">.pages</span>
+            <span class="format-tag doc">.numbers</span>
+            <span class="format-tag doc">.key</span>
           </div>
         </div>
 
-        <!-- Row 5 - Left -->
-        <div class="marquee-row" data-direction="left">
+        <!-- Row 7 - Config and Design formats -->
+        <div class="marquee-row" data-direction="left" data-speed="medium">
           <div class="marquee-content">
             <span class="format-tag config">.json</span>
             <span class="format-tag config">.yaml</span>
@@ -298,14 +428,19 @@
             <span class="format-tag config">.toml</span>
             <span class="format-tag config">.xml</span>
             <span class="format-tag config">.plist</span>
+            <span class="format-tag config">.ini</span>
+            <span class="format-tag config">.env</span>
             <span class="format-tag design">.psd</span>
             <span class="format-tag design">.svg</span>
             <span class="format-tag design">.ai</span>
+            <span class="format-tag design">.eps</span>
             <span class="format-tag design">.sketch</span>
             <span class="format-tag design">.fig</span>
+            <span class="format-tag design">.xd</span>
             <span class="format-tag font">.ttf</span>
             <span class="format-tag font">.otf</span>
             <span class="format-tag font">.woff</span>
+            <span class="format-tag font">.woff2</span>
           </div>
           <div class="marquee-content" aria-hidden="true">
             <span class="format-tag config">.json</span>
@@ -314,50 +449,147 @@
             <span class="format-tag config">.toml</span>
             <span class="format-tag config">.xml</span>
             <span class="format-tag config">.plist</span>
+            <span class="format-tag config">.ini</span>
+            <span class="format-tag config">.env</span>
             <span class="format-tag design">.psd</span>
             <span class="format-tag design">.svg</span>
             <span class="format-tag design">.ai</span>
+            <span class="format-tag design">.eps</span>
             <span class="format-tag design">.sketch</span>
             <span class="format-tag design">.fig</span>
+            <span class="format-tag design">.xd</span>
             <span class="format-tag font">.ttf</span>
             <span class="format-tag font">.otf</span>
             <span class="format-tag font">.woff</span>
+            <span class="format-tag font">.woff2</span>
           </div>
         </div>
 
-        <!-- Row 6 - Right -->
-        <div class="marquee-row" data-direction="right">
+        <!-- Row 8 - More metadata descriptions -->
+        <div class="marquee-row" data-direction="right" data-speed="fast">
+          <div class="marquee-content">
+            <span class="format-info design">🎨 PSD 圖層數</span>
+            <span class="format-info design">🎨 色彩模式</span>
+            <span class="format-info design">🎨 位元深度</span>
+            <span class="format-info design">🎨 透明通道</span>
+            <span class="format-info design">🎨 SVG 元素數</span>
+            <span class="format-info font">🔤 字型名稱</span>
+            <span class="format-info font">🔤 字型家族</span>
+            <span class="format-info font">🔤 字形數量</span>
+            <span class="format-info font">🔤 設計者</span>
+            <span class="format-info system">📦 Bundle ID</span>
+            <span class="format-info system">📦 版本</span>
+            <span class="format-info system">📦 最低 macOS</span>
+            <span class="format-info system">📦 程式碼簽章</span>
+            <span class="format-info system">📦 權限數量</span>
+          </div>
+          <div class="marquee-content" aria-hidden="true">
+            <span class="format-info design">🎨 PSD 圖層數</span>
+            <span class="format-info design">🎨 色彩模式</span>
+            <span class="format-info design">🎨 位元深度</span>
+            <span class="format-info design">🎨 透明通道</span>
+            <span class="format-info design">🎨 SVG 元素數</span>
+            <span class="format-info font">🔤 字型名稱</span>
+            <span class="format-info font">🔤 字型家族</span>
+            <span class="format-info font">🔤 字形數量</span>
+            <span class="format-info font">🔤 設計者</span>
+            <span class="format-info system">📦 Bundle ID</span>
+            <span class="format-info system">📦 版本</span>
+            <span class="format-info system">📦 最低 macOS</span>
+            <span class="format-info system">📦 程式碼簽章</span>
+            <span class="format-info system">📦 權限數量</span>
+          </div>
+        </div>
+
+        <!-- Row 9 - System and Archive formats -->
+        <div class="marquee-row" data-direction="left" data-speed="slow">
           <div class="marquee-content">
             <span class="format-tag system">.app</span>
             <span class="format-tag system">.dmg</span>
             <span class="format-tag system">.pkg</span>
+            <span class="format-tag system">.iso</span>
             <span class="format-tag archive">.zip</span>
             <span class="format-tag archive">.tar</span>
             <span class="format-tag archive">.gz</span>
             <span class="format-tag archive">.7z</span>
             <span class="format-tag archive">.rar</span>
+            <span class="format-tag archive">.bz2</span>
+            <span class="format-tag archive">.xz</span>
             <span class="format-tag data">.db</span>
             <span class="format-tag data">.sqlite</span>
+            <span class="format-tag data">.sqlite3</span>
             <span class="format-tag data">.csv</span>
             <span class="format-tag git">.git</span>
             <span class="format-tag subtitle">.srt</span>
             <span class="format-tag subtitle">.vtt</span>
+            <span class="format-tag subtitle">.ass</span>
+            <span class="format-tag subtitle">.ssa</span>
+            <span class="format-tag subtitle">.sub</span>
+            <span class="format-tag subtitle">.lrc</span>
           </div>
           <div class="marquee-content" aria-hidden="true">
             <span class="format-tag system">.app</span>
             <span class="format-tag system">.dmg</span>
             <span class="format-tag system">.pkg</span>
+            <span class="format-tag system">.iso</span>
             <span class="format-tag archive">.zip</span>
             <span class="format-tag archive">.tar</span>
             <span class="format-tag archive">.gz</span>
             <span class="format-tag archive">.7z</span>
             <span class="format-tag archive">.rar</span>
+            <span class="format-tag archive">.bz2</span>
+            <span class="format-tag archive">.xz</span>
             <span class="format-tag data">.db</span>
             <span class="format-tag data">.sqlite</span>
+            <span class="format-tag data">.sqlite3</span>
             <span class="format-tag data">.csv</span>
             <span class="format-tag git">.git</span>
             <span class="format-tag subtitle">.srt</span>
             <span class="format-tag subtitle">.vtt</span>
+            <span class="format-tag subtitle">.ass</span>
+            <span class="format-tag subtitle">.ssa</span>
+            <span class="format-tag subtitle">.sub</span>
+            <span class="format-tag subtitle">.lrc</span>
+          </div>
+        </div>
+
+        <!-- Row 10 - Final metadata descriptions -->
+        <div class="marquee-row" data-direction="right" data-speed="medium">
+          <div class="marquee-content">
+            <span class="format-info archive">📦 壓縮格式</span>
+            <span class="format-info archive">📦 檔案數量</span>
+            <span class="format-info archive">📦 壓縮率</span>
+            <span class="format-info archive">📦 加密狀態</span>
+            <span class="format-info data">🗄️ 資料表數</span>
+            <span class="format-info data">🗄️ 索引數</span>
+            <span class="format-info data">🗄️ 總列數</span>
+            <span class="format-info data">🗄️ Schema 版本</span>
+            <span class="format-info git">📂 目前分支</span>
+            <span class="format-info git">📂 提交次數</span>
+            <span class="format-info git">📂 遠端 URL</span>
+            <span class="format-info git">📂 未提交變更</span>
+            <span class="format-info git">📂 標籤數量</span>
+            <span class="format-info subtitle">🎬 字幕條目數</span>
+            <span class="format-info subtitle">🎬 時長</span>
+            <span class="format-info subtitle">🎬 語言</span>
+          </div>
+          <div class="marquee-content" aria-hidden="true">
+            <span class="format-info archive">📦 壓縮格式</span>
+            <span class="format-info archive">📦 檔案數量</span>
+            <span class="format-info archive">📦 壓縮率</span>
+            <span class="format-info archive">📦 加密狀態</span>
+            <span class="format-info data">🗄️ 資料表數</span>
+            <span class="format-info data">🗄️ 索引數</span>
+            <span class="format-info data">🗄️ 總列數</span>
+            <span class="format-info data">🗄️ Schema 版本</span>
+            <span class="format-info git">📂 目前分支</span>
+            <span class="format-info git">📂 提交次數</span>
+            <span class="format-info git">📂 遠端 URL</span>
+            <span class="format-info git">📂 未提交變更</span>
+            <span class="format-info git">📂 標籤數量</span>
+            <span class="format-info subtitle">🎬 字幕條目數</span>
+            <span class="format-info subtitle">🎬 時長</span>
+            <span class="format-info subtitle">🎬 語言</span>
           </div>
         </div>
       </div>
