@@ -498,48 +498,62 @@ body::before {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 20px;
+  padding: 8px 16px;
   border-radius: 980px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   letter-spacing: -0.01em;
   white-space: nowrap;
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.85);
-  border: none;
   will-change: transform;
 }
 
-.format-tag:hover,
-.format-info:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-
+/* Format tags (.mp4, .jpg) - subtle, secondary */
 .format-tag {
   font-family: var(--font-family-mono);
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 400;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
+.format-tag:hover {
+  color: rgba(255, 255, 255, 0.6);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Metadata info - primary, more prominent */
 .format-info {
   font-family: var(--font-family);
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  border: none;
+}
+
+.format-info:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* Light mode adjustments */
 @media (prefers-color-scheme: light) {
-  .format-tag,
+  .format-tag {
+    background: transparent;
+    color: rgba(0, 0, 0, 0.35);
+    border-color: rgba(0, 0, 0, 0.12);
+  }
+
+  .format-tag:hover {
+    color: rgba(0, 0, 0, 0.5);
+    border-color: rgba(0, 0, 0, 0.2);
+  }
+
   .format-info {
     background: rgba(0, 0, 0, 0.06);
-    color: rgba(0, 0, 0, 0.8);
+    color: rgba(0, 0, 0, 0.85);
   }
 
-  .format-tag:hover,
   .format-info:hover {
     background: rgba(0, 0, 0, 0.1);
-  }
-
-  .format-tag {
-    color: rgba(0, 0, 0, 0.5);
   }
 }
 
