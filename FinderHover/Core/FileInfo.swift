@@ -71,11 +71,15 @@ struct VideoMetadata {
     let bitrate: String?
     let videoTracks: Int?
     let audioTracks: Int?
+    let hdrFormat: String?        // Dolby Vision, HDR10, HDR10+, HLG, SDR
+    let colorPrimaries: String?   // BT.709, BT.2020, P3
+    let transferFunction: String? // SDR, PQ, HLG
 
     var hasData: Bool {
         return duration != nil || resolution != nil || codec != nil ||
                frameRate != nil || bitrate != nil || videoTracks != nil ||
-               audioTracks != nil
+               audioTracks != nil || hdrFormat != nil || colorPrimaries != nil ||
+               transferFunction != nil
     }
 }
 
@@ -414,6 +418,68 @@ struct GitMetadata {
     }
 }
 
+// MARK: - Quarantine Info Structure
+struct QuarantineInfo {
+    let isQuarantined: Bool
+    let downloadDate: String?
+    let sourceApp: String?
+    let sourceURL: String?
+
+    var hasData: Bool {
+        return isQuarantined || downloadDate != nil || sourceApp != nil || sourceURL != nil
+    }
+}
+
+// MARK: - Link Info Structure
+struct LinkInfo {
+    let isSymlink: Bool
+    let symlinkTarget: String?
+    let hardLinkCount: Int
+
+    var hasData: Bool {
+        return isSymlink || hardLinkCount > 1
+    }
+}
+
+// MARK: - Usage Stats Structure
+struct UsageStats {
+    let useCount: Int?
+    let lastUsedDate: String?
+
+    var hasData: Bool {
+        return useCount != nil || lastUsedDate != nil
+    }
+}
+
+// MARK: - System Metadata Structure
+struct SystemMetadata {
+    let finderTags: [String]?
+    let whereFroms: [String]?
+    let quarantineInfo: QuarantineInfo?
+    let linkInfo: LinkInfo?
+    let usageStats: UsageStats?
+    let iCloudStatus: String?
+    let finderComment: String?
+    let uti: String?
+    let extendedAttributes: [String]?
+    let aliasTarget: String?
+    let isAliasFile: Bool
+
+    var hasData: Bool {
+        return (finderTags != nil && !finderTags!.isEmpty) ||
+               (whereFroms != nil && !whereFroms!.isEmpty) ||
+               (quarantineInfo?.hasData ?? false) ||
+               (linkInfo?.hasData ?? false) ||
+               (usageStats?.hasData ?? false) ||
+               iCloudStatus != nil ||
+               finderComment != nil ||
+               uti != nil ||
+               (extendedAttributes != nil && !extendedAttributes!.isEmpty) ||
+               aliasTarget != nil ||
+               isAliasFile
+    }
+}
+
 struct FileInfo {
     let name: String
     let path: String
@@ -496,6 +562,9 @@ struct FileInfo {
 
     // Git repository metadata
     let gitMetadata: GitMetadata?
+
+    // System metadata (tags, quarantine, links, etc.)
+    let systemMetadata: SystemMetadata?
 
     var formattedSize: String {
         ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
@@ -693,6 +762,9 @@ struct FileInfo {
             // Extract Git repository metadata
             let gitMetadata = extractGitMetadata(from: url)
 
+            // Extract System metadata (tags, quarantine, links, etc.)
+            let systemMetadata = extractSystemMetadata(from: url)
+
             return FileInfo(
                 name: url.lastPathComponent,
                 path: path,
@@ -730,7 +802,8 @@ struct FileInfo {
                 executableMetadata: executableMetadata,
                 appBundleMetadata: appBundleMetadata,
                 sqliteMetadata: sqliteMetadata,
-                gitMetadata: gitMetadata
+                gitMetadata: gitMetadata,
+                systemMetadata: systemMetadata
             )
         } catch {
             Logger.error("Failed to read file attributes: \(path)", error: error, subsystem: .fileSystem)
@@ -920,6 +993,72 @@ struct FileInfo {
             }
         }
 
+        // Extract HDR information
+        var hdrFormat: String? = nil
+        var colorPrimaries: String? = nil
+        var transferFunction: String? = nil
+
+        if let videoTrack = videoTracks.first,
+           let formatDescriptions = videoTrack.formatDescriptions as? [CMFormatDescription],
+           let formatDescription = formatDescriptions.first {
+
+            // Get color primaries
+            if let primaries = CMFormatDescriptionGetExtension(formatDescription, extensionKey: kCMFormatDescriptionExtension_ColorPrimaries) as? String {
+                switch primaries {
+                case "ITU_R_709_2":
+                    colorPrimaries = "BT.709"
+                case "ITU_R_2020":
+                    colorPrimaries = "BT.2020"
+                case "P3_D65", "P3_DCI":
+                    colorPrimaries = "P3"
+                default:
+                    colorPrimaries = primaries
+                }
+            }
+
+            // Get transfer function to determine HDR type
+            if let transfer = CMFormatDescriptionGetExtension(formatDescription, extensionKey: kCMFormatDescriptionExtension_TransferFunction) as? String {
+                switch transfer {
+                case "ITU_R_709_2", "ITU_R_601_4":
+                    transferFunction = "SDR"
+                case "SMPTE_ST_2084_PQ":
+                    transferFunction = "PQ"
+                case "ITU_R_2100_HLG", "ARIB_STD_B67":
+                    transferFunction = "HLG"
+                default:
+                    transferFunction = transfer
+                }
+            }
+
+            // Determine HDR format based on codec and transfer function
+            if transferFunction == "PQ" || transferFunction == "HLG" {
+                // Check for Dolby Vision
+                let hasDolbyVision = asset.tracks(withMediaType: .video).contains { track in
+                    if let formats = track.formatDescriptions as? [CMFormatDescription] {
+                        return formats.contains { desc in
+                            let codecType = CMFormatDescriptionGetMediaSubType(desc)
+                            // Dolby Vision codec types: dvh1, dvhe, dva1, dvav
+                            let codecStr = fourCCToString(codecType)
+                            return codecStr.hasPrefix("dvh") || codecStr.hasPrefix("dva")
+                        }
+                    }
+                    return false
+                }
+
+                if hasDolbyVision {
+                    hdrFormat = "Dolby Vision"
+                } else if transferFunction == "HLG" {
+                    hdrFormat = "HLG"
+                } else if transferFunction == "PQ" {
+                    // Check if it's HDR10+ by looking for dynamic metadata
+                    // For simplicity, we'll report as HDR10 (HDR10+ detection requires parsing SEI)
+                    hdrFormat = "HDR10"
+                }
+            } else {
+                hdrFormat = "SDR"
+            }
+        }
+
         let metadata = VideoMetadata(
             duration: duration,
             resolution: resolution,
@@ -927,7 +1066,10 @@ struct FileInfo {
             frameRate: frameRate,
             bitrate: bitrate,
             videoTracks: videoTrackCount > 0 ? videoTrackCount : nil,
-            audioTracks: audioTrackCount > 0 ? audioTrackCount : nil
+            audioTracks: audioTrackCount > 0 ? audioTrackCount : nil,
+            hdrFormat: hdrFormat,
+            colorPrimaries: colorPrimaries,
+            transferFunction: transferFunction
         )
 
         return metadata.hasData ? metadata : nil
@@ -3175,5 +3317,197 @@ struct FileInfo {
             0
         ]
         return String(cString: bytes)
+    }
+
+    // MARK: - System Metadata Extraction
+    private static func extractSystemMetadata(from url: URL) -> SystemMetadata? {
+        var finderTags: [String]? = nil
+        var whereFroms: [String]? = nil
+        var quarantineInfo: QuarantineInfo? = nil
+        var linkInfo: LinkInfo? = nil
+        var usageStats: UsageStats? = nil
+        var iCloudStatus: String? = nil
+        var finderComment: String? = nil
+        var uti: String? = nil
+        var extendedAttributes: [String]? = nil
+        var aliasTarget: String? = nil
+        var isAliasFile = false
+
+        // Extract Finder Tags using URLResourceKey
+        do {
+            let resourceValues = try url.resourceValues(forKeys: [.tagNamesKey])
+            if let tags = resourceValues.tagNames, !tags.isEmpty {
+                finderTags = tags
+            }
+        } catch {
+            Logger.debug("Failed to extract Finder tags: \(error.localizedDescription)", subsystem: .fileSystem)
+        }
+
+        // Extract UTI (Uniform Type Identifier)
+        do {
+            let resourceValues = try url.resourceValues(forKeys: [.contentTypeKey])
+            if let contentType = resourceValues.contentType {
+                uti = contentType.identifier
+            }
+        } catch {
+            Logger.debug("Failed to extract UTI: \(error.localizedDescription)", subsystem: .fileSystem)
+        }
+
+        // Check if it's an alias file
+        do {
+            let resourceValues = try url.resourceValues(forKeys: [.isAliasFileKey])
+            isAliasFile = resourceValues.isAliasFile ?? false
+
+            if isAliasFile {
+                // Resolve alias target
+                do {
+                    let originalURL = try URL(resolvingAliasFileAt: url, options: [.withoutUI, .withoutMounting])
+                    aliasTarget = originalURL.path
+                } catch {
+                    Logger.debug("Failed to resolve alias: \(error.localizedDescription)", subsystem: .fileSystem)
+                }
+            }
+        } catch {
+            Logger.debug("Failed to check alias status: \(error.localizedDescription)", subsystem: .fileSystem)
+        }
+
+        // Extract iCloud status
+        do {
+            let resourceValues = try url.resourceValues(forKeys: [
+                .isUbiquitousItemKey,
+                .ubiquitousItemDownloadingStatusKey,
+                .ubiquitousItemIsUploadedKey,
+                .ubiquitousItemIsUploadingKey,
+                .ubiquitousItemIsDownloadingKey
+            ])
+
+            if resourceValues.isUbiquitousItem == true {
+                if let downloadStatus = resourceValues.ubiquitousItemDownloadingStatus {
+                    if downloadStatus == .current || downloadStatus == .downloaded {
+                        iCloudStatus = "iCloud.downloaded".localized
+                    } else if downloadStatus == .notDownloaded {
+                        iCloudStatus = "iCloud.cloudOnly".localized
+                    } else {
+                        iCloudStatus = "iCloud.unknown".localized
+                    }
+                }
+                if resourceValues.ubiquitousItemIsDownloading == true {
+                    iCloudStatus = "iCloud.downloading".localized
+                }
+                if resourceValues.ubiquitousItemIsUploading == true {
+                    iCloudStatus = "iCloud.uploading".localized
+                }
+            }
+        } catch {
+            Logger.debug("Failed to extract iCloud status: \(error.localizedDescription)", subsystem: .fileSystem)
+        }
+
+        // Extract Link Info (symlink and hardlink)
+        let path = url.path
+        var statInfo = stat()
+        if lstat(path, &statInfo) == 0 {
+            let isSymlink = (statInfo.st_mode & S_IFMT) == S_IFLNK
+            var symlinkTarget: String? = nil
+
+            if isSymlink {
+                var buffer = [CChar](repeating: 0, count: Int(PATH_MAX))
+                let length = readlink(path, &buffer, Int(PATH_MAX))
+                if length > 0 {
+                    symlinkTarget = String(cString: buffer)
+                }
+            }
+
+            let hardLinkCount = Int(statInfo.st_nlink)
+
+            linkInfo = LinkInfo(
+                isSymlink: isSymlink,
+                symlinkTarget: symlinkTarget,
+                hardLinkCount: hardLinkCount
+            )
+        }
+
+        // Extract Extended Attributes
+        let xattrLength = listxattr(path, nil, 0, 0)
+        if xattrLength > 0 {
+            var buffer = [CChar](repeating: 0, count: xattrLength)
+            let result = listxattr(path, &buffer, xattrLength, 0)
+            if result > 0 {
+                let xattrString = String(cString: buffer)
+                let attrs = xattrString.split(separator: "\0").map { String($0) }
+                if !attrs.isEmpty {
+                    extendedAttributes = attrs
+                }
+            }
+        }
+
+        // Extract Quarantine Info from xattr
+        var quarantineBuffer = [CChar](repeating: 0, count: 1024)
+        let quarantineLength = getxattr(path, "com.apple.quarantine", &quarantineBuffer, 1024, 0, 0)
+        if quarantineLength > 0 {
+            let quarantineString = String(cString: quarantineBuffer)
+            // Quarantine format: flags;timestamp;agent;uuid
+            let components = quarantineString.split(separator: ";")
+            var downloadDate: String? = nil
+            var sourceApp: String? = nil
+
+            if components.count >= 2 {
+                // Timestamp is hex string representing seconds since 2001
+                if let timestampHex = Int(components[1], radix: 16) {
+                    let date = Date(timeIntervalSinceReferenceDate: TimeInterval(timestampHex))
+                    downloadDate = DateFormatters.formatShortDateTime(date)
+                }
+            }
+            if components.count >= 3 {
+                sourceApp = String(components[2])
+            }
+
+            quarantineInfo = QuarantineInfo(
+                isQuarantined: true,
+                downloadDate: downloadDate,
+                sourceApp: sourceApp,
+                sourceURL: nil
+            )
+        }
+
+        // Extract Where From (download source URLs) using Spotlight metadata
+        if let mdItem = MDItemCreateWithURL(nil, url as CFURL) {
+            // Where Froms
+            if let whereFromsArray = MDItemCopyAttribute(mdItem, kMDItemWhereFroms) as? [String], !whereFromsArray.isEmpty {
+                whereFroms = whereFromsArray
+            }
+
+            // Finder Comment
+            if let comment = MDItemCopyAttribute(mdItem, kMDItemFinderComment) as? String, !comment.isEmpty {
+                finderComment = comment
+            }
+
+            // Usage Stats
+            // Note: kMDItemUseCount is not a public constant, so we use the string version
+            let useCount = MDItemCopyAttribute(mdItem, "kMDItemUseCount" as CFString) as? Int
+            var lastUsedDate: String? = nil
+            if let date = MDItemCopyAttribute(mdItem, kMDItemLastUsedDate) as? Date {
+                lastUsedDate = DateFormatters.formatShortDateTime(date)
+            }
+
+            if useCount != nil || lastUsedDate != nil {
+                usageStats = UsageStats(useCount: useCount, lastUsedDate: lastUsedDate)
+            }
+        }
+
+        let metadata = SystemMetadata(
+            finderTags: finderTags,
+            whereFroms: whereFroms,
+            quarantineInfo: quarantineInfo,
+            linkInfo: linkInfo,
+            usageStats: usageStats,
+            iCloudStatus: iCloudStatus,
+            finderComment: finderComment,
+            uti: uti,
+            extendedAttributes: extendedAttributes,
+            aliasTarget: aliasTarget,
+            isAliasFile: isAliasFile
+        )
+
+        return metadata.hasData ? metadata : nil
     }
 }
