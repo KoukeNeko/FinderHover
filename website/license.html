@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>授權條款 - FinderHover</title>
+    <meta
+      name="description"
+      content="FinderHover 以 MIT 授權條款釋出，可自由使用、修改與散布。"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/png" href="assets/icon.png" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-content">
+        <a href="index.html" class="nav-logo">
+          <img src="assets/icon.png" alt="FinderHover" />
+          <span>FinderHover</span>
+        </a>
+        <div class="nav-links">
+          <a href="index.html#features">功能特色</a>
+          <a href="index.html#metadata">支援格式</a>
+          <a href="docs.html">使用說明</a>
+          <a href="https://github.com/KoukeNeko/FinderHover" target="_blank">GitHub</a>
+        </div>
+        <a href="download.html" class="nav-cta">下載</a>
+      </div>
+    </nav>
+
+    <!-- License Hero -->
+    <section class="page-hero">
+      <h1 class="page-headline">授權條款</h1>
+      <p class="page-subheadline">MIT License</p>
+    </section>
+
+    <!-- License Content -->
+    <section class="license-section">
+      <div class="license-container">
+        <div class="license-summary">
+          <h2>開源自由軟體</h2>
+          <p>FinderHover 以 MIT 授權條款釋出，這是最寬鬆的開源授權之一。你可以自由地使用、複製、修改、合併、發布、散布、再授權及販售本軟體。</p>
+
+          <div class="license-permissions">
+            <div class="permission-item allowed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>商業使用</span>
+            </div>
+            <div class="permission-item allowed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>修改</span>
+            </div>
+            <div class="permission-item allowed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>散布</span>
+            </div>
+            <div class="permission-item allowed">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>私人使用</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="license-full">
+          <h3>完整授權條款</h3>
+          <div class="license-text">
+            <p class="license-copyright">MIT License</p>
+            <p class="license-copyright">Copyright (c) <span id="license-year"></span> KoukeNeko</p>
+
+            <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+            <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+            <p class="license-disclaimer">THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+          </div>
+        </div>
+
+        <div class="license-footer-note">
+          <a href="https://github.com/KoukeNeko/FinderHover/blob/main/LICENSE" target="_blank" class="license-github-link">
+            在 GitHub 上查看 LICENSE 檔案
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="https://github.com/KoukeNeko/FinderHover">GitHub</a>
+          <a href="https://github.com/KoukeNeko/FinderHover/issues">問題回報</a>
+          <a href="license.html">授權條款</a>
+          <a href="changelog.html">更新日誌</a>
+        </div>
+        <p class="footer-copyright">
+          Copyright © <span id="year"></span> KoukeNeko. 以 MIT 授權釋出。
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      const currentYear = new Date().getFullYear();
+      document.getElementById("year").textContent = currentYear;
+      document.getElementById("license-year").textContent = currentYear;
+    </script>
+  </body>
+</html>
