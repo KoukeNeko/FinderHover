@@ -155,16 +155,16 @@ body {
     margin-bottom: 40px;
 }
 
-.hero-cta-card {
+.hero-install-card {
     display: inline-block;
     background: linear-gradient(135deg, #1d1d1f 0%, #2d2d30 100%);
     border-radius: 20px;
-    padding: 24px 32px;
+    padding: 28px 36px;
     position: relative;
     overflow: hidden;
 }
 
-.hero-cta-card::before {
+.hero-install-card::before {
     content: '';
     position: absolute;
     top: 0;
@@ -175,64 +175,90 @@ body {
     pointer-events: none;
 }
 
-.cta-card-content {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+.hero-install-badge {
+    display: inline-block;
+    background: var(--color-accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 980px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     position: relative;
     z-index: 1;
 }
 
-.cta-card-icon {
-    width: 48px;
-    height: 48px;
+.hero-install-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-install-code {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
     background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 14px 20px;
     border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-install-code code {
+    font-family: var(--font-family-mono);
+    font-size: 15px;
+    color: #fff;
+    font-weight: 500;
+}
+
+.hero-copy-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
-    flex-shrink: 0;
-}
-
-.cta-card-icon svg {
-    width: 24px;
-    height: 24px;
-}
-
-.cta-card-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    text-align: left;
-}
-
-.cta-card-title {
-    font-size: 17px;
-    font-weight: 600;
-    color: #fff;
-}
-
-.cta-card-subtitle {
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.cta-card-btn {
-    background: var(--color-accent);
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 980px;
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: 500;
     transition: all var(--transition-default);
-    flex-shrink: 0;
 }
 
-.cta-card-btn:hover {
-    background: var(--color-accent-hover);
-    transform: scale(1.02);
+.hero-copy-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.hero-copy-btn.copied {
+    background: rgba(48, 209, 88, 0.2);
+    color: #30d158;
+}
+
+.hero-install-alt {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+    position: relative;
+    z-index: 1;
+}
+
+.hero-install-alt a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: opacity var(--transition-default);
+}
+
+.hero-install-alt a:hover {
+    opacity: 0.8;
 }
 
 .hero-image {
@@ -293,117 +319,6 @@ body {
 .btn-large {
     padding: 18px 36px;
     font-size: 19px;
-}
-
-/* Install Section */
-.install-section {
-    background: linear-gradient(135deg, #1d1d1f 0%, #2d2d30 100%);
-    padding: 80px 24px;
-    position: relative;
-    overflow: hidden;
-}
-
-.install-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(0, 113, 227, 0.15) 0%, transparent 60%);
-    pointer-events: none;
-}
-
-.install-content {
-    max-width: 600px;
-    margin: 0 auto;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-}
-
-.install-badge {
-    display: inline-block;
-    background: var(--color-accent);
-    color: #fff;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 4px 12px;
-    border-radius: 980px;
-    margin-bottom: 16px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.install-content h2 {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: #fff;
-}
-
-.install-desc {
-    font-size: 17px;
-    color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 28px;
-}
-
-.install-code {
-    display: inline-flex;
-    align-items: center;
-    gap: 16px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding: 18px 24px;
-    border-radius: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    margin-bottom: 20px;
-}
-
-.install-code code {
-    font-family: var(--font-family-mono);
-    font-size: 16px;
-    color: #fff;
-    font-weight: 500;
-}
-
-.copy-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    color: rgba(255, 255, 255, 0.8);
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all var(--transition-default);
-}
-
-.copy-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #fff;
-}
-
-.copy-btn.copied {
-    background: rgba(48, 209, 88, 0.2);
-    color: #30d158;
-}
-
-.install-hint {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.5);
-}
-
-.install-hint a {
-    color: var(--color-accent);
-    text-decoration: none;
-    transition: opacity var(--transition-default);
-}
-
-.install-hint a:hover {
-    opacity: 0.8;
 }
 
 /* Section Styles */
@@ -652,18 +567,17 @@ body {
         font-size: 36px;
     }
 
-    .hero-cta-card {
-        padding: 20px;
+    .hero-install-card {
+        padding: 24px 20px;
     }
 
-    .cta-card-content {
+    .hero-install-code {
         flex-direction: column;
-        text-align: center;
-        gap: 16px;
+        gap: 12px;
     }
 
-    .cta-card-info {
-        text-align: center;
+    .hero-install-code code {
+        font-size: 13px;
     }
 
     .gallery-grid {

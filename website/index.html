@@ -35,44 +35,25 @@
                 就能看見檔案的所有細節。照片的 EXIF、<br>
                 影片的編碼、程式碼的行數，通通一目了然。
             </p>
-            <div class="hero-cta-card">
-                <div class="cta-card-content">
-                    <div class="cta-card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="7 10 12 15 17 10"/>
-                            <line x1="12" y1="15" x2="12" y2="3"/>
+            <div class="hero-install-card">
+                <div class="hero-install-badge">推薦</div>
+                <div class="hero-install-title">使用 Homebrew 安裝</div>
+                <div class="hero-install-code">
+                    <code>brew install koukeneko/tap/finderhover</code>
+                    <button class="hero-copy-btn" onclick="copyBrew()" aria-label="複製指令">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                         </svg>
-                    </div>
-                    <div class="cta-card-info">
-                        <span class="cta-card-title">下載 FinderHover</span>
-                        <span class="cta-card-subtitle">適用於 macOS Sonoma 14.0+</span>
-                    </div>
-                    <a href="https://github.com/KoukeNeko/FinderHover/releases/latest" class="cta-card-btn">免費下載</a>
+                    </button>
+                </div>
+                <div class="hero-install-alt">
+                    或 <a href="https://github.com/KoukeNeko/FinderHover/releases/latest">直接下載</a> · 適用於 macOS 14.0+
                 </div>
             </div>
         </div>
         <div class="hero-image">
             <img src="https://github.com/user-attachments/assets/7d27934e-5e11-4196-a6ac-5c7ebc6a1f17" alt="FinderHover 介面預覽">
-        </div>
-    </section>
-
-    <!-- Homebrew Section -->
-    <section class="install-section">
-        <div class="install-content">
-            <div class="install-badge">推薦</div>
-            <h2>使用 Homebrew 安裝</h2>
-            <p class="install-desc">一行指令，自動安裝與更新。最簡單的方式。</p>
-            <div class="install-code">
-                <code id="brew-command">brew install koukeneko/tap/finderhover</code>
-                <button class="copy-btn" onclick="copyBrew()" aria-label="複製指令">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                    </svg>
-                </button>
-            </div>
-            <p class="install-hint">還沒安裝 Homebrew？<a href="https://brew.sh" target="_blank">點此安裝</a></p>
         </div>
     </section>
 
@@ -323,7 +304,7 @@
         function copyBrew() {
             const command = 'brew install koukeneko/tap/finderhover';
             navigator.clipboard.writeText(command).then(() => {
-                const btn = document.querySelector('.copy-btn');
+                const btn = document.querySelector('.hero-copy-btn');
                 btn.classList.add('copied');
                 setTimeout(() => btn.classList.remove('copied'), 2000);
             });
