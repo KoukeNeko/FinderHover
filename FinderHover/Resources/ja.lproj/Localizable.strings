@@ -513,25 +513,35 @@
 "hover.html.ogDescription" = "OG説明";
 "hover.html.ogImage" = "OG画像";
 "hover.html.twitterCard" = "Twitter Card";
+"hover.html.keywords" = "キーワード";
+"hover.html.author" = "作成者";
+"hover.html.language" = "言語";
 
 /* Extended Image Hover */
 "hover.imageExtended.title" = "拡張画像情報";
 "hover.imageExtended.copyright" = "著作権";
 "hover.imageExtended.artist" = "作成者";
+"hover.imageExtended.creator" = "作成者";
 "hover.imageExtended.description" = "説明";
 "hover.imageExtended.keywords" = "キーワード";
 "hover.imageExtended.rating" = "レート";
 "hover.imageExtended.colorProfile" = "プロファイル";
+"hover.imageExtended.creatorTool" = "作成ツール";
+"hover.imageExtended.headline" = "見出し";
 
 /* Markdown Hover */
 "hover.markdown.title" = "Markdown";
 "hover.markdown.docTitle" = "タイトル";
+"hover.markdown.mdTitle" = "タイトル";
+"hover.markdown.frontmatter" = "Frontmatter";
 "hover.markdown.author" = "作成者";
 "hover.markdown.date" = "日付";
 "hover.markdown.tags" = "タグ";
 "hover.markdown.wordCount" = "文字数";
 "hover.markdown.headingCount" = "見出し数";
 "hover.markdown.linkCount" = "リンク数";
+"hover.markdown.imageCount" = "画像数";
+"hover.markdown.codeBlockCount" = "コードブロック";
 
 /* Config File Hover */
 "hover.config.title" = "設定ファイル";
@@ -551,23 +561,33 @@
 "hover.psd.bitDepth" = "ビット";
 "hover.psd.layerCount" = "レイヤー数";
 "hover.psd.hasAlpha" = "アルファ";
+"hover.psd.resolution" = "解像度";
+"hover.psd.transparency" = "透明度";
 
 /* Executable Hover */
 "hover.executable.title" = "実行ファイル";
 "hover.executable.architecture" = "アーキ";
 "hover.executable.isUniversal" = "Universal";
 "hover.executable.isSigned" = "署名";
+"hover.executable.codeSigned" = "署名";
 "hover.executable.signingAuthority" = "認証局";
+"hover.executable.minimumOS" = "最小OS";
+"hover.executable.sdkVersion" = "SDK";
+"hover.executable.fileType" = "ファイル形式";
 
 /* App Bundle Hover */
 "hover.appBundle.title" = "アプリケーション";
 "hover.appBundle.bundleId" = "バンドルID";
+"hover.appBundle.bundleID" = "バンドルID";
 "hover.appBundle.version" = "バージョン";
 "hover.appBundle.buildNumber" = "ビルド";
 "hover.appBundle.minOS" = "最小macOS";
+"hover.appBundle.minimumOS" = "最小macOS";
 "hover.appBundle.category" = "カテゴリ";
 "hover.appBundle.copyright" = "著作権";
 "hover.appBundle.isSandboxed" = "サンドボックス";
+"hover.appBundle.codeSigned" = "署名";
+"hover.appBundle.entitlements" = "権限";
 
 /* SQLite Hover */
 "hover.sqlite.title" = "SQLiteデータベース";
@@ -575,6 +595,11 @@
 "hover.sqlite.indexCount" = "インデックス数";
 "hover.sqlite.version" = "バージョン";
 "hover.sqlite.pageSize" = "ページサイズ";
+"hover.sqlite.triggerCount" = "トリガー数";
+"hover.sqlite.viewCount" = "ビュー数";
+"hover.sqlite.totalRows" = "総行数";
+"hover.sqlite.schemaVersion" = "スキーマ";
+"hover.sqlite.encoding" = "エンコード";
 
 /* Git Repository Hover */
 "hover.git.title" = "Gitリポジトリ";
@@ -584,7 +609,10 @@
 "hover.git.lastCommitDate" = "最終コミット";
 "hover.git.lastCommitMessage" = "メッセージ";
 "hover.git.remoteUrl" = "リモート";
+"hover.git.remoteURL" = "リモート";
 "hover.git.hasUncommitted" = "未コミット";
+"hover.git.uncommittedChanges" = "未コミット";
+"hover.git.tagCount" = "タグ数";
 
 /* Common */
 "common.reset" = "デフォルトに戻す";

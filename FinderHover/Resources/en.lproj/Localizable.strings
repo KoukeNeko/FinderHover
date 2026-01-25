@@ -513,25 +513,35 @@
 "hover.html.ogDescription" = "OG Description";
 "hover.html.ogImage" = "OG Image";
 "hover.html.twitterCard" = "Twitter Card";
+"hover.html.keywords" = "Keywords";
+"hover.html.author" = "Author";
+"hover.html.language" = "Language";
 
 /* Extended Image Hover */
 "hover.imageExtended.title" = "Extended Image";
 "hover.imageExtended.copyright" = "Copyright";
 "hover.imageExtended.artist" = "Artist";
+"hover.imageExtended.creator" = "Creator";
 "hover.imageExtended.description" = "Description";
 "hover.imageExtended.keywords" = "Keywords";
 "hover.imageExtended.rating" = "Rating";
 "hover.imageExtended.colorProfile" = "Color Profile";
+"hover.imageExtended.creatorTool" = "Creator Tool";
+"hover.imageExtended.headline" = "Headline";
 
 /* Markdown Hover */
 "hover.markdown.title" = "Markdown";
 "hover.markdown.docTitle" = "Title";
+"hover.markdown.mdTitle" = "Title";
+"hover.markdown.frontmatter" = "Frontmatter";
 "hover.markdown.author" = "Author";
 "hover.markdown.date" = "Date";
 "hover.markdown.tags" = "Tags";
 "hover.markdown.wordCount" = "Words";
 "hover.markdown.headingCount" = "Headings";
 "hover.markdown.linkCount" = "Links";
+"hover.markdown.imageCount" = "Images";
+"hover.markdown.codeBlockCount" = "Code Blocks";
 
 /* Config File Hover */
 "hover.config.title" = "Config File";
@@ -551,23 +561,33 @@
 "hover.psd.bitDepth" = "Bit Depth";
 "hover.psd.layerCount" = "Layers";
 "hover.psd.hasAlpha" = "Alpha";
+"hover.psd.resolution" = "Resolution";
+"hover.psd.transparency" = "Transparency";
 
 /* Executable Hover */
 "hover.executable.title" = "Executable";
 "hover.executable.architecture" = "Architecture";
 "hover.executable.isUniversal" = "Universal";
 "hover.executable.isSigned" = "Signed";
+"hover.executable.codeSigned" = "Signed";
 "hover.executable.signingAuthority" = "Authority";
+"hover.executable.minimumOS" = "Min OS";
+"hover.executable.sdkVersion" = "SDK";
+"hover.executable.fileType" = "File Type";
 
 /* App Bundle Hover */
 "hover.appBundle.title" = "Application";
 "hover.appBundle.bundleId" = "Bundle ID";
+"hover.appBundle.bundleID" = "Bundle ID";
 "hover.appBundle.version" = "Version";
 "hover.appBundle.buildNumber" = "Build";
 "hover.appBundle.minOS" = "Min macOS";
+"hover.appBundle.minimumOS" = "Min macOS";
 "hover.appBundle.category" = "Category";
 "hover.appBundle.copyright" = "Copyright";
 "hover.appBundle.isSandboxed" = "Sandboxed";
+"hover.appBundle.codeSigned" = "Signed";
+"hover.appBundle.entitlements" = "Entitlements";
 
 /* SQLite Hover */
 "hover.sqlite.title" = "SQLite Database";
@@ -575,6 +595,11 @@
 "hover.sqlite.indexCount" = "Indexes";
 "hover.sqlite.version" = "Version";
 "hover.sqlite.pageSize" = "Page Size";
+"hover.sqlite.triggerCount" = "Triggers";
+"hover.sqlite.viewCount" = "Views";
+"hover.sqlite.totalRows" = "Total Rows";
+"hover.sqlite.schemaVersion" = "Schema";
+"hover.sqlite.encoding" = "Encoding";
 
 /* Git Repository Hover */
 "hover.git.title" = "Git Repository";
@@ -584,7 +609,10 @@
 "hover.git.lastCommitDate" = "Last Commit";
 "hover.git.lastCommitMessage" = "Message";
 "hover.git.remoteUrl" = "Remote";
+"hover.git.remoteURL" = "Remote";
 "hover.git.hasUncommitted" = "Uncommitted";
+"hover.git.uncommittedChanges" = "Uncommitted";
+"hover.git.tagCount" = "Tags";
 
 /* Common */
 "common.reset" = "Reset to Defaults";
