@@ -2,7 +2,16 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.4.3 (Current)
+## Version 1.4.4 (Current)
+
+### 🐛 Bug Fixes
+
+- Fixed duplicate/orphan divider lines in the hover window
+  - Removed trailing dividers from all metadata sections
+  - Prevents empty dividers when a section has no visible data
+  - Cleaner UI when certain metadata fields are hidden
+
+## Version 1.4.3
 
 ### 🐛 Bug Fixes
 
