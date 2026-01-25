@@ -426,24 +426,24 @@ body::before {
 .marquee-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 40px 0;
+  gap: 12px;
+  padding: 32px 0;
   width: 100%;
   overflow: hidden;
   position: relative;
-  /* Content fade using mask - no overlay needed */
+  /* Subtle edge fade - Apple prefers minimal masking */
   -webkit-mask-image: linear-gradient(
     to right,
     transparent 0%,
-    black 15%,
-    black 85%,
+    black 5%,
+    black 95%,
     transparent 100%
   );
   mask-image: linear-gradient(
     to right,
     transparent 0%,
-    black 15%,
-    black 85%,
+    black 5%,
+    black 95%,
     transparent 100%
   );
 }
