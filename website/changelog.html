@@ -26,7 +26,7 @@
         <!-- Loading State -->
         <div class="changelog-loading">
           <div class="loading-spinner"></div>
-          <p>正在從 GitHub 載入更新日誌...</p>
+          <p data-i18n="changelog.loading">正在從 GitHub 載入更新日誌...</p>
         </div>
       </div>
     </section>
@@ -35,6 +35,14 @@
     <site-footer></site-footer>
 
     <script>
+      // Helper to get translation with fallback
+      function t(key, fallback) {
+        if (window.i18n && typeof window.i18n.t === 'function') {
+          return window.i18n.t(key) || fallback;
+        }
+        return fallback;
+      }
+
       // Fetch and parse CHANGELOG.md from GitHub
       async function loadChangelog() {
         const container = document.getElementById("changelog-content");
@@ -52,10 +60,10 @@
           console.error("Error loading changelog:", error);
           container.innerHTML = `
             <div class="changelog-error">
-              <p>無法載入更新日誌</p>
+              <p>${t('changelog.error', '無法載入更新日誌')}</p>
               <a href="https://github.com/KoukeNeko/FinderHover/blob/main/CHANGELOG.md" 
                  class="changelog-link" target="_blank">
-                在 GitHub 上查看
+                ${t('changelog.viewOnGithub', '在 GitHub 上查看')}
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
                   <polyline points="15 3 21 3 21 9"/>
@@ -92,12 +100,15 @@
               v.version.endsWith(".0") && !v.version.endsWith(".0.0");
             const isLatest = index === 0 || v.isCurrent;
 
+            const currentBadge = t('changelog.currentVersion', '目前版本');
+            const majorBadge = t('changelog.majorUpdate', '重大更新');
+
             return `
             <article class="changelog-entry${isMajor ? " major" : ""}">
               <div class="changelog-header">
                 <span class="changelog-version">${v.version}</span>
-                ${isLatest ? '<span class="changelog-badge current">目前版本</span>' : ""}
-                ${isMajor && !isLatest ? '<span class="changelog-badge major">重大更新</span>' : ""}
+                ${isLatest ? `<span class="changelog-badge current">${currentBadge}</span>` : ""}
+                ${isMajor && !isLatest ? `<span class="changelog-badge major">${majorBadge}</span>` : ""}
               </div>
               <div class="changelog-content">
                 ${parseMarkdownContent(v.content)}
@@ -108,11 +119,12 @@
           .join("");
 
         // Add footer
+        const viewFullChangelog = t('changelog.viewFullChangelog', '在 GitHub 上查看完整更新日誌');
         html += `
           <div class="changelog-footer">
             <a href="https://github.com/KoukeNeko/FinderHover/blob/main/CHANGELOG.md" 
                class="changelog-link" target="_blank">
-              在 GitHub 上查看完整更新日誌
+              ${viewFullChangelog}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
                 <polyline points="15 3 21 3 21 9"/>

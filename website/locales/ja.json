@@ -161,8 +161,12 @@
   "changelog": {
     "pageTitle": "更新履歴",
     "pageSubtitle": "FinderHover のすべての改善を追跡",
-    "loading": "更新履歴を読み込み中...",
-    "error": "更新履歴の読み込みに失敗しました"
+    "loading": "GitHub から更新履歴を読み込み中...",
+    "error": "更新履歴の読み込みに失敗しました",
+    "viewOnGithub": "GitHub で見る",
+    "viewFullChangelog": "GitHub で完全な更新履歴を見る",
+    "currentVersion": "現在",
+    "majorUpdate": "メジャーアップデート"
   },
   "formats": {
     "pageTitle": "対応形式",
@@ -174,6 +178,34 @@
   },
   "license": {
     "pageTitle": "ライセンス",
-    "pageSubtitle": "MIT License"
+    "pageSubtitle": "MIT License",
+    "summary": {
+      "title": "オープンソースソフトウェア",
+      "desc": "FinderHover は MIT ライセンスの下でリリースされています。これは最も寛容なオープンソースライセンスの一つです。自由に使用、コピー、変更、マージ、公開、配布、サブライセンス、販売することができます。"
+    },
+    "permissions": {
+      "commercial": "商用利用",
+      "modification": "変更",
+      "distribution": "配布",
+      "private": "私的利用"
+    },
+    "fullLicense": "ライセンス全文",
+    "viewOnGithub": "GitHub で LICENSE ファイルを見る"
+  },
+  "docs": {
+    "pageTitle": "ドキュメント",
+    "pageSubtitle": "FinderHover を使い始める",
+    "sidebar": {
+      "gettingStarted": "はじめに",
+      "setup": "初期設定",
+      "permissions": "権限の付与",
+      "features": "機能紹介",
+      "hover": "ホバープレビュー",
+      "settings": "環境設定",
+      "styles": "インターフェーススタイル",
+      "advanced": "高度な設定",
+      "metadataFields": "メタデータフィールド",
+      "troubleshooting": "トラブルシューティング"
+    }
   }
 }

@@ -161,8 +161,12 @@
   "changelog": {
     "pageTitle": "Changelog",
     "pageSubtitle": "Track every improvement to FinderHover",
-    "loading": "Loading changelog...",
-    "error": "Failed to load changelog"
+    "loading": "Loading changelog from GitHub...",
+    "error": "Failed to load changelog",
+    "viewOnGithub": "View on GitHub",
+    "viewFullChangelog": "View full changelog on GitHub",
+    "currentVersion": "Current",
+    "majorUpdate": "Major Update"
   },
   "formats": {
     "pageTitle": "Supported Formats",
@@ -174,6 +178,34 @@
   },
   "license": {
     "pageTitle": "License",
-    "pageSubtitle": "MIT License"
+    "pageSubtitle": "MIT License",
+    "summary": {
+      "title": "Open Source Software",
+      "desc": "FinderHover is released under the MIT License, one of the most permissive open source licenses. You are free to use, copy, modify, merge, publish, distribute, sublicense, and sell this software."
+    },
+    "permissions": {
+      "commercial": "Commercial Use",
+      "modification": "Modification",
+      "distribution": "Distribution",
+      "private": "Private Use"
+    },
+    "fullLicense": "Full License Text",
+    "viewOnGithub": "View LICENSE file on GitHub"
+  },
+  "docs": {
+    "pageTitle": "Documentation",
+    "pageSubtitle": "Get started with FinderHover",
+    "sidebar": {
+      "gettingStarted": "Getting Started",
+      "setup": "Initial Setup",
+      "permissions": "Grant Permissions",
+      "features": "Features",
+      "hover": "Hover Preview",
+      "settings": "Preferences",
+      "styles": "Interface Styles",
+      "advanced": "Advanced",
+      "metadataFields": "Metadata Fields",
+      "troubleshooting": "Troubleshooting"
+    }
   }
 }

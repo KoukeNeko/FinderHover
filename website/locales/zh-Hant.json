@@ -161,8 +161,12 @@
   "changelog": {
     "pageTitle": "更新日誌",
     "pageSubtitle": "追蹤 FinderHover 的每一個改進",
-    "loading": "正在載入更新日誌...",
-    "error": "無法載入更新日誌"
+    "loading": "正在從 GitHub 載入更新日誌...",
+    "error": "無法載入更新日誌",
+    "viewOnGithub": "在 GitHub 上查看",
+    "viewFullChangelog": "在 GitHub 上查看完整更新日誌",
+    "currentVersion": "目前版本",
+    "majorUpdate": "重大更新"
   },
   "formats": {
     "pageTitle": "支援格式",
@@ -174,6 +178,34 @@
   },
   "license": {
     "pageTitle": "授權條款",
-    "pageSubtitle": "MIT License"
+    "pageSubtitle": "MIT License",
+    "summary": {
+      "title": "開源自由軟體",
+      "desc": "FinderHover 以 MIT 授權條款釋出，這是最寬鬆的開源授權之一。你可以自由地使用、複製、修改、合併、發布、散布、再授權及販售本軟體。"
+    },
+    "permissions": {
+      "commercial": "商業使用",
+      "modification": "修改",
+      "distribution": "散布",
+      "private": "私人使用"
+    },
+    "fullLicense": "完整授權條款",
+    "viewOnGithub": "在 GitHub 上查看 LICENSE 檔案"
+  },
+  "docs": {
+    "pageTitle": "使用說明",
+    "pageSubtitle": "快速上手 FinderHover",
+    "sidebar": {
+      "gettingStarted": "開始使用",
+      "setup": "初次設定",
+      "permissions": "授予權限",
+      "features": "功能介紹",
+      "hover": "懸停預覽",
+      "settings": "偏好設定",
+      "styles": "介面風格",
+      "advanced": "進階",
+      "metadataFields": "中繼資料欄位",
+      "troubleshooting": "疑難排解"
+    }
   }
 }
