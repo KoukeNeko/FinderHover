@@ -1,155 +1,233 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinderHover - Rich File Previews for macOS</title>
-    <meta name="description" content="A native macOS app that displays rich file information when hovering over files in Finder.">
+    <title>FinderHover - macOS 檔案預覽工具</title>
+    <meta name="description" content="在 Finder 中懸停即可顯示豐富的檔案資訊，支援 50+ 種檔案格式的深度中繼資料解析。">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="assets/icon.png">
-    
-    <!-- San Francisco Font Support (using system fonts stack in CSS) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <nav class="navbar">
+    <!-- Navigation -->
+    <nav class="nav">
         <div class="nav-content">
-            <div class="logo">
-                <img src="assets/icon.png" alt="FinderHover Logo">
+            <a href="#" class="nav-logo">
+                <img src="assets/icon.png" alt="FinderHover">
                 <span>FinderHover</span>
-            </div>
+            </a>
             <div class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#metadata">Metadata</a>
-                <a href="https://github.com/KoukeNeko/FinderHover" target="_blank"><i class="fab fa-github"></i> GitHub</a>
-                <a href="https://github.com/KoukeNeko/FinderHover/releases/latest" class="btn-primary-sm">Download</a>
+                <a href="#features">功能特色</a>
+                <a href="#metadata">支援格式</a>
+                <a href="#gallery">螢幕截圖</a>
+                <a href="https://github.com/KoukeNeko/FinderHover" target="_blank">GitHub</a>
             </div>
+            <a href="https://github.com/KoukeNeko/FinderHover/releases/latest" class="nav-cta">下載</a>
         </div>
     </nav>
 
-    <header class="hero">
+    <!-- Hero Section -->
+    <section class="hero">
         <div class="hero-content">
-            <img src="assets/icon.png" alt="FinderHover Icon" class="hero-icon">
-            <h1>FinderHover</h1>
-            <p class="tagline">Rich file information at your fingertips.</p>
-            <p class="sub-tagline">Windows-style file previews, reimagined for macOS.</p>
-            
-            <div class="cta-group">
-                <a href="https://github.com/KoukeNeko/FinderHover/releases/latest" class="btn-primary">
-                    <i class="fas fa-download"></i> Download for macOS
-                </a>
-                <div class="brew-install">
-                    <code>brew install koukeneko/tap/finderhover</code>
-                    <button class="copy-btn" onclick="copyBrew()" title="Copy to clipboard"><i class="fas fa-copy"></i></button>
-                </div>
-            </div>
-            
-            <div class="badges">
-                <span class="badge"><i class="fab fa-apple"></i> macOS 14.0+</span>
-                <span class="badge"><i class="fab fa-swift"></i> Native Swift</span>
-                <span class="badge"><i class="fas fa-universal-access"></i> Accessibility API</span>
+            <h1 class="hero-headline">一覽無遺，<br>觸手可及。</h1>
+            <p class="hero-subheadline">
+                FinderHover 讓你在 Finder 中輕輕一指，<br>
+                就能看見檔案的所有細節。照片的 EXIF、<br>
+                影片的編碼、程式碼的行數，通通一目了然。
+            </p>
+            <div class="hero-cta">
+                <a href="https://github.com/KoukeNeko/FinderHover/releases/latest" class="btn-primary">下載 FinderHover</a>
+                <p class="hero-version">適用於 macOS Sonoma 14.0 或更新版本</p>
             </div>
         </div>
-        
-        <div class="hero-image-container">
-            <img src="https://github.com/user-attachments/assets/7d27934e-5e11-4196-a6ac-5c7ebc6a1f17" alt="FinderHover Interface Overview" class="hero-screenshot">
+        <div class="hero-image">
+            <img src="https://github.com/user-attachments/assets/7d27934e-5e11-4196-a6ac-5c7ebc6a1f17" alt="FinderHover 介面預覽">
         </div>
-    </header>
+    </section>
 
-    <section id="features" class="features">
-        <div class="section-header">
-            <h2>Why FinderHover?</h2>
-            <p>Designed to feel native, built to be powerful.</p>
-        </div>
-        
-        <div class="feature-grid">
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-bolt"></i></div>
-                <h3>Smart Detection</h3>
-                <p>Instant previews with adjustable delay. Intelligently auto-hides when you're renaming files or dragging items.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-image"></i></div>
-                <h3>QuickLook Integration</h3>
-                <p>See native thumbnails for PDFs, images, and documents directly in the hover window.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-                <h3>Privacy First</h3>
-                <p>All processing happens locally on your device. Zero network access required. Built on macOS Accessibility API.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fas fa-sliders-h"></i></div>
-                <h3>Highly Customizable</h3>
-                <p>Choose between rich macOS style or minimal Windows tooltip style. Adjust size, opacity, and font scaling.</p>
+    <!-- Homebrew Section -->
+    <section class="install-section">
+        <div class="install-content">
+            <h2>使用 Homebrew 安裝</h2>
+            <div class="install-code">
+                <code id="brew-command">brew install koukeneko/tap/finderhover</code>
+                <button class="copy-btn" onclick="copyBrew()" aria-label="複製指令">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                </button>
             </div>
         </div>
     </section>
 
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="section-intro">
+            <h2 class="section-headline">為 macOS 精心打造</h2>
+            <p class="section-subheadline">原生 Swift 開發，整合系統 API，帶來流暢體驗。</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                </div>
+                <h3>即時預覽</h3>
+                <p>可調整的懸停延遲，從 0.1 秒到 2 秒。當你重新命名或拖曳檔案時，自動隱藏。</p>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                </div>
+                <h3>QuickLook 整合</h3>
+                <p>直接在懸停視窗中顯示 PDF、圖片和文件的原生縮圖預覽。</p>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <h3>隱私優先</h3>
+                <p>所有處理都在本機進行，無需網路連線。使用 macOS 輔助使用 API，不使用 AppleScript。</p>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                </div>
+                <h3>高度自訂</h3>
+                <p>在豐富的 macOS 風格與簡約的 Windows 提示風格之間選擇。調整大小、透明度和字體縮放。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metadata Section -->
     <section id="metadata" class="metadata-section">
-        <div class="section-header">
-            <h2>Everything You Need to Know</h2>
-            <p>Support for 50+ file formats with deep metadata extraction.</p>
+        <div class="section-intro">
+            <h2 class="section-headline">支援超過 50 種格式</h2>
+            <p class="section-subheadline">深度解析各類檔案的中繼資料，讓你不用開啟檔案就能了解一切。</p>
         </div>
 
         <div class="metadata-grid">
-            <div class="meta-item">
-                <div class="meta-icon">📷</div>
-                <h4>Photography</h4>
-                <p>Camera model, ISO, aperture, shutter speed, GPS</p>
+            <div class="metadata-card">
+                <div class="metadata-emoji">📷</div>
+                <h3>攝影</h3>
+                <p>相機型號、鏡頭、ISO、光圈、快門速度、GPS 座標、IPTC/XMP 資訊</p>
             </div>
-            <div class="meta-item">
-                <div class="meta-icon">🎬</div>
-                <h4>Multimedia</h4>
-                <p>Video codec, resolution, bitrate, frame rate</p>
+            <div class="metadata-card">
+                <div class="metadata-emoji">🎬</div>
+                <h3>影音</h3>
+                <p>影片編碼、解析度、位元率、幀率、音訊取樣率、聲道配置</p>
             </div>
-            <div class="meta-item">
-                <div class="meta-icon">💻</div>
-                <h4>Development</h4>
-                <p>Line counts, syntax detection, file encoding</p>
+            <div class="metadata-card">
+                <div class="metadata-emoji">💻</div>
+                <h3>程式開發</h3>
+                <p>支援 30+ 種程式語言的行數統計、語法偵測、檔案編碼</p>
             </div>
-            <div class="meta-item">
-                <div class="meta-icon">📂</div>
-                <h4>Git Repos</h4>
-                <p>Current branch, commit count, remote URL, status</p>
+            <div class="metadata-card">
+                <div class="metadata-emoji">📝</div>
+                <h3>Markdown</h3>
+                <p>標題偵測、Frontmatter、標題/圖片/連結/程式碼區塊統計</p>
             </div>
-            <div class="meta-item">
-                <div class="meta-icon">📦</div>
-                <h4>App Bundles</h4>
-                <p>Bundle ID, version, min macOS, entitlements</p>
+            <div class="metadata-card">
+                <div class="metadata-emoji">🌐</div>
+                <h3>HTML/網頁</h3>
+                <p>頁面標題、Meta 描述、關鍵字、作者、語言設定</p>
             </div>
-            <div class="meta-item">
-                <div class="meta-icon">🗄️</div>
-                <h4>SQLite</h4>
-                <p>Table counts, total rows, schema version</p>
+            <div class="metadata-card">
+                <div class="metadata-emoji">⚙️</div>
+                <h3>設定檔</h3>
+                <p>JSON/YAML/TOML 鍵值統計、巢狀深度、陣列計數</p>
+            </div>
+            <div class="metadata-card">
+                <div class="metadata-emoji">🎨</div>
+                <h3>設計檔案</h3>
+                <p>PSD 圖層/色彩模式/位元深度、SVG/AI 尺寸、字型字符數</p>
+            </div>
+            <div class="metadata-card">
+                <div class="metadata-emoji">📦</div>
+                <h3>應用程式</h3>
+                <p>Bundle ID、版本號、最低 macOS 版本、程式碼簽署、權限數量</p>
+            </div>
+            <div class="metadata-card">
+                <div class="metadata-emoji">⚡</div>
+                <h3>執行檔</h3>
+                <p>架構偵測 (arm64/x86_64)、程式碼簽署、最低 OS 版本、SDK 版本</p>
+            </div>
+            <div class="metadata-card">
+                <div class="metadata-emoji">🗄️</div>
+                <h3>SQLite 資料庫</h3>
+                <p>資料表/索引/觸發器/視圖統計、總列數、Schema 版本、編碼</p>
+            </div>
+            <div class="metadata-card">
+                <div class="metadata-emoji">📂</div>
+                <h3>Git 儲存庫</h3>
+                <p>目前分支、提交次數、遠端 URL、未提交變更、標籤數量</p>
+            </div>
+            <div class="metadata-card">
+                <div class="metadata-emoji">💿</div>
+                <h3>系統資訊</h3>
+                <p>檔案權限、擁有者、完整路徑、磁碟映像檔壓縮比</p>
             </div>
         </div>
     </section>
 
-    <section class="gallery">
-        <div class="section-header">
-            <h2>Gallery</h2>
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery-section">
+        <div class="section-intro">
+            <h2 class="section-headline">實際畫面</h2>
+            <p class="section-subheadline">看看 FinderHover 在日常使用中的表現。</p>
         </div>
+
         <div class="gallery-grid">
-            <img src="https://github.com/user-attachments/assets/fe969256-a07d-4db6-8715-a3bb3226782b" alt="Screenshot 1">
-            <img src="https://github.com/user-attachments/assets/f492dc51-9fd8-49f2-b854-d9fc4ac026a6" alt="Screenshot 2">
-            <img src="https://github.com/user-attachments/assets/dc04ba05-2bcb-4308-b0cc-bd5ed2259d07" alt="Screenshot 3">
-            <img src="https://github.com/user-attachments/assets/140accdd-6034-4b2d-b4d9-ccc55a28586c" alt="Screenshot 4">
+            <div class="gallery-item">
+                <img src="https://github.com/user-attachments/assets/fe969256-a07d-4db6-8715-a3bb3226782b" alt="螢幕截圖 1" loading="lazy">
+            </div>
+            <div class="gallery-item">
+                <img src="https://github.com/user-attachments/assets/f492dc51-9fd8-49f2-b854-d9fc4ac026a6" alt="螢幕截圖 2" loading="lazy">
+            </div>
+            <div class="gallery-item">
+                <img src="https://github.com/user-attachments/assets/dc04ba05-2bcb-4308-b0cc-bd5ed2259d07" alt="螢幕截圖 3" loading="lazy">
+            </div>
+            <div class="gallery-item">
+                <img src="https://github.com/user-attachments/assets/140accdd-6034-4b2d-b4d9-ccc55a28586c" alt="螢幕截圖 4" loading="lazy">
+            </div>
         </div>
     </section>
 
-    <footer>
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>立即開始使用</h2>
+        <p>免費下載，開放原始碼，採用 MIT 授權。</p>
+        <div class="cta-buttons">
+            <a href="https://github.com/KoukeNeko/FinderHover/releases/latest" class="btn-primary btn-large">下載 FinderHover</a>
+            <a href="https://github.com/KoukeNeko/FinderHover" class="btn-secondary btn-large">在 GitHub 上查看</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
         <div class="footer-content">
-            <div class="footer-logo">
-                <img src="assets/icon.png" alt="FinderHover">
-                <p>FinderHover</p>
-            </div>
             <div class="footer-links">
                 <a href="https://github.com/KoukeNeko/FinderHover">GitHub</a>
-                <a href="https://github.com/KoukeNeko/FinderHover/issues">Support</a>
-                <a href="https://github.com/KoukeNeko/FinderHover/blob/main/LICENSE">License</a>
+                <a href="https://github.com/KoukeNeko/FinderHover/issues">問題回報</a>
+                <a href="https://github.com/KoukeNeko/FinderHover/blob/main/LICENSE">授權條款</a>
+                <a href="https://github.com/KoukeNeko/FinderHover/blob/main/CHANGELOG.md">更新日誌</a>
             </div>
-            <p class="copyright">&copy; <span id="year"></span> KoukeNeko. Open source under MIT License.</p>
+            <p class="footer-copyright">Copyright © <span id="year"></span> KoukeNeko. 以 MIT 授權釋出。</p>
         </div>
     </footer>
 
@@ -160,13 +238,28 @@
             const command = 'brew install koukeneko/tap/finderhover';
             navigator.clipboard.writeText(command).then(() => {
                 const btn = document.querySelector('.copy-btn');
-                const originalIcon = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-check"></i>';
-                setTimeout(() => {
-                    btn.innerHTML = originalIcon;
-                }, 2000);
+                btn.classList.add('copied');
+                setTimeout(() => btn.classList.remove('copied'), 2000);
             });
         }
+
+        // Smooth reveal on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-item, .metadata-card, .gallery-item').forEach(el => {
+            observer.observe(el);
+        });
     </script>
 </body>
 </html>
