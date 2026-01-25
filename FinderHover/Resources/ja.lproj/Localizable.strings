@@ -191,6 +191,92 @@
 "settings.display.subtitle.hasFormatting" = "リッチフォーマット";
 "settings.display.subtitle.hint" = "字幕メタデータはSRT、VTT、ASS、SSA、SUB、SBV、LRCファイルにのみ表示されます";
 
+"settings.display.html" = "HTML/Web情報";
+"settings.display.html.show" = "HTMLメタデータを表示";
+"settings.display.html.title" = "ページタイトル";
+"settings.display.html.description" = "Meta説明";
+"settings.display.html.charset" = "文字セット";
+"settings.display.html.ogTitle" = "Open Graphタイトル";
+"settings.display.html.ogDescription" = "Open Graph説明";
+"settings.display.html.ogImage" = "Open Graph画像";
+"settings.display.html.twitterCard" = "Twitter Cardタイプ";
+"settings.display.html.hint" = "HTMLメタデータはHTMLおよびHTMファイルにのみ表示されます";
+
+"settings.display.imageExtended" = "拡張画像情報";
+"settings.display.imageExtended.show" = "拡張画像メタデータを表示";
+"settings.display.imageExtended.copyright" = "著作権情報";
+"settings.display.imageExtended.artist" = "作成者/クリエイター";
+"settings.display.imageExtended.description" = "説明";
+"settings.display.imageExtended.keywords" = "キーワード";
+"settings.display.imageExtended.rating" = "レーティング";
+"settings.display.imageExtended.colorProfile" = "カラープロファイル";
+"settings.display.imageExtended.hint" = "拡張画像メタデータはIPTC/XMPデータを含む画像にのみ表示されます";
+
+"settings.display.markdown" = "Markdown情報";
+"settings.display.markdown.show" = "Markdownメタデータを表示";
+"settings.display.markdown.title" = "タイトル（フロントマター）";
+"settings.display.markdown.author" = "作成者";
+"settings.display.markdown.date" = "日付";
+"settings.display.markdown.tags" = "タグ";
+"settings.display.markdown.wordCount" = "文字数";
+"settings.display.markdown.headingCount" = "見出し数";
+"settings.display.markdown.linkCount" = "リンク数";
+"settings.display.markdown.hint" = "MarkdownメタデータはMDファイルにのみ表示されます";
+
+"settings.display.config" = "設定ファイル情報";
+"settings.display.config.show" = "設定ファイルメタデータを表示";
+"settings.display.config.format" = "フォーマットタイプ";
+"settings.display.config.keyCount" = "キー数";
+"settings.display.config.isValid" = "検証状態";
+"settings.display.config.hint" = "設定ファイルメタデータはJSON、YAML、TOMLなどのファイルにのみ表示されます";
+
+"settings.display.psd" = "PSD情報";
+"settings.display.psd.show" = "PSDメタデータを表示";
+"settings.display.psd.dimensions" = "寸法";
+"settings.display.psd.colorMode" = "カラーモード";
+"settings.display.psd.bitDepth" = "ビット深度";
+"settings.display.psd.layerCount" = "レイヤー数";
+"settings.display.psd.hasAlpha" = "アルファチャンネル";
+"settings.display.psd.hint" = "PSDメタデータはPhotoshopファイルにのみ表示されます";
+
+"settings.display.executable" = "実行ファイル情報";
+"settings.display.executable.show" = "実行ファイルメタデータを表示";
+"settings.display.executable.architecture" = "アーキテクチャ";
+"settings.display.executable.isUniversal" = "ユニバーサルバイナリ";
+"settings.display.executable.isSigned" = "コード署名";
+"settings.display.executable.signingAuthority" = "署名認証局";
+"settings.display.executable.hint" = "実行ファイルメタデータはバイナリ実行ファイルにのみ表示されます";
+
+"settings.display.appBundle" = "アプリバンドル情報";
+"settings.display.appBundle.show" = "アプリバンドルメタデータを表示";
+"settings.display.appBundle.bundleId" = "バンドル識別子";
+"settings.display.appBundle.version" = "バージョン";
+"settings.display.appBundle.buildNumber" = "ビルド番号";
+"settings.display.appBundle.minOS" = "最小macOSバージョン";
+"settings.display.appBundle.category" = "カテゴリ";
+"settings.display.appBundle.copyright" = "著作権情報";
+"settings.display.appBundle.isSandboxed" = "サンドボックス";
+"settings.display.appBundle.hint" = "アプリバンドルメタデータはmacOSアプリケーションにのみ表示されます";
+
+"settings.display.sqlite" = "SQLiteデータベース情報";
+"settings.display.sqlite.show" = "SQLiteメタデータを表示";
+"settings.display.sqlite.tableCount" = "テーブル数";
+"settings.display.sqlite.indexCount" = "インデックス数";
+"settings.display.sqlite.version" = "SQLiteバージョン";
+"settings.display.sqlite.pageSize" = "ページサイズ";
+"settings.display.sqlite.hint" = "SQLiteメタデータはSQLiteデータベースファイルにのみ表示されます";
+
+"settings.display.git" = "Gitリポジトリ情報";
+"settings.display.git.show" = "Gitメタデータを表示";
+"settings.display.git.currentBranch" = "現在のブランチ";
+"settings.display.git.branchCount" = "ブランチ数";
+"settings.display.git.commitCount" = "コミット数";
+"settings.display.git.lastCommitDate" = "最終コミット日";
+"settings.display.git.lastCommitMessage" = "最終コミットメッセージ";
+"settings.display.git.remoteUrl" = "リモートURL";
+"settings.display.git.hasUncommitted" = "未コミットの変更";
+"settings.display.git.hint" = "GitメタデータはGitリポジトリにのみ表示されます";
+
 "settings.display.order" = "表示順序";
 "settings.display.order.hint" = "項目をドラッグして並べ替えます。各ファイルタイプのメタデータ（写真、動画、音声、PDF など）はグループとして移動します。";
 
@@ -266,6 +352,15 @@
 "displayItem.diskImage" = "ディスクイメージ情報";
 "displayItem.vectorGraphics" = "ベクターグラフィックス情報";
 "displayItem.subtitle" = "字幕ファイル情報";
+"displayItem.html" = "HTML/Web情報";
+"displayItem.imageExtended" = "拡張画像情報";
+"displayItem.markdown" = "Markdown情報";
+"displayItem.config" = "設定ファイル情報";
+"displayItem.psd" = "PSD情報";
+"displayItem.executable" = "実行ファイル情報";
+"displayItem.appBundle" = "アプリバンドル情報";
+"displayItem.sqlite" = "SQLiteデータベース情報";
+"displayItem.git" = "Gitリポジトリ情報";
 "displayItem.filePath" = "ファイルパス";
 
 /* Hover Window */
@@ -408,6 +503,85 @@
 "hover.subtitle.language" = "言語";
 "hover.subtitle.frameRate" = "レート";
 "hover.subtitle.hasFormatting" = "フォーマット";
+
+/* HTML/Web Hover */
+"hover.html.title" = "HTML/Web";
+"hover.html.pageTitle" = "タイトル";
+"hover.html.description" = "説明";
+"hover.html.charset" = "文字セット";
+"hover.html.ogTitle" = "OGタイトル";
+"hover.html.ogDescription" = "OG説明";
+"hover.html.ogImage" = "OG画像";
+"hover.html.twitterCard" = "Twitter Card";
+
+/* Extended Image Hover */
+"hover.imageExtended.title" = "拡張画像情報";
+"hover.imageExtended.copyright" = "著作権";
+"hover.imageExtended.artist" = "作成者";
+"hover.imageExtended.description" = "説明";
+"hover.imageExtended.keywords" = "キーワード";
+"hover.imageExtended.rating" = "レート";
+"hover.imageExtended.colorProfile" = "プロファイル";
+
+/* Markdown Hover */
+"hover.markdown.title" = "Markdown";
+"hover.markdown.docTitle" = "タイトル";
+"hover.markdown.author" = "作成者";
+"hover.markdown.date" = "日付";
+"hover.markdown.tags" = "タグ";
+"hover.markdown.wordCount" = "文字数";
+"hover.markdown.headingCount" = "見出し数";
+"hover.markdown.linkCount" = "リンク数";
+
+/* Config File Hover */
+"hover.config.title" = "設定ファイル";
+"hover.config.format" = "形式";
+"hover.config.keyCount" = "キー数";
+"hover.config.isValid" = "有効";
+"hover.config.yes" = "はい";
+"hover.config.no" = "いいえ";
+
+/* PSD Hover */
+"hover.psd.title" = "Photoshop";
+"hover.psd.dimensions" = "寸法";
+"hover.psd.colorMode" = "カラー";
+"hover.psd.bitDepth" = "ビット";
+"hover.psd.layerCount" = "レイヤー数";
+"hover.psd.hasAlpha" = "アルファ";
+
+/* Executable Hover */
+"hover.executable.title" = "実行ファイル";
+"hover.executable.architecture" = "アーキ";
+"hover.executable.isUniversal" = "Universal";
+"hover.executable.isSigned" = "署名";
+"hover.executable.signingAuthority" = "認証局";
+
+/* App Bundle Hover */
+"hover.appBundle.title" = "アプリケーション";
+"hover.appBundle.bundleId" = "バンドルID";
+"hover.appBundle.version" = "バージョン";
+"hover.appBundle.buildNumber" = "ビルド";
+"hover.appBundle.minOS" = "最小macOS";
+"hover.appBundle.category" = "カテゴリ";
+"hover.appBundle.copyright" = "著作権";
+"hover.appBundle.isSandboxed" = "サンドボックス";
+
+/* SQLite Hover */
+"hover.sqlite.title" = "SQLiteデータベース";
+"hover.sqlite.tableCount" = "テーブル数";
+"hover.sqlite.indexCount" = "インデックス数";
+"hover.sqlite.version" = "バージョン";
+"hover.sqlite.pageSize" = "ページサイズ";
+
+/* Git Repository Hover */
+"hover.git.title" = "Gitリポジトリ";
+"hover.git.currentBranch" = "ブランチ";
+"hover.git.branchCount" = "ブランチ数";
+"hover.git.commitCount" = "コミット数";
+"hover.git.lastCommitDate" = "最終コミット";
+"hover.git.lastCommitMessage" = "メッセージ";
+"hover.git.remoteUrl" = "リモート";
+"hover.git.hasUncommitted" = "未コミット";
 
 /* Common */
 "common.reset" = "デフォルトに戻す";

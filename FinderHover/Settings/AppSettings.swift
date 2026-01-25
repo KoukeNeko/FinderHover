@@ -66,6 +66,15 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
     case diskImage = "Disk Image Information"
     case vectorGraphics = "Vector Graphics Information"
     case subtitle = "Subtitle Information"
+    case html = "HTML Information"
+    case imageExtended = "Extended Image Information"
+    case markdown = "Markdown Information"
+    case config = "Config File Information"
+    case psd = "PSD Information"
+    case executable = "Executable Information"
+    case appBundle = "App Bundle Information"
+    case sqlite = "SQLite Information"
+    case git = "Git Repository Information"
     case filePath = "File Path"
 
     var id: String { rawValue }
@@ -92,6 +101,15 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .diskImage: return "displayItem.diskImage".localized
         case .vectorGraphics: return "displayItem.vectorGraphics".localized
         case .subtitle: return "displayItem.subtitle".localized
+        case .html: return "displayItem.html".localized
+        case .imageExtended: return "displayItem.imageExtended".localized
+        case .markdown: return "displayItem.markdown".localized
+        case .config: return "displayItem.config".localized
+        case .psd: return "displayItem.psd".localized
+        case .executable: return "displayItem.executable".localized
+        case .appBundle: return "displayItem.appBundle".localized
+        case .sqlite: return "displayItem.sqlite".localized
+        case .git: return "displayItem.git".localized
         case .filePath: return "displayItem.filePath".localized
         }
     }
@@ -118,6 +136,15 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .diskImage: return "opticaldiscdrive"
         case .vectorGraphics: return "paintbrush.pointed"
         case .subtitle: return "captions.bubble"
+        case .html: return "globe"
+        case .imageExtended: return "photo.badge.plus"
+        case .markdown: return "text.document"
+        case .config: return "gearshape.2"
+        case .psd: return "square.3.layers.3d"
+        case .executable: return "terminal"
+        case .appBundle: return "app.badge"
+        case .sqlite: return "cylinder"
+        case .git: return "arrow.triangle.branch"
         case .filePath: return IconManager.FileSystem.folder
         }
     }
@@ -527,6 +554,243 @@ class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(showSubtitleFormatting, forKey: "showSubtitleFormatting") }
     }
 
+    // MARK: - HTML Metadata
+    @Published var showHTML: Bool {
+        didSet { UserDefaults.standard.set(showHTML, forKey: "showHTML") }
+    }
+    @Published var showHTMLTitle: Bool {
+        didSet { UserDefaults.standard.set(showHTMLTitle, forKey: "showHTMLTitle") }
+    }
+    @Published var showHTMLDescription: Bool {
+        didSet { UserDefaults.standard.set(showHTMLDescription, forKey: "showHTMLDescription") }
+    }
+    @Published var showHTMLCharset: Bool {
+        didSet { UserDefaults.standard.set(showHTMLCharset, forKey: "showHTMLCharset") }
+    }
+    @Published var showHTMLOpenGraph: Bool {
+        didSet { UserDefaults.standard.set(showHTMLOpenGraph, forKey: "showHTMLOpenGraph") }
+    }
+    @Published var showHTMLTwitterCard: Bool {
+        didSet { UserDefaults.standard.set(showHTMLTwitterCard, forKey: "showHTMLTwitterCard") }
+    }
+    @Published var showHTMLKeywords: Bool {
+        didSet { UserDefaults.standard.set(showHTMLKeywords, forKey: "showHTMLKeywords") }
+    }
+    @Published var showHTMLAuthor: Bool {
+        didSet { UserDefaults.standard.set(showHTMLAuthor, forKey: "showHTMLAuthor") }
+    }
+    @Published var showHTMLLanguage: Bool {
+        didSet { UserDefaults.standard.set(showHTMLLanguage, forKey: "showHTMLLanguage") }
+    }
+
+    // MARK: - Extended Image Metadata (IPTC/XMP)
+    @Published var showImageExtended: Bool {
+        didSet { UserDefaults.standard.set(showImageExtended, forKey: "showImageExtended") }
+    }
+    @Published var showImageCopyright: Bool {
+        didSet { UserDefaults.standard.set(showImageCopyright, forKey: "showImageCopyright") }
+    }
+    @Published var showImageCreator: Bool {
+        didSet { UserDefaults.standard.set(showImageCreator, forKey: "showImageCreator") }
+    }
+    @Published var showImageKeywords: Bool {
+        didSet { UserDefaults.standard.set(showImageKeywords, forKey: "showImageKeywords") }
+    }
+    @Published var showImageRating: Bool {
+        didSet { UserDefaults.standard.set(showImageRating, forKey: "showImageRating") }
+    }
+    @Published var showImageCreatorTool: Bool {
+        didSet { UserDefaults.standard.set(showImageCreatorTool, forKey: "showImageCreatorTool") }
+    }
+    @Published var showImageDescription: Bool {
+        didSet { UserDefaults.standard.set(showImageDescription, forKey: "showImageDescription") }
+    }
+    @Published var showImageHeadline: Bool {
+        didSet { UserDefaults.standard.set(showImageHeadline, forKey: "showImageHeadline") }
+    }
+
+    // MARK: - Markdown Metadata
+    @Published var showMarkdown: Bool {
+        didSet { UserDefaults.standard.set(showMarkdown, forKey: "showMarkdown") }
+    }
+    @Published var showMarkdownFrontmatter: Bool {
+        didSet { UserDefaults.standard.set(showMarkdownFrontmatter, forKey: "showMarkdownFrontmatter") }
+    }
+    @Published var showMarkdownTitle: Bool {
+        didSet { UserDefaults.standard.set(showMarkdownTitle, forKey: "showMarkdownTitle") }
+    }
+    @Published var showMarkdownWordCount: Bool {
+        didSet { UserDefaults.standard.set(showMarkdownWordCount, forKey: "showMarkdownWordCount") }
+    }
+    @Published var showMarkdownHeadingCount: Bool {
+        didSet { UserDefaults.standard.set(showMarkdownHeadingCount, forKey: "showMarkdownHeadingCount") }
+    }
+    @Published var showMarkdownLinkCount: Bool {
+        didSet { UserDefaults.standard.set(showMarkdownLinkCount, forKey: "showMarkdownLinkCount") }
+    }
+    @Published var showMarkdownImageCount: Bool {
+        didSet { UserDefaults.standard.set(showMarkdownImageCount, forKey: "showMarkdownImageCount") }
+    }
+    @Published var showMarkdownCodeBlockCount: Bool {
+        didSet { UserDefaults.standard.set(showMarkdownCodeBlockCount, forKey: "showMarkdownCodeBlockCount") }
+    }
+
+    // MARK: - Config File Metadata (JSON/YAML/TOML)
+    @Published var showConfig: Bool {
+        didSet { UserDefaults.standard.set(showConfig, forKey: "showConfig") }
+    }
+    @Published var showConfigFormat: Bool {
+        didSet { UserDefaults.standard.set(showConfigFormat, forKey: "showConfigFormat") }
+    }
+    @Published var showConfigValid: Bool {
+        didSet { UserDefaults.standard.set(showConfigValid, forKey: "showConfigValid") }
+    }
+    @Published var showConfigKeyCount: Bool {
+        didSet { UserDefaults.standard.set(showConfigKeyCount, forKey: "showConfigKeyCount") }
+    }
+    @Published var showConfigMaxDepth: Bool {
+        didSet { UserDefaults.standard.set(showConfigMaxDepth, forKey: "showConfigMaxDepth") }
+    }
+    @Published var showConfigHasComments: Bool {
+        didSet { UserDefaults.standard.set(showConfigHasComments, forKey: "showConfigHasComments") }
+    }
+    @Published var showConfigEncoding: Bool {
+        didSet { UserDefaults.standard.set(showConfigEncoding, forKey: "showConfigEncoding") }
+    }
+
+    // MARK: - PSD Metadata
+    @Published var showPSD: Bool {
+        didSet { UserDefaults.standard.set(showPSD, forKey: "showPSD") }
+    }
+    @Published var showPSDLayerCount: Bool {
+        didSet { UserDefaults.standard.set(showPSDLayerCount, forKey: "showPSDLayerCount") }
+    }
+    @Published var showPSDColorMode: Bool {
+        didSet { UserDefaults.standard.set(showPSDColorMode, forKey: "showPSDColorMode") }
+    }
+    @Published var showPSDBitDepth: Bool {
+        didSet { UserDefaults.standard.set(showPSDBitDepth, forKey: "showPSDBitDepth") }
+    }
+    @Published var showPSDResolution: Bool {
+        didSet { UserDefaults.standard.set(showPSDResolution, forKey: "showPSDResolution") }
+    }
+    @Published var showPSDTransparency: Bool {
+        didSet { UserDefaults.standard.set(showPSDTransparency, forKey: "showPSDTransparency") }
+    }
+    @Published var showPSDDimensions: Bool {
+        didSet { UserDefaults.standard.set(showPSDDimensions, forKey: "showPSDDimensions") }
+    }
+
+    // MARK: - Executable Metadata
+    @Published var showExecutable: Bool {
+        didSet { UserDefaults.standard.set(showExecutable, forKey: "showExecutable") }
+    }
+    @Published var showExecutableArchitecture: Bool {
+        didSet { UserDefaults.standard.set(showExecutableArchitecture, forKey: "showExecutableArchitecture") }
+    }
+    @Published var showExecutableCodeSigned: Bool {
+        didSet { UserDefaults.standard.set(showExecutableCodeSigned, forKey: "showExecutableCodeSigned") }
+    }
+    @Published var showExecutableSigningAuthority: Bool {
+        didSet { UserDefaults.standard.set(showExecutableSigningAuthority, forKey: "showExecutableSigningAuthority") }
+    }
+    @Published var showExecutableMinimumOS: Bool {
+        didSet { UserDefaults.standard.set(showExecutableMinimumOS, forKey: "showExecutableMinimumOS") }
+    }
+    @Published var showExecutableSDKVersion: Bool {
+        didSet { UserDefaults.standard.set(showExecutableSDKVersion, forKey: "showExecutableSDKVersion") }
+    }
+    @Published var showExecutableFileType: Bool {
+        didSet { UserDefaults.standard.set(showExecutableFileType, forKey: "showExecutableFileType") }
+    }
+
+    // MARK: - App Bundle Metadata
+    @Published var showAppBundle: Bool {
+        didSet { UserDefaults.standard.set(showAppBundle, forKey: "showAppBundle") }
+    }
+    @Published var showAppBundleID: Bool {
+        didSet { UserDefaults.standard.set(showAppBundleID, forKey: "showAppBundleID") }
+    }
+    @Published var showAppBundleVersion: Bool {
+        didSet { UserDefaults.standard.set(showAppBundleVersion, forKey: "showAppBundleVersion") }
+    }
+    @Published var showAppBundleBuildNumber: Bool {
+        didSet { UserDefaults.standard.set(showAppBundleBuildNumber, forKey: "showAppBundleBuildNumber") }
+    }
+    @Published var showAppBundleMinimumOS: Bool {
+        didSet { UserDefaults.standard.set(showAppBundleMinimumOS, forKey: "showAppBundleMinimumOS") }
+    }
+    @Published var showAppBundleCategory: Bool {
+        didSet { UserDefaults.standard.set(showAppBundleCategory, forKey: "showAppBundleCategory") }
+    }
+    @Published var showAppBundleCopyright: Bool {
+        didSet { UserDefaults.standard.set(showAppBundleCopyright, forKey: "showAppBundleCopyright") }
+    }
+    @Published var showAppBundleCodeSigned: Bool {
+        didSet { UserDefaults.standard.set(showAppBundleCodeSigned, forKey: "showAppBundleCodeSigned") }
+    }
+    @Published var showAppBundleEntitlements: Bool {
+        didSet { UserDefaults.standard.set(showAppBundleEntitlements, forKey: "showAppBundleEntitlements") }
+    }
+
+    // MARK: - SQLite Metadata
+    @Published var showSQLite: Bool {
+        didSet { UserDefaults.standard.set(showSQLite, forKey: "showSQLite") }
+    }
+    @Published var showSQLiteTableCount: Bool {
+        didSet { UserDefaults.standard.set(showSQLiteTableCount, forKey: "showSQLiteTableCount") }
+    }
+    @Published var showSQLiteIndexCount: Bool {
+        didSet { UserDefaults.standard.set(showSQLiteIndexCount, forKey: "showSQLiteIndexCount") }
+    }
+    @Published var showSQLiteTriggerCount: Bool {
+        didSet { UserDefaults.standard.set(showSQLiteTriggerCount, forKey: "showSQLiteTriggerCount") }
+    }
+    @Published var showSQLiteViewCount: Bool {
+        didSet { UserDefaults.standard.set(showSQLiteViewCount, forKey: "showSQLiteViewCount") }
+    }
+    @Published var showSQLiteTotalRows: Bool {
+        didSet { UserDefaults.standard.set(showSQLiteTotalRows, forKey: "showSQLiteTotalRows") }
+    }
+    @Published var showSQLiteSchemaVersion: Bool {
+        didSet { UserDefaults.standard.set(showSQLiteSchemaVersion, forKey: "showSQLiteSchemaVersion") }
+    }
+    @Published var showSQLitePageSize: Bool {
+        didSet { UserDefaults.standard.set(showSQLitePageSize, forKey: "showSQLitePageSize") }
+    }
+    @Published var showSQLiteEncoding: Bool {
+        didSet { UserDefaults.standard.set(showSQLiteEncoding, forKey: "showSQLiteEncoding") }
+    }
+
+    // MARK: - Git Repository Metadata
+    @Published var showGit: Bool {
+        didSet { UserDefaults.standard.set(showGit, forKey: "showGit") }
+    }
+    @Published var showGitBranchCount: Bool {
+        didSet { UserDefaults.standard.set(showGitBranchCount, forKey: "showGitBranchCount") }
+    }
+    @Published var showGitCurrentBranch: Bool {
+        didSet { UserDefaults.standard.set(showGitCurrentBranch, forKey: "showGitCurrentBranch") }
+    }
+    @Published var showGitCommitCount: Bool {
+        didSet { UserDefaults.standard.set(showGitCommitCount, forKey: "showGitCommitCount") }
+    }
+    @Published var showGitLastCommitDate: Bool {
+        didSet { UserDefaults.standard.set(showGitLastCommitDate, forKey: "showGitLastCommitDate") }
+    }
+    @Published var showGitLastCommitMessage: Bool {
+        didSet { UserDefaults.standard.set(showGitLastCommitMessage, forKey: "showGitLastCommitMessage") }
+    }
+    @Published var showGitRemoteURL: Bool {
+        didSet { UserDefaults.standard.set(showGitRemoteURL, forKey: "showGitRemoteURL") }
+    }
+    @Published var showGitUncommittedChanges: Bool {
+        didSet { UserDefaults.standard.set(showGitUncommittedChanges, forKey: "showGitUncommittedChanges") }
+    }
+    @Published var showGitTagCount: Bool {
+        didSet { UserDefaults.standard.set(showGitTagCount, forKey: "showGitTagCount") }
+    }
+
     // Display order
     @Published var displayOrder: [DisplayItem] {
         didSet {
@@ -671,6 +935,88 @@ class AppSettings: ObservableObject {
                     decoded.append(.subtitle)
                 }
             }
+            // Migration for new metadata types
+            if !decoded.contains(.html) {
+                if let subtitleIndex = decoded.firstIndex(of: .subtitle) {
+                    decoded.insert(.html, at: subtitleIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.html, at: filePathIndex)
+                } else {
+                    decoded.append(.html)
+                }
+            }
+            if !decoded.contains(.imageExtended) {
+                if let htmlIndex = decoded.firstIndex(of: .html) {
+                    decoded.insert(.imageExtended, at: htmlIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.imageExtended, at: filePathIndex)
+                } else {
+                    decoded.append(.imageExtended)
+                }
+            }
+            if !decoded.contains(.markdown) {
+                if let imageExtendedIndex = decoded.firstIndex(of: .imageExtended) {
+                    decoded.insert(.markdown, at: imageExtendedIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.markdown, at: filePathIndex)
+                } else {
+                    decoded.append(.markdown)
+                }
+            }
+            if !decoded.contains(.config) {
+                if let markdownIndex = decoded.firstIndex(of: .markdown) {
+                    decoded.insert(.config, at: markdownIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.config, at: filePathIndex)
+                } else {
+                    decoded.append(.config)
+                }
+            }
+            if !decoded.contains(.psd) {
+                if let configIndex = decoded.firstIndex(of: .config) {
+                    decoded.insert(.psd, at: configIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.psd, at: filePathIndex)
+                } else {
+                    decoded.append(.psd)
+                }
+            }
+            if !decoded.contains(.executable) {
+                if let psdIndex = decoded.firstIndex(of: .psd) {
+                    decoded.insert(.executable, at: psdIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.executable, at: filePathIndex)
+                } else {
+                    decoded.append(.executable)
+                }
+            }
+            if !decoded.contains(.appBundle) {
+                if let executableIndex = decoded.firstIndex(of: .executable) {
+                    decoded.insert(.appBundle, at: executableIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.appBundle, at: filePathIndex)
+                } else {
+                    decoded.append(.appBundle)
+                }
+            }
+            if !decoded.contains(.sqlite) {
+                if let appBundleIndex = decoded.firstIndex(of: .appBundle) {
+                    decoded.insert(.sqlite, at: appBundleIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.sqlite, at: filePathIndex)
+                } else {
+                    decoded.append(.sqlite)
+                }
+            }
+            if !decoded.contains(.git) {
+                if let sqliteIndex = decoded.firstIndex(of: .sqlite) {
+                    decoded.insert(.git, at: sqliteIndex + 1)
+                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
+                    decoded.insert(.git, at: filePathIndex)
+                } else {
+                    decoded.append(.git)
+                }
+            }
             self.displayOrder = decoded
         } else {
             // Default order
@@ -695,6 +1041,15 @@ class AppSettings: ObservableObject {
                 .diskImage,
                 .vectorGraphics,
                 .subtitle,
+                .html,
+                .imageExtended,
+                .markdown,
+                .config,
+                .psd,
+                .executable,
+                .appBundle,
+                .sqlite,
+                .git,
                 .filePath
             ]
         }
@@ -829,7 +1184,98 @@ class AppSettings: ObservableObject {
         self.showSubtitleLanguage = UserDefaults.standard.object(forKey: "showSubtitleLanguage") as? Bool ?? Constants.Defaults.showSubtitleLanguage
         self.showSubtitleFrameRate = UserDefaults.standard.object(forKey: "showSubtitleFrameRate") as? Bool ?? Constants.Defaults.showSubtitleFrameRate
         self.showSubtitleFormatting = UserDefaults.standard.object(forKey: "showSubtitleFormatting") as? Bool ?? Constants.Defaults.showSubtitleFormatting
-        
+
+        // Initialize HTML metadata toggles
+        self.showHTML = UserDefaults.standard.object(forKey: "showHTML") as? Bool ?? Constants.Defaults.showHTML
+        self.showHTMLTitle = UserDefaults.standard.object(forKey: "showHTMLTitle") as? Bool ?? Constants.Defaults.showHTMLTitle
+        self.showHTMLDescription = UserDefaults.standard.object(forKey: "showHTMLDescription") as? Bool ?? Constants.Defaults.showHTMLDescription
+        self.showHTMLCharset = UserDefaults.standard.object(forKey: "showHTMLCharset") as? Bool ?? Constants.Defaults.showHTMLCharset
+        self.showHTMLOpenGraph = UserDefaults.standard.object(forKey: "showHTMLOpenGraph") as? Bool ?? Constants.Defaults.showHTMLOpenGraph
+        self.showHTMLTwitterCard = UserDefaults.standard.object(forKey: "showHTMLTwitterCard") as? Bool ?? Constants.Defaults.showHTMLTwitterCard
+        self.showHTMLKeywords = UserDefaults.standard.object(forKey: "showHTMLKeywords") as? Bool ?? Constants.Defaults.showHTMLKeywords
+        self.showHTMLAuthor = UserDefaults.standard.object(forKey: "showHTMLAuthor") as? Bool ?? Constants.Defaults.showHTMLAuthor
+        self.showHTMLLanguage = UserDefaults.standard.object(forKey: "showHTMLLanguage") as? Bool ?? Constants.Defaults.showHTMLLanguage
+
+        // Initialize extended image metadata toggles (IPTC/XMP)
+        self.showImageExtended = UserDefaults.standard.object(forKey: "showImageExtended") as? Bool ?? Constants.Defaults.showImageExtended
+        self.showImageCopyright = UserDefaults.standard.object(forKey: "showImageCopyright") as? Bool ?? Constants.Defaults.showImageCopyright
+        self.showImageCreator = UserDefaults.standard.object(forKey: "showImageCreator") as? Bool ?? Constants.Defaults.showImageCreator
+        self.showImageKeywords = UserDefaults.standard.object(forKey: "showImageKeywords") as? Bool ?? Constants.Defaults.showImageKeywords
+        self.showImageRating = UserDefaults.standard.object(forKey: "showImageRating") as? Bool ?? Constants.Defaults.showImageRating
+        self.showImageCreatorTool = UserDefaults.standard.object(forKey: "showImageCreatorTool") as? Bool ?? Constants.Defaults.showImageCreatorTool
+        self.showImageDescription = UserDefaults.standard.object(forKey: "showImageDescription") as? Bool ?? Constants.Defaults.showImageDescription
+        self.showImageHeadline = UserDefaults.standard.object(forKey: "showImageHeadline") as? Bool ?? Constants.Defaults.showImageHeadline
+
+        // Initialize Markdown metadata toggles
+        self.showMarkdown = UserDefaults.standard.object(forKey: "showMarkdown") as? Bool ?? Constants.Defaults.showMarkdown
+        self.showMarkdownFrontmatter = UserDefaults.standard.object(forKey: "showMarkdownFrontmatter") as? Bool ?? Constants.Defaults.showMarkdownFrontmatter
+        self.showMarkdownTitle = UserDefaults.standard.object(forKey: "showMarkdownTitle") as? Bool ?? Constants.Defaults.showMarkdownTitle
+        self.showMarkdownWordCount = UserDefaults.standard.object(forKey: "showMarkdownWordCount") as? Bool ?? Constants.Defaults.showMarkdownWordCount
+        self.showMarkdownHeadingCount = UserDefaults.standard.object(forKey: "showMarkdownHeadingCount") as? Bool ?? Constants.Defaults.showMarkdownHeadingCount
+        self.showMarkdownLinkCount = UserDefaults.standard.object(forKey: "showMarkdownLinkCount") as? Bool ?? Constants.Defaults.showMarkdownLinkCount
+        self.showMarkdownImageCount = UserDefaults.standard.object(forKey: "showMarkdownImageCount") as? Bool ?? Constants.Defaults.showMarkdownImageCount
+        self.showMarkdownCodeBlockCount = UserDefaults.standard.object(forKey: "showMarkdownCodeBlockCount") as? Bool ?? Constants.Defaults.showMarkdownCodeBlockCount
+
+        // Initialize Config file metadata toggles
+        self.showConfig = UserDefaults.standard.object(forKey: "showConfig") as? Bool ?? Constants.Defaults.showConfig
+        self.showConfigFormat = UserDefaults.standard.object(forKey: "showConfigFormat") as? Bool ?? Constants.Defaults.showConfigFormat
+        self.showConfigValid = UserDefaults.standard.object(forKey: "showConfigValid") as? Bool ?? Constants.Defaults.showConfigValid
+        self.showConfigKeyCount = UserDefaults.standard.object(forKey: "showConfigKeyCount") as? Bool ?? Constants.Defaults.showConfigKeyCount
+        self.showConfigMaxDepth = UserDefaults.standard.object(forKey: "showConfigMaxDepth") as? Bool ?? Constants.Defaults.showConfigMaxDepth
+        self.showConfigHasComments = UserDefaults.standard.object(forKey: "showConfigHasComments") as? Bool ?? Constants.Defaults.showConfigHasComments
+        self.showConfigEncoding = UserDefaults.standard.object(forKey: "showConfigEncoding") as? Bool ?? Constants.Defaults.showConfigEncoding
+
+        // Initialize PSD metadata toggles
+        self.showPSD = UserDefaults.standard.object(forKey: "showPSD") as? Bool ?? Constants.Defaults.showPSD
+        self.showPSDLayerCount = UserDefaults.standard.object(forKey: "showPSDLayerCount") as? Bool ?? Constants.Defaults.showPSDLayerCount
+        self.showPSDColorMode = UserDefaults.standard.object(forKey: "showPSDColorMode") as? Bool ?? Constants.Defaults.showPSDColorMode
+        self.showPSDBitDepth = UserDefaults.standard.object(forKey: "showPSDBitDepth") as? Bool ?? Constants.Defaults.showPSDBitDepth
+        self.showPSDResolution = UserDefaults.standard.object(forKey: "showPSDResolution") as? Bool ?? Constants.Defaults.showPSDResolution
+        self.showPSDTransparency = UserDefaults.standard.object(forKey: "showPSDTransparency") as? Bool ?? Constants.Defaults.showPSDTransparency
+        self.showPSDDimensions = UserDefaults.standard.object(forKey: "showPSDDimensions") as? Bool ?? Constants.Defaults.showPSDDimensions
+
+        // Initialize Executable metadata toggles
+        self.showExecutable = UserDefaults.standard.object(forKey: "showExecutable") as? Bool ?? Constants.Defaults.showExecutable
+        self.showExecutableArchitecture = UserDefaults.standard.object(forKey: "showExecutableArchitecture") as? Bool ?? Constants.Defaults.showExecutableArchitecture
+        self.showExecutableCodeSigned = UserDefaults.standard.object(forKey: "showExecutableCodeSigned") as? Bool ?? Constants.Defaults.showExecutableCodeSigned
+        self.showExecutableSigningAuthority = UserDefaults.standard.object(forKey: "showExecutableSigningAuthority") as? Bool ?? Constants.Defaults.showExecutableSigningAuthority
+        self.showExecutableMinimumOS = UserDefaults.standard.object(forKey: "showExecutableMinimumOS") as? Bool ?? Constants.Defaults.showExecutableMinimumOS
+        self.showExecutableSDKVersion = UserDefaults.standard.object(forKey: "showExecutableSDKVersion") as? Bool ?? Constants.Defaults.showExecutableSDKVersion
+        self.showExecutableFileType = UserDefaults.standard.object(forKey: "showExecutableFileType") as? Bool ?? Constants.Defaults.showExecutableFileType
+
+        // Initialize App Bundle metadata toggles
+        self.showAppBundle = UserDefaults.standard.object(forKey: "showAppBundle") as? Bool ?? Constants.Defaults.showAppBundle
+        self.showAppBundleID = UserDefaults.standard.object(forKey: "showAppBundleID") as? Bool ?? Constants.Defaults.showAppBundleID
+        self.showAppBundleVersion = UserDefaults.standard.object(forKey: "showAppBundleVersion") as? Bool ?? Constants.Defaults.showAppBundleVersion
+        self.showAppBundleBuildNumber = UserDefaults.standard.object(forKey: "showAppBundleBuildNumber") as? Bool ?? Constants.Defaults.showAppBundleBuildNumber
+        self.showAppBundleMinimumOS = UserDefaults.standard.object(forKey: "showAppBundleMinimumOS") as? Bool ?? Constants.Defaults.showAppBundleMinimumOS
+        self.showAppBundleCategory = UserDefaults.standard.object(forKey: "showAppBundleCategory") as? Bool ?? Constants.Defaults.showAppBundleCategory
+        self.showAppBundleCopyright = UserDefaults.standard.object(forKey: "showAppBundleCopyright") as? Bool ?? Constants.Defaults.showAppBundleCopyright
+        self.showAppBundleCodeSigned = UserDefaults.standard.object(forKey: "showAppBundleCodeSigned") as? Bool ?? Constants.Defaults.showAppBundleCodeSigned
+        self.showAppBundleEntitlements = UserDefaults.standard.object(forKey: "showAppBundleEntitlements") as? Bool ?? Constants.Defaults.showAppBundleEntitlements
+
+        // Initialize SQLite metadata toggles
+        self.showSQLite = UserDefaults.standard.object(forKey: "showSQLite") as? Bool ?? Constants.Defaults.showSQLite
+        self.showSQLiteTableCount = UserDefaults.standard.object(forKey: "showSQLiteTableCount") as? Bool ?? Constants.Defaults.showSQLiteTableCount
+        self.showSQLiteIndexCount = UserDefaults.standard.object(forKey: "showSQLiteIndexCount") as? Bool ?? Constants.Defaults.showSQLiteIndexCount
+        self.showSQLiteTriggerCount = UserDefaults.standard.object(forKey: "showSQLiteTriggerCount") as? Bool ?? Constants.Defaults.showSQLiteTriggerCount
+        self.showSQLiteViewCount = UserDefaults.standard.object(forKey: "showSQLiteViewCount") as? Bool ?? Constants.Defaults.showSQLiteViewCount
+        self.showSQLiteTotalRows = UserDefaults.standard.object(forKey: "showSQLiteTotalRows") as? Bool ?? Constants.Defaults.showSQLiteTotalRows
+        self.showSQLiteSchemaVersion = UserDefaults.standard.object(forKey: "showSQLiteSchemaVersion") as? Bool ?? Constants.Defaults.showSQLiteSchemaVersion
+        self.showSQLitePageSize = UserDefaults.standard.object(forKey: "showSQLitePageSize") as? Bool ?? Constants.Defaults.showSQLitePageSize
+        self.showSQLiteEncoding = UserDefaults.standard.object(forKey: "showSQLiteEncoding") as? Bool ?? Constants.Defaults.showSQLiteEncoding
+
+        // Initialize Git metadata toggles
+        self.showGit = UserDefaults.standard.object(forKey: "showGit") as? Bool ?? Constants.Defaults.showGit
+        self.showGitBranchCount = UserDefaults.standard.object(forKey: "showGitBranchCount") as? Bool ?? Constants.Defaults.showGitBranchCount
+        self.showGitCurrentBranch = UserDefaults.standard.object(forKey: "showGitCurrentBranch") as? Bool ?? Constants.Defaults.showGitCurrentBranch
+        self.showGitCommitCount = UserDefaults.standard.object(forKey: "showGitCommitCount") as? Bool ?? Constants.Defaults.showGitCommitCount
+        self.showGitLastCommitDate = UserDefaults.standard.object(forKey: "showGitLastCommitDate") as? Bool ?? Constants.Defaults.showGitLastCommitDate
+        self.showGitLastCommitMessage = UserDefaults.standard.object(forKey: "showGitLastCommitMessage") as? Bool ?? Constants.Defaults.showGitLastCommitMessage
+        self.showGitRemoteURL = UserDefaults.standard.object(forKey: "showGitRemoteURL") as? Bool ?? Constants.Defaults.showGitRemoteURL
+        self.showGitUncommittedChanges = UserDefaults.standard.object(forKey: "showGitUncommittedChanges") as? Bool ?? Constants.Defaults.showGitUncommittedChanges
+        self.showGitTagCount = UserDefaults.standard.object(forKey: "showGitTagCount") as? Bool ?? Constants.Defaults.showGitTagCount
+
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? Constants.Defaults.followCursor
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? Constants.Defaults.windowOffsetX
         self.windowOffsetY = UserDefaults.standard.object(forKey: "windowOffsetY") as? Double ?? Constants.Defaults.windowOffsetY
@@ -907,6 +1353,98 @@ class AppSettings: ObservableObject {
         showAudioDuration = Constants.Defaults.showAudioDuration
         showAudioBitrate = Constants.Defaults.showAudioBitrate
         showAudioSampleRate = Constants.Defaults.showAudioSampleRate
+
+        // Reset HTML settings
+        showHTML = Constants.Defaults.showHTML
+        showHTMLTitle = Constants.Defaults.showHTMLTitle
+        showHTMLDescription = Constants.Defaults.showHTMLDescription
+        showHTMLCharset = Constants.Defaults.showHTMLCharset
+        showHTMLOpenGraph = Constants.Defaults.showHTMLOpenGraph
+        showHTMLTwitterCard = Constants.Defaults.showHTMLTwitterCard
+        showHTMLKeywords = Constants.Defaults.showHTMLKeywords
+        showHTMLAuthor = Constants.Defaults.showHTMLAuthor
+        showHTMLLanguage = Constants.Defaults.showHTMLLanguage
+
+        // Reset Extended Image settings
+        showImageExtended = Constants.Defaults.showImageExtended
+        showImageCopyright = Constants.Defaults.showImageCopyright
+        showImageCreator = Constants.Defaults.showImageCreator
+        showImageKeywords = Constants.Defaults.showImageKeywords
+        showImageRating = Constants.Defaults.showImageRating
+        showImageCreatorTool = Constants.Defaults.showImageCreatorTool
+        showImageDescription = Constants.Defaults.showImageDescription
+        showImageHeadline = Constants.Defaults.showImageHeadline
+
+        // Reset Markdown settings
+        showMarkdown = Constants.Defaults.showMarkdown
+        showMarkdownFrontmatter = Constants.Defaults.showMarkdownFrontmatter
+        showMarkdownTitle = Constants.Defaults.showMarkdownTitle
+        showMarkdownWordCount = Constants.Defaults.showMarkdownWordCount
+        showMarkdownHeadingCount = Constants.Defaults.showMarkdownHeadingCount
+        showMarkdownLinkCount = Constants.Defaults.showMarkdownLinkCount
+        showMarkdownImageCount = Constants.Defaults.showMarkdownImageCount
+        showMarkdownCodeBlockCount = Constants.Defaults.showMarkdownCodeBlockCount
+
+        // Reset Config settings
+        showConfig = Constants.Defaults.showConfig
+        showConfigFormat = Constants.Defaults.showConfigFormat
+        showConfigValid = Constants.Defaults.showConfigValid
+        showConfigKeyCount = Constants.Defaults.showConfigKeyCount
+        showConfigMaxDepth = Constants.Defaults.showConfigMaxDepth
+        showConfigHasComments = Constants.Defaults.showConfigHasComments
+        showConfigEncoding = Constants.Defaults.showConfigEncoding
+
+        // Reset PSD settings
+        showPSD = Constants.Defaults.showPSD
+        showPSDLayerCount = Constants.Defaults.showPSDLayerCount
+        showPSDColorMode = Constants.Defaults.showPSDColorMode
+        showPSDBitDepth = Constants.Defaults.showPSDBitDepth
+        showPSDResolution = Constants.Defaults.showPSDResolution
+        showPSDTransparency = Constants.Defaults.showPSDTransparency
+        showPSDDimensions = Constants.Defaults.showPSDDimensions
+
+        // Reset Executable settings
+        showExecutable = Constants.Defaults.showExecutable
+        showExecutableArchitecture = Constants.Defaults.showExecutableArchitecture
+        showExecutableCodeSigned = Constants.Defaults.showExecutableCodeSigned
+        showExecutableSigningAuthority = Constants.Defaults.showExecutableSigningAuthority
+        showExecutableMinimumOS = Constants.Defaults.showExecutableMinimumOS
+        showExecutableSDKVersion = Constants.Defaults.showExecutableSDKVersion
+        showExecutableFileType = Constants.Defaults.showExecutableFileType
+
+        // Reset App Bundle settings
+        showAppBundle = Constants.Defaults.showAppBundle
+        showAppBundleID = Constants.Defaults.showAppBundleID
+        showAppBundleVersion = Constants.Defaults.showAppBundleVersion
+        showAppBundleBuildNumber = Constants.Defaults.showAppBundleBuildNumber
+        showAppBundleMinimumOS = Constants.Defaults.showAppBundleMinimumOS
+        showAppBundleCategory = Constants.Defaults.showAppBundleCategory
+        showAppBundleCopyright = Constants.Defaults.showAppBundleCopyright
+        showAppBundleCodeSigned = Constants.Defaults.showAppBundleCodeSigned
+        showAppBundleEntitlements = Constants.Defaults.showAppBundleEntitlements
+
+        // Reset SQLite settings
+        showSQLite = Constants.Defaults.showSQLite
+        showSQLiteTableCount = Constants.Defaults.showSQLiteTableCount
+        showSQLiteIndexCount = Constants.Defaults.showSQLiteIndexCount
+        showSQLiteTriggerCount = Constants.Defaults.showSQLiteTriggerCount
+        showSQLiteViewCount = Constants.Defaults.showSQLiteViewCount
+        showSQLiteTotalRows = Constants.Defaults.showSQLiteTotalRows
+        showSQLiteSchemaVersion = Constants.Defaults.showSQLiteSchemaVersion
+        showSQLitePageSize = Constants.Defaults.showSQLitePageSize
+        showSQLiteEncoding = Constants.Defaults.showSQLiteEncoding
+
+        // Reset Git settings
+        showGit = Constants.Defaults.showGit
+        showGitBranchCount = Constants.Defaults.showGitBranchCount
+        showGitCurrentBranch = Constants.Defaults.showGitCurrentBranch
+        showGitCommitCount = Constants.Defaults.showGitCommitCount
+        showGitLastCommitDate = Constants.Defaults.showGitLastCommitDate
+        showGitLastCommitMessage = Constants.Defaults.showGitLastCommitMessage
+        showGitRemoteURL = Constants.Defaults.showGitRemoteURL
+        showGitUncommittedChanges = Constants.Defaults.showGitUncommittedChanges
+        showGitTagCount = Constants.Defaults.showGitTagCount
+
         displayOrder = [
             .fileType,
             .fileSize,
@@ -919,6 +1457,24 @@ class AppSettings: ObservableObject {
             .exif,
             .video,
             .audio,
+            .pdf,
+            .office,
+            .archive,
+            .ebook,
+            .code,
+            .font,
+            .diskImage,
+            .vectorGraphics,
+            .subtitle,
+            .html,
+            .imageExtended,
+            .markdown,
+            .config,
+            .psd,
+            .executable,
+            .appBundle,
+            .sqlite,
+            .git,
             .filePath
         ]
         followCursor = Constants.Defaults.followCursor

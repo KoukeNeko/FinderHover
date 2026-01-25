@@ -438,6 +438,234 @@ enum Constants {
         /// Default show Subtitle formatting
         static let showSubtitleFormatting: Bool = true
 
+        // MARK: - HTML Metadata Defaults
+        /// Default show HTML information
+        static let showHTML: Bool = true
+
+        /// Default show HTML title
+        static let showHTMLTitle: Bool = true
+
+        /// Default show HTML description
+        static let showHTMLDescription: Bool = true
+
+        /// Default show HTML charset
+        static let showHTMLCharset: Bool = true
+
+        /// Default show HTML Open Graph
+        static let showHTMLOpenGraph: Bool = true
+
+        /// Default show HTML Twitter Card
+        static let showHTMLTwitterCard: Bool = true
+
+        /// Default show HTML keywords
+        static let showHTMLKeywords: Bool = true
+
+        /// Default show HTML author
+        static let showHTMLAuthor: Bool = true
+
+        /// Default show HTML language
+        static let showHTMLLanguage: Bool = true
+
+        // MARK: - Extended Image Metadata Defaults (IPTC/XMP)
+        /// Default show extended image information
+        static let showImageExtended: Bool = true
+
+        /// Default show image copyright
+        static let showImageCopyright: Bool = true
+
+        /// Default show image creator
+        static let showImageCreator: Bool = true
+
+        /// Default show image keywords
+        static let showImageKeywords: Bool = true
+
+        /// Default show image rating
+        static let showImageRating: Bool = true
+
+        /// Default show image creator tool
+        static let showImageCreatorTool: Bool = true
+
+        /// Default show image description
+        static let showImageDescription: Bool = true
+
+        /// Default show image headline
+        static let showImageHeadline: Bool = true
+
+        // MARK: - Markdown Metadata Defaults
+        /// Default show Markdown information
+        static let showMarkdown: Bool = true
+
+        /// Default show Markdown frontmatter
+        static let showMarkdownFrontmatter: Bool = true
+
+        /// Default show Markdown title
+        static let showMarkdownTitle: Bool = true
+
+        /// Default show Markdown word count
+        static let showMarkdownWordCount: Bool = true
+
+        /// Default show Markdown heading count
+        static let showMarkdownHeadingCount: Bool = true
+
+        /// Default show Markdown link count
+        static let showMarkdownLinkCount: Bool = true
+
+        /// Default show Markdown image count
+        static let showMarkdownImageCount: Bool = true
+
+        /// Default show Markdown code block count
+        static let showMarkdownCodeBlockCount: Bool = true
+
+        // MARK: - Config File Metadata Defaults (JSON/YAML/TOML)
+        /// Default show Config information
+        static let showConfig: Bool = true
+
+        /// Default show Config format
+        static let showConfigFormat: Bool = true
+
+        /// Default show Config valid status
+        static let showConfigValid: Bool = true
+
+        /// Default show Config key count
+        static let showConfigKeyCount: Bool = true
+
+        /// Default show Config max depth
+        static let showConfigMaxDepth: Bool = true
+
+        /// Default show Config has comments
+        static let showConfigHasComments: Bool = true
+
+        /// Default show Config encoding
+        static let showConfigEncoding: Bool = true
+
+        // MARK: - PSD Metadata Defaults
+        /// Default show PSD information
+        static let showPSD: Bool = true
+
+        /// Default show PSD layer count
+        static let showPSDLayerCount: Bool = true
+
+        /// Default show PSD color mode
+        static let showPSDColorMode: Bool = true
+
+        /// Default show PSD bit depth
+        static let showPSDBitDepth: Bool = true
+
+        /// Default show PSD resolution
+        static let showPSDResolution: Bool = true
+
+        /// Default show PSD transparency
+        static let showPSDTransparency: Bool = true
+
+        /// Default show PSD dimensions
+        static let showPSDDimensions: Bool = true
+
+        // MARK: - Executable Metadata Defaults
+        /// Default show Executable information
+        static let showExecutable: Bool = true
+
+        /// Default show Executable architecture
+        static let showExecutableArchitecture: Bool = true
+
+        /// Default show Executable code signed
+        static let showExecutableCodeSigned: Bool = true
+
+        /// Default show Executable signing authority
+        static let showExecutableSigningAuthority: Bool = true
+
+        /// Default show Executable minimum OS
+        static let showExecutableMinimumOS: Bool = true
+
+        /// Default show Executable SDK version
+        static let showExecutableSDKVersion: Bool = true
+
+        /// Default show Executable file type
+        static let showExecutableFileType: Bool = true
+
+        // MARK: - App Bundle Metadata Defaults
+        /// Default show App Bundle information
+        static let showAppBundle: Bool = true
+
+        /// Default show App Bundle ID
+        static let showAppBundleID: Bool = true
+
+        /// Default show App Bundle version
+        static let showAppBundleVersion: Bool = true
+
+        /// Default show App Bundle build number
+        static let showAppBundleBuildNumber: Bool = true
+
+        /// Default show App Bundle minimum OS
+        static let showAppBundleMinimumOS: Bool = true
+
+        /// Default show App Bundle category
+        static let showAppBundleCategory: Bool = true
+
+        /// Default show App Bundle copyright
+        static let showAppBundleCopyright: Bool = true
+
+        /// Default show App Bundle code signed
+        static let showAppBundleCodeSigned: Bool = true
+
+        /// Default show App Bundle entitlements
+        static let showAppBundleEntitlements: Bool = true
+
+        // MARK: - SQLite Metadata Defaults
+        /// Default show SQLite information
+        static let showSQLite: Bool = true
+
+        /// Default show SQLite table count
+        static let showSQLiteTableCount: Bool = true
+
+        /// Default show SQLite index count
+        static let showSQLiteIndexCount: Bool = true
+
+        /// Default show SQLite trigger count
+        static let showSQLiteTriggerCount: Bool = true
+
+        /// Default show SQLite view count
+        static let showSQLiteViewCount: Bool = true
+
+        /// Default show SQLite total rows
+        static let showSQLiteTotalRows: Bool = true
+
+        /// Default show SQLite schema version
+        static let showSQLiteSchemaVersion: Bool = true
+
+        /// Default show SQLite page size
+        static let showSQLitePageSize: Bool = true
+
+        /// Default show SQLite encoding
+        static let showSQLiteEncoding: Bool = true
+
+        // MARK: - Git Repository Metadata Defaults
+        /// Default show Git information
+        static let showGit: Bool = true
+
+        /// Default show Git branch count
+        static let showGitBranchCount: Bool = true
+
+        /// Default show Git current branch
+        static let showGitCurrentBranch: Bool = true
+
+        /// Default show Git commit count
+        static let showGitCommitCount: Bool = true
+
+        /// Default show Git last commit date
+        static let showGitLastCommitDate: Bool = true
+
+        /// Default show Git last commit message
+        static let showGitLastCommitMessage: Bool = true
+
+        /// Default show Git remote URL
+        static let showGitRemoteURL: Bool = true
+
+        /// Default show Git uncommitted changes
+        static let showGitUncommittedChanges: Bool = true
+
+        /// Default show Git tag count
+        static let showGitTagCount: Bool = true
+
         /// Default follow cursor
         static let followCursor: Bool = true
 
