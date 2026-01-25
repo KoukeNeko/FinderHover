@@ -646,7 +646,7 @@ struct SQLTextPreviewView: View {
                     .font(.headline)
                     .lineLimit(1)
 
-                Text("SQL Script · \(viewModel.formattedFileSize)")
+                Text("\(NSLocalizedString("ql.sql.title", comment: "")) · \(viewModel.formattedFileSize)")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -655,10 +655,10 @@ struct SQLTextPreviewView: View {
 
             // Stats
             HStack(spacing: 16) {
-                statBadge(icon: "text.alignleft", value: "\(viewModel.lineCount)", label: "lines")
-                statBadge(icon: "command", value: "\(viewModel.statementCount)", label: "statements")
+                statBadge(icon: "text.alignleft", value: "\(viewModel.lineCount)", label: NSLocalizedString("ql.stats.lines", comment: ""))
+                statBadge(icon: "command", value: "\(viewModel.statementCount)", label: NSLocalizedString("ql.stats.statements", comment: ""))
                 if !viewModel.tables.isEmpty {
-                    statBadge(icon: "tablecells", value: "\(viewModel.tables.count)", label: "tables")
+                    statBadge(icon: "tablecells", value: "\(viewModel.tables.count)", label: NSLocalizedString("ql.common.tables", comment: "").lowercased())
                 }
             }
         }
@@ -688,7 +688,7 @@ struct SQLTextPreviewView: View {
             VStack(alignment: .leading, spacing: 16) {
                 // Tables section
                 schemaSection(
-                    title: "Tables",
+                    title: NSLocalizedString("ql.common.tables", comment: ""),
                     icon: "tablecells",
                     count: viewModel.tables.count
                 ) {
@@ -745,7 +745,7 @@ struct SQLTextPreviewView: View {
                         .font(.system(size: 12))
                         .lineLimit(1)
 
-                    Text("\(table.columns.count) cols · \(table.rowCount) rows")
+                    Text("\(table.columns.count) \(NSLocalizedString("ql.common.cols", comment: "")) · \(table.rowCount) \(NSLocalizedString("ql.common.rows", comment: ""))")
                         .font(.system(size: 10))
                         .foregroundColor(viewModel.selectedTable?.id == table.id ? .white.opacity(0.8) : .secondary)
                 }
@@ -791,7 +791,7 @@ struct SQLTextPreviewView: View {
 
     private func viewModeTabBar(table: SQLTableDefinition) -> some View {
         HStack(spacing: 0) {
-            Text("Table: \(table.name)")
+            Text("\(NSLocalizedString("ql.common.table", comment: "")): \(table.name)")
                 .font(.headline)
                 .padding(.leading, 16)
 
@@ -806,7 +806,7 @@ struct SQLTextPreviewView: View {
                         HStack(spacing: 4) {
                             Image(systemName: iconForMode(mode))
                                 .font(.caption)
-                            Text(mode.rawValue)
+                            Text(localizedModeName(mode))
                                 .font(.caption)
                         }
                         .padding(.horizontal, 10)
@@ -833,6 +833,14 @@ struct SQLTextPreviewView: View {
         case .schema: return "list.bullet.rectangle"
         case .data: return "tablecells"
         case .source: return "doc.text"
+        }
+    }
+
+    private func localizedModeName(_ mode: SQLViewMode) -> String {
+        switch mode {
+        case .schema: return NSLocalizedString("ql.viewMode.schema", comment: "")
+        case .data: return NSLocalizedString("ql.viewMode.data", comment: "")
+        case .source: return NSLocalizedString("ql.viewMode.source", comment: "")
         }
     }
 
@@ -875,7 +883,7 @@ struct SQLTextPreviewView: View {
                         .font(.system(size: 13, weight: column.isPrimaryKey ? .semibold : .regular, design: .monospaced))
 
                     if column.isNotNull {
-                        Text("NOT NULL")
+                        Text(NSLocalizedString("ql.constraint.notNull", comment: ""))
                             .font(.system(size: 9))
                             .padding(.horizontal, 4)
                             .padding(.vertical, 2)
@@ -885,7 +893,7 @@ struct SQLTextPreviewView: View {
                     }
 
                     if column.isUnique && !column.isPrimaryKey {
-                        Text("UNIQUE")
+                        Text(NSLocalizedString("ql.constraint.unique", comment: ""))
                             .font(.system(size: 9))
                             .padding(.horizontal, 4)
                             .padding(.vertical, 2)
@@ -895,7 +903,7 @@ struct SQLTextPreviewView: View {
                     }
 
                     if column.isPrimaryKey {
-                        Text("PRIMARY KEY")
+                        Text(NSLocalizedString("ql.constraint.primaryKey", comment: ""))
                             .font(.system(size: 9))
                             .padding(.horizontal, 4)
                             .padding(.vertical, 2)
@@ -1040,10 +1048,10 @@ struct SQLTextPreviewView: View {
                 .font(.title)
                 .foregroundColor(.secondary)
 
-            Text("No Data")
+            Text(NSLocalizedString("ql.sql.noData", comment: ""))
                 .font(.headline)
 
-            Text("No INSERT statements found for this table")
+            Text(NSLocalizedString("ql.sql.noInsertStatements", comment: ""))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -1056,11 +1064,11 @@ struct SQLTextPreviewView: View {
                 .font(.title)
                 .foregroundColor(.secondary)
 
-            Text("Select a table")
+            Text(NSLocalizedString("ql.sql.selectTable", comment: ""))
                 .font(.headline)
                 .foregroundColor(.secondary)
 
-            Text("Choose a table from the sidebar")
+            Text(NSLocalizedString("ql.sql.selectTableHint", comment: ""))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -1090,14 +1098,14 @@ struct SQLTextPreviewView: View {
                 .cornerRadius(3)
 
             if let selectedTable = viewModel.selectedTable, viewModel.viewMode == .data {
-                Text("\(selectedTable.rowCount) rows (max 100)")
+                Text(String(format: NSLocalizedString("ql.sql.rowsMax", comment: ""), selectedTable.rowCount))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
 
             Spacer()
 
-            Text("UTF-8")
+            Text(NSLocalizedString("ql.sql.encoding", comment: ""))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }

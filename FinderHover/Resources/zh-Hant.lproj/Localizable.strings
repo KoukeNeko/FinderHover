@@ -9,8 +9,30 @@
 "settings.tab.behavior" = "行為";
 "settings.tab.appearance" = "外觀";
 "settings.tab.display" = "顯示";
+"settings.tab.preview" = "預覽";
 "settings.tab.permissions" = "權限";
 "settings.tab.about" = "關於";
+
+/* Settings - Preview */
+"settings.preview.title" = "預覽";
+"settings.preview.quickLook" = "Quick Look 擴充功能";
+"settings.preview.quickLook.description" = "擴充 macOS Quick Look，使用空白鍵預覽更多檔案格式。";
+"settings.preview.quickLook.supported" = "Quick Look 擴充功能已啟用";
+"settings.preview.quickLook.formats" = "支援：SQLite 資料庫 (.db, .sqlite, .sqlite3)、SQL 腳本 (.sql)";
+"settings.preview.quickLook.refresh" = "重新整理";
+"settings.preview.sqlite" = "SQLite 預覽";
+"settings.preview.sqlite.maxRows" = "最大顯示列數";
+"settings.preview.sqlite.maxRows.description" = "限制表格預覽顯示的列數以提升效能。";
+"settings.preview.sql" = "SQL 文字預覽";
+"settings.preview.sql.syntaxHighlight" = "語法高亮";
+"settings.preview.sql.syntaxHighlight.description" = "為 SQL 關鍵字、字串和註解上色。";
+"settings.preview.sql.lineNumbers" = "行號";
+"settings.preview.sql.lineNumbers.description" = "在原始碼檢視中顯示行號。";
+"settings.preview.defaultView" = "預設檢視模式";
+"settings.preview.defaultView.description" = "選擇預覽 SQL 檔案時首先顯示的檢視。";
+"settings.preview.viewMode.schema" = "結構";
+"settings.preview.viewMode.data" = "資料";
+"settings.preview.viewMode.source" = "原始碼";
 
 /* Settings - Behavior */
 "settings.behavior.title" = "行為";

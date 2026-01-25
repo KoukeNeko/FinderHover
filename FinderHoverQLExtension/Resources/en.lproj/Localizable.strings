@@ -1,0 +1,54 @@
+/* Quick Look Extension Localizable Strings - English */
+
+/* Common */
+"ql.common.cols" = "cols";
+"ql.common.rows" = "rows";
+"ql.common.table" = "Table";
+"ql.common.tables" = "Tables";
+"ql.common.views" = "Views";
+"ql.common.indexes" = "Indexes";
+"ql.common.triggers" = "Triggers";
+"ql.common.on" = "on";
+
+/* SQL Constraints */
+"ql.constraint.notNull" = "NOT NULL";
+"ql.constraint.unique" = "UNIQUE";
+"ql.constraint.primaryKey" = "PRIMARY KEY";
+
+/* SQLite Preview */
+"ql.sqlite.title" = "SQLite Database";
+"ql.sqlite.loading" = "Loading data...";
+"ql.sqlite.errorLoading" = "Error loading data";
+"ql.sqlite.noData" = "No Data";
+"ql.sqlite.tableEmpty" = "This table is empty";
+"ql.sqlite.selectTable" = "Select a table";
+"ql.sqlite.selectTableHint" = "Choose a table from the sidebar to preview its data";
+"ql.sqlite.rowsOf" = "%@ of %@ rows";
+"ql.sqlite.pageSize" = "Page: %@ bytes";
+
+/* SQL Text Preview */
+"ql.sql.title" = "SQL Script";
+"ql.sql.noData" = "No Data";
+"ql.sql.noInsertStatements" = "No INSERT statements found for this table";
+"ql.sql.selectTable" = "Select a table";
+"ql.sql.selectTableHint" = "Choose a table from the sidebar";
+"ql.sql.rowsMax" = "%d rows (max 100)";
+"ql.sql.encoding" = "UTF-8";
+
+/* View Mode Tabs */
+"ql.viewMode.schema" = "Schema";
+"ql.viewMode.data" = "Data";
+"ql.viewMode.source" = "Source";
+
+/* Stats */
+"ql.stats.lines" = "lines";
+"ql.stats.statements" = "statements";
+
+/* Errors */
+"ql.error.fileNotFound" = "File Not Found";
+"ql.error.fileNotFoundMessage" = "The file could not be found.";
+"ql.error.unsupportedFormat" = "Unsupported Format";
+"ql.error.unsupportedFormatMessage" = "This file type is not supported by FinderHover Quick Look.";
+"ql.error.databaseError" = "Database Error";
+"ql.error.error" = "Error";
+"ql.error.readingFile" = "Error Reading File";

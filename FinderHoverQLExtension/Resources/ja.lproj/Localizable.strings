@@ -1,0 +1,54 @@
+/* Quick Look Extension Localizable Strings - Japanese */
+
+/* Common */
+"ql.common.cols" = "列";
+"ql.common.rows" = "行";
+"ql.common.table" = "テーブル";
+"ql.common.tables" = "テーブル";
+"ql.common.views" = "ビュー";
+"ql.common.indexes" = "インデックス";
+"ql.common.triggers" = "トリガー";
+"ql.common.on" = "";
+
+/* SQL Constraints */
+"ql.constraint.notNull" = "NOT NULL";
+"ql.constraint.unique" = "UNIQUE";
+"ql.constraint.primaryKey" = "PRIMARY KEY";
+
+/* SQLite Preview */
+"ql.sqlite.title" = "SQLite データベース";
+"ql.sqlite.loading" = "データを読み込み中...";
+"ql.sqlite.errorLoading" = "データの読み込みエラー";
+"ql.sqlite.noData" = "データなし";
+"ql.sqlite.tableEmpty" = "このテーブルは空です";
+"ql.sqlite.selectTable" = "テーブルを選択";
+"ql.sqlite.selectTableHint" = "サイドバーからテーブルを選択してデータをプレビュー";
+"ql.sqlite.rowsOf" = "%@ / %@ 行";
+"ql.sqlite.pageSize" = "ページサイズ: %@ バイト";
+
+/* SQL Text Preview */
+"ql.sql.title" = "SQL スクリプト";
+"ql.sql.noData" = "データなし";
+"ql.sql.noInsertStatements" = "このテーブルの INSERT 文が見つかりません";
+"ql.sql.selectTable" = "テーブルを選択";
+"ql.sql.selectTableHint" = "サイドバーからテーブルを選択";
+"ql.sql.rowsMax" = "%d 行（最大 100）";
+"ql.sql.encoding" = "UTF-8";
+
+/* View Mode Tabs */
+"ql.viewMode.schema" = "スキーマ";
+"ql.viewMode.data" = "データ";
+"ql.viewMode.source" = "ソース";
+
+/* Stats */
+"ql.stats.lines" = "行";
+"ql.stats.statements" = "ステートメント";
+
+/* Errors */
+"ql.error.fileNotFound" = "ファイルが見つかりません";
+"ql.error.fileNotFoundMessage" = "ファイルが見つかりませんでした。";
+"ql.error.unsupportedFormat" = "未対応の形式";
+"ql.error.unsupportedFormatMessage" = "このファイル形式は FinderHover Quick Look で対応していません。";
+"ql.error.databaseError" = "データベースエラー";
+"ql.error.error" = "エラー";
+"ql.error.readingFile" = "ファイルの読み込みエラー";

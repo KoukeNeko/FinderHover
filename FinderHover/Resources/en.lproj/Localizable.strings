@@ -9,8 +9,30 @@
 "settings.tab.behavior" = "Behavior";
 "settings.tab.appearance" = "Appearance";
 "settings.tab.display" = "Display";
+"settings.tab.preview" = "Preview";
 "settings.tab.permissions" = "Permissions";
 "settings.tab.about" = "About";
+
+/* Settings - Preview */
+"settings.preview.title" = "Preview";
+"settings.preview.quickLook" = "Quick Look Extension";
+"settings.preview.quickLook.description" = "Extends macOS Quick Look to preview additional file formats with the spacebar.";
+"settings.preview.quickLook.supported" = "Quick Look Extension Enabled";
+"settings.preview.quickLook.formats" = "Supported: SQLite databases (.db, .sqlite, .sqlite3), SQL scripts (.sql)";
+"settings.preview.quickLook.refresh" = "Refresh";
+"settings.preview.sqlite" = "SQLite Preview";
+"settings.preview.sqlite.maxRows" = "Maximum Rows to Display";
+"settings.preview.sqlite.maxRows.description" = "Limit the number of rows shown in table preview for performance.";
+"settings.preview.sql" = "SQL Text Preview";
+"settings.preview.sql.syntaxHighlight" = "Syntax Highlighting";
+"settings.preview.sql.syntaxHighlight.description" = "Colorize SQL keywords, strings, and comments.";
+"settings.preview.sql.lineNumbers" = "Line Numbers";
+"settings.preview.sql.lineNumbers.description" = "Show line numbers in source view.";
+"settings.preview.defaultView" = "Default View Mode";
+"settings.preview.defaultView.description" = "Choose which view to show first when previewing SQL files.";
+"settings.preview.viewMode.schema" = "Schema";
+"settings.preview.viewMode.data" = "Data";
+"settings.preview.viewMode.source" = "Source";
 
 /* Settings - Behavior */
 "settings.behavior.title" = "Behavior";

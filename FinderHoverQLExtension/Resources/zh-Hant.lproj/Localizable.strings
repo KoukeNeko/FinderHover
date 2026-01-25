@@ -1,0 +1,54 @@
+/* Quick Look Extension Localizable Strings - Traditional Chinese */
+
+/* Common */
+"ql.common.cols" = "欄";
+"ql.common.rows" = "列";
+"ql.common.table" = "資料表";
+"ql.common.tables" = "資料表";
+"ql.common.views" = "檢視表";
+"ql.common.indexes" = "索引";
+"ql.common.triggers" = "觸發器";
+"ql.common.on" = "於";
+
+/* SQL Constraints */
+"ql.constraint.notNull" = "NOT NULL";
+"ql.constraint.unique" = "UNIQUE";
+"ql.constraint.primaryKey" = "PRIMARY KEY";
+
+/* SQLite Preview */
+"ql.sqlite.title" = "SQLite 資料庫";
+"ql.sqlite.loading" = "載入資料中...";
+"ql.sqlite.errorLoading" = "載入資料時發生錯誤";
+"ql.sqlite.noData" = "無資料";
+"ql.sqlite.tableEmpty" = "此資料表為空";
+"ql.sqlite.selectTable" = "選擇資料表";
+"ql.sqlite.selectTableHint" = "從側邊欄選擇資料表以預覽資料";
+"ql.sqlite.rowsOf" = "%@ / %@ 列";
+"ql.sqlite.pageSize" = "頁面大小：%@ bytes";
+
+/* SQL Text Preview */
+"ql.sql.title" = "SQL 腳本";
+"ql.sql.noData" = "無資料";
+"ql.sql.noInsertStatements" = "未找到此資料表的 INSERT 語句";
+"ql.sql.selectTable" = "選擇資料表";
+"ql.sql.selectTableHint" = "從側邊欄選擇資料表";
+"ql.sql.rowsMax" = "%d 列（最多 100）";
+"ql.sql.encoding" = "UTF-8";
+
+/* View Mode Tabs */
+"ql.viewMode.schema" = "結構";
+"ql.viewMode.data" = "資料";
+"ql.viewMode.source" = "原始碼";
+
+/* Stats */
+"ql.stats.lines" = "行";
+"ql.stats.statements" = "語句";
+
+/* Errors */
+"ql.error.fileNotFound" = "找不到檔案";
+"ql.error.fileNotFoundMessage" = "找不到該檔案。";
+"ql.error.unsupportedFormat" = "不支援的格式";
+"ql.error.unsupportedFormatMessage" = "FinderHover Quick Look 不支援此檔案類型。";
+"ql.error.databaseError" = "資料庫錯誤";
+"ql.error.error" = "錯誤";
+"ql.error.readingFile" = "讀取檔案時發生錯誤";

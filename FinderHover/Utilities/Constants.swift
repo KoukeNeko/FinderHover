@@ -666,6 +666,19 @@ enum Constants {
         /// Default show Git tag count
         static let showGitTagCount: Bool = true
 
+        // MARK: - Preview Settings Defaults (Quick Look Extension)
+        /// Default max rows to show in SQLite preview
+        static let previewSQLiteMaxRows: Int = 100
+
+        /// Default SQL syntax highlighting enabled
+        static let previewSQLSyntaxHighlight: Bool = true
+
+        /// Default SQL line numbers enabled
+        static let previewSQLLineNumbers: Bool = true
+
+        /// Default view mode for SQL preview (schema, data, source)
+        static let previewDefaultViewMode: String = "data"
+
         /// Default follow cursor
         static let followCursor: Bool = true
 

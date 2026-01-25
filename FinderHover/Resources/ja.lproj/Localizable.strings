@@ -9,8 +9,30 @@
 "settings.tab.behavior" = "動作";
 "settings.tab.appearance" = "外観";
 "settings.tab.display" = "表示";
+"settings.tab.preview" = "プレビュー";
 "settings.tab.permissions" = "アクセス許可";
 "settings.tab.about" = "情報";
+
+/* Settings - Preview */
+"settings.preview.title" = "プレビュー";
+"settings.preview.quickLook" = "Quick Look 拡張機能";
+"settings.preview.quickLook.description" = "macOS Quick Look を拡張し、スペースキーでより多くのファイル形式をプレビューできます。";
+"settings.preview.quickLook.supported" = "Quick Look 拡張機能が有効";
+"settings.preview.quickLook.formats" = "対応: SQLite データベース (.db, .sqlite, .sqlite3)、SQL スクリプト (.sql)";
+"settings.preview.quickLook.refresh" = "更新";
+"settings.preview.sqlite" = "SQLite プレビュー";
+"settings.preview.sqlite.maxRows" = "最大表示行数";
+"settings.preview.sqlite.maxRows.description" = "パフォーマンスのため、テーブルプレビューで表示する行数を制限します。";
+"settings.preview.sql" = "SQL テキストプレビュー";
+"settings.preview.sql.syntaxHighlight" = "シンタックスハイライト";
+"settings.preview.sql.syntaxHighlight.description" = "SQL キーワード、文字列、コメントを色分け表示します。";
+"settings.preview.sql.lineNumbers" = "行番号";
+"settings.preview.sql.lineNumbers.description" = "ソースビューに行番号を表示します。";
+"settings.preview.defaultView" = "デフォルト表示モード";
+"settings.preview.defaultView.description" = "SQL ファイルのプレビュー時に最初に表示するビューを選択します。";
+"settings.preview.viewMode.schema" = "スキーマ";
+"settings.preview.viewMode.data" = "データ";
+"settings.preview.viewMode.source" = "ソース";
 
 /* Settings - Behavior */
 "settings.behavior.title" = "動作";

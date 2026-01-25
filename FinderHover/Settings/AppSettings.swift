@@ -184,6 +184,20 @@ class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(compactMode, forKey: "compactMode") }
     }
 
+    // Preview settings (Quick Look Extension)
+    @Published var previewSQLiteMaxRows: Int {
+        didSet { UserDefaults.standard.set(previewSQLiteMaxRows, forKey: "previewSQLiteMaxRows") }
+    }
+    @Published var previewSQLSyntaxHighlight: Bool {
+        didSet { UserDefaults.standard.set(previewSQLSyntaxHighlight, forKey: "previewSQLSyntaxHighlight") }
+    }
+    @Published var previewSQLLineNumbers: Bool {
+        didSet { UserDefaults.standard.set(previewSQLLineNumbers, forKey: "previewSQLLineNumbers") }
+    }
+    @Published var previewDefaultViewMode: String {
+        didSet { UserDefaults.standard.set(previewDefaultViewMode, forKey: "previewDefaultViewMode") }
+    }
+
     // Information display
     @Published var showCreationDate: Bool {
         didSet { UserDefaults.standard.set(showCreationDate, forKey: "showCreationDate") }
@@ -1063,6 +1077,13 @@ class AppSettings: ObservableObject {
         self.fontSize = UserDefaults.standard.object(forKey: "fontSize") as? Double ?? Constants.Defaults.fontSize
         self.enableBlur = UserDefaults.standard.object(forKey: "enableBlur") as? Bool ?? Constants.Defaults.enableBlur
         self.compactMode = UserDefaults.standard.object(forKey: "compactMode") as? Bool ?? Constants.Defaults.compactMode
+
+        // Preview settings
+        self.previewSQLiteMaxRows = UserDefaults.standard.object(forKey: "previewSQLiteMaxRows") as? Int ?? Constants.Defaults.previewSQLiteMaxRows
+        self.previewSQLSyntaxHighlight = UserDefaults.standard.object(forKey: "previewSQLSyntaxHighlight") as? Bool ?? Constants.Defaults.previewSQLSyntaxHighlight
+        self.previewSQLLineNumbers = UserDefaults.standard.object(forKey: "previewSQLLineNumbers") as? Bool ?? Constants.Defaults.previewSQLLineNumbers
+        self.previewDefaultViewMode = UserDefaults.standard.object(forKey: "previewDefaultViewMode") as? String ?? Constants.Defaults.previewDefaultViewMode
+
         self.showCreationDate = UserDefaults.standard.object(forKey: "showCreationDate") as? Bool ?? Constants.Defaults.showCreationDate
         self.showModificationDate = UserDefaults.standard.object(forKey: "showModificationDate") as? Bool ?? Constants.Defaults.showModificationDate
         self.showFileSize = UserDefaults.standard.object(forKey: "showFileSize") as? Bool ?? Constants.Defaults.showFileSize
@@ -1483,5 +1504,16 @@ class AppSettings: ObservableObject {
         uiStyle = .macOS
         preferredLanguage = .system
         includePrereleases = Constants.Defaults.includePrereleases
+
+        // Reset Preview settings
+        resetPreviewSettings()
+    }
+
+    /// Reset only preview-related settings
+    func resetPreviewSettings() {
+        previewSQLiteMaxRows = Constants.Defaults.previewSQLiteMaxRows
+        previewSQLSyntaxHighlight = Constants.Defaults.previewSQLSyntaxHighlight
+        previewSQLLineNumbers = Constants.Defaults.previewSQLLineNumbers
+        previewDefaultViewMode = Constants.Defaults.previewDefaultViewMode
     }
 }

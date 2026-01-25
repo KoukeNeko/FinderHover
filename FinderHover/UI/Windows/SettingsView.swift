@@ -12,6 +12,7 @@ enum SettingsPage: String, CaseIterable, Identifiable {
     case behavior
     case appearance
     case display
+    case preview
     case permissions
     case about
 
@@ -22,6 +23,7 @@ enum SettingsPage: String, CaseIterable, Identifiable {
         case .behavior: return "settings.tab.behavior".localized
         case .appearance: return "settings.tab.appearance".localized
         case .display: return "settings.tab.display".localized
+        case .preview: return "settings.tab.preview".localized
         case .permissions: return "settings.tab.permissions".localized
         case .about: return "settings.tab.about".localized
         }
@@ -32,6 +34,7 @@ enum SettingsPage: String, CaseIterable, Identifiable {
         case .behavior: return "hand.point.up.left.fill"
         case .appearance: return "paintbrush.fill"
         case .display: return "list.bullet"
+        case .preview: return "eye.fill"
         case .permissions: return "lock.shield.fill"
         case .about: return "info.circle.fill"
         }
@@ -72,6 +75,8 @@ struct SettingsView: View {
                     AppearanceSettingsView(settings: settings)
                 case .display:
                     DisplaySettingsView(settings: settings)
+                case .preview:
+                    PreviewSettingsView(settings: settings)
                 case .permissions:
                     PermissionsSettingsView()
                 case .about:

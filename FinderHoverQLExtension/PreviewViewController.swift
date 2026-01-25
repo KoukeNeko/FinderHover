@@ -41,8 +41,8 @@ class PreviewViewController: NSViewController, QLPreviewingController {
         // Verify file exists
         guard FileManager.default.fileExists(atPath: url.path) else {
             await showError(
-                title: "File Not Found",
-                message: "The file could not be found."
+                title: NSLocalizedString("ql.error.fileNotFound", comment: ""),
+                message: NSLocalizedString("ql.error.fileNotFoundMessage", comment: "")
             )
             throw PreviewError.fileNotFound
         }
@@ -63,8 +63,8 @@ class PreviewViewController: NSViewController, QLPreviewingController {
         } else {
             // Unsupported file type
             await showError(
-                title: "Unsupported Format",
-                message: "This file type is not supported by FinderHover Quick Look."
+                title: NSLocalizedString("ql.error.unsupportedFormat", comment: ""),
+                message: NSLocalizedString("ql.error.unsupportedFormatMessage", comment: "")
             )
             throw PreviewError.unsupportedFormat
         }
@@ -101,13 +101,13 @@ class PreviewViewController: NSViewController, QLPreviewingController {
 
         } catch let error as SQLiteError {
             await showError(
-                title: "Database Error",
+                title: NSLocalizedString("ql.error.databaseError", comment: ""),
                 message: error.errorDescription ?? "Unknown error"
             )
             throw error
         } catch {
             await showError(
-                title: "Error",
+                title: NSLocalizedString("ql.error.error", comment: ""),
                 message: error.localizedDescription
             )
             throw error
@@ -156,7 +156,7 @@ class PreviewViewController: NSViewController, QLPreviewingController {
 
         } catch {
             await showError(
-                title: "Error Reading File",
+                title: NSLocalizedString("ql.error.readingFile", comment: ""),
                 message: error.localizedDescription
             )
             throw error

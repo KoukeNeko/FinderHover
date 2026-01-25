@@ -118,7 +118,7 @@ struct SQLitePreviewView: View {
                     .font(.headline)
                     .lineLimit(1)
 
-                Text("SQLite Database · \(viewModel.stats.formattedFileSize)")
+                Text("\(NSLocalizedString("ql.sqlite.title", comment: "")) · \(viewModel.stats.formattedFileSize)")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -144,7 +144,7 @@ struct SQLitePreviewView: View {
             VStack(alignment: .leading, spacing: 16) {
                 // Tables section
                 schemaSection(
-                    title: "Tables",
+                    title: NSLocalizedString("ql.common.tables", comment: ""),
                     icon: "tablecells",
                     count: viewModel.tables.filter { $0.type == "table" }.count
                 ) {
@@ -156,7 +156,7 @@ struct SQLitePreviewView: View {
                 // Views section
                 if viewModel.tables.contains(where: { $0.type == "view" }) {
                     schemaSection(
-                        title: "Views",
+                        title: NSLocalizedString("ql.common.views", comment: ""),
                         icon: "eye",
                         count: viewModel.tables.filter { $0.type == "view" }.count
                     ) {
@@ -169,7 +169,7 @@ struct SQLitePreviewView: View {
                 // Indexes section
                 if !viewModel.indexes.isEmpty {
                     schemaSection(
-                        title: "Indexes",
+                        title: NSLocalizedString("ql.common.indexes", comment: ""),
                         icon: "list.number",
                         count: viewModel.indexes.count
                     ) {
@@ -182,7 +182,7 @@ struct SQLitePreviewView: View {
                 // Triggers section
                 if !viewModel.triggers.isEmpty {
                     schemaSection(
-                        title: "Triggers",
+                        title: NSLocalizedString("ql.common.triggers", comment: ""),
                         icon: "bolt",
                         count: viewModel.triggers.count
                     ) {
@@ -239,7 +239,7 @@ struct SQLitePreviewView: View {
                         .font(.system(size: 12))
                         .lineLimit(1)
 
-                    Text("\(table.columns.count) cols · \(formatNumber(table.rowCount)) rows")
+                    Text("\(table.columns.count) \(NSLocalizedString("ql.common.cols", comment: "")) · \(formatNumber(table.rowCount)) \(NSLocalizedString("ql.common.rows", comment: ""))")
                         .font(.system(size: 10))
                         .foregroundColor(viewModel.selectedTable?.id == table.id ? .white.opacity(0.8) : .secondary)
                 }
@@ -269,7 +269,7 @@ struct SQLitePreviewView: View {
                     .font(.system(size: 12))
                     .lineLimit(1)
 
-                Text("on \(index.tableName)")
+                Text("\(NSLocalizedString("ql.common.on", comment: "")) \(index.tableName)")
                     .font(.system(size: 10))
                     .foregroundColor(.secondary)
             }
@@ -277,7 +277,7 @@ struct SQLitePreviewView: View {
             Spacer()
 
             if index.isUnique {
-                Text("UNIQUE")
+                Text(NSLocalizedString("ql.constraint.unique", comment: ""))
                     .font(.system(size: 9))
                     .padding(.horizontal, 4)
                     .padding(.vertical, 2)
@@ -319,7 +319,7 @@ struct SQLitePreviewView: View {
             if let table = viewModel.selectedTable {
                 // Table header
                 HStack {
-                    Text("Table: \(table.name)")
+                    Text("\(NSLocalizedString("ql.common.table", comment: "")): \(table.name)")
                         .font(.headline)
 
                     Spacer()
@@ -358,7 +358,7 @@ struct SQLitePreviewView: View {
     private var loadingView: some View {
         VStack(spacing: 12) {
             ProgressView()
-            Text("Loading data...")
+            Text(NSLocalizedString("ql.sqlite.loading", comment: ""))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -371,7 +371,7 @@ struct SQLitePreviewView: View {
                 .font(.title)
                 .foregroundColor(.orange)
 
-            Text("Error loading data")
+            Text(NSLocalizedString("ql.sqlite.errorLoading", comment: ""))
                 .font(.headline)
 
             Text(message)
@@ -387,10 +387,10 @@ struct SQLitePreviewView: View {
                 .font(.title)
                 .foregroundColor(.secondary)
 
-            Text("No Data")
+            Text(NSLocalizedString("ql.sqlite.noData", comment: ""))
                 .font(.headline)
 
-            Text("This table is empty")
+            Text(NSLocalizedString("ql.sqlite.tableEmpty", comment: ""))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -403,11 +403,11 @@ struct SQLitePreviewView: View {
                 .font(.title)
                 .foregroundColor(.secondary)
 
-            Text("Select a table")
+            Text(NSLocalizedString("ql.sqlite.selectTable", comment: ""))
                 .font(.headline)
                 .foregroundColor(.secondary)
 
-            Text("Choose a table from the sidebar to preview its data")
+            Text(NSLocalizedString("ql.sqlite.selectTableHint", comment: ""))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
@@ -483,18 +483,18 @@ struct SQLitePreviewView: View {
 
     private var footerView: some View {
         HStack(spacing: 16) {
-            statsItem(icon: "tablecells", value: "\(viewModel.stats.tableCount)", label: "tables")
+            statsItem(icon: "tablecells", value: "\(viewModel.stats.tableCount)", label: NSLocalizedString("ql.common.tables", comment: "").lowercased())
 
             if viewModel.stats.viewCount > 0 {
-                statsItem(icon: "eye", value: "\(viewModel.stats.viewCount)", label: "views")
+                statsItem(icon: "eye", value: "\(viewModel.stats.viewCount)", label: NSLocalizedString("ql.common.views", comment: "").lowercased())
             }
 
             if viewModel.stats.indexCount > 0 {
-                statsItem(icon: "list.number", value: "\(viewModel.stats.indexCount)", label: "indexes")
+                statsItem(icon: "list.number", value: "\(viewModel.stats.indexCount)", label: NSLocalizedString("ql.common.indexes", comment: "").lowercased())
             }
 
             if viewModel.stats.triggerCount > 0 {
-                statsItem(icon: "bolt", value: "\(viewModel.stats.triggerCount)", label: "triggers")
+                statsItem(icon: "bolt", value: "\(viewModel.stats.triggerCount)", label: NSLocalizedString("ql.common.triggers", comment: "").lowercased())
             }
 
             Spacer()
@@ -506,7 +506,7 @@ struct SQLitePreviewView: View {
             }
 
             if let pageSize = viewModel.stats.pageSize {
-                Text("Page: \(pageSize) bytes")
+                Text(String(format: NSLocalizedString("ql.sqlite.pageSize", comment: ""), pageSize))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
