@@ -478,30 +478,86 @@ body::before {
     display: block;
 }
 
-/* CTA Section */
-.cta-section {
-    padding: 120px 24px;
-    text-align: center;
-    background: linear-gradient(180deg, var(--color-background) 0%, var(--color-background-secondary) 100%);
+/* FAQ Section - Apple Style */
+.faq-section {
+    padding: 100px 24px;
+    background: var(--color-background);
 }
 
-.cta-section h2 {
-    font-size: clamp(32px, 5vw, 48px);
+.faq-headline {
+    font-size: clamp(40px, 6vw, 56px);
     font-weight: 700;
-    margin-bottom: 16px;
+    text-align: center;
+    margin-bottom: 60px;
+    letter-spacing: -0.02em;
 }
 
-.cta-section p {
-    font-size: 21px;
-    color: var(--color-text-secondary);
-    margin-bottom: 40px;
+.faq-list {
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-.cta-buttons {
+.faq-item {
+    border-top: 1px solid var(--color-border);
+}
+
+.faq-item:last-child {
+    border-bottom: 1px solid var(--color-border);
+}
+
+.faq-item summary {
+    padding: 24px 0;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
     display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--color-text);
+    transition: color var(--transition-default);
+}
+
+.faq-item summary::-webkit-details-marker {
+    display: none;
+}
+
+.faq-item summary::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-left: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2386868b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform var(--transition-default);
+}
+
+.faq-item[open] summary {
+    color: var(--color-accent);
+}
+
+.faq-item[open] summary::after {
+    transform: rotate(180deg);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%230071e3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+.faq-item p {
+    padding: 0 0 24px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+}
+
+@media (prefers-color-scheme: dark) {
+    .faq-item summary::after {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23a1a1a6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    }
+
+    .faq-item[open] summary::after {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%232997ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    }
 }
 
 /* Footer */
