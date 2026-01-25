@@ -466,6 +466,8 @@ body::before {
   gap: 16px;
   padding-right: 16px;
   animation: marquee-scroll 60s linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .marquee-row[data-direction="right"] .marquee-content {
@@ -512,16 +514,13 @@ body::before {
   background: rgba(255, 255, 255, 0.06);
   color: var(--color-text-secondary);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
 }
 
 .format-tag:hover,
 .format-info:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.15);
-  transform: scale(1.02);
 }
 
 .format-tag {
