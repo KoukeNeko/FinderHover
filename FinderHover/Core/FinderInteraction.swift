@@ -298,6 +298,69 @@ class FinderInteraction {
         return nil
     }
 
+    /// Checks if Quick Look preview is currently visible
+    static func isQuickLookVisible() -> Bool {
+        // Quick Look UI Service bundle identifier
+        let quickLookBundleIDs = [
+            "com.apple.quicklook.QuickLookUIService",
+            "com.apple.QuickLookUIService",
+            "com.apple.quicklook.qlmanage"
+        ]
+
+        // Method 1: Check if Quick Look process has visible windows using CGWindowList
+        if let windowList = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID) as? [[String: Any]] {
+            for window in windowList {
+                if let ownerName = window[kCGWindowOwnerName as String] as? String {
+                    // Quick Look windows have owner name containing "QuickLook"
+                    if ownerName.contains("QuickLook") || ownerName.contains("qlmanage") {
+                        // Check if window has reasonable size (not just a tiny helper window)
+                        if let bounds = window[kCGWindowBounds as String] as? [String: CGFloat],
+                           let width = bounds["Width"],
+                           let height = bounds["Height"],
+                           width > 100 && height > 100 {
+                            return true
+                        }
+                    }
+                }
+
+                // Also check by bundle identifier if available
+                if let bundleID = window[kCGWindowOwnerPID as String] as? pid_t {
+                    if let app = NSRunningApplication(processIdentifier: bundleID),
+                       let appBundleID = app.bundleIdentifier,
+                       quickLookBundleIDs.contains(appBundleID) {
+                        return true
+                    }
+                }
+            }
+        }
+
+        // Method 2: Check running applications
+        for bundleID in quickLookBundleIDs {
+            let apps = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID)
+            for app in apps {
+                // Check if the app is not hidden and has windows
+                if !app.isHidden && !app.isTerminated {
+                    // Quick Look is running - now verify it has visible windows
+                    // by checking CGWindowList for this specific PID
+                    if let windowList = CGWindowListCopyWindowInfo([.optionOnScreenOnly], kCGNullWindowID) as? [[String: Any]] {
+                        for window in windowList {
+                            if let windowPID = window[kCGWindowOwnerPID as String] as? pid_t,
+                               windowPID == app.processIdentifier {
+                                // Has at least one on-screen window
+                                if let layer = window[kCGWindowLayer as String] as? Int,
+                                   layer >= 0 {
+                                    return true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return false
+    }
+
     /// Gets the path of the current Finder window using Accessibility API
     private static func getCurrentFinderWindowPath() -> String? {
         guard let finderApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.finder").first else {

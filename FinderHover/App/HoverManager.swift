@@ -144,6 +144,14 @@ class HoverManager: ObservableObject {
         // If window is showing and we have current file info
         guard let currentInfo = currentFileInfo else { return }
 
+        // Check if Quick Look preview is visible - hide immediately
+        if FinderInteraction.isQuickLookVisible() {
+            hideHoverWindow()
+            currentFileInfo = nil
+            invalidateDisplayTimer()
+            return
+        }
+
         // Check if user is renaming - hide immediately
         if FinderInteraction.isRenamingFile() {
             hideHoverWindow()
@@ -185,6 +193,9 @@ class HoverManager: ObservableObject {
         // Don't show hover window while dragging
         guard !mouseTracker.isDragging else { return }
 
+        // Don't show hover window if Quick Look preview is visible
+        guard !FinderInteraction.isQuickLookVisible() else { return }
+
         // Try to get file path at current location
         // This will return nil if user is renaming
         if let filePath = FinderInteraction.getFileAtMousePosition(location),
@@ -224,11 +235,18 @@ class HoverManager: ObservableObject {
         // Stop existing timer
         invalidateRenamingTimer()
 
-        // Check periodically if user is renaming
+        // Check periodically if user is renaming or Quick Look is visible
         renamingCheckTimer = Timer.scheduledTimer(
             withTimeInterval: Constants.MouseTracking.renamingCheckInterval,
             repeats: true
         ) { [weak self] _ in
+            // Hide if Quick Look preview is shown
+            if FinderInteraction.isQuickLookVisible() {
+                self?.hideHoverWindow()
+                self?.currentFileInfo = nil
+                return
+            }
+            // Hide if user is renaming
             if FinderInteraction.isRenamingFile() {
                 self?.hideHoverWindow()
                 self?.currentFileInfo = nil
