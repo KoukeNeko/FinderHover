@@ -8,10 +8,15 @@
       name="description"
       content="在 Finder 中懸停即可顯示豐富的檔案資訊，支援 50+ 種檔案格式的深度中繼資料解析。"
     />
-    <link rel="stylesheet" href="style.css" />
     <link rel="icon" type="image/png" href="assets/icon.png" />
-    <script src="components.js" defer></script>
-    <script src="i18n.js" defer></script>
+    <script>
+      (function() {
+        var v = Date.now();
+        document.write('<link rel="stylesheet" href="style.css?v=' + v + '" />');
+        document.write('<script src="components.js?v=' + v + '" defer><\/script>');
+        document.write('<script src="i18n.js?v=' + v + '" defer><\/script>');
+      })();
+    </script>
   </head>
   <body>
     <!-- Navigation -->

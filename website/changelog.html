@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>更新日誌 - FinderHover</title>
     <meta name="description" content="FinderHover 版本更新歷史與變更記錄。" />
-    <link rel="stylesheet" href="style.css" />
     <link rel="icon" type="image/png" href="assets/icon.png" />
-    <script src="components.js" defer></script>
-    <script src="i18n.js" defer></script>
+    <script>
+      (function() {
+        var v = Date.now();
+        document.write('<link rel="stylesheet" href="style.css?v=' + v + '" />');
+        document.write('<script src="components.js?v=' + v + '" defer><\/script>');
+        document.write('<script src="i18n.js?v=' + v + '" defer><\/script>');
+      })();
+    </script>
   </head>
   <body>
     <!-- Navigation -->
