@@ -1671,12 +1671,8 @@ struct FileInfo {
             "scss": "SCSS", "sass": "Sass",
             "less": "Less",
             "vue": "Vue",
-            // Data/Config
-            "json": "JSON",
-            "yaml": "YAML", "yml": "YAML",
+            // Data/Config (XML only - JSON/YAML/TOML/INI use config metadata instead)
             "xml": "XML",
-            "toml": "TOML",
-            "ini": "INI",
             // Other
             "md": "Markdown", "markdown": "Markdown",
             "sql": "SQL",
