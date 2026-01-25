@@ -856,6 +856,43 @@ body::before {
     color: #ff9500;
 }
 
+.download-prereq {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-border);
+}
+
+.download-prereq p {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.download-prereq .download-code {
+    margin-bottom: 12px;
+}
+
+.download-prereq .download-code code {
+    font-size: 11px;
+}
+
+.download-prereq-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: opacity var(--transition-default);
+}
+
+.download-prereq-link:hover {
+    opacity: 0.8;
+}
+
 /* Requirements Section */
 .requirements-section {
     padding: 80px 24px;
