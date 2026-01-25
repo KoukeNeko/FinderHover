@@ -947,12 +947,12 @@ body::before {
     justify-content: space-between;
     align-items: center;
   }
-  
+
   /* Mobile: Show full name, ensure flex handles alignment */
   .lang-text-mobile {
     display: inline;
   }
-  
+
   .lang-text-desktop {
     display: none;
   }
@@ -981,10 +981,10 @@ body::before {
   /* Actually flex logic: ::before is first child, then span content, then ::after */
   /* ::before has margin-right: auto -> Pushes everything else to right end */
   /* ::after is flex item too */
-  
+
   /* Reset lang-text-mobile specific styles */
   .lang-text-mobile {
-      margin-right: 10px; /* Space before arrow */
+    margin-right: 10px; /* Space before arrow */
   }
 
   /* Update dark mode icon */

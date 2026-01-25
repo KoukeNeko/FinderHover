@@ -170,7 +170,7 @@ const i18n = {
         if (current) {
             const desktopSpan = current.querySelector('.lang-text-desktop');
             const mobileSpan = current.querySelector('.lang-text-mobile');
-            
+
             if (desktopSpan && mobileSpan) {
                 desktopSpan.textContent = langNames[this.currentLang];
                 mobileSpan.textContent = langFullNames[this.currentLang];
