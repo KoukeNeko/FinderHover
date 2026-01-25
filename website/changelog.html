@@ -67,35 +67,30 @@
       }
 
       function parseChangelog(markdown) {
-        // Split by version headers (## [x.x.x])
+        // Split by version headers (## Version x.x.x)
         const versionRegex =
-          /^## \[(\d+\.\d+\.\d+)\](?: - (\d{4}-\d{2}-\d{2}))?/gm;
+          /^## Version (\d+\.\d+\.\d+)(?: \(Current\))?/gm;
         const versions = [];
-        let match;
-        let lastIndex = 0;
 
         // Find all version headers
         const matches = [...markdown.matchAll(versionRegex)];
 
         matches.forEach((match, i) => {
           const version = match[1];
-          const date = match[2] || "";
+          const isCurrent = match[0].includes("(Current)");
           const startIndex = match.index + match[0].length;
           const endIndex = matches[i + 1]?.index || markdown.length;
           const content = markdown.slice(startIndex, endIndex).trim();
 
-          versions.push({ version, date, content });
+          versions.push({ version, isCurrent, content });
         });
-
-        // Get the latest version from Info.plist or first in list
-        const latestVersion = versions[0]?.version;
 
         // Convert to HTML
         let html = versions
           .map((v, index) => {
             const isMajor =
               v.version.endsWith(".0") && !v.version.endsWith(".0.0");
-            const isLatest = index === 0;
+            const isLatest = index === 0 || v.isCurrent;
 
             return `
             <article class="changelog-entry${isMajor ? " major" : ""}">
@@ -103,7 +98,6 @@
                 <span class="changelog-version">${v.version}</span>
                 ${isLatest ? '<span class="changelog-badge current">目前版本</span>' : ""}
                 ${isMajor && !isLatest ? '<span class="changelog-badge major">重大更新</span>' : ""}
-                ${v.date ? `<span class="changelog-date">${v.date}</span>` : ""}
               </div>
               <div class="changelog-content">
                 ${parseMarkdownContent(v.content)}
@@ -216,12 +210,6 @@
 
       .changelog-error p {
         margin-bottom: 1rem;
-      }
-
-      .changelog-date {
-        font-size: 0.85rem;
-        color: var(--color-text-secondary);
-        margin-left: auto;
       }
     </style>
   </body>
