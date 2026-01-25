@@ -19,6 +19,12 @@ All notable changes to FinderHover will be documented in this file.
 - Added translations for all new metadata types (HTML, Markdown, Config, PSD, Executable, App Bundle, SQLite, Git)
 - Full localization coverage for English, Traditional Chinese, and Japanese
 
+#### Code Signing Fix
+
+- Fixed accessibility permission not being recognized after app updates
+- Ad-hoc sign with correct bundle identifier (`dev.koukeneko.FinderHover`) for TCC compatibility
+- macOS TCC now properly tracks permissions across app updates
+
 ## Version 1.4.4
 
 ### 🐛 Bug Fixes
