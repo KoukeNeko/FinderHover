@@ -654,34 +654,66 @@
         </p>
       </div>
 
-      <div class="gallery-grid">
-        <div class="gallery-item">
-          <img
-            src="https://github.com/user-attachments/assets/fe969256-a07d-4db6-8715-a3bb3226782b"
-            alt="螢幕截圖 1"
-            loading="lazy"
-          />
-        </div>
-        <div class="gallery-item">
-          <img
-            src="https://github.com/user-attachments/assets/f492dc51-9fd8-49f2-b854-d9fc4ac026a6"
-            alt="螢幕截圖 2"
-            loading="lazy"
-          />
-        </div>
-        <div class="gallery-item">
-          <img
-            src="https://github.com/user-attachments/assets/dc04ba05-2bcb-4308-b0cc-bd5ed2259d07"
-            alt="螢幕截圖 3"
-            loading="lazy"
-          />
-        </div>
-        <div class="gallery-item">
-          <img
-            src="https://github.com/user-attachments/assets/140accdd-6034-4b2d-b4d9-ccc55a28586c"
-            alt="螢幕截圖 4"
-            loading="lazy"
-          />
+      <div class="gallery-marquee">
+        <div class="gallery-track">
+          <!-- First set of images -->
+          <div class="gallery-card">
+            <img
+              src="https://github.com/user-attachments/assets/fe969256-a07d-4db6-8715-a3bb3226782b"
+              alt="螢幕截圖 1"
+              loading="lazy"
+            />
+          </div>
+          <div class="gallery-card">
+            <img
+              src="https://github.com/user-attachments/assets/f492dc51-9fd8-49f2-b854-d9fc4ac026a6"
+              alt="螢幕截圖 2"
+              loading="lazy"
+            />
+          </div>
+          <div class="gallery-card">
+            <img
+              src="https://github.com/user-attachments/assets/dc04ba05-2bcb-4308-b0cc-bd5ed2259d07"
+              alt="螢幕截圖 3"
+              loading="lazy"
+            />
+          </div>
+          <div class="gallery-card">
+            <img
+              src="https://github.com/user-attachments/assets/140accdd-6034-4b2d-b4d9-ccc55a28586c"
+              alt="螢幕截圖 4"
+              loading="lazy"
+            />
+          </div>
+          <!-- Duplicate set for seamless loop -->
+          <div class="gallery-card">
+            <img
+              src="https://github.com/user-attachments/assets/fe969256-a07d-4db6-8715-a3bb3226782b"
+              alt="螢幕截圖 1"
+              loading="lazy"
+            />
+          </div>
+          <div class="gallery-card">
+            <img
+              src="https://github.com/user-attachments/assets/f492dc51-9fd8-49f2-b854-d9fc4ac026a6"
+              alt="螢幕截圖 2"
+              loading="lazy"
+            />
+          </div>
+          <div class="gallery-card">
+            <img
+              src="https://github.com/user-attachments/assets/dc04ba05-2bcb-4308-b0cc-bd5ed2259d07"
+              alt="螢幕截圖 3"
+              loading="lazy"
+            />
+          </div>
+          <div class="gallery-card">
+            <img
+              src="https://github.com/user-attachments/assets/140accdd-6034-4b2d-b4d9-ccc55a28586c"
+              alt="螢幕截圖 4"
+              loading="lazy"
+            />
+          </div>
         </div>
       </div>
     </section>
@@ -762,7 +794,7 @@
       }, observerOptions);
 
       document
-        .querySelectorAll(".feature-item, .metadata-card, .gallery-item")
+        .querySelectorAll(".feature-item, .metadata-card")
         .forEach((el) => {
           observer.observe(el);
         });

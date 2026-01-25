@@ -700,44 +700,81 @@ body::before {
   gap: 12px;
 }
 
-/* Gallery Section */
+/* Gallery Section - App Store Style Marquee */
 .gallery-section {
-  padding: 100px 24px;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-}
-
-.gallery-item {
-  border-radius: 16px;
+  padding: 100px 0;
   overflow: hidden;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
-.gallery-item.visible {
-  opacity: 1;
-  transform: translateY(0);
+.gallery-section .section-intro {
+  padding: 0 24px;
+  max-width: 1000px;
+  margin: 0 auto 48px;
 }
 
-.gallery-item:hover {
-  transform: scale(1.02);
-  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.2);
+.gallery-marquee {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
 }
 
-.gallery-item img {
+.gallery-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  animation: gallery-scroll 40s linear infinite;
+  will-change: transform;
+}
+
+.gallery-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes gallery-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.gallery-card {
+  flex-shrink: 0;
+  width: 500px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--color-card-bg);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+    box-shadow 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.gallery-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.gallery-card img {
   width: 100%;
   height: auto;
-  max-height: 400px;
-  object-fit: cover;
   display: block;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
 }
 
 /* FAQ Section - Apple Style */
@@ -1094,8 +1131,12 @@ body::before {
     gap: 6px;
   }
 
-  .gallery-grid {
-    grid-template-columns: 1fr;
+  .gallery-card {
+    width: 320px;
+  }
+
+  .gallery-track {
+    gap: 16px;
   }
 
   .features-grid {
