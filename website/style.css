@@ -431,38 +431,21 @@ body::before {
   width: 100%;
   overflow: hidden;
   position: relative;
-}
-
-/* Elegant edge fade - Apple style */
-.marquee-container::before,
-.marquee-container::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 20%;
-  z-index: 10;
-  pointer-events: none;
-}
-
-.marquee-container::before {
-  left: 0;
-  background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
-}
-
-.marquee-container::after {
-  right: 0;
-  background: linear-gradient(to left, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
-}
-
-@media (prefers-color-scheme: dark) {
-  .marquee-container::before {
-    background: linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
-  }
-
-  .marquee-container::after {
-    background: linear-gradient(to left, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
-  }
+  /* Content fade using mask - no overlay needed */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 15%,
+    black 85%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 15%,
+    black 85%,
+    transparent 100%
+  );
 }
 
 .marquee-row {
