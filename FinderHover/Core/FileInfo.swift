@@ -11,6 +11,7 @@ import QuickLookThumbnailing
 import ImageIO
 import AVFoundation
 import PDFKit
+import SQLite3
 
 // MARK: - Process Timeout Helper
 
@@ -260,6 +261,159 @@ struct SubtitleMetadata {
     }
 }
 
+// MARK: - HTML Metadata Structure
+struct HTMLMetadata {
+    let title: String?
+    let description: String?
+    let charset: String?
+    let ogTitle: String?           // Open Graph title
+    let ogDescription: String?     // Open Graph description
+    let ogImage: String?           // Open Graph image URL
+    let twitterCard: String?       // Twitter card type
+    let keywords: String?
+    let author: String?
+    let language: String?
+
+    var hasData: Bool {
+        return title != nil || description != nil || charset != nil ||
+               ogTitle != nil || ogDescription != nil || ogImage != nil ||
+               twitterCard != nil || keywords != nil || author != nil || language != nil
+    }
+}
+
+// MARK: - Extended Image Metadata Structure (IPTC/XMP)
+struct ImageExtendedMetadata {
+    let copyright: String?
+    let creator: String?
+    let keywords: String?          // Comma-separated keywords
+    let rating: Int?               // 0-5 stars
+    let creatorTool: String?       // Application used to create
+    let description: String?
+    let headline: String?
+
+    var hasData: Bool {
+        return copyright != nil || creator != nil || keywords != nil ||
+               rating != nil || creatorTool != nil || description != nil || headline != nil
+    }
+}
+
+// MARK: - Markdown Metadata Structure
+struct MarkdownMetadata {
+    let hasFrontmatter: Bool?
+    let frontmatterFormat: String? // YAML, TOML, JSON
+    let title: String?             // From frontmatter or first H1
+    let wordCount: Int?
+    let headingCount: Int?
+    let linkCount: Int?
+    let imageCount: Int?
+    let codeBlockCount: Int?
+
+    var hasData: Bool {
+        return hasFrontmatter != nil || frontmatterFormat != nil || title != nil ||
+               wordCount != nil || headingCount != nil || linkCount != nil ||
+               imageCount != nil || codeBlockCount != nil
+    }
+}
+
+// MARK: - Config File Metadata Structure (JSON/YAML/TOML)
+struct ConfigMetadata {
+    let format: String?            // JSON, YAML, TOML
+    let isValid: Bool?
+    let keyCount: Int?
+    let maxDepth: Int?
+    let hasComments: Bool?         // YAML/TOML only
+    let encoding: String?
+
+    var hasData: Bool {
+        return format != nil || isValid != nil || keyCount != nil ||
+               maxDepth != nil || hasComments != nil || encoding != nil
+    }
+}
+
+// MARK: - PSD Metadata Structure
+struct PSDMetadata {
+    let layerCount: Int?
+    let colorMode: String?         // RGB, CMYK, Grayscale, etc.
+    let bitDepth: Int?
+    let resolution: String?        // e.g., "300 DPI"
+    let hasTransparency: Bool?
+    let dimensions: String?
+
+    var hasData: Bool {
+        return layerCount != nil || colorMode != nil || bitDepth != nil ||
+               resolution != nil || hasTransparency != nil || dimensions != nil
+    }
+}
+
+// MARK: - Executable Metadata Structure
+struct ExecutableMetadata {
+    let architecture: String?      // arm64, x86_64, Universal
+    let isCodeSigned: Bool?
+    let signingAuthority: String?
+    let minimumOS: String?
+    let sdkVersion: String?
+    let fileType: String?          // Mach-O, dylib, etc.
+
+    var hasData: Bool {
+        return architecture != nil || isCodeSigned != nil || signingAuthority != nil ||
+               minimumOS != nil || sdkVersion != nil || fileType != nil
+    }
+}
+
+// MARK: - App Bundle Metadata Structure
+struct AppBundleMetadata {
+    let bundleID: String?
+    let version: String?
+    let buildNumber: String?
+    let minimumOS: String?
+    let category: String?
+    let copyright: String?
+    let isCodeSigned: Bool?
+    let hasEntitlements: Bool?
+
+    var hasData: Bool {
+        return bundleID != nil || version != nil || buildNumber != nil ||
+               minimumOS != nil || category != nil || copyright != nil ||
+               isCodeSigned != nil || hasEntitlements != nil
+    }
+}
+
+// MARK: - SQLite Metadata Structure
+struct SQLiteMetadata {
+    let tableCount: Int?
+    let indexCount: Int?
+    let triggerCount: Int?
+    let viewCount: Int?
+    let totalRows: Int?
+    let schemaVersion: Int?
+    let pageSize: Int?
+    let encoding: String?
+
+    var hasData: Bool {
+        return tableCount != nil || indexCount != nil || triggerCount != nil ||
+               viewCount != nil || totalRows != nil || schemaVersion != nil ||
+               pageSize != nil || encoding != nil
+    }
+}
+
+// MARK: - Git Repository Metadata Structure
+struct GitMetadata {
+    let branchCount: Int?
+    let currentBranch: String?
+    let commitCount: Int?
+    let lastCommitDate: String?
+    let lastCommitMessage: String?
+    let remoteURL: String?
+    let hasUncommittedChanges: Bool?
+    let tagCount: Int?
+
+    var hasData: Bool {
+        return branchCount != nil || currentBranch != nil || commitCount != nil ||
+               lastCommitDate != nil || lastCommitMessage != nil || remoteURL != nil ||
+               hasUncommittedChanges != nil || tagCount != nil
+    }
+}
+
 struct FileInfo {
     let name: String
     let path: String
@@ -315,6 +469,33 @@ struct FileInfo {
 
     // Subtitle metadata
     let subtitleMetadata: SubtitleMetadata?
+
+    // HTML metadata
+    let htmlMetadata: HTMLMetadata?
+
+    // Extended image metadata (IPTC/XMP)
+    let imageExtendedMetadata: ImageExtendedMetadata?
+
+    // Markdown metadata
+    let markdownMetadata: MarkdownMetadata?
+
+    // Config file metadata (JSON/YAML/TOML)
+    let configMetadata: ConfigMetadata?
+
+    // PSD metadata
+    let psdMetadata: PSDMetadata?
+
+    // Executable metadata
+    let executableMetadata: ExecutableMetadata?
+
+    // App bundle metadata
+    let appBundleMetadata: AppBundleMetadata?
+
+    // SQLite metadata
+    let sqliteMetadata: SQLiteMetadata?
+
+    // Git repository metadata
+    let gitMetadata: GitMetadata?
 
     var formattedSize: String {
         ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
@@ -485,6 +666,33 @@ struct FileInfo {
             // Extract Subtitle metadata
             let subtitleMetadata = extractSubtitleMetadata(from: url)
 
+            // Extract HTML metadata
+            let htmlMetadata = extractHTMLMetadata(from: url)
+
+            // Extract extended image metadata (IPTC/XMP)
+            let imageExtendedMetadata = extractImageExtendedMetadata(from: url)
+
+            // Extract Markdown metadata
+            let markdownMetadata = extractMarkdownMetadata(from: url)
+
+            // Extract Config file metadata (JSON/YAML/TOML)
+            let configMetadata = extractConfigMetadata(from: url)
+
+            // Extract PSD metadata
+            let psdMetadata2 = extractPSDMetadata(from: url)
+
+            // Extract Executable metadata
+            let executableMetadata = extractExecutableMetadata(from: url)
+
+            // Extract App Bundle metadata
+            let appBundleMetadata = extractAppBundleMetadata(from: url)
+
+            // Extract SQLite metadata
+            let sqliteMetadata = extractSQLiteMetadata(from: url)
+
+            // Extract Git repository metadata
+            let gitMetadata = extractGitMetadata(from: url)
+
             return FileInfo(
                 name: url.lastPathComponent,
                 path: path,
@@ -513,7 +721,16 @@ struct FileInfo {
                 fontMetadata: fontMetadata,
                 diskImageMetadata: diskImageMetadata,
                 vectorGraphicsMetadata: vectorGraphicsMetadata,
-                subtitleMetadata: subtitleMetadata
+                subtitleMetadata: subtitleMetadata,
+                htmlMetadata: htmlMetadata,
+                imageExtendedMetadata: imageExtendedMetadata,
+                markdownMetadata: markdownMetadata,
+                configMetadata: configMetadata,
+                psdMetadata: psdMetadata2,
+                executableMetadata: executableMetadata,
+                appBundleMetadata: appBundleMetadata,
+                sqliteMetadata: sqliteMetadata,
+                gitMetadata: gitMetadata
             )
         } catch {
             Logger.error("Failed to read file attributes: \(path)", error: error, subsystem: .fileSystem)
@@ -1967,6 +2184,990 @@ struct FileInfo {
             frameRate: frameRate,
             hasFormatting: hasFormatting
         )
+    }
+
+    // MARK: - HTML Metadata Extraction
+    private static func extractHTMLMetadata(from url: URL) -> HTMLMetadata? {
+        let htmlExtensions = ["html", "htm", "xhtml"]
+        let ext = url.pathExtension.lowercased()
+        guard htmlExtensions.contains(ext) else { return nil }
+
+        // Limit file size to 64KB for performance
+        guard let attrs = try? FileManager.default.attributesOfItem(atPath: url.path),
+              let fileSize = attrs[.size] as? Int64,
+              fileSize < 64 * 1024 else {
+            return nil
+        }
+
+        guard let data = try? Data(contentsOf: url),
+              let content = String(data: data, encoding: .utf8) ?? String(data: data, encoding: .ascii) else {
+            return nil
+        }
+
+        var title: String?
+        var description: String?
+        var charset: String?
+        var ogTitle: String?
+        var ogDescription: String?
+        var ogImage: String?
+        var twitterCard: String?
+        var keywords: String?
+        var author: String?
+        var language: String?
+
+        // Extract <title>
+        if let titleRange = content.range(of: #"<title[^>]*>([^<]+)</title>"#, options: .regularExpression) {
+            let titleTag = String(content[titleRange])
+            if let innerRange = titleTag.range(of: #">([^<]+)<"#, options: .regularExpression) {
+                title = String(titleTag[innerRange]).trimmingCharacters(in: CharacterSet(charactersIn: "><"))
+            }
+        }
+
+        // Extract meta tags
+        let metaPattern = #"<meta\s+[^>]*>"#
+        if let regex = try? NSRegularExpression(pattern: metaPattern, options: .caseInsensitive) {
+            let matches = regex.matches(in: content, range: NSRange(content.startIndex..., in: content))
+            for match in matches {
+                if let range = Range(match.range, in: content) {
+                    let metaTag = String(content[range]).lowercased()
+                    let originalTag = String(content[range])
+
+                    // Helper to extract content attribute
+                    func extractContent(from tag: String) -> String? {
+                        if let contentRange = tag.range(of: #"content="([^"]+)""#, options: .regularExpression) {
+                            let contentStr = String(tag[contentRange])
+                            return contentStr.replacingOccurrences(of: "content=\"", with: "").replacingOccurrences(of: "\"", with: "")
+                        }
+                        if let contentRange = tag.range(of: #"content='([^']+)'"#, options: .regularExpression) {
+                            let contentStr = String(tag[contentRange])
+                            return contentStr.replacingOccurrences(of: "content='", with: "").replacingOccurrences(of: "'", with: "")
+                        }
+                        return nil
+                    }
+
+                    // Description
+                    if metaTag.contains("name=\"description\"") || metaTag.contains("name='description'") {
+                        description = extractContent(from: originalTag)
+                    }
+
+                    // Charset
+                    if metaTag.contains("charset=") {
+                        if let charsetRange = metaTag.range(of: #"charset="?([^"\s>]+)"?"#, options: .regularExpression) {
+                            charset = String(metaTag[charsetRange]).replacingOccurrences(of: "charset=", with: "").replacingOccurrences(of: "\"", with: "")
+                        }
+                    }
+
+                    // Keywords
+                    if metaTag.contains("name=\"keywords\"") || metaTag.contains("name='keywords'") {
+                        keywords = extractContent(from: originalTag)
+                    }
+
+                    // Author
+                    if metaTag.contains("name=\"author\"") || metaTag.contains("name='author'") {
+                        author = extractContent(from: originalTag)
+                    }
+
+                    // Open Graph
+                    if metaTag.contains("property=\"og:title\"") || metaTag.contains("property='og:title'") {
+                        ogTitle = extractContent(from: originalTag)
+                    }
+                    if metaTag.contains("property=\"og:description\"") || metaTag.contains("property='og:description'") {
+                        ogDescription = extractContent(from: originalTag)
+                    }
+                    if metaTag.contains("property=\"og:image\"") || metaTag.contains("property='og:image'") {
+                        ogImage = extractContent(from: originalTag)
+                    }
+
+                    // Twitter Card
+                    if metaTag.contains("name=\"twitter:card\"") || metaTag.contains("name='twitter:card'") {
+                        twitterCard = extractContent(from: originalTag)
+                    }
+                }
+            }
+        }
+
+        // Extract language from <html lang="">
+        if let langRange = content.range(of: #"<html[^>]*\slang="([^"]+)""#, options: .regularExpression) {
+            let langTag = String(content[langRange])
+            if let innerRange = langTag.range(of: #"lang="([^"]+)""#, options: .regularExpression) {
+                language = String(langTag[innerRange]).replacingOccurrences(of: "lang=\"", with: "").replacingOccurrences(of: "\"", with: "")
+            }
+        }
+
+        let metadata = HTMLMetadata(
+            title: title,
+            description: description,
+            charset: charset,
+            ogTitle: ogTitle,
+            ogDescription: ogDescription,
+            ogImage: ogImage,
+            twitterCard: twitterCard,
+            keywords: keywords,
+            author: author,
+            language: language
+        )
+
+        return metadata.hasData ? metadata : nil
+    }
+
+    // MARK: - Extended Image Metadata Extraction (IPTC/XMP)
+    private static func extractImageExtendedMetadata(from url: URL) -> ImageExtendedMetadata? {
+        let imageExtensions = ["jpg", "jpeg", "png", "tiff", "tif", "heic", "heif", "raw", "cr2", "nef", "arw", "dng"]
+        guard let ext = url.pathExtension.lowercased() as String?,
+              imageExtensions.contains(ext) else {
+            return nil
+        }
+
+        guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil) else {
+            return nil
+        }
+
+        guard let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [String: Any] else {
+            return nil
+        }
+
+        // Extract IPTC dictionary
+        let iptcDict = imageProperties[kCGImagePropertyIPTCDictionary as String] as? [String: Any]
+
+        // Extract TIFF dictionary for additional info
+        let tiffDict = imageProperties[kCGImagePropertyTIFFDictionary as String] as? [String: Any]
+
+        var copyright: String?
+        var creator: String?
+        var keywords: String?
+        var rating: Int?
+        var creatorTool: String?
+        var description: String?
+        var headline: String?
+
+        // IPTC fields
+        if let iptc = iptcDict {
+            copyright = iptc[kCGImagePropertyIPTCCopyrightNotice as String] as? String
+            headline = iptc[kCGImagePropertyIPTCHeadline as String] as? String
+            description = iptc[kCGImagePropertyIPTCCaptionAbstract as String] as? String
+
+            if let keywordsArray = iptc[kCGImagePropertyIPTCKeywords as String] as? [String] {
+                keywords = keywordsArray.joined(separator: ", ")
+            }
+
+            if let byline = iptc[kCGImagePropertyIPTCByline as String] as? [String] {
+                creator = byline.joined(separator: ", ")
+            }
+        }
+
+        // TIFF fields
+        if let tiff = tiffDict {
+            if copyright == nil {
+                copyright = tiff[kCGImagePropertyTIFFCopyright as String] as? String
+            }
+            creatorTool = tiff[kCGImagePropertyTIFFSoftware as String] as? String
+        }
+
+        // Try to get rating from various sources
+        if let ratingValue = imageProperties["Rating"] as? Int {
+            rating = ratingValue
+        }
+
+        let metadata = ImageExtendedMetadata(
+            copyright: copyright,
+            creator: creator,
+            keywords: keywords,
+            rating: rating,
+            creatorTool: creatorTool,
+            description: description,
+            headline: headline
+        )
+
+        return metadata.hasData ? metadata : nil
+    }
+
+    // MARK: - Markdown Metadata Extraction
+    private static func extractMarkdownMetadata(from url: URL) -> MarkdownMetadata? {
+        let markdownExtensions = ["md", "markdown", "mdown", "mkd"]
+        let ext = url.pathExtension.lowercased()
+        guard markdownExtensions.contains(ext) else { return nil }
+
+        // Limit file size to 1MB
+        guard let attrs = try? FileManager.default.attributesOfItem(atPath: url.path),
+              let fileSize = attrs[.size] as? Int64,
+              fileSize < 1024 * 1024 else {
+            return nil
+        }
+
+        guard let data = try? Data(contentsOf: url),
+              let content = String(data: data, encoding: .utf8) else {
+            return nil
+        }
+
+        var hasFrontmatter: Bool? = nil
+        var frontmatterFormat: String? = nil
+        var title: String? = nil
+        var wordCount: Int? = nil
+        var headingCount: Int? = nil
+        var linkCount: Int? = nil
+        var imageCount: Int? = nil
+        var codeBlockCount: Int? = nil
+
+        let lines = content.components(separatedBy: .newlines)
+
+        // Check for frontmatter
+        if lines.first == "---" {
+            hasFrontmatter = true
+            frontmatterFormat = "YAML"
+            // Try to extract title from frontmatter
+            var inFrontmatter = true
+            for (index, line) in lines.enumerated() {
+                if index == 0 { continue }
+                if line == "---" {
+                    inFrontmatter = false
+                    continue
+                }
+                if inFrontmatter && line.hasPrefix("title:") {
+                    title = line.replacingOccurrences(of: "title:", with: "").trimmingCharacters(in: .whitespaces)
+                    title = title?.trimmingCharacters(in: CharacterSet(charactersIn: "\"'"))
+                }
+            }
+        } else if lines.first == "+++" {
+            hasFrontmatter = true
+            frontmatterFormat = "TOML"
+        } else if lines.first == "{" {
+            hasFrontmatter = true
+            frontmatterFormat = "JSON"
+        } else {
+            hasFrontmatter = false
+        }
+
+        // If no title from frontmatter, try first H1
+        if title == nil {
+            if let h1Line = lines.first(where: { $0.hasPrefix("# ") }) {
+                title = h1Line.replacingOccurrences(of: "# ", with: "")
+            }
+        }
+
+        // Count words (excluding code blocks and frontmatter)
+        var inCodeBlock = false
+        var inFrontmatterBlock = hasFrontmatter == true
+        var words = 0
+        var headings = 0
+        var codeBlocks = 0
+
+        for (index, line) in lines.enumerated() {
+            // Skip frontmatter
+            if inFrontmatterBlock {
+                if (frontmatterFormat == "YAML" && line == "---" && index > 0) ||
+                   (frontmatterFormat == "TOML" && line == "+++") {
+                    inFrontmatterBlock = false
+                }
+                continue
+            }
+
+            // Track code blocks
+            if line.hasPrefix("```") || line.hasPrefix("~~~") {
+                if !inCodeBlock {
+                    codeBlocks += 1
+                }
+                inCodeBlock.toggle()
+                continue
+            }
+
+            if !inCodeBlock {
+                // Count headings
+                if line.hasPrefix("#") {
+                    headings += 1
+                }
+
+                // Count words
+                let lineWords = line.split(separator: " ").count
+                words += lineWords
+            }
+        }
+
+        wordCount = words
+        headingCount = headings
+        codeBlockCount = codeBlocks
+
+        // Count links: [text](url) pattern
+        let linkPattern = #"\[([^\]]+)\]\([^)]+\)"#
+        if let regex = try? NSRegularExpression(pattern: linkPattern) {
+            linkCount = regex.numberOfMatches(in: content, range: NSRange(content.startIndex..., in: content))
+        }
+
+        // Count images: ![alt](url) pattern
+        let imagePattern = #"!\[([^\]]*)\]\([^)]+\)"#
+        if let regex = try? NSRegularExpression(pattern: imagePattern) {
+            imageCount = regex.numberOfMatches(in: content, range: NSRange(content.startIndex..., in: content))
+        }
+
+        let metadata = MarkdownMetadata(
+            hasFrontmatter: hasFrontmatter,
+            frontmatterFormat: frontmatterFormat,
+            title: title,
+            wordCount: wordCount,
+            headingCount: headingCount,
+            linkCount: linkCount,
+            imageCount: imageCount,
+            codeBlockCount: codeBlockCount
+        )
+
+        return metadata.hasData ? metadata : nil
+    }
+
+    // MARK: - Config File Metadata Extraction (JSON/YAML/TOML)
+    private static func extractConfigMetadata(from url: URL) -> ConfigMetadata? {
+        let ext = url.pathExtension.lowercased()
+        let configExtensions = ["json", "yaml", "yml", "toml"]
+        guard configExtensions.contains(ext) else { return nil }
+
+        // Limit file size to 1MB
+        guard let attrs = try? FileManager.default.attributesOfItem(atPath: url.path),
+              let fileSize = attrs[.size] as? Int64,
+              fileSize < 1024 * 1024 else {
+            return nil
+        }
+
+        guard let data = try? Data(contentsOf: url),
+              let content = String(data: data, encoding: .utf8) else {
+            return nil
+        }
+
+        var format: String?
+        var isValid: Bool?
+        var keyCount: Int?
+        var maxDepth: Int?
+        var hasComments: Bool?
+        let encoding = "UTF-8"
+
+        switch ext {
+        case "json":
+            format = "JSON"
+            // Validate JSON
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                    isValid = true
+                    keyCount = countJSONKeys(json)
+                    maxDepth = calculateJSONDepth(json)
+                } else if let _ = try JSONSerialization.jsonObject(with: data) as? [Any] {
+                    isValid = true
+                    keyCount = 0 // Array at root
+                    maxDepth = 1
+                }
+            } catch {
+                isValid = false
+            }
+            hasComments = false // JSON doesn't support comments
+
+        case "yaml", "yml":
+            format = "YAML"
+            // Basic YAML validation - check for common patterns
+            let lines = content.components(separatedBy: .newlines)
+            let nonEmptyLines = lines.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
+
+            // Count keys (lines with "key:")
+            let keyLines = nonEmptyLines.filter { line in
+                let trimmed = line.trimmingCharacters(in: .whitespaces)
+                return !trimmed.hasPrefix("#") && trimmed.contains(":") && !trimmed.hasPrefix("-")
+            }
+            keyCount = keyLines.count
+
+            // Check for comments
+            hasComments = nonEmptyLines.contains { $0.trimmingCharacters(in: .whitespaces).hasPrefix("#") }
+
+            // Calculate depth by indentation
+            var maxIndent = 0
+            for line in nonEmptyLines {
+                if line.trimmingCharacters(in: .whitespaces).hasPrefix("#") { continue }
+                let indent = line.prefix(while: { $0 == " " || $0 == "\t" }).count
+                maxIndent = max(maxIndent, indent)
+            }
+            maxDepth = (maxIndent / 2) + 1
+
+            // Basic validation
+            isValid = !content.isEmpty && keyCount! > 0
+
+        case "toml":
+            format = "TOML"
+            let lines = content.components(separatedBy: .newlines)
+            let nonEmptyLines = lines.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
+
+            // Count keys
+            let keyLines = nonEmptyLines.filter { line in
+                let trimmed = line.trimmingCharacters(in: .whitespaces)
+                return !trimmed.hasPrefix("#") && !trimmed.hasPrefix("[") && trimmed.contains("=")
+            }
+            keyCount = keyLines.count
+
+            // Count sections for depth
+            let sectionLines = nonEmptyLines.filter { $0.trimmingCharacters(in: .whitespaces).hasPrefix("[") }
+            let maxSectionDepth = sectionLines.map { line -> Int in
+                let dots = line.filter { $0 == "." }.count
+                return dots + 1
+            }.max() ?? 1
+            maxDepth = maxSectionDepth
+
+            // Check for comments
+            hasComments = nonEmptyLines.contains { $0.trimmingCharacters(in: .whitespaces).hasPrefix("#") }
+
+            // Basic validation
+            isValid = !content.isEmpty
+
+        default:
+            return nil
+        }
+
+        let metadata = ConfigMetadata(
+            format: format,
+            isValid: isValid,
+            keyCount: keyCount,
+            maxDepth: maxDepth,
+            hasComments: hasComments,
+            encoding: encoding
+        )
+
+        return metadata.hasData ? metadata : nil
+    }
+
+    // Helper function to count JSON keys recursively
+    private static func countJSONKeys(_ dict: [String: Any]) -> Int {
+        var count = dict.keys.count
+        for value in dict.values {
+            if let nestedDict = value as? [String: Any] {
+                count += countJSONKeys(nestedDict)
+            } else if let array = value as? [Any] {
+                for item in array {
+                    if let nestedDict = item as? [String: Any] {
+                        count += countJSONKeys(nestedDict)
+                    }
+                }
+            }
+        }
+        return count
+    }
+
+    // Helper function to calculate JSON depth
+    private static func calculateJSONDepth(_ dict: [String: Any]) -> Int {
+        var maxChildDepth = 0
+        for value in dict.values {
+            if let nestedDict = value as? [String: Any] {
+                maxChildDepth = max(maxChildDepth, calculateJSONDepth(nestedDict))
+            } else if let array = value as? [Any] {
+                for item in array {
+                    if let nestedDict = item as? [String: Any] {
+                        maxChildDepth = max(maxChildDepth, calculateJSONDepth(nestedDict))
+                    }
+                }
+            }
+        }
+        return maxChildDepth + 1
+    }
+
+    // MARK: - PSD Metadata Extraction
+    private static func extractPSDMetadata(from url: URL) -> PSDMetadata? {
+        let psdExtensions = ["psd", "psb"]
+        let ext = url.pathExtension.lowercased()
+        guard psdExtensions.contains(ext) else { return nil }
+
+        guard let data = try? Data(contentsOf: url, options: .mappedIfSafe) else {
+            return nil
+        }
+
+        // PSD file format: https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/
+        // Header is 26 bytes
+        guard data.count >= 26 else { return nil }
+
+        // Check magic number "8BPS"
+        let magic = data.prefix(4)
+        guard String(data: magic, encoding: .ascii) == "8BPS" else { return nil }
+
+        var layerCount: Int?
+        var colorMode: String?
+        var bitDepth: Int?
+        var dimensions: String?
+        var hasTransparency: Bool?
+
+        // Version (2 bytes at offset 4)
+        let version = data.subdata(in: 4..<6).withUnsafeBytes { $0.load(as: UInt16.self).bigEndian }
+
+        // Channels (2 bytes at offset 12)
+        let channels = data.subdata(in: 12..<14).withUnsafeBytes { $0.load(as: UInt16.self).bigEndian }
+        hasTransparency = channels > 3 // More than RGB means alpha channel
+
+        // Height (4 bytes at offset 14)
+        let height = data.subdata(in: 14..<18).withUnsafeBytes { $0.load(as: UInt32.self).bigEndian }
+
+        // Width (4 bytes at offset 18)
+        let width = data.subdata(in: 18..<22).withUnsafeBytes { $0.load(as: UInt32.self).bigEndian }
+
+        dimensions = "\(width) × \(height)"
+
+        // Bit depth (2 bytes at offset 22)
+        let depth = data.subdata(in: 22..<24).withUnsafeBytes { $0.load(as: UInt16.self).bigEndian }
+        bitDepth = Int(depth)
+
+        // Color mode (2 bytes at offset 24)
+        let mode = data.subdata(in: 24..<26).withUnsafeBytes { $0.load(as: UInt16.self).bigEndian }
+        switch mode {
+        case 0: colorMode = "Bitmap"
+        case 1: colorMode = "Grayscale"
+        case 2: colorMode = "Indexed"
+        case 3: colorMode = "RGB"
+        case 4: colorMode = "CMYK"
+        case 7: colorMode = "Multichannel"
+        case 8: colorMode = "Duotone"
+        case 9: colorMode = "Lab"
+        default: colorMode = "Unknown"
+        }
+
+        // Layer count requires parsing more of the file structure
+        // For simplicity, we'll use the channel count as an approximation
+        // or try to find layer info section
+
+        let metadata = PSDMetadata(
+            layerCount: layerCount,
+            colorMode: colorMode,
+            bitDepth: bitDepth,
+            resolution: nil, // Would require parsing image resources section
+            hasTransparency: hasTransparency,
+            dimensions: dimensions
+        )
+
+        return metadata.hasData ? metadata : nil
+    }
+
+    // MARK: - Executable Metadata Extraction
+    private static func extractExecutableMetadata(from url: URL) -> ExecutableMetadata? {
+        // Check if file is executable
+        let fileManager = FileManager.default
+        guard fileManager.isExecutableFile(atPath: url.path) else { return nil }
+
+        // Skip directories and known non-executable extensions
+        var isDir: ObjCBool = false
+        guard fileManager.fileExists(atPath: url.path, isDirectory: &isDir), !isDir.boolValue else {
+            return nil
+        }
+
+        // Skip script files (already handled by code metadata)
+        let scriptExtensions = ["sh", "bash", "zsh", "py", "rb", "pl", "js", "ts"]
+        if scriptExtensions.contains(url.pathExtension.lowercased()) {
+            return nil
+        }
+
+        var architecture: String?
+        var isCodeSigned: Bool?
+        var signingAuthority: String?
+        var minimumOS: String?
+        var sdkVersion: String?
+        var fileType: String?
+
+        // Use file command to detect file type
+        let fileProcess = Process()
+        fileProcess.executableURL = URL(fileURLWithPath: "/usr/bin/file")
+        fileProcess.arguments = ["-b", url.path]
+        let filePipe = Pipe()
+        fileProcess.standardOutput = filePipe
+        fileProcess.standardError = Pipe()
+
+        if runProcessWithTimeout(fileProcess, timeout: 3.0) {
+            let fileData = filePipe.fileHandleForReading.readDataToEndOfFile()
+            if let fileOutput = String(data: fileData, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) {
+                // Check if it's a Mach-O binary
+                if fileOutput.contains("Mach-O") {
+                    if fileOutput.contains("universal") || fileOutput.contains("fat") {
+                        architecture = "Universal"
+                    } else if fileOutput.contains("arm64") {
+                        architecture = "arm64"
+                    } else if fileOutput.contains("x86_64") {
+                        architecture = "x86_64"
+                    }
+
+                    if fileOutput.contains("executable") {
+                        fileType = "Mach-O Executable"
+                    } else if fileOutput.contains("dynamically linked shared library") {
+                        fileType = "Dynamic Library"
+                    } else if fileOutput.contains("bundle") {
+                        fileType = "Mach-O Bundle"
+                    }
+                } else {
+                    // Not a Mach-O binary
+                    return nil
+                }
+            }
+        }
+
+        // Check code signature using codesign
+        let codesignProcess = Process()
+        codesignProcess.executableURL = URL(fileURLWithPath: "/usr/bin/codesign")
+        codesignProcess.arguments = ["-dv", url.path]
+        let codesignPipe = Pipe()
+        let codesignErrorPipe = Pipe()
+        codesignProcess.standardOutput = codesignPipe
+        codesignProcess.standardError = codesignErrorPipe
+
+        if runProcessWithTimeout(codesignProcess, timeout: 3.0) {
+            let errorData = codesignErrorPipe.fileHandleForReading.readDataToEndOfFile()
+            if let errorOutput = String(data: errorData, encoding: .utf8) {
+                isCodeSigned = !errorOutput.contains("not signed")
+
+                // Extract signing authority
+                if let authorityRange = errorOutput.range(of: #"Authority=([^\n]+)"#, options: .regularExpression) {
+                    signingAuthority = String(errorOutput[authorityRange])
+                        .replacingOccurrences(of: "Authority=", with: "")
+                        .trimmingCharacters(in: .whitespaces)
+                }
+            }
+        } else {
+            isCodeSigned = false
+        }
+
+        // Use otool to get SDK and minimum OS version
+        let otoolProcess = Process()
+        otoolProcess.executableURL = URL(fileURLWithPath: "/usr/bin/otool")
+        otoolProcess.arguments = ["-l", url.path]
+        let otoolPipe = Pipe()
+        otoolProcess.standardOutput = otoolPipe
+        otoolProcess.standardError = Pipe()
+
+        if runProcessWithTimeout(otoolProcess, timeout: 3.0) {
+            let otoolData = otoolPipe.fileHandleForReading.readDataToEndOfFile()
+            if let otoolOutput = String(data: otoolData, encoding: .utf8) {
+                // Extract minimum OS version
+                if let minVersionRange = otoolOutput.range(of: #"minos\s+([\d.]+)"#, options: .regularExpression) {
+                    let match = String(otoolOutput[minVersionRange])
+                    minimumOS = match.components(separatedBy: .whitespaces).last
+                }
+
+                // Extract SDK version
+                if let sdkRange = otoolOutput.range(of: #"sdk\s+([\d.]+)"#, options: .regularExpression) {
+                    let match = String(otoolOutput[sdkRange])
+                    sdkVersion = match.components(separatedBy: .whitespaces).last
+                }
+            }
+        }
+
+        let metadata = ExecutableMetadata(
+            architecture: architecture,
+            isCodeSigned: isCodeSigned,
+            signingAuthority: signingAuthority,
+            minimumOS: minimumOS,
+            sdkVersion: sdkVersion,
+            fileType: fileType
+        )
+
+        return metadata.hasData ? metadata : nil
+    }
+
+    // MARK: - App Bundle Metadata Extraction
+    private static func extractAppBundleMetadata(from url: URL) -> AppBundleMetadata? {
+        // Check if it's a .app bundle
+        guard url.pathExtension.lowercased() == "app" else { return nil }
+
+        // Check if it's a directory (bundle)
+        var isDir: ObjCBool = false
+        guard FileManager.default.fileExists(atPath: url.path, isDirectory: &isDir), isDir.boolValue else {
+            return nil
+        }
+
+        // Read Info.plist
+        let infoPlistPath = url.appendingPathComponent("Contents/Info.plist")
+        guard let plistData = try? Data(contentsOf: infoPlistPath),
+              let plist = try? PropertyListSerialization.propertyList(from: plistData, format: nil) as? [String: Any] else {
+            return nil
+        }
+
+        var bundleID: String?
+        var version: String?
+        var buildNumber: String?
+        var minimumOS: String?
+        var category: String?
+        var copyright: String?
+        var isCodeSigned: Bool?
+        var hasEntitlements: Bool?
+
+        bundleID = plist["CFBundleIdentifier"] as? String
+        version = plist["CFBundleShortVersionString"] as? String
+        buildNumber = plist["CFBundleVersion"] as? String
+        minimumOS = plist["LSMinimumSystemVersion"] as? String
+        category = plist["LSApplicationCategoryType"] as? String
+        copyright = plist["NSHumanReadableCopyright"] as? String
+
+        // Check code signature
+        let codesignProcess = Process()
+        codesignProcess.executableURL = URL(fileURLWithPath: "/usr/bin/codesign")
+        codesignProcess.arguments = ["-dv", url.path]
+        let codesignPipe = Pipe()
+        codesignProcess.standardOutput = codesignPipe
+        codesignProcess.standardError = codesignPipe
+
+        if runProcessWithTimeout(codesignProcess, timeout: 3.0) {
+            let data = codesignPipe.fileHandleForReading.readDataToEndOfFile()
+            if let output = String(data: data, encoding: .utf8) {
+                isCodeSigned = !output.contains("not signed")
+            }
+        }
+
+        // Check for entitlements
+        let entitlementsProcess = Process()
+        entitlementsProcess.executableURL = URL(fileURLWithPath: "/usr/bin/codesign")
+        entitlementsProcess.arguments = ["-d", "--entitlements", "-", url.path]
+        let entitlementsPipe = Pipe()
+        entitlementsProcess.standardOutput = entitlementsPipe
+        entitlementsProcess.standardError = Pipe()
+
+        if runProcessWithTimeout(entitlementsProcess, timeout: 3.0) {
+            let data = entitlementsPipe.fileHandleForReading.readDataToEndOfFile()
+            hasEntitlements = data.count > 100 // Has meaningful entitlements data
+        }
+
+        let metadata = AppBundleMetadata(
+            bundleID: bundleID,
+            version: version,
+            buildNumber: buildNumber,
+            minimumOS: minimumOS,
+            category: category,
+            copyright: copyright,
+            isCodeSigned: isCodeSigned,
+            hasEntitlements: hasEntitlements
+        )
+
+        return metadata.hasData ? metadata : nil
+    }
+
+    // MARK: - SQLite Metadata Extraction
+    private static func extractSQLiteMetadata(from url: URL) -> SQLiteMetadata? {
+        let sqliteExtensions = ["db", "sqlite", "sqlite3", "db3"]
+        let ext = url.pathExtension.lowercased()
+        guard sqliteExtensions.contains(ext) else { return nil }
+
+        // Check SQLite magic number
+        guard let data = try? Data(contentsOf: url, options: .mappedIfSafe),
+              data.count >= 16 else {
+            return nil
+        }
+
+        let magic = String(data: data.prefix(16), encoding: .utf8)
+        guard magic?.hasPrefix("SQLite format") == true else {
+            return nil
+        }
+
+        var db: OpaquePointer?
+
+        // Open database in read-only mode
+        guard sqlite3_open_v2(url.path, &db, SQLITE_OPEN_READONLY, nil) == SQLITE_OK else {
+            return nil
+        }
+
+        defer {
+            sqlite3_close(db)
+        }
+
+        var tableCount: Int?
+        var indexCount: Int?
+        var triggerCount: Int?
+        var viewCount: Int?
+        var totalRows: Int?
+        var schemaVersion: Int?
+        var pageSize: Int?
+        var encoding: String?
+
+        // Helper function to execute a single-value query
+        func queryInt(_ sql: String) -> Int? {
+            var statement: OpaquePointer?
+            guard sqlite3_prepare_v2(db, sql, -1, &statement, nil) == SQLITE_OK else {
+                return nil
+            }
+            defer { sqlite3_finalize(statement) }
+
+            if sqlite3_step(statement) == SQLITE_ROW {
+                return Int(sqlite3_column_int64(statement, 0))
+            }
+            return nil
+        }
+
+        func queryString(_ sql: String) -> String? {
+            var statement: OpaquePointer?
+            guard sqlite3_prepare_v2(db, sql, -1, &statement, nil) == SQLITE_OK else {
+                return nil
+            }
+            defer { sqlite3_finalize(statement) }
+
+            if sqlite3_step(statement) == SQLITE_ROW {
+                if let cString = sqlite3_column_text(statement, 0) {
+                    return String(cString: cString)
+                }
+            }
+            return nil
+        }
+
+        // Query metadata using SQLite3 C API
+        tableCount = queryInt("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")
+        indexCount = queryInt("SELECT COUNT(*) FROM sqlite_master WHERE type='index'")
+        triggerCount = queryInt("SELECT COUNT(*) FROM sqlite_master WHERE type='trigger'")
+        viewCount = queryInt("SELECT COUNT(*) FROM sqlite_master WHERE type='view'")
+        schemaVersion = queryInt("PRAGMA schema_version")
+        pageSize = queryInt("PRAGMA page_size")
+        encoding = queryString("PRAGMA encoding")
+
+        // Skip row count - can be slow on large databases
+        totalRows = nil
+
+        let metadata = SQLiteMetadata(
+            tableCount: tableCount,
+            indexCount: indexCount,
+            triggerCount: triggerCount,
+            viewCount: viewCount,
+            totalRows: totalRows,
+            schemaVersion: schemaVersion,
+            pageSize: pageSize,
+            encoding: encoding
+        )
+
+        return metadata.hasData ? metadata : nil
+    }
+
+    // MARK: - Git Repository Metadata Extraction
+    private static func extractGitMetadata(from url: URL) -> GitMetadata? {
+        // Check if this is a directory containing .git
+        var isDir: ObjCBool = false
+        guard FileManager.default.fileExists(atPath: url.path, isDirectory: &isDir), isDir.boolValue else {
+            return nil
+        }
+
+        let gitDir = url.appendingPathComponent(".git")
+        guard FileManager.default.fileExists(atPath: gitDir.path) else {
+            return nil
+        }
+
+        var branchCount: Int?
+        var currentBranch: String?
+        var commitCount: Int?
+        var lastCommitDate: String?
+        var lastCommitMessage: String?
+        var remoteURL: String?
+        var hasUncommittedChanges: Bool?
+        var tagCount: Int?
+
+        // Get current branch
+        let branchProcess = Process()
+        branchProcess.executableURL = URL(fileURLWithPath: "/usr/bin/git")
+        branchProcess.arguments = ["-C", url.path, "branch", "--show-current"]
+        let branchPipe = Pipe()
+        branchProcess.standardOutput = branchPipe
+        branchProcess.standardError = Pipe()
+
+        if runProcessWithTimeout(branchProcess, timeout: 3.0) {
+            let data = branchPipe.fileHandleForReading.readDataToEndOfFile()
+            if let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines), !output.isEmpty {
+                currentBranch = output
+            }
+        }
+
+        // Get branch count
+        let branchCountProcess = Process()
+        branchCountProcess.executableURL = URL(fileURLWithPath: "/usr/bin/git")
+        branchCountProcess.arguments = ["-C", url.path, "branch", "-a"]
+        let branchCountPipe = Pipe()
+        branchCountProcess.standardOutput = branchCountPipe
+        branchCountProcess.standardError = Pipe()
+
+        if runProcessWithTimeout(branchCountProcess, timeout: 3.0) {
+            let data = branchCountPipe.fileHandleForReading.readDataToEndOfFile()
+            if let output = String(data: data, encoding: .utf8) {
+                branchCount = output.components(separatedBy: .newlines).filter { !$0.isEmpty }.count
+            }
+        }
+
+        // Get commit count
+        let commitCountProcess = Process()
+        commitCountProcess.executableURL = URL(fileURLWithPath: "/usr/bin/git")
+        commitCountProcess.arguments = ["-C", url.path, "rev-list", "--count", "HEAD"]
+        let commitCountPipe = Pipe()
+        commitCountProcess.standardOutput = commitCountPipe
+        commitCountProcess.standardError = Pipe()
+
+        if runProcessWithTimeout(commitCountProcess, timeout: 3.0) {
+            let data = commitCountPipe.fileHandleForReading.readDataToEndOfFile()
+            if let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) {
+                commitCount = Int(output)
+            }
+        }
+
+        // Get last commit info
+        let logProcess = Process()
+        logProcess.executableURL = URL(fileURLWithPath: "/usr/bin/git")
+        logProcess.arguments = ["-C", url.path, "log", "-1", "--format=%ci|%s"]
+        let logPipe = Pipe()
+        logProcess.standardOutput = logPipe
+        logProcess.standardError = Pipe()
+
+        if runProcessWithTimeout(logProcess, timeout: 3.0) {
+            let data = logPipe.fileHandleForReading.readDataToEndOfFile()
+            if let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) {
+                let parts = output.components(separatedBy: "|")
+                if parts.count >= 1 {
+                    lastCommitDate = parts[0]
+                }
+                if parts.count >= 2 {
+                    lastCommitMessage = parts[1]
+                }
+            }
+        }
+
+        // Get remote URL
+        let remoteProcess = Process()
+        remoteProcess.executableURL = URL(fileURLWithPath: "/usr/bin/git")
+        remoteProcess.arguments = ["-C", url.path, "remote", "get-url", "origin"]
+        let remotePipe = Pipe()
+        remoteProcess.standardOutput = remotePipe
+        remoteProcess.standardError = Pipe()
+
+        if runProcessWithTimeout(remoteProcess, timeout: 3.0) {
+            let data = remotePipe.fileHandleForReading.readDataToEndOfFile()
+            if let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines), !output.isEmpty {
+                remoteURL = output
+            }
+        }
+
+        // Check for uncommitted changes
+        let statusProcess = Process()
+        statusProcess.executableURL = URL(fileURLWithPath: "/usr/bin/git")
+        statusProcess.arguments = ["-C", url.path, "status", "--porcelain"]
+        let statusPipe = Pipe()
+        statusProcess.standardOutput = statusPipe
+        statusProcess.standardError = Pipe()
+
+        if runProcessWithTimeout(statusProcess, timeout: 3.0) {
+            let data = statusPipe.fileHandleForReading.readDataToEndOfFile()
+            if let output = String(data: data, encoding: .utf8) {
+                hasUncommittedChanges = !output.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            }
+        }
+
+        // Get tag count
+        let tagProcess = Process()
+        tagProcess.executableURL = URL(fileURLWithPath: "/usr/bin/git")
+        tagProcess.arguments = ["-C", url.path, "tag"]
+        let tagPipe = Pipe()
+        tagProcess.standardOutput = tagPipe
+        tagProcess.standardError = Pipe()
+
+        if runProcessWithTimeout(tagProcess, timeout: 3.0) {
+            let data = tagPipe.fileHandleForReading.readDataToEndOfFile()
+            if let output = String(data: data, encoding: .utf8) {
+                tagCount = output.components(separatedBy: .newlines).filter { !$0.isEmpty }.count
+            }
+        }
+
+        let metadata = GitMetadata(
+            branchCount: branchCount,
+            currentBranch: currentBranch,
+            commitCount: commitCount,
+            lastCommitDate: lastCommitDate,
+            lastCommitMessage: lastCommitMessage,
+            remoteURL: remoteURL,
+            hasUncommittedChanges: hasUncommittedChanges,
+            tagCount: tagCount
+        )
+
+        return metadata.hasData ? metadata : nil
     }
 
     // MARK: - Helper Functions

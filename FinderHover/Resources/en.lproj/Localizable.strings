@@ -191,6 +191,92 @@
 "settings.display.subtitle.hasFormatting" = "Rich Formatting";
 "settings.display.subtitle.hint" = "Subtitle metadata only appears for SRT, VTT, ASS, SSA, SUB, SBV, and LRC files";
 
+"settings.display.html" = "HTML/Web Information";
+"settings.display.html.show" = "Show HTML Metadata";
+"settings.display.html.title" = "Page Title";
+"settings.display.html.description" = "Meta Description";
+"settings.display.html.charset" = "Character Set";
+"settings.display.html.ogTitle" = "Open Graph Title";
+"settings.display.html.ogDescription" = "Open Graph Description";
+"settings.display.html.ogImage" = "Open Graph Image";
+"settings.display.html.twitterCard" = "Twitter Card Type";
+"settings.display.html.hint" = "HTML metadata only appears for HTML and HTM files";
+
+"settings.display.imageExtended" = "Extended Image Information";
+"settings.display.imageExtended.show" = "Show Extended Image Metadata";
+"settings.display.imageExtended.copyright" = "Copyright";
+"settings.display.imageExtended.artist" = "Artist/Creator";
+"settings.display.imageExtended.description" = "Description";
+"settings.display.imageExtended.keywords" = "Keywords";
+"settings.display.imageExtended.rating" = "Rating";
+"settings.display.imageExtended.colorProfile" = "Color Profile";
+"settings.display.imageExtended.hint" = "Extended image metadata only appears for images with IPTC/XMP data";
+
+"settings.display.markdown" = "Markdown Information";
+"settings.display.markdown.show" = "Show Markdown Metadata";
+"settings.display.markdown.title" = "Title (Frontmatter)";
+"settings.display.markdown.author" = "Author";
+"settings.display.markdown.date" = "Date";
+"settings.display.markdown.tags" = "Tags";
+"settings.display.markdown.wordCount" = "Word Count";
+"settings.display.markdown.headingCount" = "Heading Count";
+"settings.display.markdown.linkCount" = "Link Count";
+"settings.display.markdown.hint" = "Markdown metadata only appears for MD files";
+
+"settings.display.config" = "Config File Information";
+"settings.display.config.show" = "Show Config Metadata";
+"settings.display.config.format" = "Format Type";
+"settings.display.config.keyCount" = "Key Count";
+"settings.display.config.isValid" = "Validity Status";
+"settings.display.config.hint" = "Config metadata only appears for JSON, YAML, TOML, and similar files";
+
+"settings.display.psd" = "PSD Information";
+"settings.display.psd.show" = "Show PSD Metadata";
+"settings.display.psd.dimensions" = "Dimensions";
+"settings.display.psd.colorMode" = "Color Mode";
+"settings.display.psd.bitDepth" = "Bit Depth";
+"settings.display.psd.layerCount" = "Layer Count";
+"settings.display.psd.hasAlpha" = "Alpha Channel";
+"settings.display.psd.hint" = "PSD metadata only appears for Photoshop files";
+
+"settings.display.executable" = "Executable Information";
+"settings.display.executable.show" = "Show Executable Metadata";
+"settings.display.executable.architecture" = "Architecture";
+"settings.display.executable.isUniversal" = "Universal Binary";
+"settings.display.executable.isSigned" = "Code Signed";
+"settings.display.executable.signingAuthority" = "Signing Authority";
+"settings.display.executable.hint" = "Executable metadata only appears for binary executables";
+
+"settings.display.appBundle" = "App Bundle Information";
+"settings.display.appBundle.show" = "Show App Bundle Metadata";
+"settings.display.appBundle.bundleId" = "Bundle Identifier";
+"settings.display.appBundle.version" = "Version";
+"settings.display.appBundle.buildNumber" = "Build Number";
+"settings.display.appBundle.minOS" = "Minimum macOS";
+"settings.display.appBundle.category" = "Category";
+"settings.display.appBundle.copyright" = "Copyright";
+"settings.display.appBundle.isSandboxed" = "Sandboxed";
+"settings.display.appBundle.hint" = "App bundle metadata only appears for macOS applications";
+
+"settings.display.sqlite" = "SQLite Database Information";
+"settings.display.sqlite.show" = "Show SQLite Metadata";
+"settings.display.sqlite.tableCount" = "Table Count";
+"settings.display.sqlite.indexCount" = "Index Count";
+"settings.display.sqlite.version" = "SQLite Version";
+"settings.display.sqlite.pageSize" = "Page Size";
+"settings.display.sqlite.hint" = "SQLite metadata only appears for SQLite database files";
+
+"settings.display.git" = "Git Repository Information";
+"settings.display.git.show" = "Show Git Metadata";
+"settings.display.git.currentBranch" = "Current Branch";
+"settings.display.git.branchCount" = "Branch Count";
+"settings.display.git.commitCount" = "Commit Count";
+"settings.display.git.lastCommitDate" = "Last Commit Date";
+"settings.display.git.lastCommitMessage" = "Last Commit Message";
+"settings.display.git.remoteUrl" = "Remote URL";
+"settings.display.git.hasUncommitted" = "Uncommitted Changes";
+"settings.display.git.hint" = "Git metadata only appears for Git repositories";
+
 "settings.display.order" = "Display Order";
 "settings.display.order.hint" = "Drag items to reorder. Metadata for each file type (photos, videos, audio, PDFs, etc.) moves as a group.";
 
@@ -266,6 +352,15 @@
 "displayItem.diskImage" = "Disk Image Information";
 "displayItem.vectorGraphics" = "Vector Graphics Information";
 "displayItem.subtitle" = "Subtitle Information";
+"displayItem.html" = "HTML/Web Information";
+"displayItem.imageExtended" = "Extended Image Information";
+"displayItem.markdown" = "Markdown Information";
+"displayItem.config" = "Config File Information";
+"displayItem.psd" = "PSD Information";
+"displayItem.executable" = "Executable Information";
+"displayItem.appBundle" = "App Bundle Information";
+"displayItem.sqlite" = "SQLite Database Information";
+"displayItem.git" = "Git Repository Information";
 "displayItem.filePath" = "File Path";
 
 /* Hover Window */
@@ -408,6 +503,85 @@
 "hover.subtitle.language" = "Language";
 "hover.subtitle.frameRate" = "Frame Rate";
 "hover.subtitle.hasFormatting" = "Formatting";
+
+/* HTML/Web Hover */
+"hover.html.title" = "HTML/Web";
+"hover.html.pageTitle" = "Title";
+"hover.html.description" = "Description";
+"hover.html.charset" = "Charset";
+"hover.html.ogTitle" = "OG Title";
+"hover.html.ogDescription" = "OG Description";
+"hover.html.ogImage" = "OG Image";
+"hover.html.twitterCard" = "Twitter Card";
+
+/* Extended Image Hover */
+"hover.imageExtended.title" = "Extended Image";
+"hover.imageExtended.copyright" = "Copyright";
+"hover.imageExtended.artist" = "Artist";
+"hover.imageExtended.description" = "Description";
+"hover.imageExtended.keywords" = "Keywords";
+"hover.imageExtended.rating" = "Rating";
+"hover.imageExtended.colorProfile" = "Color Profile";
+
+/* Markdown Hover */
+"hover.markdown.title" = "Markdown";
+"hover.markdown.docTitle" = "Title";
+"hover.markdown.author" = "Author";
+"hover.markdown.date" = "Date";
+"hover.markdown.tags" = "Tags";
+"hover.markdown.wordCount" = "Words";
+"hover.markdown.headingCount" = "Headings";
+"hover.markdown.linkCount" = "Links";
+
+/* Config File Hover */
+"hover.config.title" = "Config File";
+"hover.config.format" = "Format";
+"hover.config.keyCount" = "Keys";
+"hover.config.isValid" = "Valid";
+"hover.config.yes" = "Yes";
+"hover.config.no" = "No";
+
+/* PSD Hover */
+"hover.psd.title" = "Photoshop";
+"hover.psd.dimensions" = "Dimensions";
+"hover.psd.colorMode" = "Color Mode";
+"hover.psd.bitDepth" = "Bit Depth";
+"hover.psd.layerCount" = "Layers";
+"hover.psd.hasAlpha" = "Alpha";
+
+/* Executable Hover */
+"hover.executable.title" = "Executable";
+"hover.executable.architecture" = "Architecture";
+"hover.executable.isUniversal" = "Universal";
+"hover.executable.isSigned" = "Signed";
+"hover.executable.signingAuthority" = "Authority";
+
+/* App Bundle Hover */
+"hover.appBundle.title" = "Application";
+"hover.appBundle.bundleId" = "Bundle ID";
+"hover.appBundle.version" = "Version";
+"hover.appBundle.buildNumber" = "Build";
+"hover.appBundle.minOS" = "Min macOS";
+"hover.appBundle.category" = "Category";
+"hover.appBundle.copyright" = "Copyright";
+"hover.appBundle.isSandboxed" = "Sandboxed";
+
+/* SQLite Hover */
+"hover.sqlite.title" = "SQLite Database";
+"hover.sqlite.tableCount" = "Tables";
+"hover.sqlite.indexCount" = "Indexes";
+"hover.sqlite.version" = "Version";
+"hover.sqlite.pageSize" = "Page Size";
+
+/* Git Repository Hover */
+"hover.git.title" = "Git Repository";
+"hover.git.currentBranch" = "Branch";
+"hover.git.branchCount" = "Branches";
+"hover.git.commitCount" = "Commits";
+"hover.git.lastCommitDate" = "Last Commit";
+"hover.git.lastCommitMessage" = "Message";
+"hover.git.remoteUrl" = "Remote";
+"hover.git.hasUncommitted" = "Uncommitted";
 
 /* Common */
 "common.reset" = "Reset to Defaults";

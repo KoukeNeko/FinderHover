@@ -191,6 +191,92 @@
 "settings.display.subtitle.hasFormatting" = "豐富格式";
 "settings.display.subtitle.hint" = "字幕檔中繼資料僅顯示於 SRT、VTT、ASS、SSA、SUB、SBV 與 LRC 檔案";
 
+"settings.display.html" = "HTML/網頁資訊";
+"settings.display.html.show" = "顯示 HTML 中繼資料";
+"settings.display.html.title" = "網頁標題";
+"settings.display.html.description" = "Meta 描述";
+"settings.display.html.charset" = "字元集";
+"settings.display.html.ogTitle" = "Open Graph 標題";
+"settings.display.html.ogDescription" = "Open Graph 描述";
+"settings.display.html.ogImage" = "Open Graph 圖片";
+"settings.display.html.twitterCard" = "Twitter Card 類型";
+"settings.display.html.hint" = "HTML 中繼資料僅顯示於 HTML 和 HTM 檔案";
+
+"settings.display.imageExtended" = "延伸影像資訊";
+"settings.display.imageExtended.show" = "顯示延伸影像中繼資料";
+"settings.display.imageExtended.copyright" = "版權資訊";
+"settings.display.imageExtended.artist" = "作者/創作者";
+"settings.display.imageExtended.description" = "描述";
+"settings.display.imageExtended.keywords" = "關鍵字";
+"settings.display.imageExtended.rating" = "評分";
+"settings.display.imageExtended.colorProfile" = "色彩描述檔";
+"settings.display.imageExtended.hint" = "延伸影像中繼資料僅顯示於包含 IPTC/XMP 資料的影像";
+
+"settings.display.markdown" = "Markdown 資訊";
+"settings.display.markdown.show" = "顯示 Markdown 中繼資料";
+"settings.display.markdown.title" = "標題（Frontmatter）";
+"settings.display.markdown.author" = "作者";
+"settings.display.markdown.date" = "日期";
+"settings.display.markdown.tags" = "標籤";
+"settings.display.markdown.wordCount" = "字數";
+"settings.display.markdown.headingCount" = "標題數";
+"settings.display.markdown.linkCount" = "連結數";
+"settings.display.markdown.hint" = "Markdown 中繼資料僅顯示於 MD 檔案";
+
+"settings.display.config" = "設定檔資訊";
+"settings.display.config.show" = "顯示設定檔中繼資料";
+"settings.display.config.format" = "格式類型";
+"settings.display.config.keyCount" = "鍵值數";
+"settings.display.config.isValid" = "驗證狀態";
+"settings.display.config.hint" = "設定檔中繼資料僅顯示於 JSON、YAML、TOML 等檔案";
+
+"settings.display.psd" = "PSD 資訊";
+"settings.display.psd.show" = "顯示 PSD 中繼資料";
+"settings.display.psd.dimensions" = "尺寸";
+"settings.display.psd.colorMode" = "色彩模式";
+"settings.display.psd.bitDepth" = "位元深度";
+"settings.display.psd.layerCount" = "圖層數";
+"settings.display.psd.hasAlpha" = "透明通道";
+"settings.display.psd.hint" = "PSD 中繼資料僅顯示於 Photoshop 檔案";
+
+"settings.display.executable" = "可執行檔資訊";
+"settings.display.executable.show" = "顯示可執行檔中繼資料";
+"settings.display.executable.architecture" = "處理器架構";
+"settings.display.executable.isUniversal" = "通用二進位檔";
+"settings.display.executable.isSigned" = "程式碼簽章";
+"settings.display.executable.signingAuthority" = "簽章授權單位";
+"settings.display.executable.hint" = "可執行檔中繼資料僅顯示於二進位可執行檔";
+
+"settings.display.appBundle" = "應用程式套件資訊";
+"settings.display.appBundle.show" = "顯示應用程式套件中繼資料";
+"settings.display.appBundle.bundleId" = "套件識別碼";
+"settings.display.appBundle.version" = "版本";
+"settings.display.appBundle.buildNumber" = "建置號碼";
+"settings.display.appBundle.minOS" = "最低 macOS 版本";
+"settings.display.appBundle.category" = "類別";
+"settings.display.appBundle.copyright" = "版權資訊";
+"settings.display.appBundle.isSandboxed" = "沙盒模式";
+"settings.display.appBundle.hint" = "應用程式套件中繼資料僅顯示於 macOS 應用程式";
+
+"settings.display.sqlite" = "SQLite 資料庫資訊";
+"settings.display.sqlite.show" = "顯示 SQLite 中繼資料";
+"settings.display.sqlite.tableCount" = "資料表數";
+"settings.display.sqlite.indexCount" = "索引數";
+"settings.display.sqlite.version" = "SQLite 版本";
+"settings.display.sqlite.pageSize" = "頁面大小";
+"settings.display.sqlite.hint" = "SQLite 中繼資料僅顯示於 SQLite 資料庫檔案";
+
+"settings.display.git" = "Git 儲存庫資訊";
+"settings.display.git.show" = "顯示 Git 中繼資料";
+"settings.display.git.currentBranch" = "目前分支";
+"settings.display.git.branchCount" = "分支數";
+"settings.display.git.commitCount" = "提交數";
+"settings.display.git.lastCommitDate" = "最後提交日期";
+"settings.display.git.lastCommitMessage" = "最後提交訊息";
+"settings.display.git.remoteUrl" = "遠端網址";
+"settings.display.git.hasUncommitted" = "未提交變更";
+"settings.display.git.hint" = "Git 中繼資料僅顯示於 Git 儲存庫";
+
 "settings.display.order" = "顯示順序";
 "settings.display.order.hint" = "拖曳項目以重新排序。每種檔案類型的中繼資料（照片、視訊、音訊、PDF 等）作為群組移動。";
 
@@ -266,6 +352,15 @@
 "displayItem.diskImage" = "磁碟映像資訊";
 "displayItem.vectorGraphics" = "向量圖形資訊";
 "displayItem.subtitle" = "字幕檔資訊";
+"displayItem.html" = "HTML/網頁資訊";
+"displayItem.imageExtended" = "延伸影像資訊";
+"displayItem.markdown" = "Markdown 資訊";
+"displayItem.config" = "設定檔資訊";
+"displayItem.psd" = "PSD 資訊";
+"displayItem.executable" = "可執行檔資訊";
+"displayItem.appBundle" = "應用程式套件資訊";
+"displayItem.sqlite" = "SQLite 資料庫資訊";
+"displayItem.git" = "Git 儲存庫資訊";
 "displayItem.filePath" = "檔案路徑";
 
 /* Hover Window */
@@ -408,6 +503,85 @@
 "hover.subtitle.language" = "語言";
 "hover.subtitle.frameRate" = "幀率";
 "hover.subtitle.hasFormatting" = "格式化";
+
+/* HTML/Web Hover */
+"hover.html.title" = "HTML/網頁";
+"hover.html.pageTitle" = "標題";
+"hover.html.description" = "描述";
+"hover.html.charset" = "字元集";
+"hover.html.ogTitle" = "OG 標題";
+"hover.html.ogDescription" = "OG 描述";
+"hover.html.ogImage" = "OG 圖片";
+"hover.html.twitterCard" = "Twitter Card";
+
+/* Extended Image Hover */
+"hover.imageExtended.title" = "延伸影像資訊";
+"hover.imageExtended.copyright" = "版權";
+"hover.imageExtended.artist" = "作者";
+"hover.imageExtended.description" = "描述";
+"hover.imageExtended.keywords" = "關鍵字";
+"hover.imageExtended.rating" = "評分";
+"hover.imageExtended.colorProfile" = "色彩描述檔";
+
+/* Markdown Hover */
+"hover.markdown.title" = "Markdown";
+"hover.markdown.docTitle" = "標題";
+"hover.markdown.author" = "作者";
+"hover.markdown.date" = "日期";
+"hover.markdown.tags" = "標籤";
+"hover.markdown.wordCount" = "字數";
+"hover.markdown.headingCount" = "標題數";
+"hover.markdown.linkCount" = "連結數";
+
+/* Config File Hover */
+"hover.config.title" = "設定檔";
+"hover.config.format" = "格式";
+"hover.config.keyCount" = "鍵值數";
+"hover.config.isValid" = "有效";
+"hover.config.yes" = "是";
+"hover.config.no" = "否";
+
+/* PSD Hover */
+"hover.psd.title" = "Photoshop";
+"hover.psd.dimensions" = "尺寸";
+"hover.psd.colorMode" = "色彩模式";
+"hover.psd.bitDepth" = "位元深度";
+"hover.psd.layerCount" = "圖層數";
+"hover.psd.hasAlpha" = "透明通道";
+
+/* Executable Hover */
+"hover.executable.title" = "可執行檔";
+"hover.executable.architecture" = "架構";
+"hover.executable.isUniversal" = "通用二進位";
+"hover.executable.isSigned" = "已簽章";
+"hover.executable.signingAuthority" = "簽章單位";
+
+/* App Bundle Hover */
+"hover.appBundle.title" = "應用程式";
+"hover.appBundle.bundleId" = "套件 ID";
+"hover.appBundle.version" = "版本";
+"hover.appBundle.buildNumber" = "建置號";
+"hover.appBundle.minOS" = "最低 macOS";
+"hover.appBundle.category" = "類別";
+"hover.appBundle.copyright" = "版權";
+"hover.appBundle.isSandboxed" = "沙盒";
+
+/* SQLite Hover */
+"hover.sqlite.title" = "SQLite 資料庫";
+"hover.sqlite.tableCount" = "資料表數";
+"hover.sqlite.indexCount" = "索引數";
+"hover.sqlite.version" = "版本";
+"hover.sqlite.pageSize" = "頁面大小";
+
+/* Git Repository Hover */
+"hover.git.title" = "Git 儲存庫";
+"hover.git.currentBranch" = "分支";
+"hover.git.branchCount" = "分支數";
+"hover.git.commitCount" = "提交數";
+"hover.git.lastCommitDate" = "最後提交";
+"hover.git.lastCommitMessage" = "訊息";
+"hover.git.remoteUrl" = "遠端";
+"hover.git.hasUncommitted" = "未提交";
 
 /* Common */
 "common.reset" = "重設為預設值";
