@@ -359,6 +359,21 @@ struct SQLSyntaxHighlighter {
                     break
                 }
 
+                // Handle escape sequences inside strings
+                if inString && remaining.first == "\\" {
+                    // Check if there's a next character to escape
+                    let nextIndex = line.index(after: currentIndex)
+                    if nextIndex < line.endIndex {
+                        // Add backslash and escaped character together
+                        let escapedChar = line[nextIndex]
+                        var escapeStr = AttributedString(String(remaining.first!) + String(escapedChar))
+                        escapeStr.foregroundColor = .yellow  // Different color for escape sequences
+                        result += escapeStr
+                        currentIndex = line.index(after: nextIndex)
+                        continue
+                    }
+                }
+
                 // Check for string start/end
                 if (remaining.first == "'" || remaining.first == "\"") {
                     if inString && remaining.first == stringChar {
@@ -1033,33 +1048,10 @@ struct SQLTextPreviewView: View {
     // MARK: - Source Code View
 
     private var sourceCodeView: some View {
-        ScrollView([.horizontal, .vertical]) {
-            HStack(alignment: .top, spacing: 0) {
-                // Line numbers - single Text for performance
-                lineNumbersText
-
-                Divider()
-
-                // Code content - use pre-cached content
-                Text(viewModel.sourceContent)
-                    .font(.system(size: 12, design: .monospaced))
-                    .textSelection(.enabled)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-            }
-        }
-        .drawingGroup()  // Flatten layer hierarchy for better performance
-    }
-
-    // Single Text for line numbers - much faster than ForEach
-    private var lineNumbersText: some View {
-        Text(viewModel.lineNumbersString)
-            .font(.system(size: 12, design: .monospaced))
-            .foregroundColor(.secondary)
-            .multilineTextAlignment(.trailing)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 8)
-            .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
+        SourceCodeTextView(
+            content: viewModel.content,
+            highlightedContent: viewModel.highlightedContent
+        )
     }
 
     // MARK: - Footer
@@ -1089,6 +1081,208 @@ struct SQLTextPreviewView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
         .background(Color(nsColor: .windowBackgroundColor))
+    }
+}
+
+// MARK: - Native Source Code View (NSTextView for performance)
+
+struct SourceCodeTextView: NSViewRepresentable {
+    let content: String
+    let highlightedContent: AttributedString?
+
+    func makeNSView(context: Context) -> NSScrollView {
+        let scrollView = NSScrollView()
+        scrollView.hasVerticalScroller = true
+        scrollView.hasHorizontalScroller = true
+        scrollView.autohidesScrollers = false
+        scrollView.borderType = .noBorder
+
+        let textView = LineNumberTextView()
+        textView.isEditable = false
+        textView.isSelectable = true
+        textView.allowsUndo = false
+        textView.isRichText = true
+        textView.usesFontPanel = false
+        textView.backgroundColor = NSColor.textBackgroundColor
+        textView.textContainerInset = NSSize(width: 8, height: 8)
+
+        // Configure text container for horizontal scrolling
+        textView.textContainer?.widthTracksTextView = false
+        textView.textContainer?.containerSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+        textView.isHorizontallyResizable = true
+        textView.isVerticallyResizable = true
+        textView.maxSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+
+        scrollView.documentView = textView
+
+        return scrollView
+    }
+
+    func updateNSView(_ scrollView: NSScrollView, context: Context) {
+        guard let textView = scrollView.documentView as? LineNumberTextView else { return }
+
+        // Only update if content changed
+        let currentText = textView.string
+        if currentText != content {
+            // Use highlighted content if available, otherwise plain
+            if let highlighted = highlightedContent {
+                let nsAttrString = NSAttributedString(highlighted)
+                textView.textStorage?.setAttributedString(nsAttrString)
+            } else {
+                let font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
+                let attributes: [NSAttributedString.Key: Any] = [
+                    .font: font,
+                    .foregroundColor: NSColor.labelColor
+                ]
+                let attrString = NSAttributedString(string: content, attributes: attributes)
+                textView.textStorage?.setAttributedString(attrString)
+            }
+            textView.updateLineNumbers()
+        }
+    }
+}
+
+// Custom NSTextView with line numbers
+class LineNumberTextView: NSTextView {
+    private var lineNumberView: LineNumberRulerView?
+
+    override init(frame frameRect: NSRect, textContainer container: NSTextContainer?) {
+        super.init(frame: frameRect, textContainer: container)
+        setupLineNumbers()
+    }
+
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        setupLineNumbers()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupLineNumbers()
+    }
+
+    private func setupLineNumbers() {
+        // Set up font
+        self.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
+
+        // Enable line number ruler
+        postsFrameChangedNotifications = true
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(textDidChange(_:)),
+            name: NSText.didChangeNotification,
+            object: self
+        )
+    }
+
+    func updateLineNumbers() {
+        guard let scrollView = enclosingScrollView else { return }
+
+        if lineNumberView == nil {
+            lineNumberView = LineNumberRulerView(textView: self)
+            scrollView.verticalRulerView = lineNumberView
+            scrollView.hasVerticalRuler = true
+            scrollView.rulersVisible = true
+        }
+
+        lineNumberView?.needsDisplay = true
+    }
+
+    @objc private func textDidChange(_ notification: Notification) {
+        updateLineNumbers()
+    }
+
+    override func didChangeText() {
+        super.didChangeText()
+        updateLineNumbers()
+    }
+}
+
+// Line number ruler view
+class LineNumberRulerView: NSRulerView {
+    private weak var textView: NSTextView?
+
+    init(textView: NSTextView) {
+        self.textView = textView
+        super.init(scrollView: textView.enclosingScrollView, orientation: .verticalRuler)
+        self.clientView = textView
+        self.ruleThickness = 50
+    }
+
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func drawHashMarksAndLabels(in rect: NSRect) {
+        guard let textView = textView,
+              let layoutManager = textView.layoutManager,
+              let textContainer = textView.textContainer else { return }
+
+        // Background
+        NSColor.controlBackgroundColor.withAlphaComponent(0.5).setFill()
+        rect.fill()
+
+        // Draw line numbers
+        let font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .foregroundColor: NSColor.secondaryLabelColor
+        ]
+
+        let content = textView.string
+        let visibleRect = textView.visibleRect
+        let glyphRange = layoutManager.glyphRange(forBoundingRect: visibleRect, in: textContainer)
+        let charRange = layoutManager.characterRange(forGlyphRange: glyphRange, actualGlyphRange: nil)
+
+        // Calculate line numbers
+        var lineNumber = 1
+        var index = content.startIndex
+
+        // Count lines before visible range
+        let charStartIndex = content.index(content.startIndex, offsetBy: charRange.location, limitedBy: content.endIndex) ?? content.startIndex
+        var tempIndex = content.startIndex
+        while tempIndex < charStartIndex {
+            if content[tempIndex] == "\n" {
+                lineNumber += 1
+            }
+            tempIndex = content.index(after: tempIndex)
+        }
+
+        // Draw visible line numbers
+        index = charStartIndex
+        let endIndex = content.index(content.startIndex, offsetBy: min(charRange.location + charRange.length, content.count), limitedBy: content.endIndex) ?? content.endIndex
+
+        var lastDrawnLine = 0
+        while index < endIndex {
+            let charIndex = content.distance(from: content.startIndex, to: index)
+            let glyphIndex = layoutManager.glyphIndexForCharacter(at: charIndex)
+            var lineFragmentRect = NSRect.zero
+            layoutManager.lineFragmentRect(forGlyphAt: glyphIndex, effectiveRange: nil, withoutAdditionalLayout: true)
+            lineFragmentRect = layoutManager.lineFragmentRect(forGlyphAt: glyphIndex, effectiveRange: nil)
+
+            if lineNumber != lastDrawnLine {
+                let yPos = lineFragmentRect.origin.y - visibleRect.origin.y + textView.textContainerInset.height
+                let lineStr = "\(lineNumber)"
+                let size = lineStr.size(withAttributes: attributes)
+                let drawRect = NSRect(
+                    x: ruleThickness - size.width - 8,
+                    y: yPos + (lineFragmentRect.height - size.height) / 2,
+                    width: size.width,
+                    height: size.height
+                )
+                lineStr.draw(in: drawRect, withAttributes: attributes)
+                lastDrawnLine = lineNumber
+            }
+
+            // Find next line
+            while index < endIndex && content[index] != "\n" {
+                index = content.index(after: index)
+            }
+            if index < endIndex {
+                index = content.index(after: index)
+                lineNumber += 1
+            }
+        }
     }
 }
 
