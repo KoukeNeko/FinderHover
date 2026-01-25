@@ -857,6 +857,374 @@ struct HoverContentView: View {
                 }
             }
 
+        case .html:
+            if settings.showHTML, let html = fileInfo.htmlMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.html.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showHTMLTitle, let title = html.title {
+                        DetailRow(icon: "textformat", label: "hover.html.pageTitle".localized, value: title, fontSize: settings.fontSize)
+                    }
+                    if settings.showHTMLDescription, let desc = html.description {
+                        DetailRow(icon: "text.alignleft", label: "hover.html.description".localized, value: desc, fontSize: settings.fontSize)
+                    }
+                    if settings.showHTMLCharset, let charset = html.charset {
+                        DetailRow(icon: "textformat.abc", label: "hover.html.charset".localized, value: charset, fontSize: settings.fontSize)
+                    }
+                    if settings.showHTMLOpenGraph {
+                        if let ogTitle = html.ogTitle {
+                            DetailRow(icon: "square.and.arrow.up", label: "hover.html.ogTitle".localized, value: ogTitle, fontSize: settings.fontSize)
+                        }
+                        if let ogDesc = html.ogDescription {
+                            DetailRow(icon: "square.and.arrow.up", label: "hover.html.ogDescription".localized, value: ogDesc, fontSize: settings.fontSize)
+                        }
+                    }
+                    if settings.showHTMLTwitterCard, let twitterCard = html.twitterCard {
+                        DetailRow(icon: "bubble.left", label: "hover.html.twitterCard".localized, value: twitterCard, fontSize: settings.fontSize)
+                    }
+                    if settings.showHTMLKeywords, let keywords = html.keywords {
+                        DetailRow(icon: "tag", label: "hover.html.keywords".localized, value: keywords, fontSize: settings.fontSize)
+                    }
+                    if settings.showHTMLAuthor, let author = html.author {
+                        DetailRow(icon: "person", label: "hover.html.author".localized, value: author, fontSize: settings.fontSize)
+                    }
+                    if settings.showHTMLLanguage, let language = html.language {
+                        DetailRow(icon: "globe", label: "hover.html.language".localized, value: language, fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
+
+        case .imageExtended:
+            if settings.showImageExtended, let imageExt = fileInfo.imageExtendedMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.imageExtended.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showImageCopyright, let copyright = imageExt.copyright {
+                        DetailRow(icon: "c.circle", label: "hover.imageExtended.copyright".localized, value: copyright, fontSize: settings.fontSize)
+                    }
+                    if settings.showImageCreator, let creator = imageExt.creator {
+                        DetailRow(icon: "person", label: "hover.imageExtended.creator".localized, value: creator, fontSize: settings.fontSize)
+                    }
+                    if settings.showImageKeywords, let keywords = imageExt.keywords {
+                        DetailRow(icon: "tag", label: "hover.imageExtended.keywords".localized, value: keywords, fontSize: settings.fontSize)
+                    }
+                    if settings.showImageRating, let rating = imageExt.rating {
+                        let stars = String(repeating: "★", count: rating) + String(repeating: "☆", count: 5 - rating)
+                        DetailRow(icon: "star", label: "hover.imageExtended.rating".localized, value: stars, fontSize: settings.fontSize)
+                    }
+                    if settings.showImageCreatorTool, let tool = imageExt.creatorTool {
+                        DetailRow(icon: "wrench.and.screwdriver", label: "hover.imageExtended.creatorTool".localized, value: tool, fontSize: settings.fontSize)
+                    }
+                    if settings.showImageDescription, let desc = imageExt.description {
+                        DetailRow(icon: "text.alignleft", label: "hover.imageExtended.description".localized, value: desc, fontSize: settings.fontSize)
+                    }
+                    if settings.showImageHeadline, let headline = imageExt.headline {
+                        DetailRow(icon: "textformat", label: "hover.imageExtended.headline".localized, value: headline, fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
+
+        case .markdown:
+            if settings.showMarkdown, let md = fileInfo.markdownMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.markdown.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showMarkdownFrontmatter, let hasFm = md.hasFrontmatter {
+                        let fmStatus = hasFm ? (md.frontmatterFormat ?? "Yes") : "No"
+                        DetailRow(icon: "doc.text", label: "hover.markdown.frontmatter".localized, value: fmStatus, fontSize: settings.fontSize)
+                    }
+                    if settings.showMarkdownTitle, let title = md.title {
+                        DetailRow(icon: "textformat", label: "hover.markdown.mdTitle".localized, value: title, fontSize: settings.fontSize)
+                    }
+                    if settings.showMarkdownWordCount, let wordCount = md.wordCount {
+                        DetailRow(icon: "character.cursor.ibeam", label: "hover.markdown.wordCount".localized, value: "\(wordCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showMarkdownHeadingCount, let headingCount = md.headingCount {
+                        DetailRow(icon: "number", label: "hover.markdown.headingCount".localized, value: "\(headingCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showMarkdownLinkCount, let linkCount = md.linkCount {
+                        DetailRow(icon: "link", label: "hover.markdown.linkCount".localized, value: "\(linkCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showMarkdownImageCount, let imageCount = md.imageCount {
+                        DetailRow(icon: "photo", label: "hover.markdown.imageCount".localized, value: "\(imageCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showMarkdownCodeBlockCount, let codeBlockCount = md.codeBlockCount {
+                        DetailRow(icon: "chevron.left.forwardslash.chevron.right", label: "hover.markdown.codeBlockCount".localized, value: "\(codeBlockCount)", fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
+
+        case .config:
+            if settings.showConfig, let config = fileInfo.configMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.config.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showConfigFormat, let format = config.format {
+                        DetailRow(icon: "doc.text", label: "hover.config.format".localized, value: format, fontSize: settings.fontSize)
+                    }
+                    if settings.showConfigValid, let isValid = config.isValid {
+                        let status = isValid ? "Valid" : "Invalid"
+                        DetailRow(icon: "checkmark.circle", label: "hover.config.valid".localized, value: status, fontSize: settings.fontSize)
+                    }
+                    if settings.showConfigKeyCount, let keyCount = config.keyCount {
+                        DetailRow(icon: "number", label: "hover.config.keyCount".localized, value: "\(keyCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showConfigMaxDepth, let maxDepth = config.maxDepth {
+                        DetailRow(icon: "arrow.down.right", label: "hover.config.maxDepth".localized, value: "\(maxDepth)", fontSize: settings.fontSize)
+                    }
+                    if settings.showConfigHasComments, let hasComments = config.hasComments {
+                        let status = hasComments ? "Yes" : "No"
+                        DetailRow(icon: "text.bubble", label: "hover.config.hasComments".localized, value: status, fontSize: settings.fontSize)
+                    }
+                    if settings.showConfigEncoding, let encoding = config.encoding {
+                        DetailRow(icon: "textformat.abc", label: "hover.config.encoding".localized, value: encoding, fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
+
+        case .psd:
+            if settings.showPSD, let psd = fileInfo.psdMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.psd.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showPSDLayerCount, let layerCount = psd.layerCount {
+                        DetailRow(icon: "square.stack.3d.up", label: "hover.psd.layerCount".localized, value: "\(layerCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showPSDColorMode, let colorMode = psd.colorMode {
+                        DetailRow(icon: "paintpalette", label: "hover.psd.colorMode".localized, value: colorMode, fontSize: settings.fontSize)
+                    }
+                    if settings.showPSDBitDepth, let bitDepth = psd.bitDepth {
+                        DetailRow(icon: "number", label: "hover.psd.bitDepth".localized, value: "\(bitDepth) bit", fontSize: settings.fontSize)
+                    }
+                    if settings.showPSDResolution, let resolution = psd.resolution {
+                        DetailRow(icon: "square.dashed", label: "hover.psd.resolution".localized, value: resolution, fontSize: settings.fontSize)
+                    }
+                    if settings.showPSDTransparency, let hasTransparency = psd.hasTransparency {
+                        let status = hasTransparency ? "Yes" : "No"
+                        DetailRow(icon: "checkerboard.rectangle", label: "hover.psd.transparency".localized, value: status, fontSize: settings.fontSize)
+                    }
+                    if settings.showPSDDimensions, let dimensions = psd.dimensions {
+                        DetailRow(icon: "aspectratio", label: "hover.psd.dimensions".localized, value: dimensions, fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
+
+        case .executable:
+            if settings.showExecutable, let exe = fileInfo.executableMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.executable.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showExecutableArchitecture, let arch = exe.architecture {
+                        DetailRow(icon: "cpu", label: "hover.executable.architecture".localized, value: arch, fontSize: settings.fontSize)
+                    }
+                    if settings.showExecutableCodeSigned, let isSigned = exe.isCodeSigned {
+                        let status = isSigned ? "Yes" : "No"
+                        DetailRow(icon: "checkmark.seal", label: "hover.executable.codeSigned".localized, value: status, fontSize: settings.fontSize)
+                    }
+                    if settings.showExecutableSigningAuthority, let authority = exe.signingAuthority {
+                        DetailRow(icon: "signature", label: "hover.executable.signingAuthority".localized, value: authority, fontSize: settings.fontSize)
+                    }
+                    if settings.showExecutableMinimumOS, let minOS = exe.minimumOS {
+                        DetailRow(icon: "desktopcomputer", label: "hover.executable.minimumOS".localized, value: minOS, fontSize: settings.fontSize)
+                    }
+                    if settings.showExecutableSDKVersion, let sdk = exe.sdkVersion {
+                        DetailRow(icon: "wrench.and.screwdriver", label: "hover.executable.sdkVersion".localized, value: sdk, fontSize: settings.fontSize)
+                    }
+                    if settings.showExecutableFileType, let fileType = exe.fileType {
+                        DetailRow(icon: "doc", label: "hover.executable.fileType".localized, value: fileType, fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
+
+        case .appBundle:
+            if settings.showAppBundle, let app = fileInfo.appBundleMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.appBundle.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showAppBundleID, let bundleID = app.bundleID {
+                        DetailRow(icon: "app", label: "hover.appBundle.bundleID".localized, value: bundleID, fontSize: settings.fontSize)
+                    }
+                    if settings.showAppBundleVersion, let version = app.version {
+                        DetailRow(icon: "number", label: "hover.appBundle.version".localized, value: version, fontSize: settings.fontSize)
+                    }
+                    if settings.showAppBundleBuildNumber, let build = app.buildNumber {
+                        DetailRow(icon: "hammer", label: "hover.appBundle.buildNumber".localized, value: build, fontSize: settings.fontSize)
+                    }
+                    if settings.showAppBundleMinimumOS, let minOS = app.minimumOS {
+                        DetailRow(icon: "desktopcomputer", label: "hover.appBundle.minimumOS".localized, value: minOS, fontSize: settings.fontSize)
+                    }
+                    if settings.showAppBundleCategory, let category = app.category {
+                        DetailRow(icon: "folder", label: "hover.appBundle.category".localized, value: category, fontSize: settings.fontSize)
+                    }
+                    if settings.showAppBundleCopyright, let copyright = app.copyright {
+                        DetailRow(icon: "c.circle", label: "hover.appBundle.copyright".localized, value: copyright, fontSize: settings.fontSize)
+                    }
+                    if settings.showAppBundleCodeSigned, let isSigned = app.isCodeSigned {
+                        let status = isSigned ? "Yes" : "No"
+                        DetailRow(icon: "checkmark.seal", label: "hover.appBundle.codeSigned".localized, value: status, fontSize: settings.fontSize)
+                    }
+                    if settings.showAppBundleEntitlements, let hasEntitlements = app.hasEntitlements {
+                        let status = hasEntitlements ? "Yes" : "No"
+                        DetailRow(icon: "lock.shield", label: "hover.appBundle.entitlements".localized, value: status, fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
+
+        case .sqlite:
+            if settings.showSQLite, let db = fileInfo.sqliteMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.sqlite.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showSQLiteTableCount, let tableCount = db.tableCount {
+                        DetailRow(icon: "tablecells", label: "hover.sqlite.tableCount".localized, value: "\(tableCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showSQLiteIndexCount, let indexCount = db.indexCount {
+                        DetailRow(icon: "list.number", label: "hover.sqlite.indexCount".localized, value: "\(indexCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showSQLiteTriggerCount, let triggerCount = db.triggerCount {
+                        DetailRow(icon: "bolt", label: "hover.sqlite.triggerCount".localized, value: "\(triggerCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showSQLiteViewCount, let viewCount = db.viewCount {
+                        DetailRow(icon: "eye", label: "hover.sqlite.viewCount".localized, value: "\(viewCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showSQLiteTotalRows, let totalRows = db.totalRows {
+                        DetailRow(icon: "number", label: "hover.sqlite.totalRows".localized, value: "\(totalRows)", fontSize: settings.fontSize)
+                    }
+                    if settings.showSQLiteSchemaVersion, let schemaVersion = db.schemaVersion {
+                        DetailRow(icon: "tag", label: "hover.sqlite.schemaVersion".localized, value: "\(schemaVersion)", fontSize: settings.fontSize)
+                    }
+                    if settings.showSQLitePageSize, let pageSize = db.pageSize {
+                        DetailRow(icon: "doc", label: "hover.sqlite.pageSize".localized, value: "\(pageSize) bytes", fontSize: settings.fontSize)
+                    }
+                    if settings.showSQLiteEncoding, let encoding = db.encoding {
+                        DetailRow(icon: "textformat.abc", label: "hover.sqlite.encoding".localized, value: encoding, fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
+
+        case .git:
+            if settings.showGit, let git = fileInfo.gitMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.git.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showGitCurrentBranch, let currentBranch = git.currentBranch {
+                        DetailRow(icon: "arrow.right.circle", label: "hover.git.currentBranch".localized, value: currentBranch, fontSize: settings.fontSize)
+                    }
+                    if settings.showGitBranchCount, let branchCount = git.branchCount {
+                        DetailRow(icon: "arrow.triangle.branch", label: "hover.git.branchCount".localized, value: "\(branchCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showGitCommitCount, let commitCount = git.commitCount {
+                        DetailRow(icon: "number", label: "hover.git.commitCount".localized, value: "\(commitCount)", fontSize: settings.fontSize)
+                    }
+                    if settings.showGitLastCommitDate, let lastCommitDate = git.lastCommitDate {
+                        DetailRow(icon: "calendar", label: "hover.git.lastCommitDate".localized, value: lastCommitDate, fontSize: settings.fontSize)
+                    }
+                    if settings.showGitLastCommitMessage, let lastCommitMessage = git.lastCommitMessage {
+                        DetailRow(icon: "text.bubble", label: "hover.git.lastCommitMessage".localized, value: lastCommitMessage, fontSize: settings.fontSize)
+                    }
+                    if settings.showGitRemoteURL, let remoteURL = git.remoteURL {
+                        DetailRow(icon: "link", label: "hover.git.remoteURL".localized, value: remoteURL, fontSize: settings.fontSize)
+                    }
+                    if settings.showGitUncommittedChanges, let hasChanges = git.hasUncommittedChanges {
+                        let status = hasChanges ? "Yes" : "No"
+                        DetailRow(icon: "exclamationmark.triangle", label: "hover.git.uncommittedChanges".localized, value: status, fontSize: settings.fontSize)
+                    }
+                    if settings.showGitTagCount, let tagCount = git.tagCount {
+                        DetailRow(icon: "tag", label: "hover.git.tagCount".localized, value: "\(tagCount)", fontSize: settings.fontSize)
+                    }
+
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                }
+            }
+
         case .filePath:
             if settings.showFilePath {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
