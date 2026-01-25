@@ -2,7 +2,46 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.4.5 (Current)
+## Version 1.5.0 (Current)
+
+### 🆕 New Feature: System Metadata
+
+A comprehensive new metadata section displaying macOS-specific file information:
+
+#### Finder Integration
+- **Finder Tags** - Display color-coded tags assigned in Finder
+- **Finder Comments** - Show comments added via Get Info
+- **Alias Resolution** - Display original file path for Finder aliases
+
+#### Download Information
+- **Download Source** - URL where the file was downloaded from
+- **Download Date** - When the file was downloaded
+- **Downloaded By** - Application used for downloading
+- Powered by macOS quarantine attributes
+
+#### File System Details
+- **Symbolic Link Target** - Show where symlinks point to
+- **Hard Link Count** - Number of hard links to the same inode
+- **iCloud Status** - Downloaded, Cloud Only, Downloading, Uploading
+- **UTI (Uniform Type Identifier)** - System type identifier
+- **Extended Attributes Count** - Number of xattrs on the file
+
+#### Usage Statistics
+- **Open Count** - How many times the file has been opened
+- **Last Used Date** - When the file was last accessed
+
+### 🎬 Video HDR Detection
+
+- Detects and displays HDR format for video files
+- Supported formats: **Dolby Vision**, **HDR10**, **HLG**
+- Shows color primaries (BT.709, BT.2020, P3) and transfer function
+
+### 🌐 Localization
+
+- Full localization for all new metadata fields
+- Supported languages: English, Traditional Chinese (繁體中文), Japanese (日本語)
+
+## Version 1.4.5
 
 ### 🐛 Bug Fixes
 
