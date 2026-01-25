@@ -10,8 +10,35 @@ import Foundation
 
 class FinderInteraction {
 
+    /// Timeout for Accessibility API operations (in seconds)
+    private static let accessibilityTimeout: TimeInterval = 0.5
+
+    /// Execute an Accessibility operation with timeout to prevent blocking
+    private static func withTimeout<T>(_ timeout: TimeInterval = accessibilityTimeout, operation: @escaping () -> T?) -> T? {
+        var result: T?
+        let semaphore = DispatchSemaphore(value: 0)
+
+        DispatchQueue.global(qos: .userInteractive).async {
+            result = operation()
+            semaphore.signal()
+        }
+
+        let waitResult = semaphore.wait(timeout: .now() + timeout)
+
+        if waitResult == .timedOut {
+            Logger.warning("Accessibility operation timed out after \(timeout)s", subsystem: .accessibility)
+            return nil
+        }
+
+        return result
+    }
+
     /// Checks if user is currently renaming a file in Finder
     static func isRenamingFile() -> Bool {
+        return withTimeout { isRenamingFileImpl() } ?? false
+    }
+
+    private static func isRenamingFileImpl() -> Bool {
         guard let finderApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.finder").first else {
             return false
         }
@@ -38,8 +65,12 @@ class FinderInteraction {
 
     /// Gets file at specific position using accessibility API
     static func getFileAtMousePosition(_ position: CGPoint) -> String? {
+        return withTimeout { getFileAtMousePositionImpl(position) } ?? nil
+    }
+
+    private static func getFileAtMousePositionImpl(_ position: CGPoint) -> String? {
         // Don't show hover if user is renaming
-        if isRenamingFile() {
+        if isRenamingFileImpl() {
             return nil
         }
 
@@ -49,7 +80,7 @@ class FinderInteraction {
         }
 
         // Fall back to selected files if we couldn't get file at position
-        if let selected = getSelectedFinderFiles().first {
+        if let selected = getSelectedFinderFilesImpl().first {
             return selected
         }
 
@@ -58,6 +89,10 @@ class FinderInteraction {
 
     /// Gets currently selected files in Finder using Accessibility API
     static func getSelectedFinderFiles() -> [String] {
+        return withTimeout { getSelectedFinderFilesImpl() } ?? []
+    }
+
+    private static func getSelectedFinderFilesImpl() -> [String] {
         guard let finderApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.finder").first else {
             return []
         }

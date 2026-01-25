@@ -12,6 +12,34 @@ import ImageIO
 import AVFoundation
 import PDFKit
 
+// MARK: - Process Timeout Helper
+
+/// Runs a Process with a timeout to prevent indefinite blocking
+/// - Parameters:
+///   - process: The Process to run
+///   - timeout: Maximum time in seconds to wait for completion
+/// - Returns: true if process completed within timeout, false if timed out or failed
+private func runProcessWithTimeout(_ process: Process, timeout: TimeInterval = 5.0) -> Bool {
+    do {
+        try process.run()
+    } catch {
+        return false
+    }
+
+    let deadline = Date().addingTimeInterval(timeout)
+
+    while process.isRunning {
+        if Date() > deadline {
+            process.terminate()
+            Logger.warning("Process timed out after \(timeout)s: \(process.executableURL?.path ?? "unknown")", subsystem: .fileSystem)
+            return false
+        }
+        Thread.sleep(forTimeInterval: 0.05)
+    }
+
+    return process.terminationStatus == 0
+}
+
 // MARK: - EXIF Data Structure
 struct EXIFData {
     let camera: String?
@@ -193,7 +221,7 @@ struct DiskImageMetadata {
     let isEncrypted: Bool?        // Whether the image is encrypted
     let partitionScheme: String?  // Partition scheme (GPT, APM, MBR, etc.)
     let fileSystem: String?       // File system (HFS+, APFS, ISO 9660, etc.)
-    
+
     var hasData: Bool {
         return format != nil || totalSize != nil || compressedSize != nil ||
                compressionRatio != nil || isEncrypted != nil || partitionScheme != nil || fileSystem != nil
@@ -209,7 +237,7 @@ struct VectorGraphicsMetadata {
     let colorMode: String?        // Color mode (RGB, CMYK, etc.)
     let creator: String?          // Creator application
     let version: String?          // Format version (e.g., SVG 1.1)
-    
+
     var hasData: Bool {
         return format != nil || dimensions != nil || viewBox != nil ||
                elementCount != nil || colorMode != nil || creator != nil || version != nil
@@ -225,7 +253,7 @@ struct SubtitleMetadata {
     let language: String?         // Language code
     let frameRate: String?        // Frame rate (for frame-based formats)
     let hasFormatting: Bool?      // Whether subtitles contain rich formatting
-    
+
     var hasData: Bool {
         return format != nil || encoding != nil || entryCount != nil ||
                duration != nil || language != nil || frameRate != nil || hasFormatting != nil
@@ -278,13 +306,13 @@ struct FileInfo {
 
     // Font metadata
     let fontMetadata: FontMetadata?
-    
+
     // Disk image metadata
     let diskImageMetadata: DiskImageMetadata?
-    
+
     // Vector graphics metadata
     let vectorGraphicsMetadata: VectorGraphicsMetadata?
-    
+
     // Subtitle metadata
     let subtitleMetadata: SubtitleMetadata?
 
@@ -319,7 +347,12 @@ struct FileInfo {
         return NSWorkspace.shared.icon(forFile: path)
     }
 
-    func generateThumbnailAsync(completion: @escaping (NSImage?) -> Void) {
+    /// Generates a thumbnail asynchronously with cancellation support
+    /// - Parameters:
+    ///   - completion: Called with the generated thumbnail image, or nil if failed/cancelled
+    /// - Returns: The QLThumbnailGenerator.Request that can be used to cancel the generation
+    @discardableResult
+    func generateThumbnailAsync(completion: @escaping (NSImage?) -> Void) -> QLThumbnailGenerator.Request {
         let url = URL(fileURLWithPath: path)
         let size = CGSize(
             width: Constants.Thumbnail.standardSize,
@@ -339,6 +372,13 @@ struct FileInfo {
                 completion(thumbnail?.nsImage)
             }
         }
+
+        return request
+    }
+
+    /// Cancels a pending thumbnail generation request
+    static func cancelThumbnailGeneration(_ request: QLThumbnailGenerator.Request) {
+        QLThumbnailGenerator.shared.cancel(request)
     }
 
     static func from(path: String) -> FileInfo? {
@@ -887,7 +927,7 @@ struct FileInfo {
                 pageSize = "A3 (297mm × 420mm)"
             } else {
                 // Custom size - show in points and approximate inches
-                pageSize = String(format: "%.0f × %.0f pt (%.1f\" × %.1f\")", 
+                pageSize = String(format: "%.0f × %.0f pt (%.1f\" × %.1f\")",
                                 width, height, widthInches, heightInches)
             }
         }
@@ -1020,11 +1060,11 @@ struct FileInfo {
         // Check if file is an archive by extension
         let archiveExtensions = ["zip", "rar", "7z", "tar", "gz", "bz2", "xz", "tgz", "tbz2", "txz", "tar.gz", "tar.bz2", "tar.xz"]
         let ext = url.pathExtension.lowercased()
-        
+
         // Check for double extensions like .tar.gz
         let fileName = url.deletingPathExtension().lastPathComponent
         let doubleExt = fileName.contains(".") ? "\(fileName.split(separator: ".").last!).\(ext)" : ext
-        
+
         guard archiveExtensions.contains(ext) || archiveExtensions.contains(doubleExt) else {
             return nil
         }
@@ -1066,15 +1106,12 @@ struct FileInfo {
             let process = Process()
             process.executableURL = URL(fileURLWithPath: "/usr/bin/zipinfo")
             process.arguments = ["-t", url.path]
-            
+
             let pipe = Pipe()
             process.standardOutput = pipe
             process.standardError = Pipe()
-            
-            do {
-                try process.run()
-                process.waitUntilExit()
-                
+
+            if runProcessWithTimeout(process, timeout: 3.0) {
                 let data = pipe.fileHandleForReading.readDataToEndOfFile()
                 if let output = String(data: data, encoding: .utf8) {
                     // Parse zipinfo output
@@ -1087,7 +1124,7 @@ struct FileInfo {
                                let count = Int(countMatch) {
                                 fileCount = count
                             }
-                            
+
                             // Extract uncompressed size
                             let components = line.components(separatedBy: " ")
                             if let uncompIndex = components.firstIndex(of: "bytes"), uncompIndex > 0,
@@ -1097,41 +1134,32 @@ struct FileInfo {
                         }
                     }
                 }
-            } catch {
-                // Silently fail
             }
-            
+
             // Check for encryption
             let listProcess = Process()
             listProcess.executableURL = URL(fileURLWithPath: "/usr/bin/unzip")
             listProcess.arguments = ["-Z", "-1", url.path]
-            
+
             let listPipe = Pipe()
             let errorPipe = Pipe()
             listProcess.standardOutput = listPipe
             listProcess.standardError = errorPipe
-            
-            do {
-                try listProcess.run()
-                listProcess.waitUntilExit()
-                
-                if listProcess.terminationStatus != 0 {
-                    // If unzip fails, might be encrypted
-                    let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
-                    if let errorOutput = String(data: errorData, encoding: .utf8),
-                       errorOutput.contains("password") || errorOutput.contains("encrypted") {
-                        isEncrypted = true
-                    }
+
+            // Run and check - if it fails, might be encrypted
+            if !runProcessWithTimeout(listProcess, timeout: 3.0) {
+                let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
+                if let errorOutput = String(data: errorData, encoding: .utf8),
+                   errorOutput.contains("password") || errorOutput.contains("encrypted") {
+                    isEncrypted = true
                 }
-            } catch {
-                // Silently fail
             }
-            
+
         } else if doubleExt.hasPrefix("tar") || ext == "tar" || ext == "tgz" || ext == "tbz2" || ext == "txz" {
             // Use tar command for TAR files
             let process = Process()
             process.executableURL = URL(fileURLWithPath: "/usr/bin/tar")
-            
+
             var tarArgs = ["-t"]
             if ext == "gz" || ext == "tgz" || doubleExt.hasSuffix(".gz") {
                 tarArgs.append("-z")
@@ -1141,24 +1169,19 @@ struct FileInfo {
                 tarArgs.append("-J")
             }
             tarArgs.append(contentsOf: ["-f", url.path])
-            
+
             process.arguments = tarArgs
-            
+
             let pipe = Pipe()
             process.standardOutput = pipe
             process.standardError = Pipe()
-            
-            do {
-                try process.run()
-                process.waitUntilExit()
-                
+
+            if runProcessWithTimeout(process, timeout: 5.0) {
                 let data = pipe.fileHandleForReading.readDataToEndOfFile()
                 if let output = String(data: data, encoding: .utf8) {
                     let files = output.components(separatedBy: .newlines).filter { !$0.isEmpty && !$0.hasSuffix("/") }
                     fileCount = files.count
                 }
-            } catch {
-                // Silently fail
             }
         }
 
@@ -1191,61 +1214,58 @@ struct FileInfo {
     private static func extractEbookMetadata(from url: URL) -> EbookMetadata? {
         let ext = url.pathExtension.lowercased()
         let ebookExtensions = ["epub", "mobi", "azw", "azw3", "fb2", "lit", "prc"]
-        
+
         guard ebookExtensions.contains(ext) else {
             return nil
         }
-        
+
         // Try EPUB parsing first (most common format)
         if ext == "epub" {
             return extractEPUBMetadata(from: url)
         }
-        
+
         // Fallback to MDItem API for other formats
         return extractEbookMetadataViaMDItem(from: url)
     }
-    
+
     private static func extractEPUBMetadata(from url: URL) -> EbookMetadata? {
         let fileManager = FileManager.default
         let tempDir = fileManager.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-        
+
         defer {
             try? fileManager.removeItem(at: tempDir)
         }
-        
+
         // EPUB is a ZIP file, extract to temp directory
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/unzip")
         process.arguments = ["-q", url.path, "-d", tempDir.path]
-        
+
+        guard runProcessWithTimeout(process, timeout: 5.0) else {
+            return nil
+        }
+
         do {
-            try process.run()
-            process.waitUntilExit()
-            
-            guard process.terminationStatus == 0 else {
-                return nil
-            }
-            
             // Find container.xml to get OPF file path
             let containerPath = tempDir.appendingPathComponent("META-INF/container.xml")
             guard fileManager.fileExists(atPath: containerPath.path) else {
                 return nil
             }
-            
+
             let containerData = try Data(contentsOf: containerPath)
             let containerXML = try XMLDocument(data: containerData, options: [])
-            
+
             // Get OPF file path from container.xml
             guard let rootfile = try containerXML.nodes(forXPath: "//rootfile[@media-type='application/oebps-package+xml']").first as? XMLElement,
                   let opfRelativePath = rootfile.attribute(forName: "full-path")?.stringValue else {
                 return nil
             }
-            
+
             // Parse OPF file for metadata
             let opfPath = tempDir.appendingPathComponent(opfRelativePath)
             let opfData = try Data(contentsOf: opfPath)
             let opfXML = try XMLDocument(data: opfData, options: [])
-            
+
             // Extract metadata using XPath (without namespace prefix for simplicity)
             // EPUB uses Dublin Core, but we'll search without namespace
             let title = try? opfXML.nodes(forXPath: "//*[local-name()='title']").first?.stringValue
@@ -1254,7 +1274,7 @@ struct FileInfo {
             let publicationDate = try? opfXML.nodes(forXPath: "//*[local-name()='date']").first?.stringValue
             let language = try? opfXML.nodes(forXPath: "//*[local-name()='language']").first?.stringValue
             let description = try? opfXML.nodes(forXPath: "//*[local-name()='description']").first?.stringValue
-            
+
             // Try to find ISBN in identifier elements
             var isbn: String? = nil
             if let identifiers = try? opfXML.nodes(forXPath: "//*[local-name()='identifier']") {
@@ -1274,7 +1294,7 @@ struct FileInfo {
                     }
                 }
             }
-            
+
             return EbookMetadata(
                 title: title,
                 author: author,
@@ -1285,18 +1305,18 @@ struct FileInfo {
                 description: description,
                 pageCount: nil  // EPUB doesn't have fixed page count
             )
-            
+
         } catch {
             print("Error extracting EPUB metadata: \(error)")
             return nil
         }
     }
-    
+
     private static func extractEbookMetadataViaMDItem(from url: URL) -> EbookMetadata? {
         guard let mdItem = MDItemCreateWithURL(kCFAllocatorDefault, url as CFURL) else {
             return nil
         }
-        
+
         let title = MDItemCopyAttribute(mdItem, kMDItemTitle) as? String
         let authors = MDItemCopyAttribute(mdItem, kMDItemAuthors) as? [String]
         let author = authors?.joined(separator: ", ")
@@ -1304,7 +1324,7 @@ struct FileInfo {
         let language = MDItemCopyAttribute(mdItem, kMDItemLanguages) as? [String]
         let description = MDItemCopyAttribute(mdItem, kMDItemDescription) as? String
         let pageCount = MDItemCopyAttribute(mdItem, kMDItemNumberOfPages) as? Int
-        
+
         return EbookMetadata(
             title: title,
             author: author,
@@ -1320,49 +1340,49 @@ struct FileInfo {
     // MARK: - Code File Metadata Extraction
     private static func extractCodeMetadata(from url: URL) -> CodeMetadata? {
         let ext = url.pathExtension.lowercased()
-        
+
         // Check if it's a code file
         guard let language = languageFromExtension(ext) else {
             return nil
         }
-        
+
         // Limit file size to avoid reading huge files (5MB limit)
         guard let attrs = try? FileManager.default.attributesOfItem(atPath: url.path),
               let fileSize = attrs[.size] as? Int64,
               fileSize < 5 * 1024 * 1024 else {
             return nil
         }
-        
+
         // Try to read the file
         guard let data = try? Data(contentsOf: url),
               let content = String(data: data, encoding: .utf8) ?? String(data: data, encoding: .ascii) else {
             return nil
         }
-        
+
         // Detect encoding
         let encoding = detectEncoding(data: data)
-        
+
         // Count lines
         let lines = content.components(separatedBy: .newlines)
         let lineCount = lines.count
-        
+
         // Analyze lines
         var codeLines = 0
         var commentLines = 0
         var blankLines = 0
         var inMultiLineComment = false
-        
+
         let commentSyntax = getCommentSyntax(for: language)
-        
+
         for line in lines {
             let trimmed = line.trimmingCharacters(in: .whitespaces)
-            
+
             // Check for blank lines
             if trimmed.isEmpty {
                 blankLines += 1
                 continue
             }
-            
+
             // Check for multi-line comments
             if let multiStart = commentSyntax.multiLineStart, let multiEnd = commentSyntax.multiLineEnd {
                 if trimmed.contains(multiStart) {
@@ -1376,7 +1396,7 @@ struct FileInfo {
                     continue
                 }
             }
-            
+
             // Check for single-line comments
             var isComment = false
             for prefix in commentSyntax.singleLine {
@@ -1386,12 +1406,12 @@ struct FileInfo {
                     break
                 }
             }
-            
+
             if !isComment {
                 codeLines += 1
             }
         }
-        
+
         return CodeMetadata(
             language: language,
             lineCount: lineCount,
@@ -1401,7 +1421,7 @@ struct FileInfo {
             encoding: encoding
         )
     }
-    
+
     private static func languageFromExtension(_ ext: String) -> String? {
         let languageMap: [String: String] = [
             // C-family
@@ -1448,16 +1468,16 @@ struct FileInfo {
             "vim": "Vim Script",
             "el": "Emacs Lisp", "elisp": "Emacs Lisp"
         ]
-        
+
         return languageMap[ext]
     }
-    
+
     private struct CommentSyntax {
         let singleLine: [String]
         let multiLineStart: String?
         let multiLineEnd: String?
     }
-    
+
     private static func getCommentSyntax(for language: String) -> CommentSyntax {
         switch language {
         case "C", "C++", "Objective-C", "Objective-C++", "C#", "Swift", "JavaScript", "TypeScript", "JSX", "Java", "Kotlin", "Scala", "Groovy", "Rust", "Go", "Dart", "PHP":
@@ -1480,7 +1500,7 @@ struct FileInfo {
             return CommentSyntax(singleLine: ["//", "#"], multiLineStart: "/*", multiLineEnd: "*/")
         }
     }
-    
+
     private static func detectEncoding(data: Data) -> String {
         // Try UTF-8
         if String(data: data, encoding: .utf8) != nil {
@@ -1499,42 +1519,42 @@ struct FileInfo {
         }
         return "Unknown"
     }
-    
+
     private static func extractFontMetadata(from url: URL) -> FontMetadata? {
         let fontExtensions = ["ttf", "otf", "ttc", "otc", "woff", "woff2", "pfb", "pfm", "fon"]
         let ext = url.pathExtension.lowercased()
         guard fontExtensions.contains(ext) else { return nil }
-        
+
         // Create CGDataProvider from URL
         guard let dataProvider = CGDataProvider(url: url as CFURL) else { return nil }
-        
+
         // Create CGFont from data provider
         guard let cgFont = CGFont(dataProvider) else { return nil }
-        
+
         // Create CTFont for easier metadata access
         let ctFont = CTFontCreateWithGraphicsFont(cgFont, 12.0, nil, nil)
-        
+
         // Extract font name (full name)
         let fontName = CTFontCopyFullName(ctFont) as String?
-        
+
         // Extract font family
         let fontFamily = CTFontCopyFamilyName(ctFont) as String?
-        
+
         // Extract font style
         let fontStyle = CTFontCopyName(ctFont, kCTFontStyleNameKey) as String?
-        
+
         // Extract version
         let version = CTFontCopyName(ctFont, kCTFontVersionNameKey) as String?
-        
+
         // Extract designer
         let designer = CTFontCopyName(ctFont, kCTFontDesignerNameKey) as String?
-        
+
         // Extract copyright
         let copyright = CTFontCopyName(ctFont, kCTFontCopyrightNameKey) as String?
-        
+
         // Get glyph count
         let glyphCount = CTFontGetGlyphCount(ctFont)
-        
+
         return FontMetadata(
             fontName: fontName,
             fontFamily: fontFamily,
@@ -1545,120 +1565,113 @@ struct FileInfo {
             glyphCount: glyphCount > 0 ? Int(glyphCount) : nil
         )
     }
-    
+
     private static func extractDiskImageMetadata(from url: URL) -> DiskImageMetadata? {
         let diskImageExtensions = ["dmg", "iso", "img", "cdr", "toast", "sparseimage", "sparsebundle"]
         let ext = url.pathExtension.lowercased()
         guard diskImageExtensions.contains(ext) else { return nil }
-        
+
         // Use hdiutil to get disk image information
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
         process.arguments = ["imageinfo", url.path]
-        
+
         let pipe = Pipe()
         process.standardOutput = pipe
         process.standardError = Pipe()
-        
-        do {
-            try process.run()
-            process.waitUntilExit()
-            
-            guard process.terminationStatus == 0 else { return nil }
-            
-            let data = pipe.fileHandleForReading.readDataToEndOfFile()
-            guard let output = String(data: data, encoding: .utf8) else { return nil }
-            
-            var format: String?
-            var totalSize: Int64?
-            var compressedSize: Int64?
-            var compressionRatio: String?
-            var isEncrypted: Bool?
-            var partitionScheme: String?
-            var fileSystem: String?
-            
-            // Parse hdiutil output
-            let lines = output.components(separatedBy: .newlines)
-            for line in lines {
-                let trimmed = line.trimmingCharacters(in: .whitespaces)
-                
-                // Format
-                if trimmed.hasPrefix("Format:") {
-                    format = trimmed.replacingOccurrences(of: "Format:", with: "").trimmingCharacters(in: .whitespaces)
-                }
-                
-                // Total size
-                if trimmed.hasPrefix("Total Bytes:") || trimmed.hasPrefix("Size Information:") {
-                    if let sizeStr = trimmed.components(separatedBy: ":").last?.trimmingCharacters(in: .whitespaces),
-                       let size = Int64(sizeStr.components(separatedBy: .whitespaces).first ?? "") {
-                        totalSize = size
-                    }
-                }
-                
-                // Compressed size
-                if trimmed.hasPrefix("Compressed Bytes:") || trimmed.hasPrefix("Compressed:") {
-                    if let sizeStr = trimmed.components(separatedBy: ":").last?.trimmingCharacters(in: .whitespaces),
-                       let size = Int64(sizeStr.components(separatedBy: .whitespaces).first ?? "") {
-                        compressedSize = size
-                    }
-                }
-                
-                // Encryption
-                if trimmed.contains("Encrypted:") || trimmed.contains("encrypted") {
-                    isEncrypted = trimmed.contains("yes") || trimmed.contains("true")
-                }
-                
-                // Partition scheme
-                if trimmed.hasPrefix("Partition Scheme:") || trimmed.contains("partition-scheme") {
-                    partitionScheme = trimmed.components(separatedBy: ":").last?.trimmingCharacters(in: .whitespaces)
-                }
-                
-                // File system
-                if trimmed.hasPrefix("Format Description:") {
-                    let description = trimmed.replacingOccurrences(of: "Format Description:", with: "").trimmingCharacters(in: .whitespaces)
-                    if description.contains("HFS+") {
-                        fileSystem = "HFS+"
-                    } else if description.contains("APFS") {
-                        fileSystem = "APFS"
-                    } else if description.contains("ISO") {
-                        fileSystem = "ISO 9660"
-                    } else if description.contains("FAT") {
-                        fileSystem = "FAT32"
-                    }
+
+        guard runProcessWithTimeout(process, timeout: 5.0) else { return nil }
+
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        guard let output = String(data: data, encoding: .utf8) else { return nil }
+
+        var format: String?
+        var totalSize: Int64?
+        var compressedSize: Int64?
+        var compressionRatio: String?
+        var isEncrypted: Bool?
+        var partitionScheme: String?
+        var fileSystem: String?
+
+        // Parse hdiutil output
+        let lines = output.components(separatedBy: .newlines)
+        for line in lines {
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+
+            // Format
+            if trimmed.hasPrefix("Format:") {
+                format = trimmed.replacingOccurrences(of: "Format:", with: "").trimmingCharacters(in: .whitespaces)
+            }
+
+            // Total size
+            if trimmed.hasPrefix("Total Bytes:") || trimmed.hasPrefix("Size Information:") {
+                if let sizeStr = trimmed.components(separatedBy: ":").last?.trimmingCharacters(in: .whitespaces),
+                   let size = Int64(sizeStr.components(separatedBy: .whitespaces).first ?? "") {
+                    totalSize = size
                 }
             }
-            
-            // Calculate compression ratio if both sizes are available
-            if let total = totalSize, let compressed = compressedSize, compressed > 0 {
-                let ratio = Double(total) / Double(compressed)
-                compressionRatio = String(format: "%.1f:1", ratio)
+
+            // Compressed size
+            if trimmed.hasPrefix("Compressed Bytes:") || trimmed.hasPrefix("Compressed:") {
+                if let sizeStr = trimmed.components(separatedBy: ":").last?.trimmingCharacters(in: .whitespaces),
+                   let size = Int64(sizeStr.components(separatedBy: .whitespaces).first ?? "") {
+                    compressedSize = size
+                }
             }
-            
-            // If encryption info not found, assume not encrypted
-            if isEncrypted == nil {
-                isEncrypted = false
+
+            // Encryption
+            if trimmed.contains("Encrypted:") || trimmed.contains("encrypted") {
+                isEncrypted = trimmed.contains("yes") || trimmed.contains("true")
             }
-            
-            return DiskImageMetadata(
-                format: format,
-                totalSize: totalSize,
-                compressedSize: compressedSize,
-                compressionRatio: compressionRatio,
-                isEncrypted: isEncrypted,
-                partitionScheme: partitionScheme,
-                fileSystem: fileSystem
-            )
-        } catch {
-            return nil
+
+            // Partition scheme
+            if trimmed.hasPrefix("Partition Scheme:") || trimmed.contains("partition-scheme") {
+                partitionScheme = trimmed.components(separatedBy: ":").last?.trimmingCharacters(in: .whitespaces)
+            }
+
+            // File system
+            if trimmed.hasPrefix("Format Description:") {
+                let description = trimmed.replacingOccurrences(of: "Format Description:", with: "").trimmingCharacters(in: .whitespaces)
+                if description.contains("HFS+") {
+                    fileSystem = "HFS+"
+                } else if description.contains("APFS") {
+                    fileSystem = "APFS"
+                } else if description.contains("ISO") {
+                    fileSystem = "ISO 9660"
+                } else if description.contains("FAT") {
+                    fileSystem = "FAT32"
+                }
+            }
         }
+
+        // Calculate compression ratio if both sizes are available
+        if let total = totalSize, let compressed = compressedSize, compressed > 0 {
+            let ratio = Double(total) / Double(compressed)
+            compressionRatio = String(format: "%.1f:1", ratio)
+        }
+
+        // If encryption info not found, assume not encrypted
+        if isEncrypted == nil {
+            isEncrypted = false
+        }
+
+        return DiskImageMetadata(
+            format: format,
+            totalSize: totalSize,
+            compressedSize: compressedSize,
+            compressionRatio: compressionRatio,
+            isEncrypted: isEncrypted,
+            partitionScheme: partitionScheme,
+            fileSystem: fileSystem
+        )
     }
-    
+
     private static func extractVectorGraphicsMetadata(from url: URL) -> VectorGraphicsMetadata? {
         // Note: PDF is handled separately in FileInfo.from() to avoid overlap with PDF document metadata
         let vectorExtensions = ["svg", "svgz", "eps", "ai", "pdf"]
         let ext = url.pathExtension.lowercased()
         guard vectorExtensions.contains(ext) else { return nil }
-        
+
         var format: String?
         var dimensions: String?
         var viewBox: String?
@@ -1666,7 +1679,7 @@ struct FileInfo {
         var colorMode: String?
         var creator: String?
         var version: String?
-        
+
         if ext == "svg" || ext == "svgz" {
             // Parse SVG file
             do {
@@ -1681,11 +1694,11 @@ struct FileInfo {
                 } else {
                     data = try Data(contentsOf: url)
                 }
-                
+
                 guard let xmlString = String(data: data, encoding: .utf8) else { return nil }
-                
+
                 format = "SVG"
-                
+
                 // Extract SVG version
                 if let versionRange = xmlString.range(of: #"version="([^"]+)""#, options: .regularExpression) {
                     let versionString = String(xmlString[versionRange])
@@ -1693,7 +1706,7 @@ struct FileInfo {
                         version = String(versionString[match]).replacingOccurrences(of: "\"", with: "")
                     }
                 }
-                
+
                 // Extract viewBox
                 if let viewBoxRange = xmlString.range(of: #"viewBox="([^"]+)""#, options: .regularExpression) {
                     let viewBoxString = String(xmlString[viewBoxRange])
@@ -1701,7 +1714,7 @@ struct FileInfo {
                         viewBox = String(viewBoxString[match]).replacingOccurrences(of: "\"", with: "")
                     }
                 }
-                
+
                 // Extract width and height
                 var width: String?
                 var height: String?
@@ -1720,7 +1733,7 @@ struct FileInfo {
                 if let w = width, let h = height {
                     dimensions = "\(w) × \(h)"
                 }
-                
+
                 // Count elements (paths, circles, rects, etc.)
                 let pathCount = xmlString.components(separatedBy: "<path").count - 1
                 let circleCount = xmlString.components(separatedBy: "<circle").count - 1
@@ -1729,7 +1742,7 @@ struct FileInfo {
                 let polygonCount = xmlString.components(separatedBy: "<polygon").count - 1
                 let polylineCount = xmlString.components(separatedBy: "<polyline").count - 1
                 elementCount = pathCount + circleCount + rectCount + ellipseCount + polygonCount + polylineCount
-                
+
                 // Extract creator/generator
                 if let creatorRange = xmlString.range(of: #"<dc:creator>([^<]+)</dc:creator>"#, options: .regularExpression) {
                     let creatorString = String(xmlString[creatorRange])
@@ -1740,7 +1753,7 @@ struct FileInfo {
                         creator = String(generatorString[match]).replacingOccurrences(of: "\"", with: "")
                     }
                 }
-                
+
             } catch {
                 return nil
             }
@@ -1750,9 +1763,9 @@ struct FileInfo {
                   let content = String(data: data.prefix(4096), encoding: .utf8) else {
                 return nil
             }
-            
+
             format = ext == "ai" ? "Adobe Illustrator" : "EPS"
-            
+
             // Extract BoundingBox
             if let bboxRange = content.range(of: #"%%BoundingBox:\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)"#, options: .regularExpression) {
                 let bboxString = String(content[bboxRange])
@@ -1763,13 +1776,13 @@ struct FileInfo {
                     dimensions = "\(width) × \(height) pt"
                 }
             }
-            
+
             // Extract Creator
             if let creatorRange = content.range(of: #"%%Creator:\s*(.+)"#, options: .regularExpression) {
                 let creatorLine = String(content[creatorRange])
                 creator = creatorLine.replacingOccurrences(of: "%%Creator:", with: "").trimmingCharacters(in: .whitespaces)
             }
-            
+
             // Detect color mode
             if content.contains("CMYK") || content.contains("setcmykcolor") {
                 colorMode = "CMYK"
@@ -1777,7 +1790,7 @@ struct FileInfo {
                 colorMode = "RGB"
             }
         }
-        
+
         return VectorGraphicsMetadata(
             format: format,
             dimensions: dimensions,
@@ -1788,12 +1801,12 @@ struct FileInfo {
             version: version
         )
     }
-    
+
     private static func extractSubtitleMetadata(from url: URL) -> SubtitleMetadata? {
         let subtitleExtensions = ["srt", "vtt", "ass", "ssa", "sub", "sbv", "lrc"]
         let ext = url.pathExtension.lowercased()
         guard subtitleExtensions.contains(ext) else { return nil }
-        
+
         var format: String?
         var encoding: String?
         var entryCount: Int?
@@ -1801,10 +1814,10 @@ struct FileInfo {
         var language: String?
         var frameRate: String?
         var hasFormatting: Bool?
-        
+
         // Read file content
         guard let data = try? Data(contentsOf: url) else { return nil }
-        
+
         // Detect encoding
         var usedEncoding: String.Encoding = .utf8
         if let detectedString = String(data: data, encoding: .utf8) {
@@ -1819,11 +1832,11 @@ struct FileInfo {
         } else {
             encoding = "Unknown"
         }
-        
+
         guard let content = String(data: data, encoding: usedEncoding) else { return nil }
-        
+
         let lines = content.components(separatedBy: .newlines)
-        
+
         switch ext {
         case "srt":
             format = "SubRip (SRT)"
@@ -1833,7 +1846,7 @@ struct FileInfo {
                 return !trimmed.isEmpty && trimmed.allSatisfy { $0.isNumber }
             }
             entryCount = entryLines.count
-            
+
             // Find last timestamp to calculate duration
             if let lastTimeline = lines.last(where: { $0.contains("-->") }) {
                 let components = lastTimeline.components(separatedBy: "-->")
@@ -1842,20 +1855,20 @@ struct FileInfo {
                     duration = endTime.components(separatedBy: ",").first
                 }
             }
-            
+
             // Check for formatting tags
             hasFormatting = content.contains("<b>") || content.contains("<i>") || content.contains("<u>")
-            
+
         case "vtt":
             format = "WebVTT"
             // Count cues (lines with -->)
             entryCount = lines.filter { $0.contains("-->") }.count
-            
+
             // Extract language from header
             if let langLine = lines.first(where: { $0.hasPrefix("Language:") }) {
                 language = langLine.replacingOccurrences(of: "Language:", with: "").trimmingCharacters(in: .whitespaces)
             }
-            
+
             // Find last timestamp
             if let lastTimeline = lines.last(where: { $0.contains("-->") }) {
                 let components = lastTimeline.components(separatedBy: "-->")
@@ -1864,22 +1877,22 @@ struct FileInfo {
                     duration = endTime.components(separatedBy: ".").first
                 }
             }
-            
+
             hasFormatting = content.contains("<b>") || content.contains("<i>") || content.contains("<c.")
-            
+
         case "ass", "ssa":
             format = ext == "ass" ? "Advanced SubStation Alpha" : "SubStation Alpha"
-            
+
             // Count dialogue lines
             entryCount = lines.filter { $0.hasPrefix("Dialogue:") }.count
-            
+
             // Extract PlayResX and PlayResY
             if let resXLine = lines.first(where: { $0.hasPrefix("PlayResX:") }),
                let resYLine = lines.first(where: { $0.hasPrefix("PlayResY:") }) {
                 let resX = resXLine.replacingOccurrences(of: "PlayResX:", with: "").trimmingCharacters(in: .whitespaces)
                 let resY = resYLine.replacingOccurrences(of: "PlayResY:", with: "").trimmingCharacters(in: .whitespaces)
             }
-            
+
             // Find last dialogue timestamp
             if let lastDialogue = lines.last(where: { $0.hasPrefix("Dialogue:") }) {
                 let parts = lastDialogue.components(separatedBy: ",")
@@ -1887,9 +1900,9 @@ struct FileInfo {
                     duration = parts[2].trimmingCharacters(in: .whitespaces)
                 }
             }
-            
+
             hasFormatting = true // ASS/SSA always have rich formatting
-            
+
         case "sub":
             format = "MicroDVD"
             // Count frame-based entries
@@ -1897,7 +1910,7 @@ struct FileInfo {
                 line.hasPrefix("{") && line.contains("}{")
             }
             entryCount = frameLines.count
-            
+
             // Try to extract frame rate from first line
             if let firstLine = frameLines.first {
                 let pattern = #"\{(\d+)\}\{(\d+)\}"#
@@ -1911,26 +1924,26 @@ struct FileInfo {
                     }
                 }
             }
-            
+
             hasFormatting = content.contains("{Y:") || content.contains("{y:")
-            
+
         case "sbv":
             format = "YouTube SBV"
             entryCount = lines.filter { $0.contains(",") && $0.contains(":") && !$0.contains(" ") }.count
-            
+
             if let lastTimeline = lines.last(where: { $0.contains(",") && $0.contains(":") && !$0.contains(" ") }) {
                 let components = lastTimeline.components(separatedBy: ",")
                 if components.count == 2 {
                     duration = components[1].trimmingCharacters(in: .whitespaces)
                 }
             }
-            
+
             hasFormatting = false
-            
+
         case "lrc":
             format = "LRC (Lyrics)"
             entryCount = lines.filter { $0.hasPrefix("[") && $0.contains("]") }.count
-            
+
             // Extract metadata
             if let titleLine = lines.first(where: { $0.hasPrefix("[ti:") }) {
                 // Title metadata available
@@ -1938,13 +1951,13 @@ struct FileInfo {
             if let langLine = lines.first(where: { $0.hasPrefix("[la:") }) {
                 language = langLine.replacingOccurrences(of: "[la:", with: "").replacingOccurrences(of: "]", with: "")
             }
-            
+
             hasFormatting = false
-            
+
         default:
             return nil
         }
-        
+
         return SubtitleMetadata(
             format: format,
             encoding: encoding,
