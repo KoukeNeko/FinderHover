@@ -14,8 +14,10 @@ class SiteNav extends HTMLElement {
 
         // Get current language from i18n if available
         const langNames = { 'zh-Hant': '繁', 'ja': '日', 'en': 'EN' };
+        const langFullNames = { 'zh-Hant': '繁體中文', 'ja': '日本語', 'en': 'English' };
         const currentLang = window.i18n?.currentLang || 'zh-Hant';
         const currentLangDisplay = langNames[currentLang] || '繁';
+        const currentLangFull = langFullNames[currentLang] || '繁體中文';
 
         this.innerHTML = `
       <nav class="nav">
@@ -40,7 +42,10 @@ class SiteNav extends HTMLElement {
             <a href="formats.html" data-i18n="nav.formats">格式</a>
             <a href="changelog.html" data-i18n="nav.changelog">更新日誌</a>
             <div class="lang-switcher">
-              <button class="lang-current" aria-label="Change language">${currentLangDisplay}</button>
+              <button class="lang-current" aria-label="Change language">
+                <span class="lang-text-desktop">${currentLangDisplay}</span>
+                <span class="lang-text-mobile">${currentLangFull}</span>
+              </button>
               <div class="lang-dropdown">
                 <button class="lang-option${currentLang === 'zh-Hant' ? ' active' : ''}" data-lang="zh-Hant">繁體中文</button>
                 <button class="lang-option${currentLang === 'ja' ? ' active' : ''}" data-lang="ja">日本語</button>
