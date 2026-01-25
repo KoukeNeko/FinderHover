@@ -538,6 +538,9 @@
 "hover.config.format" = "Format";
 "hover.config.keyCount" = "Keys";
 "hover.config.isValid" = "Valid";
+"hover.config.maxDepth" = "Depth";
+"hover.config.hasComments" = "Comments";
+"hover.config.encoding" = "Encoding";
 "hover.config.yes" = "Yes";
 "hover.config.no" = "No";
 

@@ -858,7 +858,7 @@ struct HoverContentView: View {
             }
 
         case .html:
-            if settings.showHTML, let html = fileInfo.htmlMetadata {
+            if settings.showHTML, let html = fileInfo.htmlMetadata, html.hasData {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
                     Divider()
                         .background(Color.gray.opacity(0.3))
@@ -905,7 +905,7 @@ struct HoverContentView: View {
             }
 
         case .imageExtended:
-            if settings.showImageExtended, let imageExt = fileInfo.imageExtendedMetadata {
+            if settings.showImageExtended, let imageExt = fileInfo.imageExtendedMetadata, imageExt.hasData {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
                     Divider()
                         .background(Color.gray.opacity(0.3))
@@ -945,7 +945,7 @@ struct HoverContentView: View {
             }
 
         case .markdown:
-            if settings.showMarkdown, let md = fileInfo.markdownMetadata {
+            if settings.showMarkdown, let md = fileInfo.markdownMetadata, md.hasData {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
                     Divider()
                         .background(Color.gray.opacity(0.3))
@@ -985,7 +985,7 @@ struct HoverContentView: View {
             }
 
         case .config:
-            if settings.showConfig, let config = fileInfo.configMetadata {
+            if settings.showConfig, let config = fileInfo.configMetadata, config.hasData {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
                     Divider()
                         .background(Color.gray.opacity(0.3))
@@ -999,8 +999,8 @@ struct HoverContentView: View {
                         DetailRow(icon: "doc.text", label: "hover.config.format".localized, value: format, fontSize: settings.fontSize)
                     }
                     if settings.showConfigValid, let isValid = config.isValid {
-                        let status = isValid ? "Valid" : "Invalid"
-                        DetailRow(icon: "checkmark.circle", label: "hover.config.valid".localized, value: status, fontSize: settings.fontSize)
+                        let status = isValid ? "hover.config.yes".localized : "hover.config.no".localized
+                        DetailRow(icon: "checkmark.circle", label: "hover.config.isValid".localized, value: status, fontSize: settings.fontSize)
                     }
                     if settings.showConfigKeyCount, let keyCount = config.keyCount {
                         DetailRow(icon: "number", label: "hover.config.keyCount".localized, value: "\(keyCount)", fontSize: settings.fontSize)
@@ -1009,7 +1009,7 @@ struct HoverContentView: View {
                         DetailRow(icon: "arrow.down.right", label: "hover.config.maxDepth".localized, value: "\(maxDepth)", fontSize: settings.fontSize)
                     }
                     if settings.showConfigHasComments, let hasComments = config.hasComments {
-                        let status = hasComments ? "Yes" : "No"
+                        let status = hasComments ? "hover.config.yes".localized : "hover.config.no".localized
                         DetailRow(icon: "text.bubble", label: "hover.config.hasComments".localized, value: status, fontSize: settings.fontSize)
                     }
                     if settings.showConfigEncoding, let encoding = config.encoding {
@@ -1023,7 +1023,7 @@ struct HoverContentView: View {
             }
 
         case .psd:
-            if settings.showPSD, let psd = fileInfo.psdMetadata {
+            if settings.showPSD, let psd = fileInfo.psdMetadata, psd.hasData {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
                     Divider()
                         .background(Color.gray.opacity(0.3))
@@ -1060,7 +1060,7 @@ struct HoverContentView: View {
             }
 
         case .executable:
-            if settings.showExecutable, let exe = fileInfo.executableMetadata {
+            if settings.showExecutable, let exe = fileInfo.executableMetadata, exe.hasData {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
                     Divider()
                         .background(Color.gray.opacity(0.3))
@@ -1097,7 +1097,7 @@ struct HoverContentView: View {
             }
 
         case .appBundle:
-            if settings.showAppBundle, let app = fileInfo.appBundleMetadata {
+            if settings.showAppBundle, let app = fileInfo.appBundleMetadata, app.hasData {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
                     Divider()
                         .background(Color.gray.opacity(0.3))
@@ -1141,7 +1141,7 @@ struct HoverContentView: View {
             }
 
         case .sqlite:
-            if settings.showSQLite, let db = fileInfo.sqliteMetadata {
+            if settings.showSQLite, let db = fileInfo.sqliteMetadata, db.hasData {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
                     Divider()
                         .background(Color.gray.opacity(0.3))
@@ -1183,7 +1183,7 @@ struct HoverContentView: View {
             }
 
         case .git:
-            if settings.showGit, let git = fileInfo.gitMetadata {
+            if settings.showGit, let git = fileInfo.gitMetadata, git.hasData {
                 VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
                     Divider()
                         .background(Color.gray.opacity(0.3))

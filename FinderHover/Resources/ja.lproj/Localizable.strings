@@ -538,6 +538,9 @@
 "hover.config.format" = "形式";
 "hover.config.keyCount" = "キー数";
 "hover.config.isValid" = "有効";
+"hover.config.maxDepth" = "深度";
+"hover.config.hasComments" = "コメント";
+"hover.config.encoding" = "エンコーディング";
 "hover.config.yes" = "はい";
 "hover.config.no" = "いいえ";
 
