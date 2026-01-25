@@ -1673,8 +1673,7 @@ struct FileInfo {
             "vue": "Vue",
             // Data/Config (XML only - JSON/YAML/TOML/INI use config metadata instead)
             "xml": "XML",
-            // Other
-            "md": "Markdown", "markdown": "Markdown",
+            // Other (Markdown uses dedicated markdown metadata instead)
             "sql": "SQL",
             "r": "R",
             "lua": "Lua",
