@@ -779,7 +779,7 @@ struct SQLTextPreviewView: View {
     private var schemaView: some View {
         ScrollView {
             if let selectedTable = viewModel.selectedTable {
-                VStack(alignment: .leading, spacing: 12) {
+                LazyVStack(alignment: .leading, spacing: 12) {
                     ForEach(selectedTable.columns) { column in
                         schemaColumnRow(column)
                     }
@@ -864,35 +864,12 @@ struct SQLTextPreviewView: View {
                     emptyDataView
                 } else {
                     ScrollView([.horizontal, .vertical]) {
-                        VStack(alignment: .leading, spacing: 0) {
-                            // Column headers
-                            HStack(spacing: 0) {
-                                ForEach(selectedTable.columns) { column in
-                                    columnHeader(column)
+                        LazyVStack(alignment: .leading, spacing: 0, pinnedViews: [.sectionHeaders]) {
+                            Section(header: columnHeaderRow(columns: selectedTable.columns)) {
+                                // Data rows
+                                ForEach(Array(selectedTable.data.enumerated()), id: \.offset) { index, row in
+                                    dataRow(row: row, columns: selectedTable.columns, index: index)
                                 }
-                            }
-                            .background(Color(nsColor: .controlBackgroundColor))
-
-                            Divider()
-
-                            // Data rows
-                            ForEach(Array(selectedTable.data.enumerated()), id: \.offset) { index, row in
-                                HStack(spacing: 0) {
-                                    ForEach(Array(row.enumerated()), id: \.offset) { colIndex, value in
-                                        dataCell(value: value)
-                                    }
-                                    // Fill remaining columns if row is shorter
-                                    if row.count < selectedTable.columns.count {
-                                        ForEach(row.count..<selectedTable.columns.count, id: \.self) { _ in
-                                            dataCell(value: "NULL")
-                                        }
-                                    }
-                                }
-                                .background(
-                                    index % 2 == 0
-                                        ? Color.clear
-                                        : Color.secondary.opacity(0.05)
-                                )
                             }
                         }
                     }
@@ -901,6 +878,34 @@ struct SQLTextPreviewView: View {
                 noSelectionView
             }
         }
+    }
+
+    private func columnHeaderRow(columns: [SQLColumnDefinition]) -> some View {
+        HStack(spacing: 0) {
+            ForEach(columns) { column in
+                columnHeader(column)
+            }
+        }
+        .background(Color(nsColor: .controlBackgroundColor))
+    }
+
+    private func dataRow(row: [String], columns: [SQLColumnDefinition], index: Int) -> some View {
+        HStack(spacing: 0) {
+            ForEach(Array(row.enumerated()), id: \.offset) { colIndex, value in
+                dataCell(value: value)
+            }
+            // Fill remaining columns if row is shorter
+            if row.count < columns.count {
+                ForEach(row.count..<columns.count, id: \.self) { _ in
+                    dataCell(value: "NULL")
+                }
+            }
+        }
+        .background(
+            index % 2 == 0
+                ? Color.clear
+                : Color.secondary.opacity(0.05)
+        )
     }
 
     private func columnHeader(_ column: SQLColumnDefinition) -> some View {
@@ -974,59 +979,61 @@ struct SQLTextPreviewView: View {
     // MARK: - Source Code View
 
     private var sourceCodeView: some View {
-        ScrollView([.horizontal, .vertical]) {
-            if viewModel.isHighlighting {
-                VStack {
-                    ProgressView()
-                    Text("Highlighting...")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(40)
-            } else if let highlighted = viewModel.highlightedContent {
-                HStack(alignment: .top, spacing: 0) {
-                    // Line numbers
-                    lineNumbersView
+        GeometryReader { geometry in
+            ScrollView([.horizontal, .vertical]) {
+                if viewModel.isHighlighting {
+                    VStack {
+                        ProgressView()
+                        Text("Highlighting...")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                } else if let highlighted = viewModel.highlightedContent {
+                    HStack(alignment: .top, spacing: 0) {
+                        // Line numbers - simplified for performance
+                        lineNumbersText
 
-                    Divider()
+                        Divider()
 
-                    // Code content
-                    Text(highlighted)
-                        .font(.system(size: 12, design: .monospaced))
-                        .textSelection(.enabled)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                }
-            } else {
-                // Fallback plain text
-                HStack(alignment: .top, spacing: 0) {
-                    lineNumbersView
+                        // Code content
+                        Text(highlighted)
+                            .font(.system(size: 12, design: .monospaced))
+                            .textSelection(.enabled)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                    }
+                } else {
+                    // Fallback plain text
+                    HStack(alignment: .top, spacing: 0) {
+                        lineNumbersText
 
-                    Divider()
+                        Divider()
 
-                    Text(viewModel.content)
-                        .font(.system(size: 12, design: .monospaced))
-                        .textSelection(.enabled)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
+                        Text(viewModel.content)
+                            .font(.system(size: 12, design: .monospaced))
+                            .textSelection(.enabled)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                    }
                 }
             }
         }
     }
 
-    private var lineNumbersView: some View {
-        VStack(alignment: .trailing, spacing: 0) {
-            ForEach(1...max(1, viewModel.lineCount), id: \.self) { lineNum in
-                Text("\(lineNum)")
-                    .font(.system(size: 11, design: .monospaced))
-                    .foregroundColor(.secondary)
-                    .frame(height: 17) // Match line height
-            }
-        }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 8)
-        .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
+    // Use a single Text view for line numbers instead of ForEach
+    private var lineNumbersText: some View {
+        Text(lineNumbersString)
+            .font(.system(size: 11, design: .monospaced))
+            .foregroundColor(.secondary)
+            .multilineTextAlignment(.trailing)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 8)
+            .background(Color(nsColor: .controlBackgroundColor).opacity(0.5))
+    }
+
+    private var lineNumbersString: String {
+        (1...max(1, viewModel.lineCount)).map { String($0) }.joined(separator: "\n")
     }
 
     // MARK: - Footer
