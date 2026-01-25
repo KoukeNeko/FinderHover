@@ -2,7 +2,98 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.3.2 (Current)
+## Version 1.4.3 (Current)
+
+### 🐛 Bug Fixes
+
+- Fixed Markdown files showing duplicate code file section
+  - Markdown files now only display dedicated Markdown metadata
+  - Removed redundant code file metrics for `.md` files
+
+## Version 1.4.2
+
+### 🐛 Bug Fixes
+
+- Fixed missing localization keys for new metadata types
+  - Added all missing hover window keys for HTML, Markdown, Image Extended, PSD, Executable, App Bundle, SQLite, and Git metadata
+  - Full localization support for English, Traditional Chinese, and Japanese
+
+## Version 1.4.1
+
+### 🔧 Maintenance
+
+- Minor stability improvements
+
+## Version 1.4.0
+
+### 🆕 Major Metadata Update - 9 New File Types
+
+#### HTML/Web Files
+- Page title and meta description
+- Keywords and author
+- Language attribute
+- Supports `.html`, `.htm`, `.xhtml` files
+
+#### Extended Image Metadata (IPTC/XMP)
+- Creator and creator tool
+- Headline and description
+- Copyright information
+- Enhanced metadata beyond basic EXIF
+
+#### Markdown Files
+- Title detection from frontmatter or first heading
+- Frontmatter presence indicator
+- Heading, image, link, and code block counts
+- Supports `.md`, `.markdown` files
+
+#### Config Files (JSON/YAML/TOML)
+- Key count and nesting depth
+- Array count detection
+- Format-specific parsing
+- Supports `.json`, `.yaml`, `.yml`, `.toml` files
+
+#### PSD Files
+- Layer count
+- Color mode (RGB, CMYK, etc.)
+- Bit depth
+- Resolution (DPI)
+- Transparency support
+
+#### Executable Files (Mach-O)
+- Architecture detection (arm64, x86_64, Universal)
+- Code signing status
+- Minimum OS version
+- SDK version
+- File type (executable, dylib, bundle)
+
+#### App Bundles (.app)
+- Bundle ID
+- App version and build number
+- Minimum macOS version
+- Code signing status
+- Entitlements count
+
+#### SQLite Databases
+- Table, index, trigger, and view counts
+- Total row count across all tables
+- Schema version
+- Text encoding
+- Native SQLite3 C API for better performance
+
+#### Git Repositories
+- Current branch name
+- Total commit count
+- Remote URL
+- Uncommitted changes count
+- Tag count
+
+### 🔧 Technical Improvements
+
+- **Native SQLite3 API**: Uses C API directly instead of CLI for faster database inspection
+- **Settings Toggles**: Per-field visibility controls for all new metadata types
+- **Full Localization**: All new metadata fields localized in English, Traditional Chinese, and Japanese
+
+## Version 1.3.2
 
 ### 🌍 Localization Improvements
 
