@@ -180,110 +180,72 @@ body::before {
     margin-bottom: 40px;
 }
 
-.hero-install-card {
-    display: inline-block;
-    background: linear-gradient(135deg, #1d1d1f 0%, #2d2d30 100%);
-    border-radius: 20px;
-    padding: 28px 36px;
-    position: relative;
-    overflow: hidden;
+/* Hero CTA Group - Apple Store Style */
+.hero-cta-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
 }
 
-.hero-install-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(0, 113, 227, 0.2) 0%, transparent 60%);
-    pointer-events: none;
-}
-
-.hero-install-badge {
-    display: inline-block;
-    background: var(--color-accent);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 980px;
-    margin-bottom: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    position: relative;
-    z-index: 1;
-}
-
-.hero-install-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #fff;
-    margin-bottom: 16px;
-    position: relative;
-    z-index: 1;
-}
-
-.hero-install-code {
+.hero-btn-primary {
     display: inline-flex;
     align-items: center;
-    gap: 14px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding: 14px 20px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    margin-bottom: 14px;
-    position: relative;
-    z-index: 1;
-}
-
-.hero-install-code code {
-    font-family: var(--font-family-mono);
-    font-size: 15px;
+    gap: 8px;
+    background: var(--color-accent);
     color: #fff;
+    padding: 14px 28px;
+    border-radius: 980px;
+    text-decoration: none;
+    font-size: 17px;
     font-weight: 500;
-}
-
-.hero-copy-btn {
-    background: rgba(255, 255, 255, 0.1);
     border: none;
-    color: rgba(255, 255, 255, 0.8);
     cursor: pointer;
-    padding: 6px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     transition: all var(--transition-default);
 }
 
-.hero-copy-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #fff;
+.hero-btn-primary:hover {
+    background: var(--color-accent-hover);
+    transform: scale(1.02);
 }
 
-.hero-copy-btn.copied {
-    background: rgba(48, 209, 88, 0.2);
-    color: #30d158;
+.hero-btn-primary svg {
+    flex-shrink: 0;
 }
 
-.hero-install-alt {
+.hero-brew-hint {
+    margin-top: -8px;
+}
+
+.hero-brew-hint code {
+    font-family: var(--font-family-mono);
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.5);
-    position: relative;
-    z-index: 1;
+    color: var(--color-text-secondary);
 }
 
-.hero-install-alt a {
+.hero-alt-install {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+}
+
+.hero-link {
     color: var(--color-accent);
     text-decoration: none;
     transition: opacity var(--transition-default);
 }
 
-.hero-install-alt a:hover {
+.hero-link:hover {
     opacity: 0.8;
+}
+
+.hero-requirement {
+    font-size: 12px;
+    color: var(--color-text-secondary);
 }
 
 .hero-image {
@@ -592,17 +554,13 @@ body::before {
         font-size: 36px;
     }
 
-    .hero-install-card {
-        padding: 24px 20px;
+    .hero-brew-hint code {
+        font-size: 11px;
     }
 
-    .hero-install-code {
+    .hero-alt-install {
         flex-direction: column;
-        gap: 12px;
-    }
-
-    .hero-install-code code {
-        font-size: 13px;
+        gap: 6px;
     }
 
     .gallery-grid {
