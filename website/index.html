@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinderHover - Rich File Previews for macOS</title>
+    <meta name="description" content="A native macOS app that displays rich file information when hovering over files in Finder.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="assets/icon.png">
+    
+    <!-- San Francisco Font Support (using system fonts stack in CSS) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">
+                <img src="assets/icon.png" alt="FinderHover Logo">
+                <span>FinderHover</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#metadata">Metadata</a>
+                <a href="https://github.com/KoukeNeko/FinderHover" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                <a href="https://github.com/KoukeNeko/FinderHover/releases/latest" class="btn-primary-sm">Download</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <img src="assets/icon.png" alt="FinderHover Icon" class="hero-icon">
+            <h1>FinderHover</h1>
+            <p class="tagline">Rich file information at your fingertips.</p>
+            <p class="sub-tagline">Windows-style file previews, reimagined for macOS.</p>
+            
+            <div class="cta-group">
+                <a href="https://github.com/KoukeNeko/FinderHover/releases/latest" class="btn-primary">
+                    <i class="fas fa-download"></i> Download for macOS
+                </a>
+                <div class="brew-install">
+                    <code>brew install koukeneko/tap/finderhover</code>
+                    <button class="copy-btn" onclick="copyBrew()" title="Copy to clipboard"><i class="fas fa-copy"></i></button>
+                </div>
+            </div>
+            
+            <div class="badges">
+                <span class="badge"><i class="fab fa-apple"></i> macOS 14.0+</span>
+                <span class="badge"><i class="fab fa-swift"></i> Native Swift</span>
+                <span class="badge"><i class="fas fa-universal-access"></i> Accessibility API</span>
+            </div>
+        </div>
+        
+        <div class="hero-image-container">
+            <img src="https://github.com/user-attachments/assets/7d27934e-5e11-4196-a6ac-5c7ebc6a1f17" alt="FinderHover Interface Overview" class="hero-screenshot">
+        </div>
+    </header>
+
+    <section id="features" class="features">
+        <div class="section-header">
+            <h2>Why FinderHover?</h2>
+            <p>Designed to feel native, built to be powerful.</p>
+        </div>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                <h3>Smart Detection</h3>
+                <p>Instant previews with adjustable delay. Intelligently auto-hides when you're renaming files or dragging items.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-image"></i></div>
+                <h3>QuickLook Integration</h3>
+                <p>See native thumbnails for PDFs, images, and documents directly in the hover window.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3>Privacy First</h3>
+                <p>All processing happens locally on your device. Zero network access required. Built on macOS Accessibility API.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-sliders-h"></i></div>
+                <h3>Highly Customizable</h3>
+                <p>Choose between rich macOS style or minimal Windows tooltip style. Adjust size, opacity, and font scaling.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="metadata" class="metadata-section">
+        <div class="section-header">
+            <h2>Everything You Need to Know</h2>
+            <p>Support for 50+ file formats with deep metadata extraction.</p>
+        </div>
+
+        <div class="metadata-grid">
+            <div class="meta-item">
+                <div class="meta-icon">📷</div>
+                <h4>Photography</h4>
+                <p>Camera model, ISO, aperture, shutter speed, GPS</p>
+            </div>
+            <div class="meta-item">
+                <div class="meta-icon">🎬</div>
+                <h4>Multimedia</h4>
+                <p>Video codec, resolution, bitrate, frame rate</p>
+            </div>
+            <div class="meta-item">
+                <div class="meta-icon">💻</div>
+                <h4>Development</h4>
+                <p>Line counts, syntax detection, file encoding</p>
+            </div>
+            <div class="meta-item">
+                <div class="meta-icon">📂</div>
+                <h4>Git Repos</h4>
+                <p>Current branch, commit count, remote URL, status</p>
+            </div>
+            <div class="meta-item">
+                <div class="meta-icon">📦</div>
+                <h4>App Bundles</h4>
+                <p>Bundle ID, version, min macOS, entitlements</p>
+            </div>
+            <div class="meta-item">
+                <div class="meta-icon">🗄️</div>
+                <h4>SQLite</h4>
+                <p>Table counts, total rows, schema version</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery">
+        <div class="section-header">
+            <h2>Gallery</h2>
+        </div>
+        <div class="gallery-grid">
+            <img src="https://github.com/user-attachments/assets/fe969256-a07d-4db6-8715-a3bb3226782b" alt="Screenshot 1">
+            <img src="https://github.com/user-attachments/assets/f492dc51-9fd8-49f2-b854-d9fc4ac026a6" alt="Screenshot 2">
+            <img src="https://github.com/user-attachments/assets/dc04ba05-2bcb-4308-b0cc-bd5ed2259d07" alt="Screenshot 3">
+            <img src="https://github.com/user-attachments/assets/140accdd-6034-4b2d-b4d9-ccc55a28586c" alt="Screenshot 4">
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="assets/icon.png" alt="FinderHover">
+                <p>FinderHover</p>
+            </div>
+            <div class="footer-links">
+                <a href="https://github.com/KoukeNeko/FinderHover">GitHub</a>
+                <a href="https://github.com/KoukeNeko/FinderHover/issues">Support</a>
+                <a href="https://github.com/KoukeNeko/FinderHover/blob/main/LICENSE">License</a>
+            </div>
+            <p class="copyright">&copy; <span id="year"></span> KoukeNeko. Open source under MIT License.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        function copyBrew() {
+            const command = 'brew install koukeneko/tap/finderhover';
+            navigator.clipboard.writeText(command).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalIcon = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i>';
+                setTimeout(() => {
+                    btn.innerHTML = originalIcon;
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
