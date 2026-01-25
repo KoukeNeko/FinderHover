@@ -126,6 +126,24 @@ const i18n = {
         el.title = value;
       }
     });
+
+    // Sync marquee duplicate content
+    this.syncMarqueeContent();
+  },
+
+  /**
+   * Sync marquee content - copy first marquee-content to all duplicates
+   */
+  syncMarqueeContent() {
+    document.querySelectorAll('.marquee-row').forEach(row => {
+      const contents = row.querySelectorAll('.marquee-content');
+      if (contents.length > 1) {
+        const firstContent = contents[0];
+        for (let i = 1; i < contents.length; i++) {
+          contents[i].innerHTML = firstContent.innerHTML;
+        }
+      }
+    });
   },
 
   /**
