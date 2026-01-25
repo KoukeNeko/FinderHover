@@ -549,7 +549,7 @@ This release introduces a DMG disk image installer for easier installation and d
   - Complete localization of all UI elements, settings, and menus
   - Consistent vertical slider layouts across all settings pages
 
-## Version 1.1
+## Version 1.1.0
 
 - 📸 **NEW: Photo EXIF Information**
   - Camera model and lens information
@@ -567,7 +567,7 @@ This release introduces a DMG disk image installer for easier installation and d
   - Fixed display order not persisting to UserDefaults
   - Improved compatibility with older macOS versions (pre-11.0) for blur effects
 
-## Version 1.0
+## Version 1.0.0
 
 - ✨ Initial release
 - 🎯 Smart hover preview with adjustable delay (default: 0.1s)
