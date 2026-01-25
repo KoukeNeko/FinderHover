@@ -386,10 +386,6 @@ struct HoverContentView: View {
                     if settings.showEXIFGPS, let gps = exif.gpsLocation {
                         DetailRow(icon: IconManager.Photo.location, label: "hover.exif.gps".localized, value: gps, fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -419,10 +415,6 @@ struct HoverContentView: View {
                     if settings.showVideoBitrate, let bitrate = video.bitrate {
                         DetailRow(icon: IconManager.Video.bitrate, label: "hover.video.bitrate".localized, value: bitrate, fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -464,10 +456,6 @@ struct HoverContentView: View {
                     if let channels = audio.channels {
                         DetailRow(icon: IconManager.Audio.channels, label: "hover.audio.channels".localized, value: channels, fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -518,10 +506,6 @@ struct HoverContentView: View {
                     if settings.showPDFEncrypted, let isEncrypted = pdf.isEncrypted, isEncrypted {
                         DetailRow(icon: "lock.fill", label: "hover.pdf.encrypted".localized, value: "Yes", fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -578,10 +562,6 @@ struct HoverContentView: View {
                     if settings.showOfficeCategory, let category = office.category {
                         DetailRow(icon: "folder", label: "hover.office.category".localized, value: category, fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -612,10 +592,6 @@ struct HoverContentView: View {
                     if settings.showArchiveEncrypted, let isEncrypted = archive.isEncrypted, isEncrypted {
                         DetailRow(icon: "lock.fill", label: "hover.archive.encrypted".localized, value: "hover.archive.yes".localized, fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -654,10 +630,6 @@ struct HoverContentView: View {
                     if settings.showEbookPageCount, let pageCount = ebook.pageCount {
                         DetailRow(icon: "doc.text", label: "hover.ebook.pageCount".localized, value: "\(pageCount)", fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -690,10 +662,6 @@ struct HoverContentView: View {
                     if settings.showCodeEncoding, let encoding = code.encoding {
                         DetailRow(icon: "textformat.abc", label: "hover.code.encoding".localized, value: encoding, fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -729,10 +697,6 @@ struct HoverContentView: View {
                     if settings.showFontGlyphCount, let glyphCount = font.glyphCount {
                         DetailRow(icon: "character.textbox", label: "hover.font.glyphCount".localized, value: "\(glyphCount)", fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -771,10 +735,6 @@ struct HoverContentView: View {
                     if settings.showDiskImageFileSystem, let fileSystem = diskImage.fileSystem {
                         DetailRow(icon: "doc.text", label: "hover.diskImage.fileSystem".localized, value: fileSystem, fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -810,10 +770,6 @@ struct HoverContentView: View {
                     if settings.showVectorGraphicsVersion, let version = vectorGraphics.version {
                         DetailRow(icon: "number", label: "hover.vectorGraphics.version".localized, value: version, fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -850,10 +806,6 @@ struct HoverContentView: View {
                         let status = hasFormatting ? "Yes" : "No"
                         DetailRow(icon: "textformat", label: "hover.subtitle.hasFormatting".localized, value: status, fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -897,10 +849,6 @@ struct HoverContentView: View {
                     if settings.showHTMLLanguage, let language = html.language {
                         DetailRow(icon: "globe", label: "hover.html.language".localized, value: language, fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -937,10 +885,6 @@ struct HoverContentView: View {
                     if settings.showImageHeadline, let headline = imageExt.headline {
                         DetailRow(icon: "textformat", label: "hover.imageExtended.headline".localized, value: headline, fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -977,10 +921,6 @@ struct HoverContentView: View {
                     if settings.showMarkdownCodeBlockCount, let codeBlockCount = md.codeBlockCount {
                         DetailRow(icon: "chevron.left.forwardslash.chevron.right", label: "hover.markdown.codeBlockCount".localized, value: "\(codeBlockCount)", fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -1015,10 +955,6 @@ struct HoverContentView: View {
                     if settings.showConfigEncoding, let encoding = config.encoding {
                         DetailRow(icon: "textformat.abc", label: "hover.config.encoding".localized, value: encoding, fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -1052,10 +988,6 @@ struct HoverContentView: View {
                     if settings.showPSDDimensions, let dimensions = psd.dimensions {
                         DetailRow(icon: "aspectratio", label: "hover.psd.dimensions".localized, value: dimensions, fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -1089,10 +1021,6 @@ struct HoverContentView: View {
                     if settings.showExecutableFileType, let fileType = exe.fileType {
                         DetailRow(icon: "doc", label: "hover.executable.fileType".localized, value: fileType, fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -1133,10 +1061,6 @@ struct HoverContentView: View {
                         let status = hasEntitlements ? "Yes" : "No"
                         DetailRow(icon: "lock.shield", label: "hover.appBundle.entitlements".localized, value: status, fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -1175,10 +1099,6 @@ struct HoverContentView: View {
                     if settings.showSQLiteEncoding, let encoding = db.encoding {
                         DetailRow(icon: "textformat.abc", label: "hover.sqlite.encoding".localized, value: encoding, fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
@@ -1218,10 +1138,6 @@ struct HoverContentView: View {
                     if settings.showGitTagCount, let tagCount = git.tagCount {
                         DetailRow(icon: "tag", label: "hover.git.tagCount".localized, value: "\(tagCount)", fontSize: settings.fontSize)
                     }
-
-                    Divider()
-                        .background(Color.gray.opacity(0.3))
-                        .padding(.top, settings.compactMode ? 2 : 4)
                 }
             }
 
