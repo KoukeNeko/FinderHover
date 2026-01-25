@@ -12,7 +12,7 @@
     "Helvetica Neue", Arial, sans-serif;
   --font-family-mono:
     "SF Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  --max-width: 980px;
+
   --max-width-wide: 1200px;
   --transition-default: 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
@@ -121,7 +121,7 @@ body::before {
 }
 
 .nav-content {
-  max-width: var(--max-width);
+  max-width: var(--max-width-wide);
   margin: 0 auto;
   padding: 0 22px;
   height: 48px;
@@ -403,7 +403,8 @@ body::before {
 }
 
 .hero-image {
-  max-width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.2);
@@ -702,7 +703,7 @@ body::before {
 /* Gallery Section */
 .gallery-section {
   padding: 100px 24px;
-  max-width: var(--max-width-wide);
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -734,6 +735,8 @@ body::before {
 .gallery-item img {
   width: 100%;
   height: auto;
+  max-height: 400px;
+  object-fit: cover;
   display: block;
 }
 

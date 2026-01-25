@@ -23,7 +23,7 @@ class SiteNav extends HTMLElement {
       <nav class="nav">
         <div class="nav-content">
           <a href="${homeLink}" class="nav-logo">
-            <img src="assets/icon.png" alt="FinderHover" />
+            <img src="assets/icon-128.png" alt="FinderHover" />
             <span>FinderHover</span>
           </a>
           <button class="nav-menu-toggle" aria-label="Toggle menu">
