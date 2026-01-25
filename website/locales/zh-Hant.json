@@ -113,13 +113,49 @@
     "recommended": "推薦",
     "homebrew": {
       "title": "Homebrew",
-      "desc": "一行指令，自動更新，無需處理 Gatekeeper"
+      "desc": "使用 macOS 套件管理器安裝，自動處理 Gatekeeper 驗證，更新更方便。",
+      "stepsTitle": "安裝步驟",
+      "step1": "開啟終端機 (Terminal)",
+      "step2": "貼上上方指令並按 Enter",
+      "step3": "等待安裝完成",
+      "step4": "在 Launchpad 中開啟 FinderHover",
+      "noHomebrew": "沒有 Homebrew？",
+      "visitBrew": "前往 brew.sh 了解更多"
     },
-    "dmg": {
-      "title": "DMG 下載",
-      "desc": "傳統方式，需手動允許 Gatekeeper",
-      "download": "下載最新版本",
-      "note": "下載後需在「系統設定 → 隱私與安全性」中允許執行"
+    "direct": {
+      "title": "直接下載",
+      "desc": "從 GitHub Releases 下載最新版本的 .app 檔案。",
+      "downloadBtn": "下載 FinderHover.app.zip",
+      "stepsTitle": "安裝步驟",
+      "step1": "下載並解壓縮 .zip 檔案",
+      "step2": "將 FinderHover.app 拖曳到「應用程式」資料夾",
+      "step3": "首次開啟時，右鍵點擊選擇「打開」",
+      "step4": "在彈出視窗中點擊「打開」以略過 Gatekeeper",
+      "note": "由於 App 未經 Apple 公證，需要手動允許執行"
+    },
+    "source": {
+      "title": "從原始碼建置",
+      "desc": "適合開發者或想要自訂功能的使用者。",
+      "stepsTitle": "建置步驟",
+      "step1": "確保已安裝 Xcode 15 或更新版本",
+      "step2": "Clone 儲存庫",
+      "step3": "執行 xcodebuild -scheme FinderHover -configuration Release",
+      "step4": "或在 Xcode 中開啟專案並按 ⌘B 建置"
+    },
+    "requirements": {
+      "title": "系統需求",
+      "macos": {
+        "title": "macOS Sonoma 14.0+",
+        "desc": "需要 macOS Sonoma 或更新版本"
+      },
+      "accessibility": {
+        "title": "輔助使用權限",
+        "desc": "需要授予輔助使用權限以偵測滑鼠位置"
+      },
+      "silicon": {
+        "title": "Apple Silicon",
+        "desc": "支援 M1/M2/M3/M4 及 M5 處理器"
+      }
     }
   },
   "changelog": {

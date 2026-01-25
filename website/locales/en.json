@@ -113,13 +113,49 @@
     "recommended": "Recommended",
     "homebrew": {
       "title": "Homebrew",
-      "desc": "One command, auto-updates, no Gatekeeper hassle"
+      "desc": "Install via macOS package manager, automatic Gatekeeper verification, easy updates.",
+      "stepsTitle": "Installation Steps",
+      "step1": "Open Terminal",
+      "step2": "Paste the command above and press Enter",
+      "step3": "Wait for installation to complete",
+      "step4": "Open FinderHover from Launchpad",
+      "noHomebrew": "Don't have Homebrew?",
+      "visitBrew": "Visit brew.sh to learn more"
     },
-    "dmg": {
-      "title": "DMG Download",
-      "desc": "Traditional method, requires manual Gatekeeper approval",
-      "download": "Download Latest",
-      "note": "After downloading, allow it in System Settings → Privacy & Security"
+    "direct": {
+      "title": "Direct Download",
+      "desc": "Download the latest .app file from GitHub Releases.",
+      "downloadBtn": "Download FinderHover.app.zip",
+      "stepsTitle": "Installation Steps",
+      "step1": "Download and extract the .zip file",
+      "step2": "Drag FinderHover.app to Applications folder",
+      "step3": "Right-click and select \"Open\" on first launch",
+      "step4": "Click \"Open\" in the popup to bypass Gatekeeper",
+      "note": "The app is not notarized by Apple, manual approval required"
+    },
+    "source": {
+      "title": "Build from Source",
+      "desc": "For developers or users who want custom features.",
+      "stepsTitle": "Build Steps",
+      "step1": "Ensure Xcode 15 or later is installed",
+      "step2": "Clone the repository",
+      "step3": "Run xcodebuild -scheme FinderHover -configuration Release",
+      "step4": "Or open the project in Xcode and press ⌘B to build"
+    },
+    "requirements": {
+      "title": "System Requirements",
+      "macos": {
+        "title": "macOS Sonoma 14.0+",
+        "desc": "Requires macOS Sonoma or later"
+      },
+      "accessibility": {
+        "title": "Accessibility Permission",
+        "desc": "Required to detect mouse position"
+      },
+      "silicon": {
+        "title": "Apple Silicon",
+        "desc": "Supports M1/M2/M3/M4 and M5 processors"
+      }
     }
   },
   "changelog": {

@@ -113,13 +113,49 @@
     "recommended": "推奨",
     "homebrew": {
       "title": "Homebrew",
-      "desc": "ワンコマンド、自動更新、Gatekeeper の手間なし"
+      "desc": "macOS パッケージマネージャーでインストール、Gatekeeper 検証を自動処理、更新も簡単。",
+      "stepsTitle": "インストール手順",
+      "step1": "ターミナルを開く",
+      "step2": "上記のコマンドを貼り付けて Enter",
+      "step3": "インストール完了を待つ",
+      "step4": "Launchpad から FinderHover を開く",
+      "noHomebrew": "Homebrew がない場合",
+      "visitBrew": "brew.sh で詳細を見る"
     },
-    "dmg": {
-      "title": "DMG ダウンロード",
-      "desc": "従来の方法、Gatekeeper の手動承認が必要",
-      "download": "最新版をダウンロード",
-      "note": "ダウンロード後、「システム設定 → プライバシーとセキュリティ」で許可してください"
+    "direct": {
+      "title": "直接ダウンロード",
+      "desc": "GitHub Releases から最新版の .app ファイルをダウンロード。",
+      "downloadBtn": "FinderHover.app.zip をダウンロード",
+      "stepsTitle": "インストール手順",
+      "step1": ".zip ファイルをダウンロードして解凍",
+      "step2": "FinderHover.app を「アプリケーション」フォルダにドラッグ",
+      "step3": "初回起動時は右クリックして「開く」を選択",
+      "step4": "ポップアップで「開く」をクリックして Gatekeeper をバイパス",
+      "note": "アプリは Apple による公証を受けていないため、手動で許可が必要です"
+    },
+    "source": {
+      "title": "ソースからビルド",
+      "desc": "開発者やカスタム機能が必要な方向け。",
+      "stepsTitle": "ビルド手順",
+      "step1": "Xcode 15 以降がインストールされていることを確認",
+      "step2": "リポジトリをクローン",
+      "step3": "xcodebuild -scheme FinderHover -configuration Release を実行",
+      "step4": "または Xcode でプロジェクトを開いて ⌘B でビルド"
+    },
+    "requirements": {
+      "title": "システム要件",
+      "macos": {
+        "title": "macOS Sonoma 14.0+",
+        "desc": "macOS Sonoma 以降が必要です"
+      },
+      "accessibility": {
+        "title": "アクセシビリティ権限",
+        "desc": "マウス位置を検出するためにアクセシビリティ権限が必要です"
+      },
+      "silicon": {
+        "title": "Apple Silicon",
+        "desc": "M1/M2/M3/M4 および M5 プロセッサに対応"
+      }
     }
   },
   "changelog": {

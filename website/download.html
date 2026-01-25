@@ -28,7 +28,7 @@
       <div class="download-grid">
         <!-- Homebrew -->
         <div class="download-card recommended">
-          <div class="download-badge">推薦</div>
+          <div class="download-badge" data-i18n="download.recommended">推薦</div>
           <div class="download-icon">
             <svg
               viewBox="0 0 24 24"
@@ -41,8 +41,8 @@
               />
             </svg>
           </div>
-          <h2>Homebrew</h2>
-          <p class="download-desc">
+          <h2 data-i18n="download.homebrew.title">Homebrew</h2>
+          <p class="download-desc" data-i18n="download.homebrew.desc">
             使用 macOS 套件管理器安裝，自動處理 Gatekeeper 驗證，更新更方便。
           </p>
           <div class="download-code">
@@ -69,16 +69,16 @@
             </button>
           </div>
           <div class="download-steps">
-            <h4>安裝步驟</h4>
+            <h4 data-i18n="download.homebrew.stepsTitle">安裝步驟</h4>
             <ol>
-              <li>開啟終端機 (Terminal)</li>
-              <li>貼上上方指令並按 Enter</li>
-              <li>等待安裝完成</li>
-              <li>在 Launchpad 中開啟 FinderHover</li>
+              <li data-i18n="download.homebrew.step1">開啟終端機 (Terminal)</li>
+              <li data-i18n="download.homebrew.step2">貼上上方指令並按 Enter</li>
+              <li data-i18n="download.homebrew.step3">等待安裝完成</li>
+              <li data-i18n="download.homebrew.step4">在 Launchpad 中開啟 FinderHover</li>
             </ol>
           </div>
           <div class="download-prereq">
-            <p>沒有 Homebrew？</p>
+            <p data-i18n="download.homebrew.noHomebrew">沒有 Homebrew？</p>
             <div class="download-code">
               <code
                 >/bin/bash -c "$(curl -fsSL https://brew.sh/install.sh)"</code
@@ -111,22 +111,9 @@
               href="https://brew.sh"
               target="_blank"
               class="download-prereq-link"
+              data-i18n="download.homebrew.visitBrew"
             >
               前往 brew.sh 了解更多
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
-                />
-                <polyline points="15 3 21 3 21 9" />
-                <line x1="10" y1="14" x2="21" y2="3" />
-              </svg>
             </a>
           </div>
         </div>
@@ -145,23 +132,24 @@
               <line x1="12" y1="15" x2="12" y2="3" />
             </svg>
           </div>
-          <h2>直接下載</h2>
-          <p class="download-desc">
+          <h2 data-i18n="download.direct.title">直接下載</h2>
+          <p class="download-desc" data-i18n="download.direct.desc">
             從 GitHub Releases 下載最新版本的 .app 檔案。
           </p>
           <a
             href="https://github.com/KoukeNeko/FinderHover/releases/latest"
             class="download-btn"
+            data-i18n="download.direct.downloadBtn"
           >
             下載 FinderHover.app.zip
           </a>
           <div class="download-steps">
-            <h4>安裝步驟</h4>
+            <h4 data-i18n="download.direct.stepsTitle">安裝步驟</h4>
             <ol>
-              <li>下載並解壓縮 .zip 檔案</li>
-              <li>將 FinderHover.app 拖曳到「應用程式」資料夾</li>
-              <li>首次開啟時，右鍵點擊選擇「打開」</li>
-              <li>在彈出視窗中點擊「打開」以略過 Gatekeeper</li>
+              <li data-i18n="download.direct.step1">下載並解壓縮 .zip 檔案</li>
+              <li data-i18n="download.direct.step2">將 FinderHover.app 拖曳到「應用程式」資料夾</li>
+              <li data-i18n="download.direct.step3">首次開啟時，右鍵點擊選擇「打開」</li>
+              <li data-i18n="download.direct.step4">在彈出視窗中點擊「打開」以略過 Gatekeeper</li>
             </ol>
           </div>
           <div class="download-note">
@@ -177,7 +165,7 @@
               <line x1="12" y1="16" x2="12" y2="12" />
               <line x1="12" y1="8" x2="12.01" y2="8" />
             </svg>
-            <span>由於 App 未經 Apple 公證，需要手動允許執行</span>
+            <span data-i18n="download.direct.note">由於 App 未經 Apple 公證，需要手動允許執行</span>
           </div>
         </div>
 
@@ -194,8 +182,8 @@
               <polyline points="8 6 2 12 8 18" />
             </svg>
           </div>
-          <h2>從原始碼建置</h2>
-          <p class="download-desc">適合開發者或想要自訂功能的使用者。</p>
+          <h2 data-i18n="download.source.title">從原始碼建置</h2>
+          <p class="download-desc" data-i18n="download.source.desc">適合開發者或想要自訂功能的使用者。</p>
           <div class="download-code">
             <code>git clone https://github.com/KoukeNeko/FinderHover.git</code>
             <button
@@ -223,17 +211,14 @@
             </button>
           </div>
           <div class="download-steps">
-            <h4>建置步驟</h4>
+            <h4 data-i18n="download.source.stepsTitle">建置步驟</h4>
             <ol>
-              <li>確保已安裝 Xcode 15 或更新版本</li>
-              <li>Clone 儲存庫</li>
+              <li data-i18n="download.source.step1">確保已安裝 Xcode 15 或更新版本</li>
+              <li data-i18n="download.source.step2">Clone 儲存庫</li>
               <li>
-                執行
-                <code
-                  >xcodebuild -scheme FinderHover -configuration Release</code
-                >
+                <span data-i18n="download.source.step3">執行 xcodebuild -scheme FinderHover -configuration Release</span>
               </li>
-              <li>或在 Xcode 中開啟專案並按 ⌘B 建置</li>
+              <li data-i18n="download.source.step4">或在 Xcode 中開啟專案並按 ⌘B 建置</li>
             </ol>
           </div>
         </div>
@@ -242,7 +227,7 @@
 
     <!-- System Requirements -->
     <section class="requirements-section">
-      <h2 class="section-headline">系統需求</h2>
+      <h2 class="section-headline" data-i18n="download.requirements.title">系統需求</h2>
       <div class="requirements-grid">
         <div class="requirement-item">
           <div class="requirement-icon">
@@ -257,8 +242,8 @@
               <line x1="12" y1="17" x2="12" y2="21" />
             </svg>
           </div>
-          <h3>macOS Sonoma 14.0+</h3>
-          <p>需要 macOS Sonoma 或更新版本</p>
+          <h3 data-i18n="download.requirements.macos.title">macOS Sonoma 14.0+</h3>
+          <p data-i18n="download.requirements.macos.desc">需要 macOS Sonoma 或更新版本</p>
         </div>
         <div class="requirement-item">
           <div class="requirement-icon">
@@ -271,8 +256,8 @@
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
             </svg>
           </div>
-          <h3>輔助使用權限</h3>
-          <p>需要授予輔助使用權限以偵測滑鼠位置</p>
+          <h3 data-i18n="download.requirements.accessibility.title">輔助使用權限</h3>
+          <p data-i18n="download.requirements.accessibility.desc">需要授予輔助使用權限以偵測滑鼠位置</p>
         </div>
         <div class="requirement-item">
           <div class="requirement-icon">
@@ -286,8 +271,8 @@
               <polyline points="12 6 12 12 16 14" />
             </svg>
           </div>
-          <h3>Apple Silicon</h3>
-          <p>支援 M1/M2/M3/M4 及 M5 處理器</p>
+          <h3 data-i18n="download.requirements.silicon.title">Apple Silicon</h3>
+          <p data-i18n="download.requirements.silicon.desc">支援 M1/M2/M3/M4 及 M5 處理器</p>
         </div>
       </div>
     </section>
