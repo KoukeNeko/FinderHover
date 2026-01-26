@@ -180,12 +180,14 @@
     "categories": {
       "image": {
         "title": "Image Files",
-        "desc": "Full EXIF, IPTC, XMP metadata support",
+        "desc": "Full EXIF, IPTC, XMP metadata support including WebP and AVIF",
         "meta1": "Camera model, lens info, focal length",
         "meta2": "Aperture, shutter speed, ISO",
         "meta3": "Capture date, color space",
         "meta4": "GPS coordinates",
-        "meta5": "IPTC/XMP (author, copyright, keywords, rating)"
+        "meta5": "IPTC/XMP (author, copyright, keywords, rating)",
+        "meta6": "Color profile (Display P3, sRGB, Rec.2020), bit depth",
+        "meta7": "HDR gain map detection, HDR format"
       },
       "video": {
         "title": "Video Files",
@@ -194,7 +196,9 @@
         "meta2": "Video codec (H.264, HEVC, etc.)",
         "meta3": "Frame rate, bitrate",
         "meta4": "Audio/video track count",
-        "meta5": "HDR format (Dolby Vision, HDR10, HLG)"
+        "meta5": "HDR format (Dolby Vision, HDR10, HLG)",
+        "meta6": "Chapter count, subtitle tracks, attachments",
+        "meta7": "Container format (MKV, WebM, MP4, MOV)"
       },
       "audio": {
         "title": "Audio Files",
@@ -330,6 +334,34 @@
         "meta6": "iCloud status (synced, downloading, cloud-only)",
         "meta7": "Finder comments, UTI type identifier",
         "meta8": "Extended attributes list, alias target path"
+      },
+      "model3D": {
+        "title": "3D Model Files",
+        "desc": "Industry-standard 3D model formats",
+        "meta1": "Format type (USDZ, OBJ, GLTF, FBX, etc.)",
+        "meta2": "Vertex count, face count",
+        "meta3": "Mesh count, material count",
+        "meta4": "Animation count, skeleton detection",
+        "meta5": "Bounding box dimensions"
+      },
+      "xcodeProject": {
+        "title": "Xcode Projects",
+        "desc": "Apple development project files",
+        "meta1": "Project name, target count",
+        "meta2": "Build configuration count",
+        "meta3": "Swift version, deployment target",
+        "meta4": "Organization name",
+        "meta5": "Unit test / UI test detection"
+      },
+      "fileSystemAdvanced": {
+        "title": "File System Advanced",
+        "desc": "Low-level file system information",
+        "meta1": "Allocated disk size (actual blocks used)",
+        "meta2": "Attribute modification date",
+        "meta3": "Resource fork size (classic Mac)",
+        "meta4": "Volume info (name, format, available space)",
+        "meta5": "Spotlight index status",
+        "meta6": "Cloud storage provider detection (iCloud, Dropbox, Google Drive, OneDrive)"
       }
     },
     "stats": {

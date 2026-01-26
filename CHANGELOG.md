@@ -2,7 +2,67 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.6.7 (Current)
+## Version 1.7.0 (Current)
+
+### 🆕 Major Metadata Update - New File Types & Enhanced Support
+
+#### 3D Model Files
+- **NEW: 3D Model Metadata** for USDZ, OBJ, GLTF, GLB, FBX, STL, DAE, 3DS, PLY files
+  - Format type identification
+  - Vertex count and face count
+  - Mesh count and material count
+  - Animation count and skeleton detection
+  - Bounding box dimensions
+
+#### Xcode Projects
+- **NEW: Xcode Project Metadata** for .xcodeproj and .xcworkspace files
+  - Project name and target count
+  - Build configuration count
+  - Swift version and deployment target
+  - Organization name
+  - Unit test and UI test detection
+
+#### File System Advanced
+- **NEW: Advanced File System Metadata** with detailed storage information
+  - Allocated disk size (actual blocks used)
+  - Attribute modification date
+  - Resource fork size (classic Mac files)
+  - Volume information (name, format, available space)
+  - Spotlight index status
+  - Cloud storage provider detection (iCloud, Dropbox, Google Drive, OneDrive)
+
+#### Enhanced Image Metadata
+- **Extended EXIF Support** for modern image formats
+  - Color profile detection (Display P3, sRGB, Rec.2020)
+  - Bit depth information
+  - HDR gain map detection
+  - HDR format identification
+  - Added WebP and AVIF format support
+
+#### Enhanced Video Metadata
+- **Extended Video Analysis** for container and track information
+  - Chapter count for long-form content
+  - Subtitle track count and languages
+  - Attachment count (fonts, thumbnails)
+  - Container format identification (MKV, WebM, MP4, MOV)
+
+### 🔧 Technical Improvements
+
+#### Code Architecture Refactoring
+- **Modular Metadata Extraction** - Split 4,200+ line FileInfo.swift into 15 focused modules
+  - `Models/` directory for metadata struct definitions
+  - `Extractors/` directory for extraction logic
+  - Improved build times and maintainability
+  - Better separation of concerns
+
+### 🌍 Localization Updates
+- Full localization for all new metadata types
+- Updated website with new format categories
+- Supported languages: English, Traditional Chinese (繁體中文), Japanese (日本語)
+
+
+
+## Version 1.6.7
 
 ### 🐛 Bug Fixes
 

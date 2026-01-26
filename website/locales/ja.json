@@ -180,12 +180,14 @@
     "categories": {
       "image": {
         "title": "画像ファイル",
-        "desc": "EXIF、IPTC、XMP 完全メタデータ対応",
+        "desc": "WebP、AVIF を含む完全な EXIF、IPTC、XMP メタデータ対応",
         "meta1": "カメラモデル、レンズ情報、焦点距離",
         "meta2": "絞り、シャッター速度、ISO",
         "meta3": "撮影日、色空間",
         "meta4": "GPS 座標",
-        "meta5": "IPTC/XMP（作者、著作権、キーワード、評価）"
+        "meta5": "IPTC/XMP（作者、著作権、キーワード、評価）",
+        "meta6": "カラープロファイル（Display P3、sRGB、Rec.2020）、ビット深度",
+        "meta7": "HDR ゲインマップ検出、HDR フォーマット"
       },
       "video": {
         "title": "動画ファイル",
@@ -194,7 +196,9 @@
         "meta2": "動画コーデック（H.264、HEVC など）",
         "meta3": "フレームレート、ビットレート",
         "meta4": "オーディオ/ビデオトラック数",
-        "meta5": "HDR 形式（Dolby Vision、HDR10、HLG）"
+        "meta5": "HDR 形式（Dolby Vision、HDR10、HLG）",
+        "meta6": "チャプター数、字幕トラック、添付ファイル",
+        "meta7": "コンテナ形式（MKV、WebM、MP4、MOV）"
       },
       "audio": {
         "title": "音声ファイル",
@@ -330,6 +334,34 @@
         "meta6": "iCloud ステータス（同期済み、ダウンロード中、クラウドのみ）",
         "meta7": "Finder コメント、UTI タイプ識別子",
         "meta8": "拡張属性リスト、エイリアスターゲットパス"
+      },
+      "model3D": {
+        "title": "3D モデルファイル",
+        "desc": "業界標準の 3D モデル形式",
+        "meta1": "形式タイプ（USDZ、OBJ、GLTF、FBX など）",
+        "meta2": "頂点数、面数",
+        "meta3": "メッシュ数、マテリアル数",
+        "meta4": "アニメーション数、スケルトン検出",
+        "meta5": "バウンディングボックス寸法"
+      },
+      "xcodeProject": {
+        "title": "Xcode プロジェクト",
+        "desc": "Apple 開発プロジェクトファイル",
+        "meta1": "プロジェクト名、ターゲット数",
+        "meta2": "ビルド構成数",
+        "meta3": "Swift バージョン、デプロイメントターゲット",
+        "meta4": "組織名",
+        "meta5": "ユニットテスト / UI テスト検出"
+      },
+      "fileSystemAdvanced": {
+        "title": "ファイルシステム詳細",
+        "desc": "低レベルファイルシステム情報",
+        "meta1": "割り当てディスクサイズ（実際に使用されるブロック）",
+        "meta2": "属性変更日",
+        "meta3": "リソースフォークサイズ（クラシック Mac）",
+        "meta4": "ボリューム情報（名前、形式、空き容量）",
+        "meta5": "Spotlight インデックス状態",
+        "meta6": "クラウドストレージプロバイダー検出（iCloud、Dropbox、Google Drive、OneDrive）"
       }
     },
     "stats": {

@@ -180,12 +180,14 @@
     "categories": {
       "image": {
         "title": "影像檔案",
-        "desc": "支援 EXIF、IPTC、XMP 完整中繼資料讀取",
+        "desc": "支援 EXIF、IPTC、XMP 完整中繼資料讀取（含 WebP、AVIF）",
         "meta1": "相機型號、鏡頭資訊、焦距",
         "meta2": "光圈、快門速度、ISO",
         "meta3": "拍攝日期、色彩空間",
         "meta4": "GPS 座標",
-        "meta5": "IPTC/XMP（作者、版權、關鍵字、評分）"
+        "meta5": "IPTC/XMP（作者、版權、關鍵字、評分）",
+        "meta6": "色彩描述檔（Display P3、sRGB、Rec.2020）、位元深度",
+        "meta7": "HDR 增益圖偵測、HDR 格式"
       },
       "video": {
         "title": "影片檔案",
@@ -194,7 +196,9 @@
         "meta2": "影片編碼（H.264、HEVC 等）",
         "meta3": "幀率、位元率",
         "meta4": "影音軌道數量",
-        "meta5": "HDR 格式（Dolby Vision、HDR10、HLG）"
+        "meta5": "HDR 格式（Dolby Vision、HDR10、HLG）",
+        "meta6": "章節數、字幕軌道、附件",
+        "meta7": "容器格式（MKV、WebM、MP4、MOV）"
       },
       "audio": {
         "title": "音訊檔案",
@@ -330,6 +334,34 @@
         "meta6": "iCloud 狀態（同步、下載中、僅在雲端）",
         "meta7": "Finder 註解、UTI 類型識別碼",
         "meta8": "延伸屬性列表、替身目標路徑"
+      },
+      "model3D": {
+        "title": "3D 模型檔案",
+        "desc": "支援業界標準 3D 模型格式",
+        "meta1": "格式類型（USDZ、OBJ、GLTF、FBX 等）",
+        "meta2": "頂點數、面數",
+        "meta3": "網格數、材質數",
+        "meta4": "動畫數、骨架偵測",
+        "meta5": "邊界框尺寸"
+      },
+      "xcodeProject": {
+        "title": "Xcode 專案",
+        "desc": "支援 Apple 開發專案檔案",
+        "meta1": "專案名稱、Target 數",
+        "meta2": "建置配置數",
+        "meta3": "Swift 版本、部署目標",
+        "meta4": "組織名稱",
+        "meta5": "單元測試 / UI 測試偵測"
+      },
+      "fileSystemAdvanced": {
+        "title": "檔案系統進階",
+        "desc": "底層檔案系統資訊",
+        "meta1": "已分配磁碟空間（實際使用的區塊）",
+        "meta2": "屬性修改日期",
+        "meta3": "Resource Fork 大小（傳統 Mac）",
+        "meta4": "磁碟區資訊（名稱、格式、可用空間）",
+        "meta5": "Spotlight 索引狀態",
+        "meta6": "雲端儲存偵測（iCloud、Dropbox、Google Drive、OneDrive）"
       }
     },
     "stats": {
