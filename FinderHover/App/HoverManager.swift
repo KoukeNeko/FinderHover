@@ -50,8 +50,9 @@ class HoverManager: ObservableObject {
             queue: .main
         ) { [weak self] _ in
             guard let self = self else { return }
-            // Immediately check if cursor is still over a file (no delay)
-            self.checkAndDisplayFileInfo(at: self.lastMouseLocation)
+            // Get CURRENT mouse location (not lastMouseLocation which may be stale)
+            let currentLocation = NSEvent.mouseLocation
+            self.checkAndDisplayFileInfo(at: currentLocation)
         }
     }
 

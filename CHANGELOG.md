@@ -2,7 +2,15 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.6.5 (Current)
+## Version 1.6.6 (Current)
+
+### 🐛 Bug Fixes
+
+- Fixed window staying visible after copy when cursor moved outside file area
+
+---
+
+## Version 1.6.5
 
 ### 🐛 Bug Fixes
 
