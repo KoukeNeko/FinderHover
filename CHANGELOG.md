@@ -9,7 +9,7 @@ All notable changes to FinderHover will be documented in this file.
 - Fixed window not hiding after clicking copy button and releasing Option key
 - Added local event monitor to detect Option key release when window has focus
 
----
+
 
 ## Version 1.6.6
 
@@ -17,7 +17,7 @@ All notable changes to FinderHover will be documented in this file.
 
 - Fixed window staying visible after copy when cursor moved outside file area
 
----
+
 
 ## Version 1.6.5
 
@@ -26,7 +26,7 @@ All notable changes to FinderHover will be documented in this file.
 - Fixed hover window not hiding after copying when Option key is released
 - Window now correctly hides when cursor is not over a file upon Option release
 
----
+
 
 ## Version 1.6.4
 
@@ -35,7 +35,7 @@ All notable changes to FinderHover will be documented in this file.
 - Hover window now hides when Option key is released
 - Copy feedback changed from checkmark icon to "Copied" text shown after the value
 
----
+
 
 ## Version 1.6.3
 
@@ -44,7 +44,7 @@ All notable changes to FinderHover will be documented in this file.
 - Fixed copy button layout stability using opacity instead of conditional rendering
 - Copy button is now always present in layout, preventing height shifts when Option key is pressed
 
----
+
 
 ## Version 1.6.2
 
@@ -53,7 +53,7 @@ All notable changes to FinderHover will be documented in this file.
 - Fixed copy button still causing row height to increase
 - Removed lock icon indicator
 
----
+
 
 ## Version 1.6.1
 
@@ -62,7 +62,7 @@ All notable changes to FinderHover will be documented in this file.
 - Fixed copy button causing row height to increase
 - Fixed clicking copy marking multiple rows with same value as copied
 
----
+
 
 ## Version 1.6.0
 
@@ -80,7 +80,7 @@ Release Option key or press Escape to unlock and return to normal behavior.
 
 - Added translations for copy feature in all supported languages
 
----
+
 
 ## Version 1.5.1
 
@@ -89,7 +89,7 @@ Release Option key or press Escape to unlock and return to normal behavior.
 - Widened label column for better readability (65 → 75 points)
 - Fixed Japanese localization for "Hard Links" label
 
----
+
 
 ## Version 1.5.0
 
