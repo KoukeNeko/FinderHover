@@ -155,6 +155,9 @@
         // Parse markdown sections into HTML
         let html = content;
 
+        // Remove horizontal rules
+        html = html.replace(/^---$/gm, "");
+
         // Convert ### headers to h3
         html = html.replace(/^### (.+)$/gm, "<h3>$1</h3>");
 
