@@ -2,7 +2,16 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.6.3 (Current)
+## Version 1.6.4 (Current)
+
+### 🎨 Improvements
+
+- Hover window now hides when Option key is released
+- Copy feedback changed from checkmark icon to "Copied" text shown after the value
+
+---
+
+## Version 1.6.3
 
 ### 🐛 Bug Fixes
 

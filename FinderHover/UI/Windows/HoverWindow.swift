@@ -134,10 +134,10 @@ class HoverWindowController: NSWindowController {
             self?.handleFlagsChanged(event)
         }
 
-        // Monitor Escape key to unlock
+        // Monitor Escape key to hide window
         keyDownMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
             if event.keyCode == 53 && self?.windowState.isLocked == true {  // 53 = Escape
-                self?.unlock()
+                self?.forceHide()
             }
         }
     }
@@ -161,16 +161,9 @@ class HoverWindowController: NSWindowController {
             windowState.isLocked = true
             window?.ignoresMouseEvents = false  // Allow mouse interaction
         } else if !optionPressed && windowState.isLocked {
-            // Unlock the window
-            unlock()
+            // Option released - hide the window
+            forceHide()
         }
-    }
-
-    /// Unlock the window and reset state
-    private func unlock() {
-        windowState.isLocked = false
-        windowState.copiedValue = nil
-        window?.ignoresMouseEvents = true
     }
 
     deinit {
@@ -1364,7 +1357,14 @@ struct DetailRow: View {
     let value: String
     let fontSize: Double
     @ObservedObject private var windowState = HoverWindowState.shared
-    @State private var isHoveringCopy = false
+
+    private var uniqueKey: String {
+        label + ":" + value
+    }
+
+    private var isCopied: Bool {
+        windowState.copiedValue == uniqueKey
+    }
 
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
@@ -1384,10 +1384,18 @@ struct DetailRow: View {
                 .fontWeight(.medium)
                 .lineLimit(nil)
                 .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity, alignment: .leading)
+
+            // "Copied" text - shown after value when copied
+            if isCopied {
+                Text(NSLocalizedString("hover.copy.copied", comment: ""))
+                    .font(.system(size: fontSize - 1))
+                    .foregroundColor(.green)
+            }
+
+            Spacer(minLength: 0)
 
             // Copy button - always present but only visible when locked
-            CopyButton(uniqueKey: label + ":" + value, value: value, fontSize: fontSize, isVisible: windowState.isLocked)
+            CopyButton(uniqueKey: uniqueKey, value: value, fontSize: fontSize, isVisible: windowState.isLocked)
         }
     }
 }
@@ -1401,14 +1409,10 @@ struct CopyButton: View {
     @ObservedObject private var windowState = HoverWindowState.shared
     @State private var isHovering = false
 
-    private var isCopied: Bool {
-        windowState.copiedValue == uniqueKey
-    }
-
     var body: some View {
-        Image(systemName: isCopied ? "checkmark" : "doc.on.doc")
+        Image(systemName: "doc.on.doc")
             .font(.system(size: fontSize))
-            .foregroundColor(isCopied ? .green : (isHovering ? .primary : .secondary))
+            .foregroundColor(isHovering ? .primary : .secondary)
             .frame(width: 14, alignment: .center)
             .opacity(isVisible ? 1 : 0)
             .onTapGesture {
@@ -1421,12 +1425,7 @@ struct CopyButton: View {
                     isHovering = hovering
                 }
             }
-            .help(helpText)
-    }
-
-    private var helpText: String {
-        guard isVisible else { return "" }
-        return isCopied ? "hover.copy.copied".localized : "hover.copy.copy".localized
+            .help(NSLocalizedString("hover.copy.copy", comment: ""))
     }
 }
 
