@@ -403,6 +403,9 @@
 "displayItem.sqlite" = "SQLiteデータベース情報";
 "displayItem.git" = "Gitリポジトリ情報";
 "displayItem.filePath" = "ファイルパス";
+"displayItem.fileSystemAdvanced" = "ファイルシステム詳細";
+"displayItem.model3D" = "3Dモデル情報";
+"displayItem.xcodeProject" = "Xcodeプロジェクト情報";
 
 /* Hover Window */
 "hover.fileType.folder" = "フォルダ";
@@ -722,3 +725,55 @@
 /* Copy Feature */
 "hover.copy.copy" = "コピー";
 "hover.copy.copied" = "コピー済";
+
+/* File System Advanced Hover */
+"hover.fileSystemAdvanced.title" = "ファイルシステム詳細";
+"hover.fileSystemAdvanced.allocatedSize" = "割り当てサイズ";
+"hover.fileSystemAdvanced.attributeModDate" = "属性変更日";
+"hover.fileSystemAdvanced.resourceFork" = "リソースフォーク";
+"hover.fileSystemAdvanced.volumeName" = "ボリューム名";
+"hover.fileSystemAdvanced.volumeFormat" = "ボリューム形式";
+"hover.fileSystemAdvanced.volumeAvailable" = "空き容量";
+"hover.fileSystemAdvanced.volumeTotal" = "総容量";
+"hover.fileSystemAdvanced.spotlightIndexed" = "Spotlight インデックス";
+"hover.fileSystemAdvanced.fileProvider" = "クラウドストレージ";
+"hover.fileSystemAdvanced.fileProviderStatus" = "同期状態";
+
+/* 3D Model Hover */
+"hover.model3D.title" = "3Dモデル";
+"hover.model3D.format" = "形式";
+"hover.model3D.vertices" = "頂点数";
+"hover.model3D.faces" = "面数";
+"hover.model3D.meshes" = "メッシュ数";
+"hover.model3D.materials" = "マテリアル数";
+"hover.model3D.animations" = "アニメーション数";
+"hover.model3D.skeleton" = "スケルトン";
+"hover.model3D.boundingBox" = "バウンディングボックス";
+
+/* Xcode Project Hover */
+"hover.xcodeProject.title" = "Xcodeプロジェクト";
+"hover.xcodeProject.projectName" = "プロジェクト名";
+"hover.xcodeProject.targets" = "ターゲット数";
+"hover.xcodeProject.configurations" = "構成数";
+"hover.xcodeProject.swiftVersion" = "Swift バージョン";
+"hover.xcodeProject.deploymentTarget" = "デプロイターゲット";
+"hover.xcodeProject.organization" = "組織名";
+"hover.xcodeProject.hasTests" = "ユニットテスト";
+"hover.xcodeProject.hasUITests" = "UIテスト";
+
+/* Extended EXIF Fields */
+"hover.exif.colorProfile" = "カラープロファイル";
+"hover.exif.bitDepth" = "ビット深度";
+"hover.exif.hdrGainMap" = "HDRゲインマップ";
+"hover.exif.hdrFormat" = "HDR形式";
+
+/* Extended Video Fields */
+"hover.video.chapters" = "チャプター数";
+"hover.video.subtitleTracks" = "字幕トラック";
+"hover.video.attachments" = "添付ファイル数";
+"hover.video.containerFormat" = "コンテナ形式";
+
+/* File Provider Status */
+"fileProvider.downloaded" = "ダウンロード済み";
+"fileProvider.cloudOnly" = "クラウドのみ";
+"fileProvider.unknown" = "不明";

@@ -77,6 +77,9 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
     case git = "Git Repository Information"
     case systemMetadata = "System Metadata"
     case filePath = "File Path"
+    case fileSystemAdvanced = "File System Advanced"
+    case model3D = "3D Model Information"
+    case xcodeProject = "Xcode Project Information"
 
     var id: String { rawValue }
 
@@ -113,6 +116,9 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .git: return "displayItem.git".localized
         case .systemMetadata: return "displayItem.systemMetadata".localized
         case .filePath: return "displayItem.filePath".localized
+        case .fileSystemAdvanced: return "displayItem.fileSystemAdvanced".localized
+        case .model3D: return "displayItem.model3D".localized
+        case .xcodeProject: return "displayItem.xcodeProject".localized
         }
     }
 
@@ -149,6 +155,9 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .git: return "arrow.triangle.branch"
         case .systemMetadata: return "info.circle"
         case .filePath: return IconManager.FileSystem.folder
+        case .fileSystemAdvanced: return "internaldrive"
+        case .model3D: return "cube.transparent"
+        case .xcodeProject: return "hammer"
         }
     }
 }
@@ -832,6 +841,82 @@ class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(showAliasTarget, forKey: "showAliasTarget") }
     }
 
+    // File System Advanced metadata display settings
+    @Published var showFileSystemAdvanced: Bool {
+        didSet { UserDefaults.standard.set(showFileSystemAdvanced, forKey: "showFileSystemAdvanced") }
+    }
+    @Published var showAllocatedSize: Bool {
+        didSet { UserDefaults.standard.set(showAllocatedSize, forKey: "showAllocatedSize") }
+    }
+    @Published var showAttributeModDate: Bool {
+        didSet { UserDefaults.standard.set(showAttributeModDate, forKey: "showAttributeModDate") }
+    }
+    @Published var showResourceForkSize: Bool {
+        didSet { UserDefaults.standard.set(showResourceForkSize, forKey: "showResourceForkSize") }
+    }
+    @Published var showVolumeInfo: Bool {
+        didSet { UserDefaults.standard.set(showVolumeInfo, forKey: "showVolumeInfo") }
+    }
+    @Published var showSpotlightIndexed: Bool {
+        didSet { UserDefaults.standard.set(showSpotlightIndexed, forKey: "showSpotlightIndexed") }
+    }
+    @Published var showFileProvider: Bool {
+        didSet { UserDefaults.standard.set(showFileProvider, forKey: "showFileProvider") }
+    }
+
+    // 3D Model metadata display settings
+    @Published var showModel3D: Bool {
+        didSet { UserDefaults.standard.set(showModel3D, forKey: "showModel3D") }
+    }
+    @Published var showModel3DFormat: Bool {
+        didSet { UserDefaults.standard.set(showModel3DFormat, forKey: "showModel3DFormat") }
+    }
+    @Published var showModel3DVertices: Bool {
+        didSet { UserDefaults.standard.set(showModel3DVertices, forKey: "showModel3DVertices") }
+    }
+    @Published var showModel3DMaterials: Bool {
+        didSet { UserDefaults.standard.set(showModel3DMaterials, forKey: "showModel3DMaterials") }
+    }
+    @Published var showModel3DAnimations: Bool {
+        didSet { UserDefaults.standard.set(showModel3DAnimations, forKey: "showModel3DAnimations") }
+    }
+
+    // Xcode Project metadata display settings
+    @Published var showXcodeProject: Bool {
+        didSet { UserDefaults.standard.set(showXcodeProject, forKey: "showXcodeProject") }
+    }
+    @Published var showXcodeTargets: Bool {
+        didSet { UserDefaults.standard.set(showXcodeTargets, forKey: "showXcodeTargets") }
+    }
+    @Published var showXcodeSwiftVersion: Bool {
+        didSet { UserDefaults.standard.set(showXcodeSwiftVersion, forKey: "showXcodeSwiftVersion") }
+    }
+    @Published var showXcodeDeploymentTarget: Bool {
+        didSet { UserDefaults.standard.set(showXcodeDeploymentTarget, forKey: "showXcodeDeploymentTarget") }
+    }
+
+    // Extended EXIF display settings (HDR/Color)
+    @Published var showEXIFColorProfile: Bool {
+        didSet { UserDefaults.standard.set(showEXIFColorProfile, forKey: "showEXIFColorProfile") }
+    }
+    @Published var showEXIFBitDepth: Bool {
+        didSet { UserDefaults.standard.set(showEXIFBitDepth, forKey: "showEXIFBitDepth") }
+    }
+    @Published var showEXIFHDRInfo: Bool {
+        didSet { UserDefaults.standard.set(showEXIFHDRInfo, forKey: "showEXIFHDRInfo") }
+    }
+
+    // Extended Video display settings (Chapters/Subtitles)
+    @Published var showVideoChapters: Bool {
+        didSet { UserDefaults.standard.set(showVideoChapters, forKey: "showVideoChapters") }
+    }
+    @Published var showVideoSubtitleTracks: Bool {
+        didSet { UserDefaults.standard.set(showVideoSubtitleTracks, forKey: "showVideoSubtitleTracks") }
+    }
+    @Published var showVideoContainerFormat: Bool {
+        didSet { UserDefaults.standard.set(showVideoContainerFormat, forKey: "showVideoContainerFormat") }
+    }
+
     // Display order
     @Published var displayOrder: [DisplayItem] {
         didSet {
@@ -1341,6 +1426,38 @@ class AppSettings: ObservableObject {
         self.showExtendedAttributes = UserDefaults.standard.object(forKey: "showExtendedAttributes") as? Bool ?? Constants.Defaults.showExtendedAttributes
         self.showAliasTarget = UserDefaults.standard.object(forKey: "showAliasTarget") as? Bool ?? Constants.Defaults.showAliasTarget
 
+        // File System Advanced metadata
+        self.showFileSystemAdvanced = UserDefaults.standard.object(forKey: "showFileSystemAdvanced") as? Bool ?? true
+        self.showAllocatedSize = UserDefaults.standard.object(forKey: "showAllocatedSize") as? Bool ?? true
+        self.showAttributeModDate = UserDefaults.standard.object(forKey: "showAttributeModDate") as? Bool ?? false
+        self.showResourceForkSize = UserDefaults.standard.object(forKey: "showResourceForkSize") as? Bool ?? true
+        self.showVolumeInfo = UserDefaults.standard.object(forKey: "showVolumeInfo") as? Bool ?? true
+        self.showSpotlightIndexed = UserDefaults.standard.object(forKey: "showSpotlightIndexed") as? Bool ?? false
+        self.showFileProvider = UserDefaults.standard.object(forKey: "showFileProvider") as? Bool ?? true
+
+        // 3D Model metadata
+        self.showModel3D = UserDefaults.standard.object(forKey: "showModel3D") as? Bool ?? true
+        self.showModel3DFormat = UserDefaults.standard.object(forKey: "showModel3DFormat") as? Bool ?? true
+        self.showModel3DVertices = UserDefaults.standard.object(forKey: "showModel3DVertices") as? Bool ?? true
+        self.showModel3DMaterials = UserDefaults.standard.object(forKey: "showModel3DMaterials") as? Bool ?? true
+        self.showModel3DAnimations = UserDefaults.standard.object(forKey: "showModel3DAnimations") as? Bool ?? true
+
+        // Xcode Project metadata
+        self.showXcodeProject = UserDefaults.standard.object(forKey: "showXcodeProject") as? Bool ?? true
+        self.showXcodeTargets = UserDefaults.standard.object(forKey: "showXcodeTargets") as? Bool ?? true
+        self.showXcodeSwiftVersion = UserDefaults.standard.object(forKey: "showXcodeSwiftVersion") as? Bool ?? true
+        self.showXcodeDeploymentTarget = UserDefaults.standard.object(forKey: "showXcodeDeploymentTarget") as? Bool ?? true
+
+        // Extended EXIF (HDR/Color)
+        self.showEXIFColorProfile = UserDefaults.standard.object(forKey: "showEXIFColorProfile") as? Bool ?? true
+        self.showEXIFBitDepth = UserDefaults.standard.object(forKey: "showEXIFBitDepth") as? Bool ?? true
+        self.showEXIFHDRInfo = UserDefaults.standard.object(forKey: "showEXIFHDRInfo") as? Bool ?? true
+
+        // Extended Video (Chapters/Subtitles)
+        self.showVideoChapters = UserDefaults.standard.object(forKey: "showVideoChapters") as? Bool ?? true
+        self.showVideoSubtitleTracks = UserDefaults.standard.object(forKey: "showVideoSubtitleTracks") as? Bool ?? true
+        self.showVideoContainerFormat = UserDefaults.standard.object(forKey: "showVideoContainerFormat") as? Bool ?? true
+
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? Constants.Defaults.followCursor
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? Constants.Defaults.windowOffsetX
         self.windowOffsetY = UserDefaults.standard.object(forKey: "windowOffsetY") as? Double ?? Constants.Defaults.windowOffsetY
@@ -1523,6 +1640,38 @@ class AppSettings: ObservableObject {
         showExtendedAttributes = Constants.Defaults.showExtendedAttributes
         showAliasTarget = Constants.Defaults.showAliasTarget
 
+        // File System Advanced metadata
+        showFileSystemAdvanced = true
+        showAllocatedSize = true
+        showAttributeModDate = false
+        showResourceForkSize = true
+        showVolumeInfo = true
+        showSpotlightIndexed = false
+        showFileProvider = true
+
+        // 3D Model metadata
+        showModel3D = true
+        showModel3DFormat = true
+        showModel3DVertices = true
+        showModel3DMaterials = true
+        showModel3DAnimations = true
+
+        // Xcode Project metadata
+        showXcodeProject = true
+        showXcodeTargets = true
+        showXcodeSwiftVersion = true
+        showXcodeDeploymentTarget = true
+
+        // Extended EXIF (HDR/Color)
+        showEXIFColorProfile = true
+        showEXIFBitDepth = true
+        showEXIFHDRInfo = true
+
+        // Extended Video (Chapters/Subtitles)
+        showVideoChapters = true
+        showVideoSubtitleTracks = true
+        showVideoContainerFormat = true
+
         displayOrder = [
             .fileType,
             .fileSize,
@@ -1554,6 +1703,9 @@ class AppSettings: ObservableObject {
             .sqlite,
             .git,
             .systemMetadata,
+            .fileSystemAdvanced,
+            .model3D,
+            .xcodeProject,
             .filePath
         ]
         followCursor = Constants.Defaults.followCursor

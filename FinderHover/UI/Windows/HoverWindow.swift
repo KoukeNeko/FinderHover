@@ -1365,6 +1365,103 @@ struct HoverContentView: View {
                     DetailRow(icon: "folder", label: "hover.label.location".localized, value: fileInfo.path, fontSize: settings.fontSize)
                 }
             }
+
+        case .fileSystemAdvanced:
+            if settings.showFileSystemAdvanced, let fsMetadata = fileInfo.fileSystemAdvancedMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.fileSystemAdvanced.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showAllocatedSize, let size = fsMetadata.formattedAllocatedSize {
+                        DetailRow(icon: "archivebox", label: "hover.fileSystemAdvanced.allocatedSize".localized, value: size, fontSize: settings.fontSize)
+                    }
+                    if settings.showVolumeInfo {
+                        if let volumeName = fsMetadata.volumeName {
+                            DetailRow(icon: "externaldrive", label: "hover.fileSystemAdvanced.volumeName".localized, value: volumeName, fontSize: settings.fontSize)
+                        }
+                        if let volumeFormat = fsMetadata.volumeFormat {
+                            DetailRow(icon: "internaldrive", label: "hover.fileSystemAdvanced.volumeFormat".localized, value: volumeFormat, fontSize: settings.fontSize)
+                        }
+                        if let available = fsMetadata.formattedVolumeAvailable {
+                            DetailRow(icon: "chart.pie", label: "hover.fileSystemAdvanced.volumeAvailable".localized, value: available, fontSize: settings.fontSize)
+                        }
+                    }
+                    if settings.showSpotlightIndexed, let indexed = fsMetadata.spotlightIndexed {
+                        DetailRow(icon: "magnifyingglass", label: "hover.fileSystemAdvanced.spotlightIndexed".localized, value: indexed ? "hover.config.yes".localized : "hover.config.no".localized, fontSize: settings.fontSize)
+                    }
+                    if settings.showFileProvider, let provider = fsMetadata.fileProviderName {
+                        DetailRow(icon: "cloud", label: "hover.fileSystemAdvanced.fileProvider".localized, value: provider, fontSize: settings.fontSize)
+                        if let status = fsMetadata.fileProviderStatus {
+                            DetailRow(icon: "arrow.triangle.2.circlepath", label: "hover.fileSystemAdvanced.fileProviderStatus".localized, value: status, fontSize: settings.fontSize)
+                        }
+                    }
+                }
+            }
+
+        case .model3D:
+            if settings.showModel3D, let model3D = fileInfo.model3DMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.model3D.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if settings.showModel3DFormat, let format = model3D.format {
+                        DetailRow(icon: "doc", label: "hover.model3D.format".localized, value: format, fontSize: settings.fontSize)
+                    }
+                    if settings.showModel3DVertices {
+                        if let vertices = model3D.vertexCount {
+                            DetailRow(icon: "circle.grid.3x3", label: "hover.model3D.vertices".localized, value: "\(vertices)", fontSize: settings.fontSize)
+                        }
+                        if let faces = model3D.faceCount {
+                            DetailRow(icon: "triangle", label: "hover.model3D.faces".localized, value: "\(faces)", fontSize: settings.fontSize)
+                        }
+                    }
+                    if settings.showModel3DMaterials, let materials = model3D.materialCount {
+                        DetailRow(icon: "paintpalette", label: "hover.model3D.materials".localized, value: "\(materials)", fontSize: settings.fontSize)
+                    }
+                    if settings.showModel3DAnimations, let animations = model3D.animationCount, animations > 0 {
+                        DetailRow(icon: "play.rectangle", label: "hover.model3D.animations".localized, value: "\(animations)", fontSize: settings.fontSize)
+                    }
+                }
+            }
+
+        case .xcodeProject:
+            if settings.showXcodeProject, let xcode = fileInfo.xcodeProjectMetadata {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    Divider()
+                        .background(Color.gray.opacity(0.3))
+                        .padding(.top, settings.compactMode ? 2 : 4)
+                        .padding(.bottom, settings.compactMode ? 2 : 4)
+
+                    Text("hover.xcodeProject.title".localized)
+                        .font(.system(size: settings.fontSize, weight: .semibold))
+
+                    if let name = xcode.projectName {
+                        DetailRow(icon: "folder", label: "hover.xcodeProject.projectName".localized, value: name, fontSize: settings.fontSize)
+                    }
+                    if settings.showXcodeTargets, let targets = xcode.targetCount {
+                        DetailRow(icon: "target", label: "hover.xcodeProject.targets".localized, value: "\(targets)", fontSize: settings.fontSize)
+                    }
+                    if settings.showXcodeSwiftVersion, let swift = xcode.swiftVersion {
+                        DetailRow(icon: "swift", label: "hover.xcodeProject.swiftVersion".localized, value: swift, fontSize: settings.fontSize)
+                    }
+                    if settings.showXcodeDeploymentTarget, let target = xcode.deploymentTarget {
+                        DetailRow(icon: "desktopcomputer", label: "hover.xcodeProject.deploymentTarget".localized, value: target, fontSize: settings.fontSize)
+                    }
+                    if let hasTests = xcode.hasTests, hasTests {
+                        DetailRow(icon: "checkmark.circle", label: "hover.xcodeProject.hasTests".localized, value: "hover.config.yes".localized, fontSize: settings.fontSize)
+                    }
+                }
+            }
         }
     }
 

@@ -53,12 +53,18 @@ struct EXIFData {
     let imageSize: String?
     let colorSpace: String?
     let gpsLocation: String?
+    // New HDR/Color fields
+    let colorProfile: String?         // Display P3, sRGB, Adobe RGB, Rec.2020
+    let bitDepth: Int?                // 8, 10, 12, 16 bit
+    let hasHDRGainMap: Bool?          // Has HDR gain map (for HEIC/AVIF)
+    let hdrFormat: String?            // HDR10, HLG, Dolby Vision
 
     var hasData: Bool {
         return camera != nil || lens != nil || focalLength != nil ||
                aperture != nil || shutterSpeed != nil || iso != nil ||
                dateTaken != nil || imageSize != nil || colorSpace != nil ||
-               gpsLocation != nil
+               gpsLocation != nil || colorProfile != nil || bitDepth != nil ||
+               hasHDRGainMap != nil || hdrFormat != nil
     }
 }
 
@@ -74,12 +80,18 @@ struct VideoMetadata {
     let hdrFormat: String?        // Dolby Vision, HDR10, HDR10+, HLG, SDR
     let colorPrimaries: String?   // BT.709, BT.2020, P3
     let transferFunction: String? // SDR, PQ, HLG
+    // New MKV/WebM specific fields
+    let chapterCount: Int?        // Number of chapters
+    let subtitleTracks: Int?      // Number of subtitle tracks
+    let attachmentCount: Int?     // Number of attachments (fonts, cover art)
+    let containerFormat: String?  // MKV, WebM, MP4, MOV, etc.
 
     var hasData: Bool {
         return duration != nil || resolution != nil || codec != nil ||
                frameRate != nil || bitrate != nil || videoTracks != nil ||
                audioTracks != nil || hdrFormat != nil || colorPrimaries != nil ||
-               transferFunction != nil
+               transferFunction != nil || chapterCount != nil || subtitleTracks != nil ||
+               attachmentCount != nil || containerFormat != nil
     }
 }
 
@@ -480,6 +492,117 @@ struct SystemMetadata {
     }
 }
 
+// MARK: - File System Advanced Metadata Structure
+struct FileSystemAdvancedMetadata {
+    let allocatedSize: Int64?           // Actual disk blocks used
+    let attributeModDate: Date?         // Attribute modification date
+    let resourceForkSize: Int64?        // Resource fork size (classic Mac)
+    let dataForkSize: Int64?            // Data fork size
+    let volumeName: String?             // Volume name
+    let volumeFormat: String?           // Volume format (APFS, HFS+, etc.)
+    let volumeAvailable: Int64?         // Available space on volume
+    let volumeTotal: Int64?             // Total volume capacity
+    let spotlightIndexed: Bool?         // Is indexed by Spotlight
+    let fileProviderName: String?       // Cloud storage provider name
+    let fileProviderStatus: String?     // Cloud sync status
+
+    var hasData: Bool {
+        return allocatedSize != nil ||
+               attributeModDate != nil ||
+               resourceForkSize != nil ||
+               dataForkSize != nil ||
+               volumeName != nil ||
+               volumeFormat != nil ||
+               volumeAvailable != nil ||
+               volumeTotal != nil ||
+               spotlightIndexed != nil ||
+               fileProviderName != nil ||
+               fileProviderStatus != nil
+    }
+
+    /// Formatted allocated size
+    var formattedAllocatedSize: String? {
+        guard let size = allocatedSize else { return nil }
+        return ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
+    }
+
+    /// Formatted attribute modification date
+    var formattedAttributeModDate: String? {
+        guard let date = attributeModDate else { return nil }
+        return DateFormatters.formatShortDateTime(date)
+    }
+
+    /// Formatted resource fork size
+    var formattedResourceForkSize: String? {
+        guard let size = resourceForkSize, size > 0 else { return nil }
+        return ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
+    }
+
+    /// Formatted volume available space
+    var formattedVolumeAvailable: String? {
+        guard let size = volumeAvailable else { return nil }
+        return ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
+    }
+
+    /// Formatted volume total capacity
+    var formattedVolumeTotal: String? {
+        guard let size = volumeTotal else { return nil }
+        return ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
+    }
+
+    /// Volume usage percentage
+    var volumeUsagePercentage: Double? {
+        guard let total = volumeTotal, let available = volumeAvailable, total > 0 else { return nil }
+        return Double(total - available) / Double(total) * 100.0
+    }
+}
+
+// MARK: - 3D Model Metadata Structure
+struct Model3DMetadata {
+    let format: String?               // USDZ, OBJ, FBX, GLTF
+    let vertexCount: Int?             // Number of vertices
+    let faceCount: Int?               // Number of faces
+    let meshCount: Int?               // Number of meshes
+    let materialCount: Int?           // Number of materials
+    let animationCount: Int?          // Number of animations
+    let hasSkeleton: Bool?            // Has skeleton/armature
+    let boundingBox: String?          // Bounding box dimensions
+
+    var hasData: Bool {
+        return format != nil ||
+               vertexCount != nil ||
+               faceCount != nil ||
+               meshCount != nil ||
+               materialCount != nil ||
+               animationCount != nil ||
+               hasSkeleton != nil ||
+               boundingBox != nil
+    }
+}
+
+// MARK: - Xcode Project Metadata Structure
+struct XcodeProjectMetadata {
+    let projectName: String?
+    let targetCount: Int?             // Number of targets
+    let configurationCount: Int?      // Number of build configurations
+    let swiftVersion: String?         // Swift version
+    let deploymentTarget: String?     // Deployment target
+    let organizationName: String?     // Organization name
+    let hasTests: Bool?               // Has test target
+    let hasUITests: Bool?             // Has UI test target
+
+    var hasData: Bool {
+        return projectName != nil ||
+               targetCount != nil ||
+               configurationCount != nil ||
+               swiftVersion != nil ||
+               deploymentTarget != nil ||
+               organizationName != nil ||
+               hasTests != nil ||
+               hasUITests != nil
+    }
+}
+
 struct FileInfo {
     let name: String
     let path: String
@@ -565,6 +688,15 @@ struct FileInfo {
 
     // System metadata (tags, quarantine, links, etc.)
     let systemMetadata: SystemMetadata?
+
+    // File system advanced metadata (volume info, allocated size, etc.)
+    let fileSystemAdvancedMetadata: FileSystemAdvancedMetadata?
+
+    // 3D model metadata
+    let model3DMetadata: Model3DMetadata?
+
+    // Xcode project metadata
+    let xcodeProjectMetadata: XcodeProjectMetadata?
 
     var formattedSize: String {
         ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
@@ -765,6 +897,15 @@ struct FileInfo {
             // Extract System metadata (tags, quarantine, links, etc.)
             let systemMetadata = extractSystemMetadata(from: url)
 
+            // Extract File System Advanced metadata (volume info, allocated size, etc.)
+            let fileSystemAdvancedMetadata = extractFileSystemAdvancedMetadata(from: url)
+
+            // Extract 3D Model metadata
+            let model3DMetadata = extractModel3DMetadata(from: url)
+
+            // Extract Xcode Project metadata
+            let xcodeProjectMetadata = extractXcodeProjectMetadata(from: url)
+
             return FileInfo(
                 name: url.lastPathComponent,
                 path: path,
@@ -803,7 +944,10 @@ struct FileInfo {
                 appBundleMetadata: appBundleMetadata,
                 sqliteMetadata: sqliteMetadata,
                 gitMetadata: gitMetadata,
-                systemMetadata: systemMetadata
+                systemMetadata: systemMetadata,
+                fileSystemAdvancedMetadata: fileSystemAdvancedMetadata,
+                model3DMetadata: model3DMetadata,
+                xcodeProjectMetadata: xcodeProjectMetadata
             )
         } catch {
             Logger.error("Failed to read file attributes: \(path)", error: error, subsystem: .fileSystem)
@@ -813,8 +957,8 @@ struct FileInfo {
 
     // MARK: - EXIF Extraction
     private static func extractEXIFData(from url: URL) -> EXIFData? {
-        // Check if file is an image by extension
-        let imageExtensions = ["jpg", "jpeg", "png", "tiff", "tif", "heic", "heif", "raw", "cr2", "nef", "arw", "dng"]
+        // Check if file is an image by extension (including WebP and AVIF)
+        let imageExtensions = ["jpg", "jpeg", "png", "tiff", "tif", "heic", "heif", "raw", "cr2", "nef", "arw", "dng", "webp", "avif"]
         guard let ext = url.pathExtension.lowercased() as String?,
               imageExtensions.contains(ext) else {
             return nil
@@ -903,6 +1047,76 @@ struct FileInfo {
             gpsLocation = String(format: "%.6f°%@, %.6f°%@", lat, latRef, lon, lonRef)
         }
 
+        // Extract color profile (Display P3, sRGB, Adobe RGB, Rec.2020)
+        var colorProfile: String? = nil
+        if let profileName = imageProperties[kCGImagePropertyProfileName as String] as? String {
+            colorProfile = profileName
+        } else if let iccProfile = imageProperties["ProfileName"] as? String {
+            colorProfile = iccProfile
+        }
+
+        // Extract bit depth
+        var bitDepth: Int? = nil
+        if let depth = imageProperties[kCGImagePropertyDepth as String] as? Int {
+            bitDepth = depth
+        }
+
+        // Check for HDR gain map (HEIC/AVIF specific)
+        var hasHDRGainMap: Bool? = nil
+        var hdrFormat: String? = nil
+
+        // Check HEIC-specific properties for HDR
+        if let heicsDict = imageProperties["{HEICS}"] as? [String: Any] {
+            // Check for HDR gain map
+            if heicsDict["HasHDRGainMap"] as? Bool == true ||
+               heicsDict["HDRGainMapVersion"] != nil {
+                hasHDRGainMap = true
+            }
+        }
+
+        // Check for auxiliary images (HDR gain map is stored as auxiliary)
+        let auxDataCount = CGImageSourceGetCount(imageSource)
+        if auxDataCount > 1 {
+            // Multiple images might indicate HDR gain map
+            for i in 1..<auxDataCount {
+                if let auxProps = CGImageSourceCopyPropertiesAtIndex(imageSource, i, nil) as? [String: Any] {
+                    if let auxType = auxProps[kCGImagePropertyImageCount as String] {
+                        // Has auxiliary data
+                        if hasHDRGainMap == nil {
+                            hasHDRGainMap = true
+                        }
+                    }
+                }
+            }
+        }
+
+        // Determine HDR format from color profile and transfer function
+        if let profile = colorProfile {
+            let profileLower = profile.lowercased()
+            if profileLower.contains("bt.2100") || profileLower.contains("rec.2100") {
+                if profileLower.contains("hlg") {
+                    hdrFormat = "HLG"
+                } else if profileLower.contains("pq") {
+                    hdrFormat = "HDR10"
+                }
+            } else if profileLower.contains("display p3") {
+                // P3 with high bit depth might be HDR
+                if let depth = bitDepth, depth > 8 {
+                    hdrFormat = "HDR (P3)"
+                }
+            } else if profileLower.contains("bt.2020") || profileLower.contains("rec.2020") {
+                hdrFormat = "HDR (BT.2020)"
+            }
+        }
+
+        // Check for Dolby Vision in MakerNote (for some cameras)
+        if let makerNote = exifDict?[kCGImagePropertyExifMakerNote as String] as? Data {
+            let makerNoteString = String(data: makerNote, encoding: .ascii) ?? ""
+            if makerNoteString.contains("Dolby") {
+                hdrFormat = "Dolby Vision"
+            }
+        }
+
         // Only return EXIF data if at least one field has data
         let exifData = EXIFData(
             camera: camera,
@@ -914,7 +1128,11 @@ struct FileInfo {
             dateTaken: dateTaken,
             imageSize: imageSize,
             colorSpace: colorSpace,
-            gpsLocation: gpsLocation
+            gpsLocation: gpsLocation,
+            colorProfile: colorProfile,
+            bitDepth: bitDepth,
+            hasHDRGainMap: hasHDRGainMap,
+            hdrFormat: hdrFormat
         )
 
         return exifData.hasData ? exifData : nil
@@ -1059,6 +1277,63 @@ struct FileInfo {
             }
         }
 
+        // Determine container format
+        var containerFormat: String? = nil
+        switch ext {
+        case "mkv":
+            containerFormat = "Matroska (MKV)"
+        case "webm":
+            containerFormat = "WebM"
+        case "mp4", "m4v":
+            containerFormat = "MPEG-4"
+        case "mov":
+            containerFormat = "QuickTime"
+        case "avi":
+            containerFormat = "AVI"
+        case "flv":
+            containerFormat = "Flash Video"
+        case "wmv":
+            containerFormat = "Windows Media"
+        case "mpeg", "mpg":
+            containerFormat = "MPEG"
+        case "3gp":
+            containerFormat = "3GPP"
+        case "mts", "m2ts":
+            containerFormat = "MPEG-2 Transport Stream"
+        default:
+            containerFormat = ext.uppercased()
+        }
+
+        // Extract chapter count (if available)
+        var chapterCount: Int? = nil
+        let chapterMetadataGroups = asset.chapterMetadataGroups(bestMatchingPreferredLanguages: ["en", "*"])
+        if !chapterMetadataGroups.isEmpty {
+            chapterCount = chapterMetadataGroups.count
+        }
+
+        // Extract subtitle track count
+        var subtitleTracks: Int? = nil
+        let subtitleTrackCount = asset.tracks(withMediaType: .text).count
+        if subtitleTrackCount > 0 {
+            subtitleTracks = subtitleTrackCount
+        }
+
+        // Also check for closed caption tracks
+        let closedCaptionCount = asset.tracks(withMediaType: .closedCaption).count
+        if closedCaptionCount > 0 {
+            subtitleTracks = (subtitleTracks ?? 0) + closedCaptionCount
+        }
+
+        // Note: Attachment count (fonts, cover art) is not directly available via AVFoundation
+        // For MKV files, this would require parsing the file directly
+        var attachmentCount: Int? = nil
+
+        // Check for embedded artwork/attachments via metadata
+        let artworkItems = AVMetadataItem.metadataItems(from: asset.commonMetadata, filteredByIdentifier: .commonIdentifierArtwork)
+        if !artworkItems.isEmpty {
+            attachmentCount = artworkItems.count
+        }
+
         let metadata = VideoMetadata(
             duration: duration,
             resolution: resolution,
@@ -1069,7 +1344,11 @@ struct FileInfo {
             audioTracks: audioTrackCount > 0 ? audioTrackCount : nil,
             hdrFormat: hdrFormat,
             colorPrimaries: colorPrimaries,
-            transferFunction: transferFunction
+            transferFunction: transferFunction,
+            chapterCount: chapterCount,
+            subtitleTracks: subtitleTracks,
+            attachmentCount: attachmentCount,
+            containerFormat: containerFormat
         )
 
         return metadata.hasData ? metadata : nil
@@ -3506,6 +3785,423 @@ struct FileInfo {
             extendedAttributes: extendedAttributes,
             aliasTarget: aliasTarget,
             isAliasFile: isAliasFile
+        )
+
+        return metadata.hasData ? metadata : nil
+    }
+
+    // MARK: - File System Advanced Metadata Extraction
+    private static func extractFileSystemAdvancedMetadata(from url: URL) -> FileSystemAdvancedMetadata? {
+        var allocatedSize: Int64? = nil
+        var attributeModDate: Date? = nil
+        var resourceForkSize: Int64? = nil
+        var dataForkSize: Int64? = nil
+        var volumeName: String? = nil
+        var volumeFormat: String? = nil
+        var volumeAvailable: Int64? = nil
+        var volumeTotal: Int64? = nil
+        var spotlightIndexed: Bool? = nil
+        var fileProviderName: String? = nil
+        var fileProviderStatus: String? = nil
+
+        // Extract allocated size and data fork size using URL resource keys
+        do {
+            let resourceValues = try url.resourceValues(forKeys: [
+                .totalFileAllocatedSizeKey,
+                .fileSizeKey,
+                .totalFileSizeKey
+            ])
+            if let allocated = resourceValues.totalFileAllocatedSize {
+                allocatedSize = Int64(allocated)
+            }
+            if let fileSize = resourceValues.fileSize {
+                dataForkSize = Int64(fileSize)
+            }
+        } catch {
+            Logger.debug("Failed to extract allocated size: \(error.localizedDescription)", subsystem: .fileSystem)
+        }
+
+        // Extract volume information
+        do {
+            let resourceValues = try url.resourceValues(forKeys: [
+                .volumeNameKey,
+                .volumeLocalizedFormatDescriptionKey,
+                .volumeAvailableCapacityKey,
+                .volumeTotalCapacityKey
+            ])
+            volumeName = resourceValues.volumeName
+            volumeFormat = resourceValues.volumeLocalizedFormatDescription
+            if let available = resourceValues.volumeAvailableCapacity {
+                volumeAvailable = Int64(available)
+            }
+            if let total = resourceValues.volumeTotalCapacity {
+                volumeTotal = Int64(total)
+            }
+        } catch {
+            Logger.debug("Failed to extract volume info: \(error.localizedDescription)", subsystem: .fileSystem)
+        }
+
+        // Extract attribute modification date using stat
+        let path = url.path
+        var statInfo = stat()
+        if stat(path, &statInfo) == 0 {
+            // st_ctimespec is the time of last status change (attribute modification)
+            let ctimeSeconds = statInfo.st_ctimespec.tv_sec
+            attributeModDate = Date(timeIntervalSince1970: TimeInterval(ctimeSeconds))
+        }
+
+        // Extract resource fork size using extended attributes
+        let resourceForkPath = path + "/..namedfork/rsrc"
+        var rsrcStat = stat()
+        if stat(resourceForkPath, &rsrcStat) == 0 {
+            let size = rsrcStat.st_size
+            if size > 0 {
+                resourceForkSize = Int64(size)
+            }
+        }
+
+        // Check if file is indexed by Spotlight using MDItemCreate
+        if let mdItem = MDItemCreateWithURL(nil, url as CFURL) {
+            // If MDItem exists, the file is indexed by Spotlight
+            spotlightIndexed = true
+
+            // Try to get more detailed indexing info
+            if let _ = MDItemCopyAttribute(mdItem, kMDItemContentType) {
+                // Successfully retrieved content type, file is indexed
+            }
+        } else {
+            spotlightIndexed = false
+        }
+
+        // Extract file provider information (for cloud storage)
+        do {
+            let resourceValues = try url.resourceValues(forKeys: [
+                .ubiquitousItemContainerDisplayNameKey,
+                .ubiquitousItemDownloadingStatusKey,
+                .isUbiquitousItemKey
+            ])
+
+            // Check if it's a cloud file
+            if resourceValues.isUbiquitousItem == true {
+                if let containerName = resourceValues.ubiquitousItemContainerDisplayName {
+                    fileProviderName = containerName
+                }
+
+                if let status = resourceValues.ubiquitousItemDownloadingStatus {
+                    switch status {
+                    case .current, .downloaded:
+                        fileProviderStatus = "fileProvider.downloaded".localized
+                    case .notDownloaded:
+                        fileProviderStatus = "fileProvider.cloudOnly".localized
+                    default:
+                        fileProviderStatus = "fileProvider.unknown".localized
+                    }
+                }
+            }
+        } catch {
+            Logger.debug("Failed to extract file provider info: \(error.localizedDescription)", subsystem: .fileSystem)
+        }
+
+        // Check for third-party file providers (Dropbox, Google Drive, OneDrive)
+        if fileProviderName == nil {
+            let pathComponents = url.pathComponents
+
+            // Detect Dropbox
+            if pathComponents.contains("Dropbox") {
+                fileProviderName = "Dropbox"
+            }
+            // Detect Google Drive
+            else if pathComponents.contains("Google Drive") || pathComponents.contains("GoogleDrive") {
+                fileProviderName = "Google Drive"
+            }
+            // Detect OneDrive
+            else if pathComponents.contains("OneDrive") {
+                fileProviderName = "OneDrive"
+            }
+            // Detect Box
+            else if pathComponents.contains("Box") {
+                fileProviderName = "Box"
+            }
+        }
+
+        let metadata = FileSystemAdvancedMetadata(
+            allocatedSize: allocatedSize,
+            attributeModDate: attributeModDate,
+            resourceForkSize: resourceForkSize,
+            dataForkSize: dataForkSize,
+            volumeName: volumeName,
+            volumeFormat: volumeFormat,
+            volumeAvailable: volumeAvailable,
+            volumeTotal: volumeTotal,
+            spotlightIndexed: spotlightIndexed,
+            fileProviderName: fileProviderName,
+            fileProviderStatus: fileProviderStatus
+        )
+
+        return metadata.hasData ? metadata : nil
+    }
+
+    // MARK: - 3D Model Metadata Extraction
+    private static func extractModel3DMetadata(from url: URL) -> Model3DMetadata? {
+        let ext = url.pathExtension.lowercased()
+        let model3DExtensions = ["usdz", "usda", "usdc", "usd", "obj", "gltf", "glb", "fbx", "dae", "stl", "ply", "3ds"]
+
+        guard model3DExtensions.contains(ext) else {
+            return nil
+        }
+
+        var format: String? = nil
+        var vertexCount: Int? = nil
+        var faceCount: Int? = nil
+        var meshCount: Int? = nil
+        var materialCount: Int? = nil
+        var animationCount: Int? = nil
+        var hasSkeleton: Bool? = nil
+        var boundingBox: String? = nil
+
+        // Determine format name
+        switch ext {
+        case "usdz", "usda", "usdc", "usd":
+            format = "USD (\(ext.uppercased()))"
+        case "obj":
+            format = "Wavefront OBJ"
+        case "gltf", "glb":
+            format = "glTF \(ext == "glb" ? "(Binary)" : "(JSON)")"
+        case "fbx":
+            format = "Autodesk FBX"
+        case "dae":
+            format = "COLLADA"
+        case "stl":
+            format = "STL"
+        case "ply":
+            format = "PLY"
+        case "3ds":
+            format = "3DS"
+        default:
+            format = ext.uppercased()
+        }
+
+        // For text-based formats, try to extract basic info
+        if ["obj", "gltf", "dae", "stl", "ply"].contains(ext) {
+            do {
+                let content = try String(contentsOf: url, encoding: .utf8)
+                let lines = content.components(separatedBy: .newlines)
+
+                switch ext {
+                case "obj":
+                    // Count vertices (v), faces (f), and materials (usemtl)
+                    var vCount = 0
+                    var fCount = 0
+                    var mtlSet = Set<String>()
+
+                    for line in lines.prefix(50000) { // Limit for performance
+                        let trimmed = line.trimmingCharacters(in: .whitespaces)
+                        if trimmed.hasPrefix("v ") {
+                            vCount += 1
+                        } else if trimmed.hasPrefix("f ") {
+                            fCount += 1
+                        } else if trimmed.hasPrefix("usemtl ") {
+                            let material = String(trimmed.dropFirst(7)).trimmingCharacters(in: .whitespaces)
+                            mtlSet.insert(material)
+                        }
+                    }
+
+                    if vCount > 0 { vertexCount = vCount }
+                    if fCount > 0 { faceCount = fCount }
+                    if !mtlSet.isEmpty { materialCount = mtlSet.count }
+
+                case "stl":
+                    // Count facets in ASCII STL
+                    var facetCount = 0
+                    for line in lines {
+                        if line.trimmingCharacters(in: .whitespaces).lowercased().hasPrefix("facet normal") {
+                            facetCount += 1
+                        }
+                    }
+                    if facetCount > 0 {
+                        faceCount = facetCount
+                        vertexCount = facetCount * 3 // Each facet has 3 vertices
+                    }
+
+                case "gltf":
+                    // Parse GLTF JSON
+                    if let data = content.data(using: .utf8),
+                       let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                        if let meshes = json["meshes"] as? [[String: Any]] {
+                            meshCount = meshes.count
+                        }
+                        if let materials = json["materials"] as? [[String: Any]] {
+                            materialCount = materials.count
+                        }
+                        if let animations = json["animations"] as? [[String: Any]] {
+                            animationCount = animations.count
+                        }
+                        if let skins = json["skins"] as? [[String: Any]], !skins.isEmpty {
+                            hasSkeleton = true
+                        }
+                    }
+
+                default:
+                    break
+                }
+            } catch {
+                Logger.debug("Failed to parse 3D model: \(error.localizedDescription)", subsystem: .fileSystem)
+            }
+        }
+
+        // For binary formats like GLB, try basic header parsing
+        if ext == "glb" {
+            do {
+                let data = try Data(contentsOf: url)
+                // GLB header: magic (4) + version (4) + length (4)
+                if data.count >= 12 {
+                    let magic = data.subdata(in: 0..<4)
+                    if magic == Data([0x67, 0x6C, 0x54, 0x46]) { // "glTF"
+                        // Valid GLB file
+                        format = "glTF (Binary)"
+                    }
+                }
+            } catch {
+                Logger.debug("Failed to read GLB header: \(error.localizedDescription)", subsystem: .fileSystem)
+            }
+        }
+
+        let metadata = Model3DMetadata(
+            format: format,
+            vertexCount: vertexCount,
+            faceCount: faceCount,
+            meshCount: meshCount,
+            materialCount: materialCount,
+            animationCount: animationCount,
+            hasSkeleton: hasSkeleton,
+            boundingBox: boundingBox
+        )
+
+        return metadata.hasData ? metadata : nil
+    }
+
+    // MARK: - Xcode Project Metadata Extraction
+    private static func extractXcodeProjectMetadata(from url: URL) -> XcodeProjectMetadata? {
+        let ext = url.pathExtension.lowercased()
+
+        // Check if it's an Xcode project or workspace
+        guard ext == "xcodeproj" || ext == "xcworkspace" else {
+            return nil
+        }
+
+        var projectName: String? = nil
+        var targetCount: Int? = nil
+        var configurationCount: Int? = nil
+        var swiftVersion: String? = nil
+        var deploymentTarget: String? = nil
+        var organizationName: String? = nil
+        var hasTests: Bool? = nil
+        var hasUITests: Bool? = nil
+
+        // Get project name from URL
+        projectName = url.deletingPathExtension().lastPathComponent
+
+        if ext == "xcodeproj" {
+            // Parse project.pbxproj
+            let pbxprojURL = url.appendingPathComponent("project.pbxproj")
+
+            if FileManager.default.fileExists(atPath: pbxprojURL.path) {
+                do {
+                    let content = try String(contentsOf: pbxprojURL, encoding: .utf8)
+
+                    // Count targets (PBXNativeTarget)
+                    let targetMatches = content.components(separatedBy: "isa = PBXNativeTarget")
+                    targetCount = max(0, targetMatches.count - 1)
+
+                    // Count build configurations (XCBuildConfiguration)
+                    let configMatches = content.components(separatedBy: "isa = XCBuildConfiguration")
+                    // Divide by 2 because each target has Debug and Release
+                    let configCount = max(0, configMatches.count - 1)
+                    if configCount > 0 {
+                        configurationCount = min(configCount, 10) // Reasonable limit
+                    }
+
+                    // Extract Swift version
+                    if let swiftRange = content.range(of: "SWIFT_VERSION = ") {
+                        let startIndex = swiftRange.upperBound
+                        if let endIndex = content[startIndex...].firstIndex(of: ";") {
+                            let version = String(content[startIndex..<endIndex])
+                                .trimmingCharacters(in: .whitespaces)
+                                .replacingOccurrences(of: "\"", with: "")
+                            if !version.isEmpty {
+                                swiftVersion = version
+                            }
+                        }
+                    }
+
+                    // Extract deployment target
+                    let deploymentKeys = ["IPHONEOS_DEPLOYMENT_TARGET", "MACOSX_DEPLOYMENT_TARGET", "TVOS_DEPLOYMENT_TARGET", "WATCHOS_DEPLOYMENT_TARGET"]
+                    for key in deploymentKeys {
+                        if let range = content.range(of: "\(key) = ") {
+                            let startIndex = range.upperBound
+                            if let endIndex = content[startIndex...].firstIndex(of: ";") {
+                                let target = String(content[startIndex..<endIndex])
+                                    .trimmingCharacters(in: .whitespaces)
+                                    .replacingOccurrences(of: "\"", with: "")
+                                if !target.isEmpty {
+                                    let platform = key.replacingOccurrences(of: "_DEPLOYMENT_TARGET", with: "")
+                                        .replacingOccurrences(of: "OS", with: "OS ")
+                                        .capitalized
+                                    deploymentTarget = "\(platform) \(target)"
+                                    break
+                                }
+                            }
+                        }
+                    }
+
+                    // Extract organization name
+                    if let orgRange = content.range(of: "ORGANIZATIONNAME = ") {
+                        let startIndex = orgRange.upperBound
+                        if let endIndex = content[startIndex...].firstIndex(of: ";") {
+                            let org = String(content[startIndex..<endIndex])
+                                .trimmingCharacters(in: .whitespaces)
+                                .replacingOccurrences(of: "\"", with: "")
+                            if !org.isEmpty {
+                                organizationName = org
+                            }
+                        }
+                    }
+
+                    // Check for test targets
+                    hasTests = content.contains("productType = \"com.apple.product-type.bundle.unit-test\"")
+                    hasUITests = content.contains("productType = \"com.apple.product-type.bundle.ui-testing\"")
+
+                } catch {
+                    Logger.debug("Failed to parse pbxproj: \(error.localizedDescription)", subsystem: .fileSystem)
+                }
+            }
+        } else if ext == "xcworkspace" {
+            // Parse workspace contents
+            let contentsURL = url.appendingPathComponent("contents.xcworkspacedata")
+
+            if FileManager.default.fileExists(atPath: contentsURL.path) {
+                do {
+                    let content = try String(contentsOf: contentsURL, encoding: .utf8)
+
+                    // Count FileRef entries (projects in workspace)
+                    let fileRefMatches = content.components(separatedBy: "<FileRef")
+                    targetCount = max(0, fileRefMatches.count - 1)
+
+                } catch {
+                    Logger.debug("Failed to parse workspace: \(error.localizedDescription)", subsystem: .fileSystem)
+                }
+            }
+        }
+
+        let metadata = XcodeProjectMetadata(
+            projectName: projectName,
+            targetCount: targetCount,
+            configurationCount: configurationCount,
+            swiftVersion: swiftVersion,
+            deploymentTarget: deploymentTarget,
+            organizationName: organizationName,
+            hasTests: hasTests,
+            hasUITests: hasUITests
         )
 
         return metadata.hasData ? metadata : nil

@@ -403,6 +403,9 @@
 "displayItem.sqlite" = "SQLite 資料庫資訊";
 "displayItem.git" = "Git 儲存庫資訊";
 "displayItem.filePath" = "檔案路徑";
+"displayItem.fileSystemAdvanced" = "檔案系統進階資訊";
+"displayItem.model3D" = "3D 模型資訊";
+"displayItem.xcodeProject" = "Xcode 專案資訊";
 
 /* Hover Window */
 "hover.fileType.folder" = "資料夾";
@@ -722,3 +725,55 @@
 /* Copy Feature */
 "hover.copy.copy" = "複製";
 "hover.copy.copied" = "已複製！";
+
+/* File System Advanced Hover */
+"hover.fileSystemAdvanced.title" = "檔案系統進階";
+"hover.fileSystemAdvanced.allocatedSize" = "已分配空間";
+"hover.fileSystemAdvanced.attributeModDate" = "屬性修改日期";
+"hover.fileSystemAdvanced.resourceFork" = "Resource Fork";
+"hover.fileSystemAdvanced.volumeName" = "磁碟區名稱";
+"hover.fileSystemAdvanced.volumeFormat" = "磁碟區格式";
+"hover.fileSystemAdvanced.volumeAvailable" = "可用空間";
+"hover.fileSystemAdvanced.volumeTotal" = "總容量";
+"hover.fileSystemAdvanced.spotlightIndexed" = "Spotlight 索引";
+"hover.fileSystemAdvanced.fileProvider" = "雲端儲存";
+"hover.fileSystemAdvanced.fileProviderStatus" = "同步狀態";
+
+/* 3D Model Hover */
+"hover.model3D.title" = "3D 模型";
+"hover.model3D.format" = "格式";
+"hover.model3D.vertices" = "頂點數";
+"hover.model3D.faces" = "面數";
+"hover.model3D.meshes" = "網格數";
+"hover.model3D.materials" = "材質數";
+"hover.model3D.animations" = "動畫數";
+"hover.model3D.skeleton" = "骨架";
+"hover.model3D.boundingBox" = "邊界框";
+
+/* Xcode Project Hover */
+"hover.xcodeProject.title" = "Xcode 專案";
+"hover.xcodeProject.projectName" = "專案名稱";
+"hover.xcodeProject.targets" = "Target 數";
+"hover.xcodeProject.configurations" = "配置數";
+"hover.xcodeProject.swiftVersion" = "Swift 版本";
+"hover.xcodeProject.deploymentTarget" = "部署目標";
+"hover.xcodeProject.organization" = "組織名稱";
+"hover.xcodeProject.hasTests" = "單元測試";
+"hover.xcodeProject.hasUITests" = "UI 測試";
+
+/* Extended EXIF Fields */
+"hover.exif.colorProfile" = "色彩描述檔";
+"hover.exif.bitDepth" = "位元深度";
+"hover.exif.hdrGainMap" = "HDR 增益圖";
+"hover.exif.hdrFormat" = "HDR 格式";
+
+/* Extended Video Fields */
+"hover.video.chapters" = "章節數";
+"hover.video.subtitleTracks" = "字幕軌道";
+"hover.video.attachments" = "附件數";
+"hover.video.containerFormat" = "容器格式";
+
+/* File Provider Status */
+"fileProvider.downloaded" = "已下載";
+"fileProvider.cloudOnly" = "僅在雲端";
+"fileProvider.unknown" = "未知";

@@ -403,6 +403,9 @@
 "displayItem.sqlite" = "SQLite Database Information";
 "displayItem.git" = "Git Repository Information";
 "displayItem.filePath" = "File Path";
+"displayItem.fileSystemAdvanced" = "File System Advanced";
+"displayItem.model3D" = "3D Model Information";
+"displayItem.xcodeProject" = "Xcode Project Information";
 
 /* Hover Window */
 "hover.fileType.folder" = "Folder";
@@ -722,3 +725,55 @@
 /* Copy Feature */
 "hover.copy.copy" = "Copy";
 "hover.copy.copied" = "Copied!";
+
+/* File System Advanced Hover */
+"hover.fileSystemAdvanced.title" = "File System Advanced";
+"hover.fileSystemAdvanced.allocatedSize" = "Allocated Size";
+"hover.fileSystemAdvanced.attributeModDate" = "Attribute Modified";
+"hover.fileSystemAdvanced.resourceFork" = "Resource Fork";
+"hover.fileSystemAdvanced.volumeName" = "Volume Name";
+"hover.fileSystemAdvanced.volumeFormat" = "Volume Format";
+"hover.fileSystemAdvanced.volumeAvailable" = "Available Space";
+"hover.fileSystemAdvanced.volumeTotal" = "Total Capacity";
+"hover.fileSystemAdvanced.spotlightIndexed" = "Spotlight Indexed";
+"hover.fileSystemAdvanced.fileProvider" = "Cloud Storage";
+"hover.fileSystemAdvanced.fileProviderStatus" = "Sync Status";
+
+/* 3D Model Hover */
+"hover.model3D.title" = "3D Model";
+"hover.model3D.format" = "Format";
+"hover.model3D.vertices" = "Vertices";
+"hover.model3D.faces" = "Faces";
+"hover.model3D.meshes" = "Meshes";
+"hover.model3D.materials" = "Materials";
+"hover.model3D.animations" = "Animations";
+"hover.model3D.skeleton" = "Skeleton";
+"hover.model3D.boundingBox" = "Bounding Box";
+
+/* Xcode Project Hover */
+"hover.xcodeProject.title" = "Xcode Project";
+"hover.xcodeProject.projectName" = "Project Name";
+"hover.xcodeProject.targets" = "Targets";
+"hover.xcodeProject.configurations" = "Configurations";
+"hover.xcodeProject.swiftVersion" = "Swift Version";
+"hover.xcodeProject.deploymentTarget" = "Deployment Target";
+"hover.xcodeProject.organization" = "Organization";
+"hover.xcodeProject.hasTests" = "Unit Tests";
+"hover.xcodeProject.hasUITests" = "UI Tests";
+
+/* Extended EXIF Fields */
+"hover.exif.colorProfile" = "Color Profile";
+"hover.exif.bitDepth" = "Bit Depth";
+"hover.exif.hdrGainMap" = "HDR Gain Map";
+"hover.exif.hdrFormat" = "HDR Format";
+
+/* Extended Video Fields */
+"hover.video.chapters" = "Chapters";
+"hover.video.subtitleTracks" = "Subtitle Tracks";
+"hover.video.attachments" = "Attachments";
+"hover.video.containerFormat" = "Container Format";
+
+/* File Provider Status */
+"fileProvider.downloaded" = "Downloaded";
+"fileProvider.cloudOnly" = "Cloud Only";
+"fileProvider.unknown" = "Unknown";
