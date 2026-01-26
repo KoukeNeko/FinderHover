@@ -10,6 +10,11 @@ import AppKit
 import Combine
 import QuickLookThumbnailing
 
+// MARK: - Notification for Option Key Release
+extension Notification.Name {
+    static let hoverWindowUnlocked = Notification.Name("hoverWindowUnlocked")
+}
+
 // MARK: - Shared State for Lock Mode
 class HoverWindowState: ObservableObject {
     static let shared = HoverWindowState()
@@ -161,9 +166,18 @@ class HoverWindowController: NSWindowController {
             windowState.isLocked = true
             window?.ignoresMouseEvents = false  // Allow mouse interaction
         } else if !optionPressed && windowState.isLocked {
-            // Option released - hide the window
-            forceHide()
+            // Option released - just unlock, let normal hover behavior decide visibility
+            unlock()
         }
+    }
+
+    /// Unlock the window without hiding (let HoverManager decide visibility)
+    private func unlock() {
+        windowState.isLocked = false
+        windowState.copiedValue = nil
+        window?.ignoresMouseEvents = true
+        // Notify HoverManager to re-check cursor position
+        NotificationCenter.default.post(name: .hoverWindowUnlocked, object: nil)
     }
 
     deinit {

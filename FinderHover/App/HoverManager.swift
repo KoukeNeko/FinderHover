@@ -33,11 +33,26 @@ class HoverManager: ObservableObject {
     // Store observer tokens for cleanup
     private var appActivateObserver: NSObjectProtocol?
     private var appDeactivateObserver: NSObjectProtocol?
+    private var unlockObserver: NSObjectProtocol?
 
     init() {
         setupSubscriptions()
         setupAppSwitchObserver()
+        setupUnlockObserver()
         checkAccessibilityPermissions()
+    }
+
+    private func setupUnlockObserver() {
+        // Listen for Option key release to re-check cursor position
+        unlockObserver = NotificationCenter.default.addObserver(
+            forName: .hoverWindowUnlocked,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self = self else { return }
+            // Immediately check if cursor is still over a file (no delay)
+            self.checkAndDisplayFileInfo(at: self.lastMouseLocation)
+        }
     }
 
     private func setupSubscriptions() {

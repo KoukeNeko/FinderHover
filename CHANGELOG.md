@@ -2,7 +2,16 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.6.4 (Current)
+## Version 1.6.5 (Current)
+
+### 🐛 Bug Fixes
+
+- Fixed hover window not hiding after copying when Option key is released
+- Window now correctly hides when cursor is not over a file upon Option release
+
+---
+
+## Version 1.6.4
 
 ### 🎨 Improvements
 
