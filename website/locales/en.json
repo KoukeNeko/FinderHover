@@ -34,6 +34,10 @@
     "customizable": {
       "title": "Fully Customizable",
       "desc": "Choose between rich macOS style or minimal Windows tooltip style. Adjust size, opacity, and font scaling."
+    },
+    "copy": {
+      "title": "Quick Copy",
+      "desc": "Hold Option (⌥) to lock the window, then click any copy button next to a value to copy it to the clipboard."
     }
   },
   "metadata": {

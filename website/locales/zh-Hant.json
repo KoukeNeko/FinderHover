@@ -34,6 +34,10 @@
     "customizable": {
       "title": "完整自訂",
       "desc": "在豐富的 macOS 風格與簡約的 Windows 提示風格之間選擇。調整大小、透明度和字體縮放。"
+    },
+    "copy": {
+      "title": "快速複製",
+      "desc": "按住 Option (⌥) 鍵鎖定視窗，點擊任何數值旁的複製按鈕即可複製到剪貼簿。"
     }
   },
   "metadata": {
