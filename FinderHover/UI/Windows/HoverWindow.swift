@@ -1386,10 +1386,8 @@ struct DetailRow: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-            // Copy button - shown when locked
-            if windowState.isLocked {
-                CopyButton(uniqueKey: label + ":" + value, value: value, fontSize: fontSize)
-            }
+            // Copy button - always present but only visible when locked
+            CopyButton(uniqueKey: label + ":" + value, value: value, fontSize: fontSize, isVisible: windowState.isLocked)
         }
     }
 }
@@ -1399,6 +1397,7 @@ struct CopyButton: View {
     let uniqueKey: String  // Unique identifier for this row
     let value: String      // Actual value to copy
     let fontSize: Double
+    let isVisible: Bool
     @ObservedObject private var windowState = HoverWindowState.shared
     @State private var isHovering = false
 
@@ -1407,20 +1406,27 @@ struct CopyButton: View {
     }
 
     var body: some View {
-        Button(action: {
-            windowState.copyToClipboard(value, key: uniqueKey)
-        }) {
-            Image(systemName: isCopied ? "checkmark" : "doc.on.doc")
-                .font(.system(size: fontSize))
-                .foregroundColor(isCopied ? .green : (isHovering ? .primary : .secondary))
-                .frame(width: 14, alignment: .center)
-        }
-        .buttonStyle(.plain)
-        .contentShape(Rectangle())
-        .onHover { hovering in
-            isHovering = hovering
-        }
-        .help(isCopied ? "hover.copy.copied".localized : "hover.copy.copy".localized)
+        Image(systemName: isCopied ? "checkmark" : "doc.on.doc")
+            .font(.system(size: fontSize))
+            .foregroundColor(isCopied ? .green : (isHovering ? .primary : .secondary))
+            .frame(width: 14, alignment: .center)
+            .opacity(isVisible ? 1 : 0)
+            .onTapGesture {
+                if isVisible {
+                    windowState.copyToClipboard(value, key: uniqueKey)
+                }
+            }
+            .onHover { hovering in
+                if isVisible {
+                    isHovering = hovering
+                }
+            }
+            .help(helpText)
+    }
+
+    private var helpText: String {
+        guard isVisible else { return "" }
+        return isCopied ? "hover.copy.copied".localized : "hover.copy.copy".localized
     }
 }
 

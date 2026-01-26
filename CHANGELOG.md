@@ -2,7 +2,16 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.6.2 (Current)
+## Version 1.6.3 (Current)
+
+### 🐛 Bug Fixes
+
+- Fixed copy button layout stability using opacity instead of conditional rendering
+- Copy button is now always present in layout, preventing height shifts when Option key is pressed
+
+---
+
+## Version 1.6.2
 
 ### 🐛 Bug Fixes
 
