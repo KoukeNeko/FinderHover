@@ -2,7 +2,16 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.6.6 (Current)
+## Version 1.6.7 (Current)
+
+### 🐛 Bug Fixes
+
+- Fixed window not hiding after clicking copy button and releasing Option key
+- Added local event monitor to detect Option key release when window has focus
+
+---
+
+## Version 1.6.6
 
 ### 🐛 Bug Fixes
 

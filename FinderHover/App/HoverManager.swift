@@ -50,7 +50,10 @@ class HoverManager: ObservableObject {
             queue: .main
         ) { [weak self] _ in
             guard let self = self else { return }
-            // Get CURRENT mouse location (not lastMouseLocation which may be stale)
+            // Force hide first, then check if we need to show again
+            self.hoverWindow?.hide()
+            self.currentFileInfo = nil
+            // Get CURRENT mouse location and check if over a file
             let currentLocation = NSEvent.mouseLocation
             self.checkAndDisplayFileInfo(at: currentLocation)
         }

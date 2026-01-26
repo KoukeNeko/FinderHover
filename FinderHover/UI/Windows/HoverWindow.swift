@@ -45,6 +45,7 @@ class HoverWindowState: ObservableObject {
 class HoverWindowController: NSWindowController {
     private var visualEffectView: NSVisualEffectView?
     private var flagsMonitor: Any?
+    private var localFlagsMonitor: Any?
     private var keyDownMonitor: Any?
     private let windowState = HoverWindowState.shared
 
@@ -134,9 +135,15 @@ class HoverWindowController: NSWindowController {
         // Avoid duplicate monitors
         stopKeyMonitoring()
 
-        // Monitor Option key (flags changed)
+        // Monitor Option key (flags changed) - global monitor for events outside the window
         flagsMonitor = NSEvent.addGlobalMonitorForEvents(matching: .flagsChanged) { [weak self] event in
             self?.handleFlagsChanged(event)
+        }
+
+        // Local monitor for events when window has focus (after clicking copy button)
+        localFlagsMonitor = NSEvent.addLocalMonitorForEvents(matching: .flagsChanged) { [weak self] event in
+            self?.handleFlagsChanged(event)
+            return event
         }
 
         // Monitor Escape key to hide window
@@ -151,6 +158,10 @@ class HoverWindowController: NSWindowController {
         if let monitor = flagsMonitor {
             NSEvent.removeMonitor(monitor)
             flagsMonitor = nil
+        }
+        if let monitor = localFlagsMonitor {
+            NSEvent.removeMonitor(monitor)
+            localFlagsMonitor = nil
         }
         if let monitor = keyDownMonitor {
             NSEvent.removeMonitor(monitor)
