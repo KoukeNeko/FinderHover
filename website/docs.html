@@ -230,37 +230,171 @@
               你可以在設定中自訂要顯示哪些中繼資料欄位。以下是各類檔案支援的欄位：
             </p>
 
-            <h3 data-i18n="docs.metadata.imageTitle">圖片檔案</h3>
+            <h3 data-i18n="docs.metadata.imageTitle">影像檔案</h3>
             <ul>
-              <li data-i18n="docs.metadata.image1">相機型號、鏡頭資訊</li>
-              <li data-i18n="docs.metadata.image2">ISO、光圈、快門速度</li>
-              <li data-i18n="docs.metadata.image3">GPS 座標</li>
-              <li data-i18n="docs.metadata.image4">
-                IPTC/XMP 中繼資料（作者、版權等）
-              </li>
+              <li data-i18n="docs.metadata.image1">相機型號、鏡頭資訊、焦距</li>
+              <li data-i18n="docs.metadata.image2">光圈、快門速度、ISO</li>
+              <li data-i18n="docs.metadata.image3">拍攝日期、色彩空間、GPS 座標</li>
+              <li data-i18n="docs.metadata.image4">IPTC/XMP（作者、版權、關鍵字、評分）</li>
+              <li data-i18n="docs.metadata.image5">色彩描述檔、位元深度、HDR 增益圖偵測</li>
             </ul>
 
             <h3 data-i18n="docs.metadata.videoTitle">影片檔案</h3>
             <ul>
-              <li data-i18n="docs.metadata.video1">
-                影片編碼（H.264、HEVC 等）
-              </li>
-              <li data-i18n="docs.metadata.video2">解析度、幀率</li>
-              <li data-i18n="docs.metadata.video3">位元率</li>
-              <li data-i18n="docs.metadata.video4">音訊取樣率、聲道數</li>
+              <li data-i18n="docs.metadata.video1">影片時長、解析度、影片編碼</li>
+              <li data-i18n="docs.metadata.video2">幀率、位元率、影音軌道數量</li>
+              <li data-i18n="docs.metadata.video3">HDR 格式（Dolby Vision、HDR10、HLG）</li>
+              <li data-i18n="docs.metadata.video4">章節數、字幕軌道、容器格式</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.audioTitle">音訊檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.audio1">曲目名稱、演出者、專輯</li>
+              <li data-i18n="docs.metadata.audio2">專輯演出者、類型、年份</li>
+              <li data-i18n="docs.metadata.audio3">時長、位元率、取樣率、聲道數</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.documentTitle">文件檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.document1">文件標題、作者、主旨、關鍵字</li>
+              <li data-i18n="docs.metadata.document2">建立/修改日期、頁數、字數</li>
+              <li data-i18n="docs.metadata.document3">工作表數（Excel）、投影片數（PowerPoint）</li>
+              <li data-i18n="docs.metadata.document4">PDF 版本、加密狀態、頁面尺寸</li>
             </ul>
 
             <h3 data-i18n="docs.metadata.codeTitle">程式碼檔案</h3>
             <ul>
-              <li data-i18n="docs.metadata.code1">程式語言偵測</li>
-              <li data-i18n="docs.metadata.code2">行數統計</li>
-              <li data-i18n="docs.metadata.code3">檔案編碼</li>
+              <li data-i18n="docs.metadata.code1">程式語言自動偵測（38 種語言）</li>
+              <li data-i18n="docs.metadata.code2">總行數、程式碼行數</li>
+              <li data-i18n="docs.metadata.code3">註解行數、空白行數、檔案編碼</li>
             </ul>
 
-            <h3 data-i18n="docs.metadata.moreTitle">更多類型</h3>
+            <h3 data-i18n="docs.metadata.configTitle">設定檔與資料格式</h3>
+            <ul>
+              <li data-i18n="docs.metadata.config1">格式類型、語法有效性</li>
+              <li data-i18n="docs.metadata.config2">鍵值數量、最大巢狀深度</li>
+              <li data-i18n="docs.metadata.config3">是否包含註解、檔案編碼</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.markdownTitle">Markdown 檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.markdown1">Frontmatter 內容（YAML/TOML/JSON）</li>
+              <li data-i18n="docs.metadata.markdown2">文件標題（H1 或 Frontmatter）</li>
+              <li data-i18n="docs.metadata.markdown3">字數、標題數量、連結數量、圖片數量</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.webTitle">網頁檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.web1">頁面標題、描述、關鍵字</li>
+              <li data-i18n="docs.metadata.web2">作者、語言、字元編碼</li>
+              <li data-i18n="docs.metadata.web3">Open Graph（og:title, og:description, og:image）</li>
+              <li data-i18n="docs.metadata.web4">Twitter Card 類型</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.archiveTitle">壓縮檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.archive1">壓縮格式類型</li>
+              <li data-i18n="docs.metadata.archive2">檔案數量、解壓縮後大小</li>
+              <li data-i18n="docs.metadata.archive3">壓縮比例、是否加密</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.ebookTitle">電子書檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.ebook1">書名、作者、出版商</li>
+              <li data-i18n="docs.metadata.ebook2">出版日期、ISBN、語言</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.fontTitle">字型檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.font1">字型全名、字型家族</li>
+              <li data-i18n="docs.metadata.font2">字型風格（Regular、Bold 等）</li>
+              <li data-i18n="docs.metadata.font3">版本、設計師、版權資訊、字符數量</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.vectorTitle">向量圖形與設計檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.vector1">格式類型、尺寸、ViewBox</li>
+              <li data-i18n="docs.metadata.vector2">色彩模式（RGB、CMYK）</li>
+              <li data-i18n="docs.metadata.vector3">圖層數量（PSD）、位元深度、解析度</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.subtitleTitle">字幕檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.subtitle1">字幕格式、文字編碼</li>
+              <li data-i18n="docs.metadata.subtitle2">字幕條目數量、總時長</li>
+              <li data-i18n="docs.metadata.subtitle3">語言代碼、是否包含格式化樣式</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.diskImageTitle">磁碟映像檔</h3>
+            <ul>
+              <li data-i18n="docs.metadata.diskImage1">映像格式（UDIF、ISO 9660 等）</li>
+              <li data-i18n="docs.metadata.diskImage2">總大小、壓縮後大小、壓縮比例</li>
+              <li data-i18n="docs.metadata.diskImage3">加密狀態、分割區架構、檔案系統</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.databaseTitle">資料庫檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.database1">資料表數量、索引數量</li>
+              <li data-i18n="docs.metadata.database2">觸發器數量、檢視數量</li>
+              <li data-i18n="docs.metadata.database3">Schema 版本、頁面大小、資料庫編碼</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.appBundleTitle">應用程式套件</h3>
+            <ul>
+              <li data-i18n="docs.metadata.appBundle1">Bundle ID、版本號、Build 號</li>
+              <li data-i18n="docs.metadata.appBundle2">最低 macOS 版本需求</li>
+              <li data-i18n="docs.metadata.appBundle3">應用程式類別、版權</li>
+              <li data-i18n="docs.metadata.appBundle4">程式碼簽章狀態、Entitlements</li>
+              <li data-i18n="docs.metadata.appBundle5">架構（arm64、x86_64、Universal）</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.gitTitle">Git 儲存庫</h3>
+            <ul>
+              <li data-i18n="docs.metadata.git1">目前分支、分支數量</li>
+              <li data-i18n="docs.metadata.git2">Commit 數量、標籤數量</li>
+              <li data-i18n="docs.metadata.git3">最後 Commit 日期與訊息</li>
+              <li data-i18n="docs.metadata.git4">遠端 URL、未提交的變更狀態</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.systemMetaTitle">系統中繼資料</h3>
+            <ul>
+              <li data-i18n="docs.metadata.systemMeta1">Finder 標籤（顏色與自訂標籤）</li>
+              <li data-i18n="docs.metadata.systemMeta2">下載來源（來自哪個網站或應用程式）</li>
+              <li data-i18n="docs.metadata.systemMeta3">隔離資訊（Gatekeeper 狀態）</li>
+              <li data-i18n="docs.metadata.systemMeta4">連結資訊（符號連結、硬連結）</li>
+              <li data-i18n="docs.metadata.systemMeta5">使用統計（開啟次數、最後使用日期）</li>
+              <li data-i18n="docs.metadata.systemMeta6">iCloud 狀態、Finder 註解、UTI 類型識別碼</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.model3DTitle">3D 模型檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.model3D1">格式類型（USDZ、OBJ、GLTF、FBX 等）</li>
+              <li data-i18n="docs.metadata.model3D2">頂點數、面數、網格數、材質數</li>
+              <li data-i18n="docs.metadata.model3D3">動畫數、骨架偵測、邊界框尺寸</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.xcodeProjectTitle">Xcode 專案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.xcodeProject1">專案名稱、Target 數、建置配置數</li>
+              <li data-i18n="docs.metadata.xcodeProject2">Swift 版本、部署目標</li>
+              <li data-i18n="docs.metadata.xcodeProject3">組織名稱、單元測試 / UI 測試偵測</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.fileSystemTitle">檔案系統進階</h3>
+            <ul>
+              <li data-i18n="docs.metadata.fileSystem1">已分配磁碟空間（實際使用的區塊）</li>
+              <li data-i18n="docs.metadata.fileSystem2">屬性修改日期、Resource Fork 大小</li>
+              <li data-i18n="docs.metadata.fileSystem3">磁碟區資訊（名稱、格式、可用空間）</li>
+              <li data-i18n="docs.metadata.fileSystem4">Spotlight 索引狀態</li>
+              <li data-i18n="docs.metadata.fileSystem5">雲端儲存偵測（iCloud、Dropbox、Google Drive、OneDrive）</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.moreTitle">查看完整清單</h3>
             <p data-i18n="docs.metadata.moreDesc">
-              FinderHover 支援超過 120 種檔案格式，包括
-              Markdown、HTML、JSON/YAML/TOML、PSD、SQLite 資料庫、Git 儲存庫等。
+              以上僅列出部分欄位，完整支援請參閱格式頁面。
+            </p>
+            <p>
+              <a href="formats.html" class="docs-link" data-i18n="docs.metadata.viewFormats">查看完整格式清單 →</a>
             </p>
           </article>
 
