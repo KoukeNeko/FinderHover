@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "FinderHover - macOS ファイルプレビューツール",
-    "description": "Finder でホバーするだけで、50 種類以上のファイル形式の詳細なメタデータを表示できます。"
+    "description": "Finder でホバーするだけで、120 種類以上のファイル形式の詳細なメタデータを表示できます。"
   },
   "nav": {
     "features": "機能",
@@ -41,7 +41,7 @@
     }
   },
   "metadata": {
-    "headline": "50 種類以上の形式に対応",
+    "headline": "120 種類以上の形式に対応",
     "subheadline": "あらゆるファイルのメタデータを深く解析。開かなくてもすべてがわかります。",
     "viewAll": "すべての形式を見る →",
     "info": {
@@ -480,7 +480,7 @@
       "code2": "行数統計",
       "code3": "ファイルエンコーディング",
       "moreTitle": "その他のタイプ",
-      "moreDesc": "FinderHover は Markdown、HTML、JSON/YAML/TOML、PSD、SQLite データベース、Git リポジトリなど、50 種類以上のファイル形式をサポートしています。"
+      "moreDesc": "FinderHover は Markdown、HTML、JSON/YAML/TOML、PSD、SQLite データベース、Git リポジトリなど、120 種類以上のファイル形式をサポートしています。"
     },
     "troubleshooting": {
       "title": "トラブルシューティング",

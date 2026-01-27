@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "FinderHover - macOS 檔案預覽工具",
-    "description": "在 Finder 中懸停即可顯示豐富的檔案資訊，支援 50+ 種檔案格式的深度中繼資料解析。"
+    "description": "在 Finder 中懸停即可顯示豐富的檔案資訊，支援 120+ 種檔案格式的深度中繼資料解析。"
   },
   "nav": {
     "features": "功能",
@@ -41,7 +41,7 @@
     }
   },
   "metadata": {
-    "headline": "支援超過 50 種格式",
+    "headline": "支援超過 120 種格式",
     "subheadline": "深度解析各類檔案的中繼資料，讓你不用開啟檔案就能了解一切。",
     "viewAll": "查看完整格式清單 →",
     "info": {
@@ -480,7 +480,7 @@
       "code2": "行數統計",
       "code3": "檔案編碼",
       "moreTitle": "更多類型",
-      "moreDesc": "FinderHover 支援超過 50 種檔案格式，包括 Markdown、HTML、JSON/YAML/TOML、PSD、SQLite 資料庫、Git 儲存庫等。"
+      "moreDesc": "FinderHover 支援超過 120 種檔案格式，包括 Markdown、HTML、JSON/YAML/TOML、PSD、SQLite 資料庫、Git 儲存庫等。"
     },
     "troubleshooting": {
       "title": "疑難排解",
