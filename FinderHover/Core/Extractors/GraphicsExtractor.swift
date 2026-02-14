@@ -13,7 +13,11 @@ enum GraphicsExtractor {
 
     // MARK: - Vector Graphics Metadata Extraction
 
-    static func extractVectorGraphicsMetadata(from url: URL) -> VectorGraphicsMetadata? {
+    static func extractVectorGraphicsMetadata(
+        from url: URL,
+        policy: FileInfo.MetadataExtractionPolicy = .default,
+        noticeRecorder: ((FileInfo.AnalysisNotice) -> Void)? = nil
+    ) -> VectorGraphicsMetadata? {
         let ext = url.pathExtension.lowercased()
         let vectorExtensions = ["svg", "eps", "ai", "pdf"]
 
@@ -32,6 +36,12 @@ enum GraphicsExtractor {
         switch ext {
         case "svg":
             format = "SVG"
+            if policy.enableLargeFileProtection,
+               let size = fileSize(of: url),
+               size > policy.largeFileThresholds.vectorTextBytes {
+                noticeRecorder?(.largeFileProtection)
+                break
+            }
             if let content = try? String(contentsOf: url, encoding: .utf8) {
                 // Extract viewBox
                 if let viewBoxRange = content.range(of: #"viewBox="([^"]+)""#, options: .regularExpression) {
@@ -165,7 +175,11 @@ enum GraphicsExtractor {
 
     // MARK: - 3D Model Metadata Extraction
 
-    static func extractModel3DMetadata(from url: URL) -> Model3DMetadata? {
+    static func extractModel3DMetadata(
+        from url: URL,
+        policy: FileInfo.MetadataExtractionPolicy = .default,
+        noticeRecorder: ((FileInfo.AnalysisNotice) -> Void)? = nil
+    ) -> Model3DMetadata? {
         let ext = url.pathExtension.lowercased()
         let model3DExtensions = ["usdz", "usda", "usdc", "usd", "obj", "gltf", "glb", "fbx", "dae", "stl", "ply", "3ds"]
 
@@ -206,66 +220,72 @@ enum GraphicsExtractor {
 
         // Parse text-based formats
         if ["obj", "gltf", "dae", "stl", "ply"].contains(ext) {
-            do {
-                let content = try String(contentsOf: url, encoding: .utf8)
-                let lines = content.components(separatedBy: .newlines)
+            if policy.enableLargeFileProtection,
+               let size = fileSize(of: url),
+               size > policy.largeFileThresholds.modelTextBytes {
+                noticeRecorder?(.largeFileProtection)
+            } else {
+                do {
+                    let content = try String(contentsOf: url, encoding: .utf8)
+                    let lines = content.components(separatedBy: .newlines)
 
-                switch ext {
-                case "obj":
-                    var vCount = 0
-                    var fCount = 0
-                    var mtlSet = Set<String>()
+                    switch ext {
+                    case "obj":
+                        var vCount = 0
+                        var fCount = 0
+                        var mtlSet = Set<String>()
 
-                    for line in lines.prefix(50000) {
-                        let trimmed = line.trimmingCharacters(in: .whitespaces)
-                        if trimmed.hasPrefix("v ") {
-                            vCount += 1
-                        } else if trimmed.hasPrefix("f ") {
-                            fCount += 1
-                        } else if trimmed.hasPrefix("usemtl ") {
-                            let material = String(trimmed.dropFirst(7)).trimmingCharacters(in: .whitespaces)
-                            mtlSet.insert(material)
+                        for line in lines.prefix(50000) {
+                            let trimmed = line.trimmingCharacters(in: .whitespaces)
+                            if trimmed.hasPrefix("v ") {
+                                vCount += 1
+                            } else if trimmed.hasPrefix("f ") {
+                                fCount += 1
+                            } else if trimmed.hasPrefix("usemtl ") {
+                                let material = String(trimmed.dropFirst(7)).trimmingCharacters(in: .whitespaces)
+                                mtlSet.insert(material)
+                            }
                         }
+
+                        if vCount > 0 { vertexCount = vCount }
+                        if fCount > 0 { faceCount = fCount }
+                        if !mtlSet.isEmpty { materialCount = mtlSet.count }
+
+                    case "stl":
+                        var facetCount = 0
+                        for line in lines {
+                            if line.trimmingCharacters(in: .whitespaces).lowercased().hasPrefix("facet normal") {
+                                facetCount += 1
+                            }
+                        }
+                        if facetCount > 0 {
+                            faceCount = facetCount
+                            vertexCount = facetCount * 3
+                        }
+
+                    case "gltf":
+                        if let data = content.data(using: .utf8),
+                           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                            if let meshes = json["meshes"] as? [[String: Any]] {
+                                meshCount = meshes.count
+                            }
+                            if let materials = json["materials"] as? [[String: Any]] {
+                                materialCount = materials.count
+                            }
+                            if let animations = json["animations"] as? [[String: Any]] {
+                                animationCount = animations.count
+                            }
+                            if let skins = json["skins"] as? [[String: Any]], !skins.isEmpty {
+                                hasSkeleton = true
+                            }
+                        }
+
+                    default:
+                        break
                     }
-
-                    if vCount > 0 { vertexCount = vCount }
-                    if fCount > 0 { faceCount = fCount }
-                    if !mtlSet.isEmpty { materialCount = mtlSet.count }
-
-                case "stl":
-                    var facetCount = 0
-                    for line in lines {
-                        if line.trimmingCharacters(in: .whitespaces).lowercased().hasPrefix("facet normal") {
-                            facetCount += 1
-                        }
-                    }
-                    if facetCount > 0 {
-                        faceCount = facetCount
-                        vertexCount = facetCount * 3
-                    }
-
-                case "gltf":
-                    if let data = content.data(using: .utf8),
-                       let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                        if let meshes = json["meshes"] as? [[String: Any]] {
-                            meshCount = meshes.count
-                        }
-                        if let materials = json["materials"] as? [[String: Any]] {
-                            materialCount = materials.count
-                        }
-                        if let animations = json["animations"] as? [[String: Any]] {
-                            animationCount = animations.count
-                        }
-                        if let skins = json["skins"] as? [[String: Any]], !skins.isEmpty {
-                            hasSkeleton = true
-                        }
-                    }
-
-                default:
-                    break
+                } catch {
+                    Logger.debug("Failed to parse 3D model: \(error.localizedDescription)", subsystem: .fileSystem)
                 }
-            } catch {
-                Logger.debug("Failed to parse 3D model: \(error.localizedDescription)", subsystem: .fileSystem)
             }
         }
 
@@ -296,5 +316,12 @@ enum GraphicsExtractor {
         )
 
         return metadata.hasData ? metadata : nil
+    }
+
+    private static func fileSize(of url: URL) -> Int64? {
+        guard let attributes = try? FileManager.default.attributesOfItem(atPath: url.path) else {
+            return nil
+        }
+        return attributes[.size] as? Int64
     }
 }

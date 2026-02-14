@@ -26,7 +26,9 @@ func runProcessWithTimeout(_ process: Process, timeout: TimeInterval = 5.0) -> B
     while process.isRunning {
         if Date() > deadline {
             process.terminate()
-            Logger.warning("Process timed out after \(timeout)s: \(process.executableURL?.path ?? "unknown")", subsystem: .fileSystem)
+            let executable = process.executableURL?.path ?? "unknown"
+            let arguments = process.arguments?.joined(separator: " ") ?? ""
+            Logger.warning("Process timed out after \(timeout)s: \(executable) \(arguments)", subsystem: .fileSystem)
             return false
         }
         Thread.sleep(forTimeInterval: 0.05)

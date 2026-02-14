@@ -14,7 +14,11 @@ enum TextExtractor {
 
     // MARK: - Subtitle Metadata Extraction
 
-    static func extractSubtitleMetadata(from url: URL) -> SubtitleMetadata? {
+    static func extractSubtitleMetadata(
+        from url: URL,
+        policy: FileInfo.MetadataExtractionPolicy = .default,
+        noticeRecorder: ((FileInfo.AnalysisNotice) -> Void)? = nil
+    ) -> SubtitleMetadata? {
         let ext = url.pathExtension.lowercased()
         let subtitleExtensions = ["srt", "vtt", "ass", "ssa", "sub", "idx", "smi"]
 
@@ -46,6 +50,22 @@ enum TextExtractor {
             format = "SAMI"
         default:
             format = ext.uppercased()
+        }
+
+        if policy.enableLargeFileProtection,
+           let attributes = try? FileManager.default.attributesOfItem(atPath: url.path),
+           let fileSize = attributes[.size] as? Int64,
+           fileSize > policy.largeFileThresholds.subtitleBytes {
+            noticeRecorder?(.largeFileProtection)
+            return SubtitleMetadata(
+                format: format,
+                encoding: nil,
+                entryCount: nil,
+                duration: nil,
+                language: nil,
+                frameRate: nil,
+                hasFormatting: nil
+            )
         }
 
         // Try to read and parse the file

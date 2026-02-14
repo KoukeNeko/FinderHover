@@ -17,6 +17,7 @@
 "settings.behavior.hoverDelay" = "ホバー遅延";
 "settings.behavior.hoverDelay.seconds" = "%.1f 秒";
 "settings.behavior.autoHide" = "マウスが離れたら自動的に隠す";
+"settings.behavior.largeFileProtection" = "大容量ファイル保護";
 "settings.behavior.launchAtLogin" = "ログイン時に起動";
 "settings.behavior.windowPosition" = "ウィンドウ位置";
 "settings.behavior.horizontalOffset" = "水平オフセット";
@@ -419,6 +420,7 @@
 "hover.label.mode" = "アクセス権";
 "hover.label.owner" = "所有者";
 "hover.label.location" = "ファイルパス";
+"hover.analysisNotice.largeFileProtection" = "リソース使用量を抑えるため、一部の重い解析を省略しました。";
 "hover.exif.title" = "写真情報";
 "hover.exif.camera" = "カメラ";
 "hover.exif.lens" = "レンズ";
@@ -696,6 +698,7 @@
 /* Settings Descriptions */
 "settings.behavior.hoverDelay.description" = "プレビューウィンドウを表示するまでの待機時間";
 "settings.behavior.autoHide.description" = "マウスがファイルから離れたら即座にウィンドウを隠す";
+"settings.behavior.largeFileProtection.description" = "非常に大きなファイルでは重いメタデータ解析を省略し、メモリ使用量を抑える";
 "settings.behavior.launchAtLogin.description" = "ログイン時に FinderHover を自動的に起動";
 "settings.behavior.windowPosition.description" = "カーソルとプレビューウィンドウ間の距離";
 "settings.appearance.opacity.description" = "プレビューウィンドウの透明度";

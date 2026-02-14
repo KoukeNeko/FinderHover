@@ -17,6 +17,7 @@
 "settings.behavior.hoverDelay" = "懸停延遲";
 "settings.behavior.hoverDelay.seconds" = "%.1f 秒";
 "settings.behavior.autoHide" = "滑鼠移開時自動隱藏";
+"settings.behavior.largeFileProtection" = "大型檔案保護";
 "settings.behavior.launchAtLogin" = "登入時啟動";
 "settings.behavior.windowPosition" = "視窗位置";
 "settings.behavior.horizontalOffset" = "水平偏移";
@@ -419,6 +420,7 @@
 "hover.label.mode" = "模式";
 "hover.label.owner" = "擁有者";
 "hover.label.location" = "檔案路徑";
+"hover.analysisNotice.largeFileProtection" = "已略過部分重度分析以降低資源使用。";
 "hover.exif.title" = "照片資訊";
 "hover.exif.camera" = "相機";
 "hover.exif.lens" = "鏡頭";
@@ -696,6 +698,7 @@
 /* Settings Descriptions */
 "settings.behavior.hoverDelay.description" = "顯示預覽視窗前的等待時間";
 "settings.behavior.autoHide.description" = "滑鼠離開檔案時立即隱藏視窗";
+"settings.behavior.largeFileProtection.description" = "略過超大檔案的重度中繼資料分析，以降低記憶體使用量";
 "settings.behavior.launchAtLogin.description" = "登入時自動啟動 FinderHover";
 "settings.behavior.windowPosition.description" = "游標與預覽視窗之間的距離";
 "settings.appearance.opacity.description" = "預覽視窗的透明度";

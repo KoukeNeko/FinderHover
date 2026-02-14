@@ -178,6 +178,9 @@ class AppSettings: ObservableObject {
             LaunchAtLogin.setEnabled(launchAtLogin)
         }
     }
+    @Published var enableLargeFileProtection: Bool {
+        didSet { UserDefaults.standard.set(enableLargeFileProtection, forKey: "enableLargeFileProtection") }
+    }
 
     // Appearance
     @Published var windowOpacity: Double {
@@ -1194,6 +1197,7 @@ class AppSettings: ObservableObject {
         self.hoverDelay = UserDefaults.standard.object(forKey: "hoverDelay") as? Double ?? Constants.Defaults.hoverDelay
         self.autoHideEnabled = UserDefaults.standard.object(forKey: "autoHideEnabled") as? Bool ?? Constants.Defaults.autoHideEnabled
         self.launchAtLogin = UserDefaults.standard.object(forKey: "launchAtLogin") as? Bool ?? Constants.Defaults.launchAtLogin
+        self.enableLargeFileProtection = UserDefaults.standard.object(forKey: "enableLargeFileProtection") as? Bool ?? Constants.Defaults.enableLargeFileProtection
         self.windowOpacity = UserDefaults.standard.object(forKey: "windowOpacity") as? Double ?? Constants.Defaults.windowOpacity
         self.windowMaxWidth = UserDefaults.standard.object(forKey: "windowMaxWidth") as? Double ?? Constants.Defaults.windowMaxWidth
         self.fontSize = UserDefaults.standard.object(forKey: "fontSize") as? Double ?? Constants.Defaults.fontSize
@@ -1498,6 +1502,7 @@ class AppSettings: ObservableObject {
         hoverDelay = Constants.Defaults.hoverDelay
         autoHideEnabled = Constants.Defaults.autoHideEnabled
         launchAtLogin = Constants.Defaults.launchAtLogin
+        enableLargeFileProtection = Constants.Defaults.enableLargeFileProtection
         windowOpacity = Constants.Defaults.windowOpacity
         windowMaxWidth = Constants.Defaults.windowMaxWidth
         fontSize = Constants.Defaults.fontSize

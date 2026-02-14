@@ -52,6 +52,18 @@ struct BehaviorSettingsView: SettingsPageView {
 
             Divider()
 
+            // Large File Protection
+            SettingRow(
+                title: "settings.behavior.largeFileProtection".localized,
+                description: "settings.behavior.largeFileProtection.description".localized
+            ) {
+                Toggle("", isOn: $settings.enableLargeFileProtection)
+                    .labelsHidden()
+                    .toggleStyle(.switch)
+            }
+
+            Divider()
+
             // Launch at Login
             SettingRow(
                 title: "settings.behavior.launchAtLogin".localized,

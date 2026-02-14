@@ -409,6 +409,13 @@ struct HoverContentView: View {
             Divider()
                 .background(Color.gray.opacity(0.3))
 
+            if let analysisNotice = fileInfo.analysisNotice {
+                Text(analysisNotice.localizedText)
+                    .font(.system(size: settings.fontSize - 1))
+                    .foregroundColor(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
             // File details - displayed in order based on settings
             ForEach(settings.displayOrder) { item in
                 displayItemView(for: item)
@@ -1592,6 +1599,16 @@ struct WindowsStyleHoverView: View {
                         fontSize: settings.fontSize
                     )
                 }
+            }
+
+            if let analysisNotice = fileInfo.analysisNotice {
+                Text(analysisNotice.localizedText)
+                    .font(.system(size: settings.fontSize - 1))
+                    .foregroundColor(.secondary)
+                    .lineLimit(nil)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 4)
             }
         }
         .padding(10)

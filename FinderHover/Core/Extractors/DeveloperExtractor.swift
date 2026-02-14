@@ -237,7 +237,11 @@ enum DeveloperExtractor {
 
     // MARK: - Xcode Project Metadata Extraction
 
-    static func extractXcodeProjectMetadata(from url: URL) -> XcodeProjectMetadata? {
+    static func extractXcodeProjectMetadata(
+        from url: URL,
+        policy: FileInfo.MetadataExtractionPolicy = .default,
+        noticeRecorder: ((FileInfo.AnalysisNotice) -> Void)? = nil
+    ) -> XcodeProjectMetadata? {
         let ext = url.pathExtension.lowercased()
 
         guard ext == "xcodeproj" || ext == "xcworkspace" else {
@@ -260,62 +264,69 @@ enum DeveloperExtractor {
 
             if FileManager.default.fileExists(atPath: pbxprojURL.path) {
                 do {
-                    let content = try String(contentsOf: pbxprojURL, encoding: .utf8)
+                    if policy.enableLargeFileProtection,
+                       let attrs = try? FileManager.default.attributesOfItem(atPath: pbxprojURL.path),
+                       let fileSize = attrs[.size] as? Int64,
+                       fileSize > policy.largeFileThresholds.xcodeProjectBytes {
+                        noticeRecorder?(.largeFileProtection)
+                    } else {
+                        let content = try String(contentsOf: pbxprojURL, encoding: .utf8)
 
-                    let targetMatches = content.components(separatedBy: "isa = PBXNativeTarget")
-                    targetCount = max(0, targetMatches.count - 1)
+                        let targetMatches = content.components(separatedBy: "isa = PBXNativeTarget")
+                        targetCount = max(0, targetMatches.count - 1)
 
-                    let configMatches = content.components(separatedBy: "isa = XCBuildConfiguration")
-                    let configCount = max(0, configMatches.count - 1)
-                    if configCount > 0 {
-                        configurationCount = min(configCount, 10)
-                    }
-
-                    if let swiftRange = content.range(of: "SWIFT_VERSION = ") {
-                        let startIndex = swiftRange.upperBound
-                        if let endIndex = content[startIndex...].firstIndex(of: ";") {
-                            let version = String(content[startIndex..<endIndex])
-                                .trimmingCharacters(in: .whitespaces)
-                                .replacingOccurrences(of: "\"", with: "")
-                            if !version.isEmpty {
-                                swiftVersion = version
-                            }
+                        let configMatches = content.components(separatedBy: "isa = XCBuildConfiguration")
+                        let configCount = max(0, configMatches.count - 1)
+                        if configCount > 0 {
+                            configurationCount = min(configCount, 10)
                         }
-                    }
 
-                    let deploymentKeys = ["IPHONEOS_DEPLOYMENT_TARGET", "MACOSX_DEPLOYMENT_TARGET", "TVOS_DEPLOYMENT_TARGET", "WATCHOS_DEPLOYMENT_TARGET"]
-                    for key in deploymentKeys {
-                        if let range = content.range(of: "\(key) = ") {
-                            let startIndex = range.upperBound
+                        if let swiftRange = content.range(of: "SWIFT_VERSION = ") {
+                            let startIndex = swiftRange.upperBound
                             if let endIndex = content[startIndex...].firstIndex(of: ";") {
-                                let target = String(content[startIndex..<endIndex])
+                                let version = String(content[startIndex..<endIndex])
                                     .trimmingCharacters(in: .whitespaces)
                                     .replacingOccurrences(of: "\"", with: "")
-                                if !target.isEmpty {
-                                    let platform = key.replacingOccurrences(of: "_DEPLOYMENT_TARGET", with: "")
-                                        .replacingOccurrences(of: "OS", with: "OS ")
-                                        .capitalized
-                                    deploymentTarget = "\(platform) \(target)"
-                                    break
+                                if !version.isEmpty {
+                                    swiftVersion = version
                                 }
                             }
                         }
-                    }
 
-                    if let orgRange = content.range(of: "ORGANIZATIONNAME = ") {
-                        let startIndex = orgRange.upperBound
-                        if let endIndex = content[startIndex...].firstIndex(of: ";") {
-                            let org = String(content[startIndex..<endIndex])
-                                .trimmingCharacters(in: .whitespaces)
-                                .replacingOccurrences(of: "\"", with: "")
-                            if !org.isEmpty {
-                                organizationName = org
+                        let deploymentKeys = ["IPHONEOS_DEPLOYMENT_TARGET", "MACOSX_DEPLOYMENT_TARGET", "TVOS_DEPLOYMENT_TARGET", "WATCHOS_DEPLOYMENT_TARGET"]
+                        for key in deploymentKeys {
+                            if let range = content.range(of: "\(key) = ") {
+                                let startIndex = range.upperBound
+                                if let endIndex = content[startIndex...].firstIndex(of: ";") {
+                                    let target = String(content[startIndex..<endIndex])
+                                        .trimmingCharacters(in: .whitespaces)
+                                        .replacingOccurrences(of: "\"", with: "")
+                                    if !target.isEmpty {
+                                        let platform = key.replacingOccurrences(of: "_DEPLOYMENT_TARGET", with: "")
+                                            .replacingOccurrences(of: "OS", with: "OS ")
+                                            .capitalized
+                                        deploymentTarget = "\(platform) \(target)"
+                                        break
+                                    }
+                                }
                             }
                         }
-                    }
 
-                    hasTests = content.contains("productType = \"com.apple.product-type.bundle.unit-test\"")
-                    hasUITests = content.contains("productType = \"com.apple.product-type.bundle.ui-testing\"")
+                        if let orgRange = content.range(of: "ORGANIZATIONNAME = ") {
+                            let startIndex = orgRange.upperBound
+                            if let endIndex = content[startIndex...].firstIndex(of: ";") {
+                                let org = String(content[startIndex..<endIndex])
+                                    .trimmingCharacters(in: .whitespaces)
+                                    .replacingOccurrences(of: "\"", with: "")
+                                if !org.isEmpty {
+                                    organizationName = org
+                                }
+                            }
+                        }
+
+                        hasTests = content.contains("productType = \"com.apple.product-type.bundle.unit-test\"")
+                        hasUITests = content.contains("productType = \"com.apple.product-type.bundle.ui-testing\"")
+                    }
 
                 } catch {
                     Logger.debug("Failed to parse pbxproj: \(error.localizedDescription)", subsystem: .fileSystem)
@@ -326,9 +337,16 @@ enum DeveloperExtractor {
 
             if FileManager.default.fileExists(atPath: contentsURL.path) {
                 do {
-                    let content = try String(contentsOf: contentsURL, encoding: .utf8)
-                    let fileRefMatches = content.components(separatedBy: "<FileRef")
-                    targetCount = max(0, fileRefMatches.count - 1)
+                    if policy.enableLargeFileProtection,
+                       let attrs = try? FileManager.default.attributesOfItem(atPath: contentsURL.path),
+                       let fileSize = attrs[.size] as? Int64,
+                       fileSize > policy.largeFileThresholds.xcodeProjectBytes {
+                        noticeRecorder?(.largeFileProtection)
+                    } else {
+                        let content = try String(contentsOf: contentsURL, encoding: .utf8)
+                        let fileRefMatches = content.components(separatedBy: "<FileRef")
+                        targetCount = max(0, fileRefMatches.count - 1)
+                    }
                 } catch {
                     Logger.debug("Failed to parse workspace: \(error.localizedDescription)", subsystem: .fileSystem)
                 }

@@ -12,6 +12,34 @@ import QuickLookThumbnailing
 // MARK: - FileInfo Structure
 
 struct FileInfo {
+    enum AnalysisNotice: String, Hashable {
+        case largeFileProtection
+
+        var localizedText: String {
+            switch self {
+            case .largeFileProtection:
+                return "hover.analysisNotice.largeFileProtection".localized
+            }
+        }
+    }
+
+    struct MetadataExtractionPolicy {
+        let enableLargeFileProtection: Bool
+        let largeFileThresholds: Constants.LargeFileThresholds
+
+        static let `default` = MetadataExtractionPolicy(
+            enableLargeFileProtection: Constants.Defaults.enableLargeFileProtection,
+            largeFileThresholds: Constants.Performance.largeFileThresholds
+        )
+
+        static func from(settings: AppSettings) -> MetadataExtractionPolicy {
+            MetadataExtractionPolicy(
+                enableLargeFileProtection: settings.enableLargeFileProtection,
+                largeFileThresholds: Constants.Performance.largeFileThresholds
+            )
+        }
+    }
+
     let name: String
     let path: String
     let size: Int64
@@ -106,6 +134,9 @@ struct FileInfo {
     // Xcode project metadata
     let xcodeProjectMetadata: XcodeProjectMetadata?
 
+    // Analysis status hint shown in hover view
+    let analysisNotice: AnalysisNotice?
+
     // MARK: - Computed Properties
 
     var formattedSize: String {
@@ -178,6 +209,10 @@ struct FileInfo {
     // MARK: - Factory Method
 
     static func from(path: String) -> FileInfo? {
+        from(path: path, policy: .default)
+    }
+
+    static func from(path: String, policy: MetadataExtractionPolicy) -> FileInfo? {
         let fileManager = FileManager.default
 
         guard fileManager.fileExists(atPath: path) else {
@@ -219,6 +254,7 @@ struct FileInfo {
 
             // Get last access date (may not be available on all file systems)
             let lastAccessDate = attributes[.modificationDate] as? Date
+            var analysisNotices = Set<AnalysisNotice>()
 
             // Extract metadata using the new Extractor modules
             let exifData = MediaExtractor.extractEXIFData(from: url)
@@ -238,14 +274,22 @@ struct FileInfo {
                 } else if metadata?.title != nil || metadata?.author != nil {
                     pdfMetadata = metadata
                 } else {
-                    vectorGraphicsMetadata = GraphicsExtractor.extractVectorGraphicsMetadata(from: url)
+                    vectorGraphicsMetadata = GraphicsExtractor.extractVectorGraphicsMetadata(
+                        from: url,
+                        policy: policy,
+                        noticeRecorder: { analysisNotices.insert($0) }
+                    )
                     if vectorGraphicsMetadata == nil {
                         pdfMetadata = metadata
                     }
                 }
             } else {
                 pdfMetadata = DocumentExtractor.extractPDFMetadata(from: url)
-                vectorGraphicsMetadata = GraphicsExtractor.extractVectorGraphicsMetadata(from: url)
+                vectorGraphicsMetadata = GraphicsExtractor.extractVectorGraphicsMetadata(
+                    from: url,
+                    policy: policy,
+                    noticeRecorder: { analysisNotices.insert($0) }
+                )
             }
 
             // Document metadata
@@ -258,14 +302,22 @@ struct FileInfo {
             // Developer metadata
             let codeMetadata = DeveloperExtractor.extractCodeMetadata(from: url)
             let gitMetadata = DeveloperExtractor.extractGitMetadata(from: url)
-            let xcodeProjectMetadata = DeveloperExtractor.extractXcodeProjectMetadata(from: url)
+            let xcodeProjectMetadata = DeveloperExtractor.extractXcodeProjectMetadata(
+                from: url,
+                policy: policy,
+                noticeRecorder: { analysisNotices.insert($0) }
+            )
             let executableMetadata = DeveloperExtractor.extractExecutableMetadata(from: url)
             let appBundleMetadata = DeveloperExtractor.extractAppBundleMetadata(from: url)
             let sqliteMetadata = DeveloperExtractor.extractSQLiteMetadata(from: url)
 
             // Graphics metadata
             let psdMetadata = GraphicsExtractor.extractPSDMetadata(from: url)
-            let model3DMetadata = GraphicsExtractor.extractModel3DMetadata(from: url)
+            let model3DMetadata = GraphicsExtractor.extractModel3DMetadata(
+                from: url,
+                policy: policy,
+                noticeRecorder: { analysisNotices.insert($0) }
+            )
 
             // Archive metadata
             let archiveMetadata = ArchiveExtractor.extractArchiveMetadata(from: url)
@@ -273,7 +325,11 @@ struct FileInfo {
 
             // Text metadata
             let fontMetadata = TextExtractor.extractFontMetadata(from: url)
-            let subtitleMetadata = TextExtractor.extractSubtitleMetadata(from: url)
+            let subtitleMetadata = TextExtractor.extractSubtitleMetadata(
+                from: url,
+                policy: policy,
+                noticeRecorder: { analysisNotices.insert($0) }
+            )
 
             // System metadata
             let systemMetadata = SystemExtractor.extractSystemMetadata(from: url)
@@ -320,7 +376,8 @@ struct FileInfo {
                 systemMetadata: systemMetadata,
                 fileSystemAdvancedMetadata: fileSystemAdvancedMetadata,
                 model3DMetadata: model3DMetadata,
-                xcodeProjectMetadata: xcodeProjectMetadata
+                xcodeProjectMetadata: xcodeProjectMetadata,
+                analysisNotice: analysisNotices.contains(.largeFileProtection) ? .largeFileProtection : nil
             )
         } catch {
             Logger.error("Failed to read file attributes: \(path)", error: error, subsystem: .fileSystem)

@@ -28,6 +28,8 @@ class HoverManager: ObservableObject {
     private var displayTimer: Timer?
     private var renamingCheckTimer: Timer?
     private var lastMouseLocation: CGPoint = .zero
+    private let metadataQueue = DispatchQueue(label: "com.finderhover.metadataExtraction", qos: .userInitiated)
+    private var metadataRequestToken: UInt64 = 0
     private let settings = AppSettings.shared
 
     // Store observer tokens for cleanup
@@ -53,6 +55,7 @@ class HoverManager: ObservableObject {
             // Force hide first, then check if we need to show again
             self.hoverWindow?.hide()
             self.currentFileInfo = nil
+            self.invalidateMetadataRequests()
             // Get CURRENT mouse location and check if over a file
             let currentLocation = NSEvent.mouseLocation
             self.checkAndDisplayFileInfo(at: currentLocation)
@@ -60,10 +63,21 @@ class HoverManager: ObservableObject {
     }
 
     private func setupSubscriptions() {
-        // Monitor mouse location changes with immediate hide check
+        // Always keep latest mouse location for async metadata validation
         mouseTracker.$mouseLocation
             .sink { [weak self] location in
                 self?.lastMouseLocation = location
+            }
+            .store(in: &cancellables)
+
+        // Monitor mouse location changes with throttled hide check
+        mouseTracker.$mouseLocation
+            .throttle(
+                for: .milliseconds(Constants.Performance.hoverHideThrottleMs),
+                scheduler: RunLoop.main,
+                latest: true
+            )
+            .sink { [weak self] location in
                 self?.checkIfShouldHide(at: location)
             }
             .store(in: &cancellables)
@@ -83,6 +97,7 @@ class HoverManager: ObservableObject {
                     self?.hideHoverWindow()
                     self?.currentFileInfo = nil
                     self?.invalidateDisplayTimer()
+                    self?.invalidateMetadataRequests()
                 }
             }
             .store(in: &cancellables)
@@ -105,6 +120,7 @@ class HoverManager: ObservableObject {
                 self?.hideHoverWindow()
                 self?.currentFileInfo = nil
                 self?.invalidateDisplayTimer()
+                self?.invalidateMetadataRequests()
             }
         }
 
@@ -124,6 +140,7 @@ class HoverManager: ObservableObject {
                 self?.hideHoverWindow()
                 self?.currentFileInfo = nil
                 self?.invalidateDisplayTimer()
+                self?.invalidateMetadataRequests()
             }
         }
     }
@@ -154,6 +171,7 @@ class HoverManager: ObservableObject {
         hideHoverWindow()
         invalidateDisplayTimer()
         invalidateRenamingTimer()
+        invalidateMetadataRequests()
     }
 
     private func checkIfShouldHide(at location: CGPoint) {
@@ -168,6 +186,7 @@ class HoverManager: ObservableObject {
             hideHoverWindow()
             currentFileInfo = nil
             invalidateDisplayTimer()
+            invalidateMetadataRequests()
             return
         }
 
@@ -176,6 +195,7 @@ class HoverManager: ObservableObject {
             hideHoverWindow()
             currentFileInfo = nil
             invalidateDisplayTimer()
+            invalidateMetadataRequests()
             return
         }
 
@@ -186,12 +206,14 @@ class HoverManager: ObservableObject {
                 hideHoverWindow()
                 currentFileInfo = nil
                 invalidateDisplayTimer()
+                invalidateMetadataRequests()
             }
         } else {
             // No file under cursor, hide immediately
             hideHoverWindow()
             currentFileInfo = nil
             invalidateDisplayTimer()
+            invalidateMetadataRequests()
         }
     }
 
@@ -217,18 +239,45 @@ class HoverManager: ObservableObject {
 
         // Try to get file path at current location
         // This will return nil if user is renaming
-        if let filePath = FinderInteraction.getFileAtMousePosition(location),
-           let fileInfo = FileInfo.from(path: filePath) {
-
-            // Only update if it's a different file
-            if currentFileInfo?.path != fileInfo.path {
-                Logger.debug("Displaying hover for file: \(fileInfo.name)", subsystem: .ui)
-                currentFileInfo = fileInfo
-                showHoverWindow(at: location, with: fileInfo)
-            }
-        } else {
+        guard let filePath = FinderInteraction.getFileAtMousePosition(location) else {
             hideHoverWindow()
             currentFileInfo = nil
+            invalidateMetadataRequests()
+            return
+        }
+
+        // No-op if we are already showing metadata for the same file
+        guard currentFileInfo?.path != filePath else { return }
+
+        let requestToken = beginMetadataRequest()
+        let extractionPolicy = FileInfo.MetadataExtractionPolicy.from(settings: settings)
+
+        metadataQueue.async { [weak self] in
+            guard let fileInfo = FileInfo.from(path: filePath, policy: extractionPolicy) else {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    guard self.isMetadataRequestCurrent(requestToken) else { return }
+                    self.hideHoverWindow()
+                    self.currentFileInfo = nil
+                }
+                return
+            }
+
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                guard self.isMetadataRequestCurrent(requestToken) else { return }
+                guard !self.mouseTracker.isDragging else { return }
+                guard !FinderInteraction.isQuickLookVisible() else { return }
+
+                // Skip stale result if cursor is no longer over the file.
+                if FinderInteraction.getFileAtMousePosition(self.lastMouseLocation) != fileInfo.path {
+                    return
+                }
+
+                Logger.debug("Displaying hover for file: \(fileInfo.name)", subsystem: .ui)
+                self.currentFileInfo = fileInfo
+                self.showHoverWindow(at: location, with: fileInfo)
+            }
         }
     }
 
@@ -266,12 +315,14 @@ class HoverManager: ObservableObject {
             if FinderInteraction.isQuickLookVisible() {
                 self?.hideHoverWindow()
                 self?.currentFileInfo = nil
+                self?.invalidateMetadataRequests()
                 return
             }
             // Hide if user is renaming
             if FinderInteraction.isRenamingFile() {
                 self?.hideHoverWindow()
                 self?.currentFileInfo = nil
+                self?.invalidateMetadataRequests()
             }
         }
     }
@@ -292,6 +343,22 @@ class HoverManager: ObservableObject {
     private func invalidateRenamingTimer() {
         renamingCheckTimer?.invalidate()
         renamingCheckTimer = nil
+    }
+
+    /// Creates a new token for metadata extraction and invalidates older pending results.
+    private func beginMetadataRequest() -> UInt64 {
+        metadataRequestToken &+= 1
+        return metadataRequestToken
+    }
+
+    /// Invalidates all in-flight metadata extraction results.
+    private func invalidateMetadataRequests() {
+        metadataRequestToken &+= 1
+    }
+
+    /// Checks if the async metadata result still belongs to the latest request.
+    private func isMetadataRequestCurrent(_ token: UInt64) -> Bool {
+        token == metadataRequestToken
     }
 
     private func checkAccessibilityPermissions() {

@@ -22,6 +22,30 @@ enum Constants {
         static let renamingCheckInterval: TimeInterval = 0.1
     }
 
+    // MARK: - Performance
+    enum Performance {
+        /// Throttle interval for hide checks on mouse move (milliseconds)
+        static let hoverHideThrottleMs: Int = 100
+
+        /// Delay before retrying timed-out accessibility calls (milliseconds)
+        static let accessibilityRetryDelayMs: Int = 120
+
+        /// File size thresholds for protection mode
+        static let largeFileThresholds = LargeFileThresholds(
+            subtitleBytes: 2 * 1024 * 1024,
+            vectorTextBytes: 2 * 1024 * 1024,
+            modelTextBytes: 8 * 1024 * 1024,
+            xcodeProjectBytes: 6 * 1024 * 1024
+        )
+    }
+
+    struct LargeFileThresholds {
+        let subtitleBytes: Int64
+        let vectorTextBytes: Int64
+        let modelTextBytes: Int64
+        let xcodeProjectBytes: Int64
+    }
+
     // MARK: - Window Layout
     enum WindowLayout {
         /// Temporary container height for size calculation
@@ -91,6 +115,9 @@ enum Constants {
 
         /// Default compact mode
         static let compactMode: Bool = false
+
+        /// Default large file protection mode
+        static let enableLargeFileProtection: Bool = true
 
         /// Default show creation date
         static let showCreationDate: Bool = true

@@ -12,25 +12,84 @@ class FinderInteraction {
 
     /// Timeout for Accessibility API operations (in seconds)
     private static let accessibilityTimeout: TimeInterval = 0.5
+    private static let accessibilityRetryCount: Int = 1
+    private static let accessibilityRetryDelay: TimeInterval =
+        Double(Constants.Performance.accessibilityRetryDelayMs) / 1000.0
+    private static let accessibilityQueue = DispatchQueue(
+        label: "com.finderhover.accessibility.singleflight",
+        qos: .userInteractive
+    )
+    private static let accessibilityStateLock = NSLock()
+    private static var hasInFlightAccessibilityOperation = false
+
+    private enum TimeoutAttemptResult<T> {
+        case success(T?)
+        case timedOut
+        case skippedDueToInFlightOperation
+    }
 
     /// Execute an Accessibility operation with timeout to prevent blocking
     private static func withTimeout<T>(_ timeout: TimeInterval = accessibilityTimeout, operation: @escaping () -> T?) -> T? {
+        for attempt in 0...accessibilityRetryCount {
+            if attempt > 0 {
+                Thread.sleep(forTimeInterval: accessibilityRetryDelay)
+            }
+
+            switch executeSingleFlightOperation(timeout: timeout, operation: operation) {
+            case .success(let result):
+                return result
+            case .timedOut:
+                continue
+            case .skippedDueToInFlightOperation:
+                Logger.debug(
+                    "Skipped accessibility operation because a previous timed-out operation is still running",
+                    subsystem: .accessibility
+                )
+                return nil
+            }
+        }
+
+        return nil
+    }
+
+    private static func executeSingleFlightOperation<T>(
+        timeout: TimeInterval,
+        operation: @escaping () -> T?
+    ) -> TimeoutAttemptResult<T> {
+        guard acquireAccessibilityInFlightSlot() else {
+            return .skippedDueToInFlightOperation
+        }
+
         var result: T?
         let semaphore = DispatchSemaphore(value: 0)
 
-        DispatchQueue.global(qos: .userInteractive).async {
+        accessibilityQueue.async {
             result = operation()
+            releaseAccessibilityInFlightSlot()
             semaphore.signal()
         }
 
         let waitResult = semaphore.wait(timeout: .now() + timeout)
-
         if waitResult == .timedOut {
             Logger.warning("Accessibility operation timed out after \(timeout)s", subsystem: .accessibility)
-            return nil
+            return .timedOut
         }
 
-        return result
+        return .success(result)
+    }
+
+    private static func acquireAccessibilityInFlightSlot() -> Bool {
+        accessibilityStateLock.lock()
+        defer { accessibilityStateLock.unlock() }
+        guard !hasInFlightAccessibilityOperation else { return false }
+        hasInFlightAccessibilityOperation = true
+        return true
+    }
+
+    private static func releaseAccessibilityInFlightSlot() {
+        accessibilityStateLock.lock()
+        hasInFlightAccessibilityOperation = false
+        accessibilityStateLock.unlock()
     }
 
     /// Checks if user is currently renaming a file in Finder
