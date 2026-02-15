@@ -2,7 +2,27 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.7.0 (Current)
+## Version 1.7.1 (Current)
+
+### 🚀 Performance & Stability Improvements
+
+#### Memory Pressure Control
+- Added **single-flight Accessibility queries** to prevent concurrent task buildup
+- Updated timeout flow to **retry once only** (`0.5s` timeout + short retry delay) and skip when previous timed-out work is still running
+- Added **hover hide check throttling** to reduce repeated high-frequency polling
+
+#### Metadata Extraction Guardrails
+- Added **serial metadata extraction queue** with request token invalidation to drop stale hover results
+- Added configurable **Large File Protection** (enabled by default) to skip costly deep parsing for oversized files
+- Added a short in-window analysis notice when heavy analysis is skipped to reduce resource usage
+
+### ⚙️ Settings & UX
+- Added new setting: **Large File Protection**
+- Added localized UI strings for English, Traditional Chinese, and Japanese
+
+
+
+## Version 1.7.0
 
 ### 🆕 Major Metadata Update - New File Types & Enhanced Support
 
