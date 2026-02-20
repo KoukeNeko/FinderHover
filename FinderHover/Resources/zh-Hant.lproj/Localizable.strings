@@ -12,6 +12,13 @@
 "settings.tab.permissions" = "權限";
 "settings.tab.about" = "關於";
 
+/* Settings - Page Descriptions */
+"settings.page.description.behavior" = "設定懸停延遲、自動隱藏與啟動選項。";
+"settings.page.description.appearance" = "自訂懸停預覽視窗的外觀與風格。";
+"settings.page.description.display" = "選擇各檔案類型要顯示的中繼資料欄位。";
+"settings.page.description.permissions" = "管理 FinderHover 所需的輔助使用權限。";
+"settings.page.description.about" = "版本資訊、更新與貢獻者。";
+
 /* Settings - Behavior */
 "settings.behavior.title" = "行為";
 "settings.behavior.hoverDelay" = "懸停延遲";

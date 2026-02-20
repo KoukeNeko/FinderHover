@@ -13,15 +13,11 @@ struct PermissionsSettingsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                // Header
-                Text("settings.permissions.title".localized)
-                    .font(.system(size: 20, weight: .semibold))
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
-                    .padding(.bottom, 8)
-
-                Divider()
-                    .padding(.bottom, 20)
+                SettingsPageHeader(
+                    icon: "lock.shield",
+                    title: "settings.permissions.title".localized,
+                    description: "settings.page.description.permissions".localized
+                )
 
                 VStack(spacing: 24) {
                     // Accessibility Permission

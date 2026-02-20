@@ -7,6 +7,42 @@
 
 import SwiftUI
 
+// MARK: - Page Header
+
+struct SettingsPageHeader: View {
+    let icon: String
+    let title: String
+    let description: String
+
+    var body: some View {
+        VStack(spacing: 8) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(Color(NSColor.systemGray).opacity(0.35))
+                    .frame(width: 64, height: 64)
+                Image(systemName: icon)
+                    .font(.system(size: 32, weight: .light))
+                    .foregroundStyle(.primary)
+            }
+
+            Text(title)
+                .font(.system(size: 18, weight: .semibold))
+
+            Text(description)
+                .font(.system(size: 12))
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: 320)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 20)
+        .background(Color(NSColor.controlBackgroundColor))
+        .cornerRadius(10)
+        .padding(.horizontal, 20)
+        .padding(.bottom, 16)
+    }
+}
+
 // MARK: - Setting Row
 struct SettingRow<Content: View>: View {
     let title: String
@@ -35,6 +71,7 @@ struct SettingRow<Content: View>: View {
             }
         }
         .padding(.horizontal, 20)
+        .padding(.vertical, 12)
     }
 }
 

@@ -8,12 +8,14 @@
 import SwiftUI
 
 /// Template Method Pattern for settings pages
-/// All settings pages share the same structure: title + divider + content + reset button
+/// All settings pages share the same structure: header banner + content + reset button
 protocol SettingsPageView: View {
     associatedtype Content: View
 
     var settings: AppSettings { get }
     var pageTitle: String { get }
+    var pageIcon: String { get }
+    var pageDescription: String { get }
 
     /// Subclasses implement this to provide page-specific content
     @ViewBuilder
@@ -28,15 +30,12 @@ extension SettingsPageView {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                // Header (fixed template)
-                Text(pageTitle)
-                    .font(.system(size: 20, weight: .semibold))
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
-                    .padding(.bottom, 8)
-
-                Divider()
-                    .padding(.bottom, 20)
+                // Header banner (fixed template)
+                SettingsPageHeader(
+                    icon: pageIcon,
+                    title: pageTitle,
+                    description: pageDescription
+                )
 
                 // Page-specific content (hook for subclasses)
                 pageContent()

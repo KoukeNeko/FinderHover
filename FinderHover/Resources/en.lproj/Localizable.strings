@@ -12,6 +12,13 @@
 "settings.tab.permissions" = "Permissions";
 "settings.tab.about" = "About";
 
+/* Settings - Page Descriptions */
+"settings.page.description.behavior" = "Configure hover delay, auto-hide, and startup options.";
+"settings.page.description.appearance" = "Customize the look and feel of the hover preview window.";
+"settings.page.description.display" = "Choose which metadata fields to show for each file type.";
+"settings.page.description.permissions" = "Manage accessibility permissions required by FinderHover.";
+"settings.page.description.about" = "Version information, updates, and contributors.";
+
 /* Settings - Behavior */
 "settings.behavior.title" = "Behavior";
 "settings.behavior.hoverDelay" = "Hover Delay";

@@ -30,15 +30,11 @@ struct AboutSettingsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                // Header
-                Text("settings.tab.about".localized)
-                    .font(.system(size: 20, weight: .semibold))
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
-                    .padding(.bottom, 8)
-
-                Divider()
-                    .padding(.bottom, 20)
+                SettingsPageHeader(
+                    icon: "info.circle",
+                    title: "settings.tab.about".localized,
+                    description: "settings.page.description.about".localized
+                )
 
                 VStack(alignment: .center, spacing: 24) {
                     // App Icon

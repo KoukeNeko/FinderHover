@@ -16,15 +16,11 @@ struct DisplaySettingsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                // Header
-                Text("settings.display.title".localized)
-                    .font(.system(size: 20, weight: .semibold))
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
-                    .padding(.bottom, 8)
-
-                Divider()
-                    .padding(.bottom, 20)
+                SettingsPageHeader(
+                    icon: "list.bullet",
+                    title: "settings.display.title".localized,
+                    description: "settings.page.description.display".localized
+                )
 
                 VStack(alignment: .leading, spacing: 16) {
                     Text("settings.display.basicInfo".localized)
