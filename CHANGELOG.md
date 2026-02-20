@@ -2,7 +2,19 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.7.2 (Current)
+## Version 1.8.0 (Current)
+
+### ✨ Liquid Glass Effect (macOS 26 Tahoe)
+
+- Added **Liquid Glass** visual effect option in Appearance settings
+- Requires macOS 26 (Tahoe) or later
+- Liquid Glass and Blur are mutually exclusive — enabling one automatically disables the other
+- Localized hint text explaining that full glass effect requires a foreground app (FinderHover runs in the background)
+- Available in English, Traditional Chinese (繁體中文), and Japanese (日本語)
+
+---
+
+## Version 1.7.2
 
 ### 🎨 Settings UI Redesign
 
