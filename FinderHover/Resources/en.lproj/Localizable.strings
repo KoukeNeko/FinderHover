@@ -34,7 +34,7 @@
 /* Settings - Appearance */
 "settings.appearance.title" = "Appearance";
 "settings.appearance.liquidGlass" = "Liquid Glass";
-"settings.appearance.liquidGlass.hint" = "Native macOS 26 Tahoe glass effect";
+"settings.appearance.liquidGlass.hint" = "macOS 26 Tahoe native glass effect — subtle but present";
 "settings.appearance.blur" = "Enable blur effect";
 "settings.appearance.blur.hint" = "Native macOS background blur";
 "settings.appearance.blur.hint.liquidglass" = "Liquid Glass — native macOS 26 Tahoe effect";

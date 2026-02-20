@@ -34,7 +34,7 @@
 /* Settings - Appearance */
 "settings.appearance.title" = "外観";
 "settings.appearance.liquidGlass" = "Liquid Glass";
-"settings.appearance.liquidGlass.hint" = "macOS 26 Tahoe ネイティブグラスエフェクト";
+"settings.appearance.liquidGlass.hint" = "macOS 26 Tahoe ネイティブグラスエフェクト — 控えめながら確かに存在します";
 "settings.appearance.blur" = "ぼかし効果を有効にする";
 "settings.appearance.blur.hint" = "ネイティブ macOS 背景ぼかし";
 "settings.appearance.blur.hint.liquidglass" = "Liquid Glass — macOS 26 Tahoe ネイティブエフェクト";
