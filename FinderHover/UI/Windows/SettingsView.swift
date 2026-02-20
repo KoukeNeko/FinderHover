@@ -36,6 +36,36 @@ enum SettingsPage: String, CaseIterable, Identifiable {
         case .about: return "info.circle.fill"
         }
     }
+
+    var iconBackgroundColor: Color {
+        switch self {
+        case .behavior: return .blue
+        case .appearance: return .purple
+        case .display: return .orange
+        case .permissions: return .green
+        case .about: return Color(NSColor.systemGray)
+        }
+    }
+}
+
+private struct SidebarItemLabel: View {
+    let page: SettingsPage
+
+    var body: some View {
+        Label {
+            Text(page.localizedName)
+                .font(.system(size: 13))
+        } icon: {
+            ZStack {
+                RoundedRectangle(cornerRadius: 6)
+                    .fill(page.iconBackgroundColor)
+                    .frame(width: 28, height: 28)
+                Image(systemName: page.icon)
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(.white)
+            }
+        }
+    }
 }
 
 struct SettingsView: View {
@@ -47,21 +77,11 @@ struct SettingsView: View {
             // Sidebar
             List(SettingsPage.allCases, selection: $selectedPage) { page in
                 NavigationLink(value: page) {
-                    Label {
-                        Text(page.localizedName)
-                            .font(.system(size: 13))
-                    } icon: {
-                        Image(systemName: page.icon)
-                            .font(.system(size: 16))
-                            .foregroundColor(selectedPage == page ? .white : .accentColor)
-                            .frame(width: 20)
-                    }
+                    SidebarItemLabel(page: page)
                 }
-                .listRowInsets(EdgeInsets(top: 8, leading: 10, bottom: 8, trailing: 10))
             }
             .navigationSplitViewColumnWidth(220)
             .listStyle(.sidebar)
-            .frame(minWidth: 200)
         } detail: {
             // Detail view using factory pattern
             Group {
