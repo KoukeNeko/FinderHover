@@ -33,8 +33,11 @@
 
 /* Settings - Appearance */
 "settings.appearance.title" = "外觀";
+"settings.appearance.liquidGlass" = "液態玻璃";
+"settings.appearance.liquidGlass.hint" = "macOS 26 Tahoe 原生玻璃效果";
 "settings.appearance.blur" = "啟用模糊效果";
 "settings.appearance.blur.hint" = "原生 macOS 背景模糊";
+"settings.appearance.blur.hint.liquidglass" = "Liquid Glass — macOS 26 Tahoe 原生效果";
 "settings.appearance.opacity" = "視窗不透明度";
 "settings.appearance.opacity.hint" = "僅在停用模糊時可用";
 "settings.appearance.opacity.percent" = "%d%%";

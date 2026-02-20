@@ -47,6 +47,7 @@ private struct MenuBarContentView: View {
 
         Button("menu.settings".localized) {
             openSettings()
+            NSApp.activate(ignoringOtherApps: true)
         }
         .keyboardShortcut(",")
 

@@ -236,11 +236,28 @@ class HoverWindowController: NSWindowController {
             ? Constants.WindowLayout.windowsCornerRadius
             : Constants.WindowLayout.macOSCornerRadius
 
-        if settings.enableBlur {
+        if #available(macOS 26, *), settings.enableLiquidGlass {
+            setupLiquidGlassContent(window: window, hostingView: hostingView, size: size, cornerRadius: cornerRadius)
+        } else if settings.enableBlur {
             setupBlurContent(window: window, hostingView: hostingView, size: size, cornerRadius: cornerRadius)
         } else {
             setupSolidContent(window: window, hostingView: hostingView, size: size, cornerRadius: cornerRadius, opacity: settings.windowOpacity)
         }
+    }
+
+    /// Setup window content with macOS 26+ Liquid Glass effect
+    @available(macOS 26, *)
+    private func setupLiquidGlassContent(window: NSWindow, hostingView: NSHostingView<AnyView>, size: NSSize, cornerRadius: CGFloat) {
+        let glassView = NSGlassEffectView(frame: NSRect(origin: .zero, size: size))
+        glassView.cornerRadius = cornerRadius
+        // Ensure the hosting view is transparent so the glass renders behind content
+        hostingView.wantsLayer = true
+        hostingView.layer?.backgroundColor = CGColor.clear
+        hostingView.frame = glassView.bounds
+        hostingView.autoresizingMask = [.width, .height]
+        glassView.contentView = hostingView
+        window.contentView = glassView
+        self.visualEffectView = nil
     }
 
     /// Setup window content with blur effect

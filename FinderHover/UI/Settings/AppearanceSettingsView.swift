@@ -41,6 +41,22 @@ struct AppearanceSettingsView: SettingsPageView {
 
                 Divider().padding(.leading, 20)
 
+                if #available(macOS 26, *) {
+                    SettingRow(
+                        title: "settings.appearance.liquidGlass".localized,
+                        description: "settings.appearance.liquidGlass.hint".localized
+                    ) {
+                        Toggle("", isOn: $settings.enableLiquidGlass)
+                            .labelsHidden()
+                            .toggleStyle(.switch)
+                            .onChange(of: settings.enableLiquidGlass) { _, newValue in
+                                if newValue { settings.enableBlur = false }
+                            }
+                    }
+
+                    Divider().padding(.leading, 20)
+                }
+
                 SettingRow(
                     title: "settings.appearance.blur".localized,
                     description: "settings.appearance.blur.hint".localized
@@ -48,6 +64,11 @@ struct AppearanceSettingsView: SettingsPageView {
                     Toggle("", isOn: $settings.enableBlur)
                         .labelsHidden()
                         .toggleStyle(.switch)
+                        .onChange(of: settings.enableBlur) { _, newValue in
+                            if newValue, #available(macOS 26, *) {
+                                settings.enableLiquidGlass = false
+                            }
+                        }
                 }
 
                 Divider().padding(.leading, 20)

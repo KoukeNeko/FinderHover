@@ -82,6 +82,9 @@ enum Constants {
         /// macOS version where blur effect behavior changed
         /// Versions <= 15.x require special workaround for corner radius
         static let blurLayoutChangeVersion: Int = 15
+
+        /// macOS version where Liquid Glass (.glassEffect) is available
+        static let liquidGlassVersion: Int = 26
     }
 
     // MARK: - Settings Defaults
@@ -112,6 +115,9 @@ enum Constants {
 
         /// Default blur effect enabled
         static let enableBlur: Bool = true
+
+        /// Default Liquid Glass effect enabled (macOS 26+ only)
+        static let enableLiquidGlass: Bool = true
 
         /// Default compact mode
         static let compactMode: Bool = false

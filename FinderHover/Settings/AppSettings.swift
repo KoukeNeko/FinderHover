@@ -195,6 +195,9 @@ class AppSettings: ObservableObject {
     @Published var enableBlur: Bool {
         didSet { UserDefaults.standard.set(enableBlur, forKey: "enableBlur") }
     }
+    @Published var enableLiquidGlass: Bool {
+        didSet { UserDefaults.standard.set(enableLiquidGlass, forKey: "enableLiquidGlass") }
+    }
     @Published var compactMode: Bool {
         didSet { UserDefaults.standard.set(compactMode, forKey: "compactMode") }
     }
@@ -1202,6 +1205,16 @@ class AppSettings: ObservableObject {
         self.windowMaxWidth = UserDefaults.standard.object(forKey: "windowMaxWidth") as? Double ?? Constants.Defaults.windowMaxWidth
         self.fontSize = UserDefaults.standard.object(forKey: "fontSize") as? Double ?? Constants.Defaults.fontSize
         self.enableBlur = UserDefaults.standard.object(forKey: "enableBlur") as? Bool ?? Constants.Defaults.enableBlur
+        self.enableLiquidGlass = UserDefaults.standard.object(forKey: "enableLiquidGlass") as? Bool ?? Constants.Defaults.enableLiquidGlass
+
+        // On macOS 26+, Liquid Glass takes priority — disable blur if both are on
+        let osVersion = ProcessInfo.processInfo.operatingSystemVersion
+        if osVersion.majorVersion >= Constants.Compatibility.liquidGlassVersion,
+           self.enableLiquidGlass, self.enableBlur {
+            self.enableBlur = false
+            UserDefaults.standard.set(false, forKey: "enableBlur")
+        }
+
         self.compactMode = UserDefaults.standard.object(forKey: "compactMode") as? Bool ?? Constants.Defaults.compactMode
         self.showCreationDate = UserDefaults.standard.object(forKey: "showCreationDate") as? Bool ?? Constants.Defaults.showCreationDate
         self.showModificationDate = UserDefaults.standard.object(forKey: "showModificationDate") as? Bool ?? Constants.Defaults.showModificationDate
@@ -1507,6 +1520,7 @@ class AppSettings: ObservableObject {
         windowMaxWidth = Constants.Defaults.windowMaxWidth
         fontSize = Constants.Defaults.fontSize
         enableBlur = Constants.Defaults.enableBlur
+        enableLiquidGlass = Constants.Defaults.enableLiquidGlass
         compactMode = Constants.Defaults.compactMode
         showCreationDate = Constants.Defaults.showCreationDate
         showModificationDate = Constants.Defaults.showModificationDate
