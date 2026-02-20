@@ -9,130 +9,52 @@ import SwiftUI
 
 @main
 struct FinderHoverApp: App {
-    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @StateObject private var hoverManager = HoverManager()
 
     var body: some Scene {
-        Settings {
-            EmptyView()
+        MenuBarExtra {
+            MenuBarContentView(hoverManager: hoverManager)
+        } label: {
+            Image(systemName: hoverManager.isEnabled
+                  ? "appwindow.swipe.rectangle"
+                  : "appwindow.swipe.rectangle")
+                .opacity(hoverManager.isEnabled ? 1.0 : 0.5)
         }
+        .menuBarExtraStyle(.menu)
+
+        Settings {
+            SettingsView()
+        }
+        .defaultSize(width: 780, height: 540)
     }
 }
 
-class AppDelegate: NSObject, NSApplicationDelegate {
-    var statusItem: NSStatusItem?
-    var hoverManager: HoverManager?
-    var settingsWindow: NSWindow?
+private struct MenuBarContentView: View {
+    @ObservedObject var hoverManager: HoverManager
+    @Environment(\.openSettings) private var openSettings
 
-    func applicationDidFinishLaunching(_ notification: Notification) {
-        // Hide dock icon to make it a menu bar only app
-        NSApp.setActivationPolicy(.accessory)
+    var body: some View {
+        Color.clear
+            .frame(width: 0, height: 0)
+            .task { hoverManager.startMonitoring() }
 
-        // Create menu bar item
-        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-
-        updateMenuBarIcon(enabled: true)
-        setupMenuBar()
-
-        // Initialize and start hover manager
-        hoverManager = HoverManager()
-        hoverManager?.startMonitoring()
-    }
-
-    private func updateMenuBarIcon(enabled: Bool) {
-        guard let button = statusItem?.button else { return }
-
-        if enabled {
-            // Enabled state: normal icon
-            button.image = NSImage(systemSymbolName: "appwindow.swipe.rectangle", accessibilityDescription: "FinderHover Enabled")
-        } else {
-            // Disabled state: slashed icon
-            button.image = NSImage(systemSymbolName: "appwindow.swipe.rectangle", accessibilityDescription: "FinderHover Disabled")
-            // Make the icon semi-transparent to indicate disabled state
-            button.image?.isTemplate = true
-            button.alphaValue = 0.5
+        Button(hoverManager.isEnabled ? "menu.disable".localized : "menu.enable".localized) {
+            hoverManager.isEnabled.toggle()
         }
+        .keyboardShortcut("e")
 
-        // Reset alpha if enabled
-        if enabled {
-            button.alphaValue = 1.0
+        Divider()
+
+        Button("menu.settings".localized) {
+            openSettings()
         }
-    }
+        .keyboardShortcut(",")
 
-    private func setupMenuBar() {
-        let menu = NSMenu()
+        Divider()
 
-        menu.addItem(NSMenuItem.separator())
-
-        // Toggle enable/disable
-        let toggleItem = NSMenuItem(
-            title: "menu.enable".localized,
-            action: #selector(toggleHover),
-            keyEquivalent: "e"
-        )
-        toggleItem.state = .on
-        toggleItem.tag = 100
-        menu.addItem(toggleItem)
-
-        menu.addItem(NSMenuItem.separator())
-
-        // Settings
-        menu.addItem(NSMenuItem(
-            title: "menu.settings".localized,
-            action: #selector(showSettings),
-            keyEquivalent: ","
-        ))
-
-        menu.addItem(NSMenuItem.separator())
-
-        // Quit
-        menu.addItem(NSMenuItem(
-            title: "menu.quit".localized,
-            action: #selector(NSApplication.terminate(_:)),
-            keyEquivalent: "q"
-        ))
-
-        if let item = statusItem {
-            item.menu = menu
+        Button("menu.quit".localized) {
+            NSApplication.shared.terminate(nil)
         }
-    }
-
-    @objc func toggleHover(_ sender: NSMenuItem) {
-        if sender.state == .on {
-            sender.state = .off
-            hoverManager?.isEnabled = false
-            sender.title = "menu.enable".localized
-            updateMenuBarIcon(enabled: false)
-        } else {
-            sender.state = .on
-            hoverManager?.isEnabled = true
-            sender.title = "menu.disable".localized
-            updateMenuBarIcon(enabled: true)
-        }
-    }
-
-    @objc func showSettings() {
-        if settingsWindow == nil {
-            let settingsView = SettingsView()
-            let hostingController = NSHostingController(rootView: settingsView)
-
-            let window = NSWindow(contentViewController: hostingController)
-            window.title = "FinderHover"
-            window.styleMask = [.titled, .closable, .resizable, .fullSizeContentView]
-            window.minSize = NSSize(width: 700, height: 500)
-            window.setContentSize(NSSize(width: 700, height: 500))
-            window.center()
-            window.setFrameAutosaveName("FinderHoverSettings")
-            window.isReleasedWhenClosed = false
-            
-            // System Settings style
-            window.titlebarAppearsTransparent = true
-            window.titleVisibility = .hidden
-            window.toolbarStyle = .unified
-
-            settingsWindow = window
-        }
-
-        settingsWindow?.makeKeyAndOrderFront(nil)
-        NSApp.activate(ignoringOtherApps: true)
+        .keyboardShortcut("q")
     }
 }

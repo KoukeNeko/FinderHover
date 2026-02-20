@@ -29,43 +29,28 @@ enum SettingsPage: String, CaseIterable, Identifiable {
 
     var icon: String {
         switch self {
-        case .behavior: return "hand.point.up.left.fill"
-        case .appearance: return "paintbrush.fill"
+        case .behavior: return "hand.point.up.left"
+        case .appearance: return "paintbrush"
         case .display: return "list.bullet"
-        case .permissions: return "lock.shield.fill"
-        case .about: return "info.circle.fill"
-        }
-    }
-
-    var iconBackgroundColor: Color {
-        switch self {
-        case .behavior: return .blue
-        case .appearance: return .purple
-        case .display: return .orange
-        case .permissions: return .green
-        case .about: return Color(NSColor.systemGray)
+        case .permissions: return "lock.shield"
+        case .about: return "info.circle"
         }
     }
 }
 
-private struct SidebarItemLabel: View {
-    let page: SettingsPage
-
-    var body: some View {
-        Label {
-            Text(page.localizedName)
-                .font(.system(size: 13))
-        } icon: {
-            ZStack {
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(page.iconBackgroundColor)
-                    .frame(width: 28, height: 28)
-                Image(systemName: page.icon)
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(.white)
-            }
+private struct FullHeightSidebarWindowConfigurator: NSViewRepresentable {
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        DispatchQueue.main.async {
+            guard let window = view.window else { return }
+            // window.titlebarAppearsTransparent = true
+            window.styleMask.insert(.fullSizeContentView)
+            window.toolbarStyle = .unified
         }
+        return view
     }
+
+    func updateNSView(_ nsView: NSView, context: Context) {}
 }
 
 struct SettingsView: View {
@@ -74,34 +59,28 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationSplitView {
-            // Sidebar
-            List(SettingsPage.allCases, selection: $selectedPage) { page in
-                NavigationLink(value: page) {
-                    SidebarItemLabel(page: page)
-                }
+            List(SettingsPage.allCases, id: \.self, selection: $selectedPage) { page in
+                Label(page.localizedName, systemImage: page.icon)
             }
-            .navigationSplitViewColumnWidth(220)
             .listStyle(.sidebar)
+            .navigationSplitViewColumnWidth(min: 180, ideal: 220, max: 240)
         } detail: {
-            // Detail view using factory pattern
-            Group {
-                switch selectedPage {
-                case .behavior:
-                    BehaviorSettingsView(settings: settings)
-                case .appearance:
-                    AppearanceSettingsView(settings: settings)
-                case .display:
-                    DisplaySettingsView(settings: settings)
-                case .permissions:
-                    PermissionsSettingsView()
-                case .about:
-                    AboutSettingsView()
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .background(Color(NSColor.windowBackgroundColor))
+            detailView
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
-        .frame(minWidth: 700, minHeight: 500)
+        .toolbar(removing: .sidebarToggle)
+        .background(FullHeightSidebarWindowConfigurator())
+    }
+
+    @ViewBuilder
+    private var detailView: some View {
+        switch selectedPage {
+        case .behavior:    BehaviorSettingsView(settings: settings)
+        case .appearance:  AppearanceSettingsView(settings: settings)
+        case .display:     DisplaySettingsView(settings: settings)
+        case .permissions: PermissionsSettingsView()
+        case .about:       AboutSettingsView()
+        }
     }
 }
 
