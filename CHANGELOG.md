@@ -2,7 +2,22 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.7.1 (Current)
+## Version 1.7.2 (Current)
+
+### 🎨 Settings UI Redesign
+
+#### Card-Style Layout
+- Redesigned all settings pages with **grouped card sections** (rounded corners + background fill) matching macOS System Settings style
+- **Behavior page**: settings now grouped into four cards — General Behavior toggles, Hover Delay, Language, and Window Position
+- **Appearance page**: settings now grouped into two cards — Style Options (UI style, blur, compact mode) and Window Dimensions (opacity, max width, font size)
+
+#### Page Headers
+- Added **icon badge + title + description header card** to every settings page (Behavior, Appearance, Display, Permissions, About)
+- Header uses a rounded-square icon badge with a subtle background, consistent with macOS design conventions
+
+---
+
+## Version 1.7.1
 
 ### 🚀 Performance & Stability Improvements
 
