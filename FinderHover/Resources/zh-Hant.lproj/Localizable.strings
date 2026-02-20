@@ -34,7 +34,7 @@
 /* Settings - Appearance */
 "settings.appearance.title" = "外觀";
 "settings.appearance.liquidGlass" = "液態玻璃";
-"settings.appearance.liquidGlass.hint" = "macOS 26 Tahoe 原生玻璃效果，效果較為低調但確實存在";
+"settings.appearance.liquidGlass.hint" = "macOS 26 Tahoe 原生玻璃效果，效果較為低調但確實存在（因 FinderHover 為背景 App，完整玻璃效果僅限前景應用程式）";
 "settings.appearance.blur" = "啟用模糊效果";
 "settings.appearance.blur.hint" = "原生 macOS 背景模糊";
 "settings.appearance.blur.hint.liquidglass" = "Liquid Glass — macOS 26 Tahoe 原生效果";
