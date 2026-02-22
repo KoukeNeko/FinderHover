@@ -110,6 +110,8 @@
     "changelog": "Changelog",
     "license": "License",
     "docs": "Documentation",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
     "copyright": "© 2025 KoukeNeko. Released under MIT License."
   },
   "download": {
@@ -389,6 +391,86 @@
     },
     "fullLicense": "Full License Text",
     "viewOnGithub": "View LICENSE file on GitHub"
+  },
+  "terms": {
+    "pageTitle": "Terms of Service",
+    "pageSubtitle": "Terms of Service",
+    "lastUpdated": "Last updated: June 2025",
+    "acceptance": {
+      "title": "1. Acceptance of Terms",
+      "desc": "By using FinderHover, you agree to these Terms of Service. If you do not agree to these terms, please do not use this software."
+    },
+    "license": {
+      "title": "2. Software License",
+      "desc": "FinderHover's source code is released under the MIT License, allowing anyone to freely use, modify, and distribute it. Official pre-built releases include the Paddle licensing system with a 30-day free trial period. After the trial ends, a license purchase is required to continue using the software."
+    },
+    "trial": {
+      "title": "3. Trial Period",
+      "desc": "FinderHover offers a 30-day free trial with full access to all features. After the trial period ends, you must purchase a license to continue using the software."
+    },
+    "payment": {
+      "title": "4. Payment & Refunds",
+      "desc": "Payments are processed through Paddle, our licensing partner. Paddle is the Merchant of Record and handles all payment-related matters. Refund requests must be submitted through Paddle within 30 days of purchase."
+    },
+    "licenseKey": {
+      "title": "5. License Key",
+      "desc": "After purchase, you will receive a license key that can be activated on a limited number of devices. You may deactivate your license to transfer it to another computer. Please keep your license key secure and do not share it with others."
+    },
+    "disclaimer": {
+      "title": "6. Disclaimer",
+      "desc": "This software is provided \"as is\" without warranty of any kind, express or implied. In no event shall the authors be liable for any damages arising from the use of this software."
+    },
+    "changes": {
+      "title": "7. Changes to Terms",
+      "desc": "We reserve the right to modify these Terms of Service at any time. Updated terms will be posted on this page, and continued use of the software constitutes acceptance of the modified terms."
+    },
+    "contact": {
+      "title": "8. Contact",
+      "desc": "If you have any questions, please contact us via GitHub Issues:"
+    }
+  },
+  "privacy": {
+    "pageTitle": "Privacy Policy",
+    "pageSubtitle": "Privacy Policy",
+    "summary": {
+      "title": "Your Privacy Matters",
+      "desc": "FinderHover's core principle is local processing. All file analysis is performed on your computer and no file content is ever sent to external servers."
+    },
+    "highlights": {
+      "local": "Fully Local Processing",
+      "noAnalytics": "No Analytics Tracking",
+      "noAccount": "No Account Required",
+      "openSource": "Open Source & Auditable"
+    },
+    "lastUpdated": "Last updated: June 2025",
+    "collection": {
+      "title": "1. Data We Collect",
+      "desc": "FinderHover itself does not collect, store, or transmit any personal data. All file metadata parsing is performed locally on your computer and is never sent to any server."
+    },
+    "paddle": {
+      "title": "2. Payment Processing (Paddle)",
+      "desc": "When you purchase a license, payment is processed by Paddle.com. Paddle collects information necessary to complete the transaction (such as email address and payment information). For Paddle's privacy policy, please see:"
+    },
+    "licenseData": {
+      "title": "3. License Data",
+      "desc": "Your license key and activation status are stored locally. The Paddle SDK periodically communicates with Paddle servers to verify license status. This process only transmits the license key and device identifier, and does not involve any file content or personal files."
+    },
+    "accessibility": {
+      "title": "4. Accessibility API",
+      "desc": "FinderHover uses the macOS Accessibility API to detect files under the mouse cursor in Finder. This feature requires you to grant permission in System Settings. The Accessibility API is only used to obtain file paths, and all data is processed locally."
+    },
+    "analytics": {
+      "title": "5. Analytics & Tracking",
+      "desc": "FinderHover does not include any analytics, telemetry, or tracking features. We do not collect usage data, track user behavior, or send anonymous statistics."
+    },
+    "changes": {
+      "title": "6. Policy Changes",
+      "desc": "We may update this Privacy Policy from time to time. Any changes will be posted on this page."
+    },
+    "contact": {
+      "title": "7. Contact",
+      "desc": "If you have any privacy-related questions, please contact us via GitHub Issues:"
+    }
   },
   "docs": {
     "pageTitle": "Documentation",

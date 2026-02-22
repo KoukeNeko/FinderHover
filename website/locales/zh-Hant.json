@@ -110,6 +110,8 @@
     "changelog": "更新日誌",
     "license": "授權條款",
     "docs": "文件",
+    "terms": "服務條款",
+    "privacy": "隱私權政策",
     "copyright": "© 2025 KoukeNeko. 依 MIT 授權條款釋出。"
   },
   "download": {
@@ -389,6 +391,86 @@
     },
     "fullLicense": "完整授權條款",
     "viewOnGithub": "在 GitHub 上查看 LICENSE 檔案"
+  },
+  "terms": {
+    "pageTitle": "服務條款",
+    "pageSubtitle": "Terms of Service",
+    "lastUpdated": "最後更新：2025 年 6 月",
+    "acceptance": {
+      "title": "1. 接受條款",
+      "desc": "使用 FinderHover 即表示您同意本服務條款。如果您不同意這些條款，請勿使用本軟體。"
+    },
+    "license": {
+      "title": "2. 軟體授權",
+      "desc": "FinderHover 的原始碼以 MIT 授權條款釋出，任何人可以自由使用、修改與散布。官方發佈的預編譯版本包含 Paddle 授權機制，提供 30 天免費試用期，試用期結束後需購買授權以繼續使用。"
+    },
+    "trial": {
+      "title": "3. 試用期",
+      "desc": "FinderHover 提供 30 天免費試用期，試用期間可使用所有功能。試用期結束後，您需要購買授權以繼續使用。"
+    },
+    "payment": {
+      "title": "4. 付款與退款",
+      "desc": "付款透過 Paddle（我們的授權合作夥伴）處理。Paddle 是記錄在案的商家，負責處理所有付款相關事宜。退款請求請在購買後 30 天內透過 Paddle 提出。"
+    },
+    "licenseKey": {
+      "title": "5. 授權金鑰",
+      "desc": "購買後您將收到授權金鑰，每個金鑰可在有限數量的裝置上啟用。您可以停用授權以轉移到其他電腦。請妥善保管您的授權金鑰，不要與他人分享。"
+    },
+    "disclaimer": {
+      "title": "6. 免責聲明",
+      "desc": "本軟體按「現狀」提供，不附帶任何形式的明示或暗示保證。在任何情況下，作者均不對因使用本軟體而產生的任何損害負責。"
+    },
+    "changes": {
+      "title": "7. 條款變更",
+      "desc": "我們保留隨時修改本服務條款的權利。修改後的條款將在本頁面上公佈，繼續使用本軟體即表示接受修改後的條款。"
+    },
+    "contact": {
+      "title": "8. 聯絡方式",
+      "desc": "如有任何問題，請透過 GitHub Issues 聯繫我們："
+    }
+  },
+  "privacy": {
+    "pageTitle": "隱私權政策",
+    "pageSubtitle": "Privacy Policy",
+    "summary": {
+      "title": "您的隱私，我們重視",
+      "desc": "FinderHover 的核心原則是本機處理。所有檔案分析都在您的電腦上完成，不會將任何檔案內容傳送到外部伺服器。"
+    },
+    "highlights": {
+      "local": "完全本機處理",
+      "noAnalytics": "無分析追蹤",
+      "noAccount": "無需帳號",
+      "openSource": "開源可審計"
+    },
+    "lastUpdated": "最後更新：2025 年 6 月",
+    "collection": {
+      "title": "1. 我們收集的資料",
+      "desc": "FinderHover 本身不收集、儲存或傳送任何個人資料。所有檔案中繼資料的解析都在您的電腦上本機完成，不會傳送到任何伺服器。"
+    },
+    "paddle": {
+      "title": "2. 付款處理（Paddle）",
+      "desc": "當您購買授權時，付款由 Paddle.com 處理。Paddle 會收集完成交易所需的資訊（如電子郵件地址和付款資訊）。Paddle 的隱私權政策請參閱："
+    },
+    "licenseData": {
+      "title": "3. 授權資料",
+      "desc": "您的授權金鑰和啟用狀態儲存在本機。Paddle SDK 會定期與 Paddle 伺服器通訊以驗證授權狀態，此過程僅傳送授權金鑰和裝置識別碼，不涉及任何檔案內容或個人檔案。"
+    },
+    "accessibility": {
+      "title": "4. 輔助使用 API",
+      "desc": "FinderHover 使用 macOS 輔助使用 API 來偵測 Finder 中滑鼠游標下的檔案。此功能需要您在系統設定中授予權限。輔助使用 API 僅用於取得檔案路徑，所有資料均在本機處理。"
+    },
+    "analytics": {
+      "title": "5. 分析與追蹤",
+      "desc": "FinderHover 不包含任何分析、遙測或追蹤功能。我們不收集使用資料、不追蹤使用行為、不傳送匿名統計資料。"
+    },
+    "changes": {
+      "title": "6. 政策變更",
+      "desc": "我們可能會不時更新本隱私權政策。任何變更都會在本頁面上公佈。"
+    },
+    "contact": {
+      "title": "7. 聯絡方式",
+      "desc": "如有任何隱私相關問題，請透過 GitHub Issues 聯繫我們："
+    }
   },
   "docs": {
     "pageTitle": "使用說明",

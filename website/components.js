@@ -133,6 +133,8 @@ class SiteFooter extends HTMLElement {
             <a href="https://github.com/KoukeNeko/FinderHover" data-i18n="footer.github">GitHub</a>
             <a href="changelog.html" data-i18n="footer.changelog">更新日誌</a>
             <a href="license.html" data-i18n="footer.license">授權條款</a>
+            <a href="terms.html" data-i18n="footer.terms">服務條款</a>
+            <a href="privacy.html" data-i18n="footer.privacy">隱私權政策</a>
           </div>
           <p class="footer-copyright" data-i18n="footer.copyright">
             © ${year} KoukeNeko. 依 MIT 授權條款釋出。
