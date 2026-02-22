@@ -13,6 +13,7 @@ enum SettingsPage: String, CaseIterable, Identifiable {
     case appearance
     case display
     case permissions
+    case license
     case about
 
     var id: String { rawValue }
@@ -23,6 +24,7 @@ enum SettingsPage: String, CaseIterable, Identifiable {
         case .appearance: return "settings.tab.appearance".localized
         case .display: return "settings.tab.display".localized
         case .permissions: return "settings.tab.permissions".localized
+        case .license: return "settings.tab.license".localized
         case .about: return "settings.tab.about".localized
         }
     }
@@ -33,6 +35,7 @@ enum SettingsPage: String, CaseIterable, Identifiable {
         case .appearance: return "paintbrush"
         case .display: return "list.bullet"
         case .permissions: return "lock.shield"
+        case .license: return "checkmark.seal"
         case .about: return "info.circle"
         }
     }
@@ -79,6 +82,7 @@ struct SettingsView: View {
         case .appearance:  AppearanceSettingsView(settings: settings)
         case .display:     DisplaySettingsView(settings: settings)
         case .permissions: PermissionsSettingsView()
+        case .license:     LicenseSettingsView()
         case .about:       AboutSettingsView()
         }
     }

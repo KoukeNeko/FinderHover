@@ -10,19 +10,9 @@
 		C8BAE64F2EB86F1C0007FB19 /* FinderHover.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinderHover.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		C8F0FA252F4AD2C200A373F9 /* Exceptions for "FinderHover" folder in "FinderHover" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			target = C8BAE64E2EB86F1C0007FB19 /* FinderHover */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C8BAE6512EB86F1C0007FB19 /* FinderHover */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				C8F0FA252F4AD2C200A373F9 /* Exceptions for "FinderHover" folder in "FinderHover" target */,
-			);
 			path = FinderHover;
 			sourceTree = "<group>";
 		};

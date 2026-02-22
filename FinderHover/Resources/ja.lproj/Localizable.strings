@@ -4,12 +4,16 @@
 "menu.settings" = "設定...";
 "menu.about" = "FinderHoverについて";
 "menu.quit" = "終了";
+"menu.trial.daysRemaining" = "試用期間：残り %d 日";
+"menu.trial.expired" = "試用期間終了";
+"menu.trial.purchase" = "購入して続行...";
 
 /* Settings - Tabs */
 "settings.tab.behavior" = "動作";
 "settings.tab.appearance" = "外観";
 "settings.tab.display" = "表示";
 "settings.tab.permissions" = "アクセス許可";
+"settings.tab.license" = "ライセンス";
 "settings.tab.about" = "情報";
 
 /* Settings - Page Descriptions */
@@ -17,7 +21,19 @@
 "settings.page.description.appearance" = "ホバープレビューウィンドウの外観をカスタマイズします。";
 "settings.page.description.display" = "ファイルタイプごとに表示するメタデータフィールドを選択します。";
 "settings.page.description.permissions" = "FinderHoverに必要なアクセシビリティ権限を管理します。";
-"settings.page.description.about" = "バージョン情報、アップデート、貢献者。";
+"settings.page.description.license" = "ライセンスと購入状況を管理します。";
+"settings.page.description.about" = "バージョン情報と貢献者。";
+
+/* License */
+"license.status.trial" = "無料試用";
+"license.status.trial.daysRemaining" = "残り %d 日";
+"license.status.expired" = "試用期間終了";
+"license.status.expired.description" = "すべての機能を引き続き使用するには、FinderHover を購入してください。";
+"license.status.purchased" = "ライセンス済み";
+"license.status.purchased.description" = "FinderHover をご購入いただきありがとうございます！";
+"license.purchase.button" = "購入 — %@";
+"license.purchase.unavailable" = "現在購入できません。しばらくしてから再度お試しください。";
+"license.restore" = "購入を復元";
 
 /* Settings - Behavior */
 "settings.behavior.title" = "動作";

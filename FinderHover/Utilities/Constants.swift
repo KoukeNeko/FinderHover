@@ -739,4 +739,9 @@ enum Constants {
         /// Default follow cursor
         static let followCursor: Bool = true
     }
+
+    enum Trial {
+        static let durationDays: Int = 30
+        static let productID: String = "dev.koukeneko.FinderHover.unlock"
+    }
 }

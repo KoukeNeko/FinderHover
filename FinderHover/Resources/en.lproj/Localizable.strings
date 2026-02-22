@@ -4,12 +4,16 @@
 "menu.settings" = "Settings...";
 "menu.about" = "About FinderHover";
 "menu.quit" = "Quit";
+"menu.trial.daysRemaining" = "Trial: %d days remaining";
+"menu.trial.expired" = "Trial expired";
+"menu.trial.purchase" = "Purchase to Continue...";
 
 /* Settings - Tabs */
 "settings.tab.behavior" = "Behavior";
 "settings.tab.appearance" = "Appearance";
 "settings.tab.display" = "Display";
 "settings.tab.permissions" = "Permissions";
+"settings.tab.license" = "License";
 "settings.tab.about" = "About";
 
 /* Settings - Page Descriptions */
@@ -17,7 +21,19 @@
 "settings.page.description.appearance" = "Customize the look and feel of the hover preview window.";
 "settings.page.description.display" = "Choose which metadata fields to show for each file type.";
 "settings.page.description.permissions" = "Manage accessibility permissions required by FinderHover.";
-"settings.page.description.about" = "Version information, updates, and contributors.";
+"settings.page.description.license" = "Manage your license and purchase status.";
+"settings.page.description.about" = "Version information and contributors.";
+
+/* License */
+"license.status.trial" = "Free Trial";
+"license.status.trial.daysRemaining" = "%d days remaining";
+"license.status.expired" = "Trial Expired";
+"license.status.expired.description" = "Purchase FinderHover to continue using all features.";
+"license.status.purchased" = "Licensed";
+"license.status.purchased.description" = "Thank you for purchasing FinderHover!";
+"license.purchase.button" = "Purchase — %@";
+"license.purchase.unavailable" = "Purchase unavailable. Please try again later.";
+"license.restore" = "Restore Purchase";
 
 /* Settings - Behavior */
 "settings.behavior.title" = "Behavior";

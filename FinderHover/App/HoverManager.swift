@@ -41,7 +41,6 @@ class HoverManager: ObservableObject {
         setupSubscriptions()
         setupAppSwitchObserver()
         setupUnlockObserver()
-        checkAccessibilityPermissions()
     }
 
     private func setupUnlockObserver() {
@@ -161,6 +160,13 @@ class HoverManager: ObservableObject {
             Logger.debug("Monitoring not started - disabled by user", subsystem: .mouseTracking)
             return
         }
+
+        guard TrialManager.shared.isFeatureUnlocked else {
+            Logger.debug("Monitoring not started - trial expired", subsystem: .mouseTracking)
+            isEnabled = false
+            return
+        }
+
         Logger.info("Starting mouse tracking", subsystem: .mouseTracking)
         mouseTracker.startTracking()
     }
@@ -359,35 +365,6 @@ class HoverManager: ObservableObject {
     /// Checks if the async metadata result still belongs to the latest request.
     private func isMetadataRequestCurrent(_ token: UInt64) -> Bool {
         token == metadataRequestToken
-    }
-
-    private func checkAccessibilityPermissions() {
-        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeRetainedValue() as String: true]
-        let accessEnabled = AXIsProcessTrustedWithOptions(options)
-
-        if !accessEnabled {
-            Logger.warning("Accessibility permissions not granted", subsystem: .accessibility)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.showAccessibilityAlert()
-            }
-        } else {
-            Logger.info("Accessibility permissions granted", subsystem: .accessibility)
-        }
-    }
-
-    private func showAccessibilityAlert() {
-        let alert = NSAlert()
-        alert.messageText = "Accessibility Permission Required"
-        alert.informativeText = "FinderHover needs accessibility permissions to detect files under your cursor. Please grant access in System Settings > Privacy & Security > Accessibility."
-        alert.alertStyle = .warning
-        alert.addButton(withTitle: "Open System Settings")
-        alert.addButton(withTitle: "Cancel")
-
-        if alert.runModal() == .alertFirstButtonReturn {
-            if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
-                NSWorkspace.shared.open(url)
-            }
-        }
     }
 
     deinit {

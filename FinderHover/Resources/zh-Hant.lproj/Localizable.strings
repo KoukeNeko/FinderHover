@@ -4,12 +4,16 @@
 "menu.settings" = "設定...";
 "menu.about" = "關於 FinderHover";
 "menu.quit" = "結束";
+"menu.trial.daysRemaining" = "試用中：剩餘 %d 天";
+"menu.trial.expired" = "試用已到期";
+"menu.trial.purchase" = "購買以繼續使用...";
 
 /* Settings - Tabs */
 "settings.tab.behavior" = "行為";
 "settings.tab.appearance" = "外觀";
 "settings.tab.display" = "顯示";
 "settings.tab.permissions" = "權限";
+"settings.tab.license" = "授權";
 "settings.tab.about" = "關於";
 
 /* Settings - Page Descriptions */
@@ -17,7 +21,19 @@
 "settings.page.description.appearance" = "自訂懸停預覽視窗的外觀與風格。";
 "settings.page.description.display" = "選擇各檔案類型要顯示的中繼資料欄位。";
 "settings.page.description.permissions" = "管理 FinderHover 所需的輔助使用權限。";
-"settings.page.description.about" = "版本資訊、更新與貢獻者。";
+"settings.page.description.license" = "管理授權與購買狀態。";
+"settings.page.description.about" = "版本資訊與貢獻者。";
+
+/* License */
+"license.status.trial" = "免費試用";
+"license.status.trial.daysRemaining" = "剩餘 %d 天";
+"license.status.expired" = "試用已到期";
+"license.status.expired.description" = "請購買 FinderHover 以繼續使用所有功能。";
+"license.status.purchased" = "已授權";
+"license.status.purchased.description" = "感謝您購買 FinderHover！";
+"license.purchase.button" = "購買 — %@";
+"license.purchase.unavailable" = "目前無法購買，請稍後再試。";
+"license.restore" = "還原購買";
 
 /* Settings - Behavior */
 "settings.behavior.title" = "行為";
