@@ -25,6 +25,9 @@ struct FinderHoverApp: App {
 
         Settings {
             SettingsView()
+                .onOpenURL { url in
+                    paddleService.handleActivationURL(url)
+                }
         }
         .defaultSize(width: 780, height: 540)
     }

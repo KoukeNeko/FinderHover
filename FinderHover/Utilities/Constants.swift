@@ -87,6 +87,15 @@ enum Constants {
         static let liquidGlassVersion: Int = 26
     }
 
+    // MARK: - License Management
+    enum License {
+        /// Trial duration in days
+        static let trialDurationDays: Int = 30
+
+        /// How often to re-verify license online (in days)
+        static let reverificationIntervalDays: Int = 7
+    }
+
     // MARK: - Settings Defaults
     enum Defaults {
         /// Default hover delay in seconds

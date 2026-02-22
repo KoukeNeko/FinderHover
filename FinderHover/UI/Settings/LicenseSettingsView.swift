@@ -9,8 +9,8 @@ import SwiftUI
 
 struct LicenseSettingsView: View {
     @ObservedObject private var paddleService = PaddleService.shared
-    @State private var licenseKey = ""
     @State private var email = ""
+    @State private var transactionID = ""
 
     var body: some View {
         ScrollView {
@@ -111,7 +111,7 @@ struct LicenseSettingsView: View {
                             .scaleEffect(0.8)
                             .frame(width: 16, height: 16)
                     } else {
-                        Image(systemName: "cart")
+                        Image(systemName: "safari")
                         Text("license.purchase.button".localized)
                     }
                     Spacer()
@@ -120,6 +120,10 @@ struct LicenseSettingsView: View {
             }
             .buttonStyle(.borderedProminent)
             .disabled(paddleService.isLoading)
+
+            Text("license.purchase.hint".localized)
+                .font(.system(size: 11))
+                .foregroundColor(.secondary)
 
             if let error = paddleService.errorMessage {
                 Text(error)
@@ -132,7 +136,7 @@ struct LicenseSettingsView: View {
         .cornerRadius(10)
     }
 
-    // MARK: - License Key Activation
+    // MARK: - Email Activation
 
     @ViewBuilder
     private var activateSection: some View {
@@ -143,15 +147,15 @@ struct LicenseSettingsView: View {
             TextField("license.activate.email.placeholder".localized, text: $email)
                 .textFieldStyle(.roundedBorder)
 
-            TextField("license.activate.key.placeholder".localized, text: $licenseKey)
+            TextField("license.activate.transactionID.placeholder".localized, text: $transactionID)
                 .textFieldStyle(.roundedBorder)
 
             Button(action: {
-                paddleService.activateLicense(email: email, code: licenseKey)
+                paddleService.activateLicense(email: email, code: transactionID)
             }) {
                 Text("license.activate.button".localized)
             }
-            .disabled(licenseKey.isEmpty || email.isEmpty || paddleService.isLoading)
+            .disabled(email.isEmpty || transactionID.isEmpty || paddleService.isLoading)
         }
         .padding(16)
         .background(Color(NSColor.controlBackgroundColor))

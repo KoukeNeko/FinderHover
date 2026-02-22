@@ -2,16 +2,20 @@
 //  Secrets.example.swift
 //  FinderHover
 //
-//  Copy this file as Secrets.swift and fill in your Paddle credentials:
+//  Copy this file as Secrets.swift and fill in your Paddle Billing credentials:
 //    cp Secrets.example.swift Secrets.swift
 //
 //  Secrets.swift is gitignored and will NOT be committed.
-//  Without Secrets.swift the project still compiles — Paddle features
-//  are conditionally compiled (#if canImport(Paddle)).
+//  Without real credentials, all features are unlocked (open-source build).
 //
 
 enum PaddleSecrets {
-    static let vendorID = "YOUR_VENDOR_ID"
+    /// Paddle Billing API key (read-only scope)
     static let apiKey = "YOUR_API_KEY"
-    static let productID = "YOUR_PRODUCT_ID"
+
+    /// Paddle price ID for FinderHover (pri_xxx)
+    static let priceID = "YOUR_PRICE_ID"
+
+    /// Full checkout URL opened in user's default browser
+    static let checkoutURL = "YOUR_CHECKOUT_URL"
 }

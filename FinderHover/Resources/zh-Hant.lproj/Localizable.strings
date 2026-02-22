@@ -33,11 +33,12 @@
 "license.status.licensed.description" = "感謝您購買 FinderHover！";
 "license.purchase.button" = "購買 FinderHover";
 "license.purchase.failed" = "購買失敗，請再試一次。";
-"license.activate.title" = "使用授權金鑰啟用";
+"license.purchase.hint" = "將在網頁瀏覽器中開啟";
+"license.activate.title" = "使用購買電子郵件啟用";
 "license.activate.email.placeholder" = "電子郵件";
-"license.activate.key.placeholder" = "授權金鑰";
+"license.activate.transactionID.placeholder" = "交易 ID（txn_...）";
 "license.activate.button" = "啟用";
-"license.activate.failed" = "啟用失敗，請確認您的授權金鑰。";
+"license.activate.failed" = "啟用失敗，請確認您的電子郵件和交易 ID。";
 "license.deactivate.button" = "停用授權";
 "license.deactivate.description" = "停用此授權以轉移至其他電腦。";
 "license.deactivate.failed" = "停用失敗，請再試一次。";

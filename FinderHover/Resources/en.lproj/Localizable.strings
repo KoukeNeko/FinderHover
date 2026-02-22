@@ -33,11 +33,12 @@
 "license.status.licensed.description" = "Thank you for purchasing FinderHover!";
 "license.purchase.button" = "Purchase FinderHover";
 "license.purchase.failed" = "Purchase failed. Please try again.";
-"license.activate.title" = "Activate with License Key";
+"license.purchase.hint" = "Opens in your web browser";
+"license.activate.title" = "Activate with Purchase Email";
 "license.activate.email.placeholder" = "Email";
-"license.activate.key.placeholder" = "License Key";
+"license.activate.transactionID.placeholder" = "Transaction ID (txn_...)";
 "license.activate.button" = "Activate";
-"license.activate.failed" = "Activation failed. Please check your license key.";
+"license.activate.failed" = "Activation failed. Please check your email and transaction ID.";
 "license.deactivate.button" = "Deactivate License";
 "license.deactivate.description" = "Deactivate this license to transfer it to another computer.";
 "license.deactivate.failed" = "Deactivation failed. Please try again.";

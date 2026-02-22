@@ -22,6 +22,17 @@
 	<string>41</string>
 	<key>LSUIElement</key>
 	<true/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>dev.koukeneko.FinderHover</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>finderhover</string>
+			</array>
+		</dict>
+	</array>
 	<key>NSAppleEventsUsageDescription</key>
 	<string>FinderHover needs to control Finder to detect which file you're hovering over and display its information.</string>
 	<key>NSAppleScriptEnabled</key>

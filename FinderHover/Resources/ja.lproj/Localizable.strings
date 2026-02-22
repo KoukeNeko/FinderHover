@@ -33,11 +33,12 @@
 "license.status.licensed.description" = "FinderHover をご購入いただきありがとうございます！";
 "license.purchase.button" = "FinderHover を購入";
 "license.purchase.failed" = "購入に失敗しました。もう一度お試しください。";
-"license.activate.title" = "ライセンスキーで有効化";
+"license.purchase.hint" = "ウェブブラウザで開きます";
+"license.activate.title" = "購入時のメールアドレスで有効化";
 "license.activate.email.placeholder" = "メールアドレス";
-"license.activate.key.placeholder" = "ライセンスキー";
+"license.activate.transactionID.placeholder" = "取引 ID（txn_...）";
 "license.activate.button" = "有効化";
-"license.activate.failed" = "有効化に失敗しました。ライセンスキーを確認してください。";
+"license.activate.failed" = "有効化に失敗しました。メールアドレスと取引 ID を確認してください。";
 "license.deactivate.button" = "ライセンスを無効化";
 "license.deactivate.description" = "このライセンスを無効化して、別のコンピュータに移行できます。";
 "license.deactivate.failed" = "無効化に失敗しました。もう一度お試しください。";

@@ -18,6 +18,14 @@ enum SettingsPage: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
+    /// Pages shown in settings sidebar (License hidden in open-source builds without credentials)
+    static var visibleCases: [SettingsPage] {
+        if PaddleSecrets.apiKey == "YOUR_API_KEY" {
+            return allCases.filter { $0 != .license }
+        }
+        return allCases
+    }
+
     var localizedName: String {
         switch self {
         case .behavior: return "settings.tab.behavior".localized
@@ -62,7 +70,7 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationSplitView {
-            List(SettingsPage.allCases, id: \.self, selection: $selectedPage) { page in
+            List(SettingsPage.visibleCases, id: \.self, selection: $selectedPage) { page in
                 Label(page.localizedName, systemImage: page.icon)
             }
             .listStyle(.sidebar)
