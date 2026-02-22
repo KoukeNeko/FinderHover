@@ -10,12 +10,11 @@ import SwiftUI
 @main
 struct FinderHoverApp: App {
     @StateObject private var hoverManager = HoverManager()
-    @StateObject private var trialManager = TrialManager.shared
-    @StateObject private var storeKitService = StoreKitService.shared
+    @StateObject private var paddleService = PaddleService.shared
 
     var body: some Scene {
         MenuBarExtra {
-            MenuBarContentView(hoverManager: hoverManager, trialManager: trialManager)
+            MenuBarContentView(hoverManager: hoverManager, paddleService: paddleService)
         } label: {
             Image(systemName: hoverManager.isEnabled
                   ? "appwindow.swipe.rectangle"
@@ -33,11 +32,11 @@ struct FinderHoverApp: App {
 
 private struct MenuBarContentView: View {
     @ObservedObject var hoverManager: HoverManager
-    @ObservedObject var trialManager: TrialManager
+    @ObservedObject var paddleService: PaddleService
     @Environment(\.openSettings) private var openSettings
 
     private var isUnlocked: Bool {
-        trialManager.isFeatureUnlocked
+        paddleService.isFeatureUnlocked
     }
 
     var body: some View {
@@ -45,15 +44,15 @@ private struct MenuBarContentView: View {
             .frame(width: 0, height: 0)
             .task { hoverManager.startMonitoring() }
 
-        // Trial status indicator
-        switch trialManager.licenseStatus {
+        // License status indicator
+        switch paddleService.licenseStatus {
         case .trial(let daysRemaining):
             Text(String(format: "menu.trial.daysRemaining".localized, daysRemaining))
                 .foregroundColor(.secondary)
         case .expired:
             Text("menu.trial.expired".localized)
                 .foregroundColor(.red)
-        case .purchased:
+        case .licensed:
             EmptyView()
         }
 

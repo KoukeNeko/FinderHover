@@ -29,11 +29,19 @@
 "license.status.trial.daysRemaining" = "残り %d 日";
 "license.status.expired" = "試用期間終了";
 "license.status.expired.description" = "すべての機能を引き続き使用するには、FinderHover を購入してください。";
-"license.status.purchased" = "ライセンス済み";
-"license.status.purchased.description" = "FinderHover をご購入いただきありがとうございます！";
-"license.purchase.button" = "購入 — %@";
-"license.purchase.unavailable" = "現在購入できません。しばらくしてから再度お試しください。";
-"license.restore" = "購入を復元";
+"license.status.licensed" = "ライセンス済み";
+"license.status.licensed.description" = "FinderHover をご購入いただきありがとうございます！";
+"license.purchase.button" = "FinderHover を購入";
+"license.purchase.failed" = "購入に失敗しました。もう一度お試しください。";
+"license.activate.title" = "ライセンスキーで有効化";
+"license.activate.email.placeholder" = "メールアドレス";
+"license.activate.key.placeholder" = "ライセンスキー";
+"license.activate.button" = "有効化";
+"license.activate.failed" = "有効化に失敗しました。ライセンスキーを確認してください。";
+"license.deactivate.button" = "ライセンスを無効化";
+"license.deactivate.description" = "このライセンスを無効化して、別のコンピュータに移行できます。";
+"license.deactivate.failed" = "無効化に失敗しました。もう一度お試しください。";
+"license.verify.failed" = "ライセンスの検証に失敗しました。";
 
 /* Settings - Behavior */
 "settings.behavior.title" = "動作";

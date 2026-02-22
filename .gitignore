@@ -132,3 +132,9 @@ Temporary Items
 
 # Development planning files
 PROPOSED_PLAN.md
+
+# Paddle SDK (proprietary binary, not distributed with source)
+Frameworks/
+
+# Paddle secrets (credentials must not be committed)
+FinderHover/Utilities/Secrets.swift

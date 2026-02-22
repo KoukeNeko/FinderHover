@@ -29,11 +29,19 @@
 "license.status.trial.daysRemaining" = "%d days remaining";
 "license.status.expired" = "Trial Expired";
 "license.status.expired.description" = "Purchase FinderHover to continue using all features.";
-"license.status.purchased" = "Licensed";
-"license.status.purchased.description" = "Thank you for purchasing FinderHover!";
-"license.purchase.button" = "Purchase — %@";
-"license.purchase.unavailable" = "Purchase unavailable. Please try again later.";
-"license.restore" = "Restore Purchase";
+"license.status.licensed" = "Licensed";
+"license.status.licensed.description" = "Thank you for purchasing FinderHover!";
+"license.purchase.button" = "Purchase FinderHover";
+"license.purchase.failed" = "Purchase failed. Please try again.";
+"license.activate.title" = "Activate with License Key";
+"license.activate.email.placeholder" = "Email";
+"license.activate.key.placeholder" = "License Key";
+"license.activate.button" = "Activate";
+"license.activate.failed" = "Activation failed. Please check your license key.";
+"license.deactivate.button" = "Deactivate License";
+"license.deactivate.description" = "Deactivate this license to transfer it to another computer.";
+"license.deactivate.failed" = "Deactivation failed. Please try again.";
+"license.verify.failed" = "License verification failed.";
 
 /* Settings - Behavior */
 "settings.behavior.title" = "Behavior";

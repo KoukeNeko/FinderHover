@@ -6,11 +6,11 @@
 //
 
 import SwiftUI
-import StoreKit
 
 struct LicenseSettingsView: View {
-    @ObservedObject private var trialManager = TrialManager.shared
-    @ObservedObject private var storeService = StoreKitService.shared
+    @ObservedObject private var paddleService = PaddleService.shared
+    @State private var licenseKey = ""
+    @State private var email = ""
 
     var body: some View {
         ScrollView {
@@ -22,14 +22,13 @@ struct LicenseSettingsView: View {
                 )
 
                 VStack(spacing: 16) {
-                    // License Status Card
                     statusCard
 
-                    // Purchase Section
-                    if case .purchased = trialManager.licenseStatus {
-                        // Already purchased — no action needed
+                    if case .licensed = paddleService.licenseStatus {
+                        deactivateSection
                     } else {
                         purchaseSection
+                        activateSection
                     }
                 }
                 .padding(.horizontal, 20)
@@ -45,7 +44,7 @@ struct LicenseSettingsView: View {
     @ViewBuilder
     private var statusCard: some View {
         VStack(spacing: 12) {
-            switch trialManager.licenseStatus {
+            switch paddleService.licenseStatus {
             case .trial(let daysRemaining):
                 HStack(spacing: 12) {
                     Image(systemName: "clock")
@@ -77,16 +76,16 @@ struct LicenseSettingsView: View {
                     Spacer()
                 }
 
-            case .purchased:
+            case .licensed:
                 HStack(spacing: 12) {
                     Image(systemName: "checkmark.seal.fill")
                         .font(.system(size: 28))
                         .foregroundColor(.green)
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("license.status.purchased".localized)
+                        Text("license.status.licensed".localized)
                             .font(.system(size: 15, weight: .semibold))
                             .foregroundColor(.green)
-                        Text("license.status.purchased.description".localized)
+                        Text("license.status.licensed.description".localized)
                             .font(.system(size: 12))
                             .foregroundColor(.secondary)
                     }
@@ -104,57 +103,76 @@ struct LicenseSettingsView: View {
     @ViewBuilder
     private var purchaseSection: some View {
         VStack(spacing: 12) {
-            if let product = storeService.unlockProduct {
-                Button(action: {
-                    Task {
-                        await storeService.purchase(product)
+            Button(action: { paddleService.startPurchase() }) {
+                HStack {
+                    Spacer()
+                    if paddleService.isLoading {
+                        ProgressView()
+                            .scaleEffect(0.8)
+                            .frame(width: 16, height: 16)
+                    } else {
+                        Image(systemName: "cart")
+                        Text("license.purchase.button".localized)
                     }
-                }) {
-                    HStack {
-                        Spacer()
-                        if storeService.isLoading {
-                            ProgressView()
-                                .scaleEffect(0.8)
-                                .frame(width: 16, height: 16)
-                        } else {
-                            Image(systemName: "cart")
-                            Text(String(format: "license.purchase.button".localized, product.displayPrice))
-                        }
-                        Spacer()
-                    }
-                    .padding(.vertical, 10)
+                    Spacer()
                 }
-                .buttonStyle(.borderedProminent)
-                .disabled(storeService.isLoading)
-            } else if storeService.isLoading {
-                ProgressView()
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-            } else {
-                Text("license.purchase.unavailable".localized)
-                    .font(.system(size: 12))
-                    .foregroundColor(.secondary)
-                    .frame(maxWidth: .infinity)
+                .padding(.vertical, 10)
             }
+            .buttonStyle(.borderedProminent)
+            .disabled(paddleService.isLoading)
 
-            // Error message
-            if let error = storeService.purchaseError {
+            if let error = paddleService.errorMessage {
                 Text(error)
                     .font(.system(size: 11))
                     .foregroundColor(.red)
             }
+        }
+        .padding(16)
+        .background(Color(NSColor.controlBackgroundColor))
+        .cornerRadius(10)
+    }
 
-            // Restore purchases
+    // MARK: - License Key Activation
+
+    @ViewBuilder
+    private var activateSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("license.activate.title".localized)
+                .font(.system(size: 13, weight: .semibold))
+
+            TextField("license.activate.email.placeholder".localized, text: $email)
+                .textFieldStyle(.roundedBorder)
+
+            TextField("license.activate.key.placeholder".localized, text: $licenseKey)
+                .textFieldStyle(.roundedBorder)
+
             Button(action: {
-                Task {
-                    await storeService.restorePurchases()
-                }
+                paddleService.activateLicense(email: email, code: licenseKey)
             }) {
-                Text("license.restore".localized)
+                Text("license.activate.button".localized)
+            }
+            .disabled(licenseKey.isEmpty || email.isEmpty || paddleService.isLoading)
+        }
+        .padding(16)
+        .background(Color(NSColor.controlBackgroundColor))
+        .cornerRadius(10)
+    }
+
+    // MARK: - Deactivate Section
+
+    @ViewBuilder
+    private var deactivateSection: some View {
+        VStack(spacing: 12) {
+            Button(action: { paddleService.deactivateLicense() }) {
+                Text("license.deactivate.button".localized)
                     .font(.system(size: 12))
             }
             .buttonStyle(.link)
-            .disabled(storeService.isLoading)
+            .disabled(paddleService.isLoading)
+
+            Text("license.deactivate.description".localized)
+                .font(.system(size: 11))
+                .foregroundColor(.secondary)
         }
         .padding(16)
         .background(Color(NSColor.controlBackgroundColor))

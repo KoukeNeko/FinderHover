@@ -29,11 +29,19 @@
 "license.status.trial.daysRemaining" = "剩餘 %d 天";
 "license.status.expired" = "試用已到期";
 "license.status.expired.description" = "請購買 FinderHover 以繼續使用所有功能。";
-"license.status.purchased" = "已授權";
-"license.status.purchased.description" = "感謝您購買 FinderHover！";
-"license.purchase.button" = "購買 — %@";
-"license.purchase.unavailable" = "目前無法購買，請稍後再試。";
-"license.restore" = "還原購買";
+"license.status.licensed" = "已授權";
+"license.status.licensed.description" = "感謝您購買 FinderHover！";
+"license.purchase.button" = "購買 FinderHover";
+"license.purchase.failed" = "購買失敗，請再試一次。";
+"license.activate.title" = "使用授權金鑰啟用";
+"license.activate.email.placeholder" = "電子郵件";
+"license.activate.key.placeholder" = "授權金鑰";
+"license.activate.button" = "啟用";
+"license.activate.failed" = "啟用失敗，請確認您的授權金鑰。";
+"license.deactivate.button" = "停用授權";
+"license.deactivate.description" = "停用此授權以轉移至其他電腦。";
+"license.deactivate.failed" = "停用失敗，請再試一次。";
+"license.verify.failed" = "授權驗證失敗。";
 
 /* Settings - Behavior */
 "settings.behavior.title" = "行為";

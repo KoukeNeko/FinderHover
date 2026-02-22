@@ -161,8 +161,8 @@ class HoverManager: ObservableObject {
             return
         }
 
-        guard TrialManager.shared.isFeatureUnlocked else {
-            Logger.debug("Monitoring not started - trial expired", subsystem: .mouseTracking)
+        guard PaddleService.shared.isFeatureUnlocked else {
+            Logger.debug("Monitoring not started - license expired", subsystem: .mouseTracking)
             isEnabled = false
             return
         }
