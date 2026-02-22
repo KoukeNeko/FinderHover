@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct FinderHoverApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var hoverManager = HoverManager()
     @StateObject private var paddleService = PaddleService.shared
 
@@ -25,13 +26,24 @@ struct FinderHoverApp: App {
 
         Settings {
             SettingsView()
-                .onOpenURL { url in
-                    paddleService.handleActivationURL(url)
-                }
         }
         .defaultSize(width: 780, height: 540)
     }
 }
+
+// MARK: - App Delegate (URL Scheme Handling)
+
+class AppDelegate: NSObject, NSApplicationDelegate {
+    func application(_ application: NSApplication, open urls: [URL]) {
+        for url in urls where url.scheme == "finderhover" {
+            Task { @MainActor in
+                PaddleService.shared.handleActivationURL(url)
+            }
+        }
+    }
+}
+
+// MARK: - Menu Bar Content
 
 private struct MenuBarContentView: View {
     @ObservedObject var hoverManager: HoverManager

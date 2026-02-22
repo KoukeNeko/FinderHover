@@ -121,12 +121,26 @@ class PaddleService: ObservableObject {
 
     /// Handle `finderhover://activate?_ptxn=txn_xxx` callback from Paddle checkout
     func handleActivationURL(_ url: URL) {
+        Logger.info("Received activation URL: \(url.absoluteString)", subsystem: .settings)
+
         guard !isOpenSourceBuild else { return }
 
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-              components.host == "activate",
-              let transactionID = components.queryItems?.first(where: { $0.name == "_ptxn" })?.value
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            Logger.error("Failed to parse URL components", subsystem: .settings)
+            return
+        }
+
+        Logger.debug("URL scheme=\(components.scheme ?? "nil") host=\(components.host ?? "nil") path=\(components.path) query=\(components.queryItems?.description ?? "nil")", subsystem: .settings)
+
+        // Try multiple parameter names Paddle might use
+        let transactionID = components.queryItems?.first(where: {
+            $0.name == "_ptxn" || $0.name == "ptxn" || $0.name == "transaction_id"
+        })?.value
+
+        guard components.host == "activate" || components.path == "/activate",
+              let transactionID
         else {
+            Logger.error("Missing activate host or transaction ID in URL", subsystem: .settings)
             return
         }
 
@@ -139,13 +153,16 @@ class PaddleService: ObservableObject {
                     transactionID: transactionID
                 )
 
-                guard transaction.status == "completed" else {
+                Logger.info("Transaction \(transactionID) status: \(transaction.status)", subsystem: .settings)
+
+                guard transaction.status == "completed" || transaction.status == "paid" else {
                     throw PaddleBillingAPI.APIError.noCompletedTransaction
                 }
 
                 storeLicense(transactionID: transactionID, email: "")
                 licenseStatus = .licensed
             } catch {
+                Logger.error("Activation failed: \(error)", subsystem: .settings)
                 errorMessage = "license.activate.failed".localized
             }
 
