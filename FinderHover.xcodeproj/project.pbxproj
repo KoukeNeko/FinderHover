@@ -6,13 +6,30 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		C8BAE64F2EB86F1C0007FB19 /* FinderHover.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinderHover.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C8F0FB012F4ADE5D00A373F9 /* Products.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Products.storekit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C8BAE6602EB86F1F0007FB19 /* Exceptions for "FinderHover" folder in "FinderHover" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = C8BAE64E2EB86F1C0007FB19 /* FinderHover */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C8BAE6512EB86F1C0007FB19 /* FinderHover */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C8BAE6602EB86F1F0007FB19 /* Exceptions for "FinderHover" folder in "FinderHover" target */,
+			);
 			path = FinderHover;
 			sourceTree = "<group>";
 		};
@@ -32,6 +49,7 @@
 		C8BAE6462EB86F1C0007FB19 = {
 			isa = PBXGroup;
 			children = (
+				C8F0FB012F4ADE5D00A373F9 /* Products.storekit */,
 				C8BAE6512EB86F1C0007FB19 /* FinderHover */,
 				C8BAE6502EB86F1C0007FB19 /* Products */,
 			);
@@ -111,6 +129,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C8F0FB022F4ADE5D00A373F9 /* Products.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
