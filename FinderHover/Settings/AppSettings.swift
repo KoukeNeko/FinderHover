@@ -958,11 +958,6 @@ class AppSettings: ObservableObject {
         }
     }
 
-    // Update preferences
-    @Published var includePrereleases: Bool {
-        didSet { UserDefaults.standard.set(includePrereleases, forKey: "includePrereleases") }
-    }
-
     private init() {
         // Load display order or use default
         if let data = UserDefaults.standard.data(forKey: "displayOrder"),
@@ -1206,14 +1201,6 @@ class AppSettings: ObservableObject {
         self.fontSize = UserDefaults.standard.object(forKey: "fontSize") as? Double ?? Constants.Defaults.fontSize
         self.enableBlur = UserDefaults.standard.object(forKey: "enableBlur") as? Bool ?? Constants.Defaults.enableBlur
         self.enableLiquidGlass = UserDefaults.standard.object(forKey: "enableLiquidGlass") as? Bool ?? Constants.Defaults.enableLiquidGlass
-
-        // On macOS 26+, Liquid Glass takes priority — disable blur if both are on
-        let osVersion = ProcessInfo.processInfo.operatingSystemVersion
-        if osVersion.majorVersion >= Constants.Compatibility.liquidGlassVersion,
-           self.enableLiquidGlass, self.enableBlur {
-            self.enableBlur = false
-            UserDefaults.standard.set(false, forKey: "enableBlur")
-        }
 
         self.compactMode = UserDefaults.standard.object(forKey: "compactMode") as? Bool ?? Constants.Defaults.compactMode
         self.showCreationDate = UserDefaults.standard.object(forKey: "showCreationDate") as? Bool ?? Constants.Defaults.showCreationDate
@@ -1495,8 +1482,13 @@ class AppSettings: ObservableObject {
             self.preferredLanguage = .system
         }
 
-        // Load update preferences
-        self.includePrereleases = UserDefaults.standard.object(forKey: "includePrereleases") as? Bool ?? Constants.Defaults.includePrereleases
+        // On macOS 26+, Liquid Glass takes priority — disable blur if both are on
+        let osVersion = ProcessInfo.processInfo.operatingSystemVersion
+        if osVersion.majorVersion >= Constants.Compatibility.liquidGlassVersion,
+           self.enableLiquidGlass, self.enableBlur {
+            self.enableBlur = false
+            UserDefaults.standard.set(false, forKey: "enableBlur")
+        }
 
         // Apply language preference on launch
         applyLanguagePreference()
@@ -1732,6 +1724,5 @@ class AppSettings: ObservableObject {
         windowOffsetY = Constants.Defaults.windowOffsetY
         uiStyle = .macOS
         preferredLanguage = .system
-        includePrereleases = Constants.Defaults.includePrereleases
     }
 }

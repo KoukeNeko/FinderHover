@@ -738,8 +738,5 @@ enum Constants {
 
         /// Default follow cursor
         static let followCursor: Bool = true
-
-        /// Default include prereleases
-        static let includePrereleases: Bool = false
     }
 }
