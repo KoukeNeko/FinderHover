@@ -36,12 +36,40 @@ class HoverManager: ObservableObject {
     private var appActivateObserver: NSObjectProtocol?
     private var appDeactivateObserver: NSObjectProtocol?
     private var unlockObserver: NSObjectProtocol?
+    private var extensionNotificationObserver: NSObjectProtocol?
 
     init() {
         setupSubscriptions()
         setupAppSwitchObserver()
         setupUnlockObserver()
+        setupExtensionNotificationListener()
         checkAccessibilityPermissions()
+    }
+
+    // MARK: - Finder Sync Extension IPC
+
+    private func setupExtensionNotificationListener() {
+        extensionNotificationObserver = DistributedNotificationCenter.default().addObserver(
+            forName: .init("com.finderhover.showFileFromExtension"),
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let path = notification.userInfo?["filePath"] as? String,
+                  FileManager.default.fileExists(atPath: path) else { return }
+            self?.showFileFromExtension(path: path)
+        }
+    }
+
+    private func showFileFromExtension(path: String) {
+        let policy = FileInfo.MetadataExtractionPolicy.from(settings: settings)
+        metadataQueue.async { [weak self] in
+            guard let self, let fileInfo = FileInfo.from(path: path, policy: policy) else { return }
+            DispatchQueue.main.async {
+                Logger.info("Showing hover window from Finder Sync Extension for: \(fileInfo.name)", subsystem: .ui)
+                self.currentFileInfo = fileInfo
+                self.showHoverWindow(at: NSEvent.mouseLocation, with: fileInfo)
+            }
+        }
     }
 
     private func setupUnlockObserver() {
@@ -393,6 +421,9 @@ class HoverManager: ObservableObject {
     deinit {
         stopMonitoring()
         removeAppSwitchObservers()
+        if let observer = extensionNotificationObserver {
+            DistributedNotificationCenter.default().removeObserver(observer)
+        }
         cancellables.removeAll()
     }
 }

@@ -150,7 +150,7 @@ brew install koukeneko/tap/finderhover
 
 1. 從 [Releases](../../releases) 下載 `FinderHover.app.zip`
 2. 解壓縮並移動到「應用程式」資料夾
-3. 右鍵點擊 → 打開（略過 Gatekeeper）
+3. 直接雙擊開啟（App 已由 Apple 簽章與公證）
 4. 系統提示時授予輔助使用權限
 
 ---
@@ -231,12 +231,11 @@ FinderHover/
 
 ## 📝 最新更新
 
-### v1.7.0 - 進階中繼資料更新
-- **新增：** 3D 模型中繼資料（USDZ、OBJ、GLTF、FBX）
-- **新增：** Xcode 專案檢視（Target 數、Swift 版本、部署目標）
-- **新增：** 進階檔案系統中繼資料（已分配空間、Resource Fork、磁碟區資訊）
-- **強化：** 壓縮檔格式支援（新增 ISO、TAR、CPIO）
-- **強化：** 系統中繼資料（Finder 標籤、下載來源、iCloud 狀態）
+### v1.8.0 - 程式碼簽章與 Liquid Glass
+- **新增：** 正式**程式碼簽章與公證** — 不再出現 Gatekeeper 警告
+- **新增：** macOS 26 Tahoe 的 **Liquid Glass** 視覺效果
+- **新增：** Universal Binary（arm64 + x86_64）搭配 Hardened Runtime
+- **新增：** 公證票證已嵌入 DMG 與 ZIP，支援離線驗證
 
 [查看完整更新日誌](CHANGELOG.md)
 

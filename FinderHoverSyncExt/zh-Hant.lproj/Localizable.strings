@@ -1,0 +1,97 @@
+/* Context menu */
+"ext.menu.title"         = "FinderHover 資訊";
+"ext.menu.showInWindow"  = "在 FinderHover 視窗中顯示...";
+"ext.menu.multipleItems" = "%d 個項目 — 共 %@";
+
+/* Basic metadata */
+"ext.label.type"        = "類型：";
+"ext.label.size"        = "大小：";
+"ext.label.created"     = "建立：";
+"ext.label.modified"    = "修改：";
+"ext.label.lastAccess"  = "最後存取：";
+"ext.label.permissions" = "權限：";
+"ext.label.owner"       = "擁有者：";
+"ext.label.itemUnit"    = "個項目";
+
+/* EXIF / Photo */
+"ext.label.camera"       = "相機：";
+"ext.label.lens"         = "鏡頭：";
+"ext.label.settings"     = "";
+"ext.label.dateTaken"    = "拍攝日期：";
+"ext.label.dimensions"   = "尺寸：";
+"ext.label.colorProfile" = "色彩描述檔：";
+"ext.label.bitDepth"     = "位元深度：";
+"ext.label.gps"          = "GPS：";
+"ext.label.copyright"    = "版權：";
+"ext.label.creator"      = "建立者：";
+"ext.label.rating"       = "評分：";
+
+/* Video */
+"ext.label.duration"        = "時長：";
+"ext.label.resolution"      = "解析度：";
+"ext.label.codec"           = "編解碼器：";
+"ext.label.frameRate"       = "影格率：";
+"ext.label.bitrate"         = "位元率：";
+"ext.label.hdr"             = "HDR：";
+"ext.label.containerFormat" = "格式：";
+
+/* Audio */
+"ext.label.audioTitle"   = "標題：";
+"ext.label.audioArtist"  = "演出者：";
+"ext.label.audioAlbum"   = "專輯：";
+"ext.label.audioGenre"   = "類型：";
+"ext.label.audioYear"    = "年份：";
+"ext.label.sampleRate"   = "取樣率：";
+
+/* PDF */
+"ext.label.pageCount"     = "頁數：";
+"ext.label.pageUnit"      = "頁";
+"ext.label.pageSize"      = "頁面大小：";
+"ext.label.pdfVersion"    = "PDF 版本：";
+"ext.label.pdfTitle"      = "標題：";
+"ext.label.pdfAuthor"     = "作者：";
+"ext.label.pdfEncrypted"  = "加密：";
+
+/* Font */
+"ext.label.fontName"    = "字型名稱：";
+"ext.label.fontFamily"  = "字型家族：";
+"ext.label.fontStyle"   = "樣式：";
+"ext.label.fontGlyphs"  = "字符數：";
+
+/* System */
+"ext.label.finderTags"    = "標籤：";
+"ext.label.downloadDate"  = "下載日期：";
+"ext.label.downloader"    = "下載程式：";
+"ext.label.whereFrom"     = "下載來源：";
+"ext.label.hardLinks"     = "硬連結數：";
+"ext.label.finderComment" = "註解：";
+"ext.label.useCount"      = "開啟次數：";
+"ext.label.lastUsed"      = "最後使用：";
+"ext.label.uti"           = "類型識別碼：";
+"ext.label.filePath"      = "檔案路徑：";
+
+/* App Bundle */
+"ext.label.appBundleID"     = "套件 ID：";
+"ext.label.appVersion"      = "版本：";
+"ext.label.appBuild"        = "建置號：";
+"ext.label.appMinOS"        = "最低 macOS：";
+"ext.label.appCopyright"    = "版權：";
+"ext.label.appCodeSigned"   = "已簽章：";
+"ext.label.appEntitlements"  = "權限：";
+
+/* Section headers */
+"ext.section.exif"   = "照片";
+"ext.section.video"  = "影片";
+"ext.section.audio"  = "音訊";
+"ext.section.pdf"    = "PDF";
+"ext.section.font"   = "字型";
+"ext.section.app"    = "應用程式";
+"ext.section.system" = "系統資訊";
+
+/* Common values */
+"ext.value.yes"         = "是";
+"ext.value.no"          = "否";
+
+/* File type fallbacks */
+"ext.fileType.folder"   = "資料夾";
+"ext.fileType.file"     = "檔案";

@@ -165,6 +165,20 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
 class AppSettings: ObservableObject {
     static let shared = AppSettings()
 
+    // Path to the Group Container preferences plist that the sandboxed Finder Sync
+    // Extension reads via UserDefaults(suiteName:). Non-sandboxed apps must write
+    // here directly because UserDefaults(suiteName:) routes to ~/Library/Preferences/.
+    private static let groupContainerPlistURL: URL? = {
+        let home = FileManager.default.homeDirectoryForCurrentUser
+        let prefsDir = home
+            .appendingPathComponent("Library/Group Containers/group.dev.koukeneko.FinderHover")
+            .appendingPathComponent("Library/Preferences")
+        try? FileManager.default.createDirectory(at: prefsDir, withIntermediateDirectories: true)
+        return prefsDir.appendingPathComponent("group.dev.koukeneko.FinderHover.plist")
+    }()
+
+    private var settingsSyncCancellable: AnyCancellable?
+
     // Hover behavior
     @Published var hoverDelay: Double {
         didSet { UserDefaults.standard.set(hoverDelay, forKey: "hoverDelay") }
@@ -1503,6 +1517,133 @@ class AppSettings: ObservableObject {
 
         // Apply language preference on launch
         applyLanguagePreference()
+
+        // Sync display settings to App Group so the Finder Sync Extension can read them.
+        // Initial sync covers users upgrading from versions before the extension.
+        syncDisplaySettingsToAppGroup()
+
+        // Re-sync whenever any published property changes (debounced to avoid excessive writes).
+        settingsSyncCancellable = objectWillChange
+            .debounce(for: .milliseconds(200), scheduler: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.syncDisplaySettingsToAppGroup()
+            }
+    }
+
+    // Display toggle keys synced to the Finder Sync Extension, with their default values.
+    // Using a dictionary ensures every key is always written (even if the user never
+    // changed it), so the extension never falls back to hardcoded defaults.
+    private static let extensionSyncDefaults: [String: Bool] = [
+        // Basic
+        "showFileType": Constants.Defaults.showFileType,
+        "showFileSize": Constants.Defaults.showFileSize,
+        "showCreationDate": Constants.Defaults.showCreationDate,
+        "showModificationDate": Constants.Defaults.showModificationDate,
+        "showLastAccessDate": Constants.Defaults.showLastAccessDate,
+        "showPermissions": Constants.Defaults.showPermissions,
+        "showOwner": Constants.Defaults.showOwner,
+        "showItemCount": Constants.Defaults.showItemCount,
+        "showFilePath": Constants.Defaults.showFilePath,
+        // EXIF / Photo
+        "showEXIF": Constants.Defaults.showEXIF,
+        "showEXIFCamera": Constants.Defaults.showEXIFCamera,
+        "showEXIFLens": Constants.Defaults.showEXIFLens,
+        "showEXIFSettings": Constants.Defaults.showEXIFSettings,
+        "showEXIFDateTaken": Constants.Defaults.showEXIFDateTaken,
+        "showEXIFDimensions": Constants.Defaults.showEXIFDimensions,
+        "showEXIFGPS": Constants.Defaults.showEXIFGPS,
+        "showEXIFColorProfile": false,
+        "showEXIFBitDepth": false,
+        "showEXIFHDRInfo": false,
+        // Video
+        "showVideo": Constants.Defaults.showVideo,
+        "showVideoDuration": Constants.Defaults.showVideoDuration,
+        "showVideoResolution": Constants.Defaults.showVideoResolution,
+        "showVideoCodec": Constants.Defaults.showVideoCodec,
+        "showVideoFrameRate": Constants.Defaults.showVideoFrameRate,
+        "showVideoBitrate": Constants.Defaults.showVideoBitrate,
+        "showVideoHDR": Constants.Defaults.showVideoHDR,
+        "showVideoChapters": true,
+        "showVideoSubtitleTracks": true,
+        "showVideoContainerFormat": false,
+        // Audio
+        "showAudio": Constants.Defaults.showAudio,
+        "showAudioTitle": Constants.Defaults.showAudioTitle,
+        "showAudioArtist": Constants.Defaults.showAudioArtist,
+        "showAudioAlbum": Constants.Defaults.showAudioAlbum,
+        "showAudioGenre": Constants.Defaults.showAudioGenre,
+        "showAudioYear": Constants.Defaults.showAudioYear,
+        "showAudioDuration": Constants.Defaults.showAudioDuration,
+        "showAudioBitrate": Constants.Defaults.showAudioBitrate,
+        "showAudioSampleRate": Constants.Defaults.showAudioSampleRate,
+        // PDF
+        "showPDF": Constants.Defaults.showPDF,
+        "showPDFPageCount": Constants.Defaults.showPDFPageCount,
+        "showPDFPageSize": Constants.Defaults.showPDFPageSize,
+        "showPDFVersion": Constants.Defaults.showPDFVersion,
+        "showPDFTitle": Constants.Defaults.showPDFTitle,
+        "showPDFAuthor": Constants.Defaults.showPDFAuthor,
+        "showPDFSubject": Constants.Defaults.showPDFSubject,
+        "showPDFCreator": Constants.Defaults.showPDFCreator,
+        "showPDFProducer": Constants.Defaults.showPDFProducer,
+        "showPDFCreationDate": Constants.Defaults.showPDFCreationDate,
+        "showPDFModificationDate": Constants.Defaults.showPDFModificationDate,
+        "showPDFKeywords": Constants.Defaults.showPDFKeywords,
+        "showPDFEncrypted": Constants.Defaults.showPDFEncrypted,
+        // Archive
+        "showArchive": Constants.Defaults.showArchive,
+        "showArchiveFormat": Constants.Defaults.showArchiveFormat,
+        "showArchiveFileCount": Constants.Defaults.showArchiveFileCount,
+        "showArchiveUncompressedSize": Constants.Defaults.showArchiveUncompressedSize,
+        "showArchiveCompressionRatio": Constants.Defaults.showArchiveCompressionRatio,
+        "showArchiveEncrypted": Constants.Defaults.showArchiveEncrypted,
+        // Font
+        "showFont": Constants.Defaults.showFont,
+        "showFontName": Constants.Defaults.showFontName,
+        "showFontFamily": Constants.Defaults.showFontFamily,
+        "showFontStyle": Constants.Defaults.showFontStyle,
+        "showFontVersion": Constants.Defaults.showFontVersion,
+        "showFontDesigner": Constants.Defaults.showFontDesigner,
+        "showFontCopyright": Constants.Defaults.showFontCopyright,
+        "showFontGlyphCount": Constants.Defaults.showFontGlyphCount,
+        // Image Extended
+        "showImageExtended": Constants.Defaults.showImageExtended,
+        "showImageCopyright": Constants.Defaults.showImageCopyright,
+        "showImageCreator": Constants.Defaults.showImageCreator,
+        "showImageKeywords": Constants.Defaults.showImageKeywords,
+        "showImageRating": Constants.Defaults.showImageRating,
+        "showImageCreatorTool": Constants.Defaults.showImageCreatorTool,
+        "showImageDescription": Constants.Defaults.showImageDescription,
+        "showImageHeadline": Constants.Defaults.showImageHeadline,
+        // App Bundle
+        "showAppBundle": Constants.Defaults.showAppBundle,
+        "showAppBundleID": Constants.Defaults.showAppBundleID,
+        "showAppBundleVersion": Constants.Defaults.showAppBundleVersion,
+        "showAppBundleBuildNumber": Constants.Defaults.showAppBundleBuildNumber,
+        "showAppBundleMinimumOS": Constants.Defaults.showAppBundleMinimumOS,
+        "showAppBundleCategory": Constants.Defaults.showAppBundleCategory,
+        "showAppBundleCopyright": Constants.Defaults.showAppBundleCopyright,
+        "showAppBundleCodeSigned": Constants.Defaults.showAppBundleCodeSigned,
+        "showAppBundleEntitlements": Constants.Defaults.showAppBundleEntitlements,
+        // System Metadata
+        "showSystemMetadata": Constants.Defaults.showSystemMetadata,
+        "showFinderTags": Constants.Defaults.showFinderTags,
+        "showWhereFroms": Constants.Defaults.showWhereFroms,
+        "showUTI": Constants.Defaults.showUTI,
+        "showQuarantineInfo": Constants.Defaults.showQuarantineInfo,
+        "showLinkInfo": Constants.Defaults.showLinkInfo,
+        "showUsageStats": Constants.Defaults.showUsageStats,
+        "showFinderComment": Constants.Defaults.showFinderComment,
+        "showAliasTarget": Constants.Defaults.showAliasTarget,
+    ]
+
+    private func syncDisplaySettingsToAppGroup() {
+        guard let plistURL = Self.groupContainerPlistURL else { return }
+        var dict: [String: Any] = [:]
+        for (key, defaultValue) in Self.extensionSyncDefaults {
+            dict[key] = UserDefaults.standard.object(forKey: key) ?? defaultValue
+        }
+        (dict as NSDictionary).write(to: plistURL, atomically: true)
     }
 
     private func applyLanguagePreference() {

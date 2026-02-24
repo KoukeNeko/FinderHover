@@ -1,0 +1,97 @@
+/* Context menu */
+"ext.menu.title"         = "FinderHover 情報";
+"ext.menu.showInWindow"  = "FinderHover ウィンドウで表示...";
+"ext.menu.multipleItems" = "%d 個のアイテム — 合計 %@";
+
+/* Basic metadata */
+"ext.label.type"        = "種類：";
+"ext.label.size"        = "サイズ：";
+"ext.label.created"     = "作成日：";
+"ext.label.modified"    = "変更日：";
+"ext.label.lastAccess"  = "最終アクセス：";
+"ext.label.permissions" = "アクセス権：";
+"ext.label.owner"       = "所有者：";
+"ext.label.itemUnit"    = "個のアイテム";
+
+/* EXIF / Photo */
+"ext.label.camera"       = "カメラ：";
+"ext.label.lens"         = "レンズ：";
+"ext.label.settings"     = "";
+"ext.label.dateTaken"    = "撮影日：";
+"ext.label.dimensions"   = "サイズ（ピクセル）：";
+"ext.label.colorProfile" = "カラープロファイル：";
+"ext.label.bitDepth"     = "ビット深度：";
+"ext.label.gps"          = "GPS：";
+"ext.label.copyright"    = "著作権：";
+"ext.label.creator"      = "作成者：";
+"ext.label.rating"       = "評価：";
+
+/* Video */
+"ext.label.duration"        = "時間：";
+"ext.label.resolution"      = "解像度：";
+"ext.label.codec"           = "コーデック：";
+"ext.label.frameRate"       = "フレームレート：";
+"ext.label.bitrate"         = "ビットレート：";
+"ext.label.hdr"             = "HDR：";
+"ext.label.containerFormat" = "フォーマット：";
+
+/* Audio */
+"ext.label.audioTitle"   = "タイトル：";
+"ext.label.audioArtist"  = "アーティスト：";
+"ext.label.audioAlbum"   = "アルバム：";
+"ext.label.audioGenre"   = "ジャンル：";
+"ext.label.audioYear"    = "年：";
+"ext.label.sampleRate"   = "サンプルレート：";
+
+/* PDF */
+"ext.label.pageCount"     = "ページ数：";
+"ext.label.pageUnit"      = "ページ";
+"ext.label.pageSize"      = "ページサイズ：";
+"ext.label.pdfVersion"    = "PDF バージョン：";
+"ext.label.pdfTitle"      = "タイトル：";
+"ext.label.pdfAuthor"     = "著者：";
+"ext.label.pdfEncrypted"  = "暗号化：";
+
+/* Font */
+"ext.label.fontName"    = "フォント名：";
+"ext.label.fontFamily"  = "ファミリー：";
+"ext.label.fontStyle"   = "スタイル：";
+"ext.label.fontGlyphs"  = "グリフ数：";
+
+/* System */
+"ext.label.finderTags"    = "タグ：";
+"ext.label.downloadDate"  = "ダウンロード日：";
+"ext.label.downloader"    = "ダウンローダー：";
+"ext.label.whereFrom"     = "ダウンロード元：";
+"ext.label.hardLinks"     = "ハードリンク：";
+"ext.label.finderComment" = "コメント：";
+"ext.label.useCount"      = "使用回数：";
+"ext.label.lastUsed"      = "最終使用：";
+"ext.label.uti"           = "タイプ ID：";
+"ext.label.filePath"      = "ファイルパス：";
+
+/* App Bundle */
+"ext.label.appBundleID"     = "バンドルID：";
+"ext.label.appVersion"      = "バージョン：";
+"ext.label.appBuild"        = "ビルド：";
+"ext.label.appMinOS"        = "最小macOS：";
+"ext.label.appCopyright"    = "著作権：";
+"ext.label.appCodeSigned"   = "署名：";
+"ext.label.appEntitlements"  = "権限：";
+
+/* Section headers */
+"ext.section.exif"   = "写真";
+"ext.section.video"  = "ビデオ";
+"ext.section.audio"  = "オーディオ";
+"ext.section.pdf"    = "PDF";
+"ext.section.font"   = "フォント";
+"ext.section.app"    = "アプリケーション";
+"ext.section.system" = "システム情報";
+
+/* Common values */
+"ext.value.yes"         = "はい";
+"ext.value.no"          = "いいえ";
+
+/* File type fallbacks */
+"ext.fileType.folder"   = "フォルダ";
+"ext.fileType.file"     = "ファイル";

@@ -2,7 +2,7 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.9.0 (Current)
+## Version 1.8.0 (Current)
 
 ### 🔐 Official Code Signing & Notarization
 
@@ -11,10 +11,6 @@ All notable changes to FinderHover will be documented in this file.
 - Distributed as a **Universal Binary** (arm64 + x86_64) with **Hardened Runtime** enabled
 - Users no longer need to manually bypass Gatekeeper — the app opens immediately without any security warning
 - Homebrew Cask installation now works seamlessly without `xattr` workarounds
-
----
-
-## Version 1.8.0
 
 ### ✨ Liquid Glass Effect (macOS 26 Tahoe)
 

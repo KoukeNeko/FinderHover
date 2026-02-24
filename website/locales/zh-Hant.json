@@ -94,7 +94,7 @@
     },
     "q2": {
       "question": "為什麼推薦用 Homebrew 安裝？",
-      "answer": "透過 Homebrew 安裝會自動處理 Gatekeeper 驗證，省去手動解除安全性限制的步驟。直接下載的 .app 檔案需要在「系統設定 → 隱私與安全性」中手動允許執行。"
+      "answer": "Homebrew 只需一行指令即可安裝與更新，非常方便。App 已由 Apple 正式簽章與公證，無論透過 Homebrew 或直接下載，都不會出現 Gatekeeper 警告。"
     },
     "q3": {
       "question": "支援哪些 macOS 版本？",
@@ -134,9 +134,8 @@
       "stepsTitle": "安裝步驟",
       "step1": "下載並解壓縮 .zip 檔案",
       "step2": "將 FinderHover.app 拖曳到「應用程式」資料夾",
-      "step3": "首次開啟時，右鍵點擊選擇「打開」",
-      "step4": "在彈出視窗中點擊「打開」以略過 Gatekeeper",
-      "note": "由於 App 未經 Apple 公證，需要手動允許執行"
+      "step3": "直接雙擊開啟（App 已由 Apple 簽章與公證）",
+      "step4": "依照提示授予輔助使用權限"
     },
     "source": {
       "title": "從原始碼建置",

@@ -6,7 +6,36 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C86938C02F4DBC0A00CB7A18 /* FinderHoverSyncExt.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C86938B92F4DBC0A00CB7A18 /* FinderHoverSyncExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C86938BE2F4DBC0A00CB7A18 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C8BAE6472EB86F1C0007FB19 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C86938B82F4DBC0A00CB7A18;
+			remoteInfo = FinderHoverSyncExt;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C86938C52F4DBC0A00CB7A18 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				C86938C02F4DBC0A00CB7A18 /* FinderHoverSyncExt.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		C86938B92F4DBC0A00CB7A18 /* FinderHoverSyncExt.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FinderHoverSyncExt.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8BAE64F2EB86F1C0007FB19 /* FinderHover.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinderHover.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -18,9 +47,24 @@
 			);
 			target = C8BAE64E2EB86F1C0007FB19 /* FinderHover */;
 		};
+		C86938C42F4DBC0A00CB7A18 /* Exceptions for "FinderHoverSyncExt" folder in "FinderHoverSyncExt" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = C86938B82F4DBC0A00CB7A18 /* FinderHoverSyncExt */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		C86938BA2F4DBC0A00CB7A18 /* FinderHoverSyncExt */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C86938C42F4DBC0A00CB7A18 /* Exceptions for "FinderHoverSyncExt" folder in "FinderHoverSyncExt" target */,
+			);
+			path = FinderHoverSyncExt;
+			sourceTree = "<group>";
+		};
 		C8BAE6512EB86F1C0007FB19 /* FinderHover */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -32,6 +76,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C86938B62F4DBC0A00CB7A18 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C8BAE64C2EB86F1C0007FB19 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -46,6 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				C8BAE6512EB86F1C0007FB19 /* FinderHover */,
+				C86938BA2F4DBC0A00CB7A18 /* FinderHoverSyncExt */,
 				C8BAE6502EB86F1C0007FB19 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				C8BAE64F2EB86F1C0007FB19 /* FinderHover.app */,
+				C86938B92F4DBC0A00CB7A18 /* FinderHoverSyncExt.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,6 +114,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		C86938B82F4DBC0A00CB7A18 /* FinderHoverSyncExt */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C86938C12F4DBC0A00CB7A18 /* Build configuration list for PBXNativeTarget "FinderHoverSyncExt" */;
+			buildPhases = (
+				C86938B52F4DBC0A00CB7A18 /* Sources */,
+				C86938B62F4DBC0A00CB7A18 /* Frameworks */,
+				C86938B72F4DBC0A00CB7A18 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				C86938BA2F4DBC0A00CB7A18 /* FinderHoverSyncExt */,
+			);
+			name = FinderHoverSyncExt;
+			packageProductDependencies = (
+			);
+			productName = FinderHoverSyncExt;
+			productReference = C86938B92F4DBC0A00CB7A18 /* FinderHoverSyncExt.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		C8BAE64E2EB86F1C0007FB19 /* FinderHover */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C8BAE65A2EB86F1F0007FB19 /* Build configuration list for PBXNativeTarget "FinderHover" */;
@@ -68,10 +143,12 @@
 				C8BAE64B2EB86F1C0007FB19 /* Sources */,
 				C8BAE64C2EB86F1C0007FB19 /* Frameworks */,
 				C8BAE64D2EB86F1C0007FB19 /* Resources */,
+				C86938C52F4DBC0A00CB7A18 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C86938BF2F4DBC0A00CB7A18 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				C8BAE6512EB86F1C0007FB19 /* FinderHover */,
@@ -90,9 +167,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2600;
+				LastSwiftUpdateCheck = 2630;
 				LastUpgradeCheck = 2630;
 				TargetAttributes = {
+					C86938B82F4DBC0A00CB7A18 = {
+						CreatedOnToolsVersion = 26.3;
+					};
 					C8BAE64E2EB86F1C0007FB19 = {
 						CreatedOnToolsVersion = 26.0.1;
 					};
@@ -115,11 +195,19 @@
 			projectRoot = "";
 			targets = (
 				C8BAE64E2EB86F1C0007FB19 /* FinderHover */,
+				C86938B82F4DBC0A00CB7A18 /* FinderHoverSyncExt */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		C86938B72F4DBC0A00CB7A18 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C8BAE64D2EB86F1C0007FB19 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -130,6 +218,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C86938B52F4DBC0A00CB7A18 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C8BAE64B2EB86F1C0007FB19 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -139,7 +234,81 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		C86938BF2F4DBC0A00CB7A18 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C86938B82F4DBC0A00CB7A18 /* FinderHoverSyncExt */;
+			targetProxy = C86938BE2F4DBC0A00CB7A18 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		C86938C22F4DBC0A00CB7A18 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = FinderHoverSyncExt/FinderHoverSyncExt.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 41;
+				DEVELOPMENT_TEAM = 33832Z66QU;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FinderHoverSyncExt/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FinderHoverSyncExt;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.8.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.koukeneko.FinderHover.FinderHoverSyncExt;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C86938C32F4DBC0A00CB7A18 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = FinderHoverSyncExt/FinderHoverSyncExt.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 41;
+				DEVELOPMENT_TEAM = 33832Z66QU;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FinderHoverSyncExt/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FinderHoverSyncExt;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.8.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.koukeneko.FinderHover.FinderHoverSyncExt;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		C8BAE6582EB86F1F0007FB19 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -271,7 +440,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 6;
@@ -307,7 +476,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 6;
@@ -341,6 +510,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C86938C12F4DBC0A00CB7A18 /* Build configuration list for PBXNativeTarget "FinderHoverSyncExt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C86938C22F4DBC0A00CB7A18 /* Debug */,
+				C86938C32F4DBC0A00CB7A18 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C8BAE64A2EB86F1C0007FB19 /* Build configuration list for PBXProject "FinderHover" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

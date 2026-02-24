@@ -150,7 +150,7 @@ brew install koukeneko/tap/finderhover
 
 1. Download `FinderHover.app.zip` from [Releases](../../releases)
 2. Extract and move to Applications folder
-3. Right-click → Open (to bypass Gatekeeper)
+3. Double-click to open (the app is signed and notarized by Apple)
 4. Grant Accessibility permission when prompted
 
 ---
@@ -231,12 +231,11 @@ FinderHover/
 
 ## 📝 What's New
 
-### v1.7.0 - Advanced Metadata Update
-- **New:** 3D model metadata (USDZ, OBJ, GLTF, FBX)
-- **New:** Xcode project inspection (targets, Swift version, deployment target)
-- **New:** Advanced file system metadata (allocated space, resource fork, volume info)
-- **Enhanced:** Archive format support (added ISO, TAR, CPIO)
-- **Enhanced:** System metadata (Finder tags, download source, iCloud status)
+### v1.8.0 - Code Signing & Liquid Glass
+- **New:** Official **code signing & notarization** — no more Gatekeeper warnings
+- **New:** **Liquid Glass** visual effect for macOS 26 Tahoe
+- **New:** Universal Binary (arm64 + x86_64) with Hardened Runtime
+- **New:** Notarization ticket stapled to DMG and ZIP for offline verification
 
 [View Full Changelog](CHANGELOG.md)
 

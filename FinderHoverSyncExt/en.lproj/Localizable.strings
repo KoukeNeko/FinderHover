@@ -1,0 +1,97 @@
+/* Context menu */
+"ext.menu.title"         = "FinderHover Info";
+"ext.menu.showInWindow"  = "Show in FinderHover Window...";
+"ext.menu.multipleItems" = "%d items — %@ total";
+
+/* Basic metadata */
+"ext.label.type"        = "Type: ";
+"ext.label.size"        = "Size: ";
+"ext.label.created"     = "Created: ";
+"ext.label.modified"    = "Modified: ";
+"ext.label.lastAccess"  = "Last Accessed: ";
+"ext.label.permissions" = "Permissions: ";
+"ext.label.owner"       = "Owner: ";
+"ext.label.itemUnit"    = "items";
+
+/* EXIF / Photo */
+"ext.label.camera"       = "Camera: ";
+"ext.label.lens"         = "Lens: ";
+"ext.label.settings"     = "";
+"ext.label.dateTaken"    = "Date Taken: ";
+"ext.label.dimensions"   = "Dimensions: ";
+"ext.label.colorProfile" = "Color Profile: ";
+"ext.label.bitDepth"     = "Bit Depth: ";
+"ext.label.gps"          = "GPS: ";
+"ext.label.copyright"    = "Copyright: ";
+"ext.label.creator"      = "Creator: ";
+"ext.label.rating"       = "Rating: ";
+
+/* Video */
+"ext.label.duration"        = "Duration: ";
+"ext.label.resolution"      = "Resolution: ";
+"ext.label.codec"           = "Codec: ";
+"ext.label.frameRate"       = "Frame Rate: ";
+"ext.label.bitrate"         = "Bitrate: ";
+"ext.label.hdr"             = "HDR: ";
+"ext.label.containerFormat" = "Format: ";
+
+/* Audio */
+"ext.label.audioTitle"   = "Title: ";
+"ext.label.audioArtist"  = "Artist: ";
+"ext.label.audioAlbum"   = "Album: ";
+"ext.label.audioGenre"   = "Genre: ";
+"ext.label.audioYear"    = "Year: ";
+"ext.label.sampleRate"   = "Sample Rate: ";
+
+/* PDF */
+"ext.label.pageCount"     = "Pages: ";
+"ext.label.pageUnit"      = "pages";
+"ext.label.pageSize"      = "Page Size: ";
+"ext.label.pdfVersion"    = "PDF Version: ";
+"ext.label.pdfTitle"      = "Title: ";
+"ext.label.pdfAuthor"     = "Author: ";
+"ext.label.pdfEncrypted"  = "Encrypted: ";
+
+/* Font */
+"ext.label.fontName"    = "Font: ";
+"ext.label.fontFamily"  = "Family: ";
+"ext.label.fontStyle"   = "Style: ";
+"ext.label.fontGlyphs"  = "Glyphs: ";
+
+/* System */
+"ext.label.finderTags"    = "Tags: ";
+"ext.label.downloadDate"  = "Download Date: ";
+"ext.label.downloader"    = "Downloaded By: ";
+"ext.label.whereFrom"     = "Where From: ";
+"ext.label.hardLinks"     = "Hard Links: ";
+"ext.label.finderComment" = "Comment: ";
+"ext.label.useCount"      = "Open Count: ";
+"ext.label.lastUsed"      = "Last Used: ";
+"ext.label.uti"           = "Type ID: ";
+"ext.label.filePath"      = "File Path: ";
+
+/* App Bundle */
+"ext.label.appBundleID"     = "Bundle ID: ";
+"ext.label.appVersion"      = "Version: ";
+"ext.label.appBuild"        = "Build: ";
+"ext.label.appMinOS"        = "Min macOS: ";
+"ext.label.appCopyright"    = "Copyright: ";
+"ext.label.appCodeSigned"   = "Signed: ";
+"ext.label.appEntitlements"  = "Entitlements: ";
+
+/* Section headers */
+"ext.section.exif"   = "Photo";
+"ext.section.video"  = "Video";
+"ext.section.audio"  = "Audio";
+"ext.section.pdf"    = "PDF";
+"ext.section.font"   = "Font";
+"ext.section.app"    = "Application";
+"ext.section.system" = "System Info";
+
+/* Common values */
+"ext.value.yes"         = "Yes";
+"ext.value.no"          = "No";
+
+/* File type fallbacks */
+"ext.fileType.folder"   = "Folder";
+"ext.fileType.file"     = "File";

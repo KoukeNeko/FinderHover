@@ -94,7 +94,7 @@
     },
     "q2": {
       "question": "Why is Homebrew recommended?",
-      "answer": "Installing via Homebrew automatically handles Gatekeeper verification, saving you from manually bypassing security restrictions. Direct downloads require manual approval in System Settings → Privacy & Security."
+      "answer": "Homebrew makes installation and updates convenient with a single command. The app is now signed and notarized by Apple, so both Homebrew and direct download work seamlessly without Gatekeeper warnings."
     },
     "q3": {
       "question": "Which macOS versions are supported?",
@@ -134,9 +134,8 @@
       "stepsTitle": "Installation Steps",
       "step1": "Download and extract the .zip file",
       "step2": "Drag FinderHover.app to Applications folder",
-      "step3": "Right-click and select \"Open\" on first launch",
-      "step4": "Click \"Open\" in the popup to bypass Gatekeeper",
-      "note": "The app is not notarized by Apple, manual approval required"
+      "step3": "Double-click to open (the app is signed and notarized by Apple)",
+      "step4": "Grant Accessibility permission when prompted"
     },
     "source": {
       "title": "Build from Source",
