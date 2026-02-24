@@ -73,13 +73,15 @@ clean_extended_attributes() {
 }
 
 build_release() {
-    # Mark the build directory so Xcode's clean step can delete it
+    # Clean manually to avoid APFS build.db disk I/O errors when using `clean build` together
+    echo "🧹 Cleaning previous build..."
+    rm -rf "${PROJECT_ROOT}/build"
     mkdir -p "${PROJECT_ROOT}/build"
     xattr -w com.apple.xcode.CreatedByBuildSystem true "${PROJECT_ROOT}/build" 2>/dev/null || true
 
     echo "🔨 Building Release..."
     xcodebuild -project FinderHover.xcodeproj \
-        -target FinderHover \
+        -scheme FinderHover \
         -configuration Release \
         SYMROOT="${PROJECT_ROOT}/build" \
         CODE_SIGN_STYLE=Manual \
@@ -89,7 +91,7 @@ build_release() {
         DEVELOPMENT_TEAM="${APPLE_TEAM_ID}" \
         OTHER_CODE_SIGN_FLAGS="--timestamp" \
         ENABLE_HARDENED_RUNTIME=YES \
-        clean build
+        build
 
     APP_PATH="build/Release/${APP_NAME}.app"
     if [ ! -d "$APP_PATH" ]; then

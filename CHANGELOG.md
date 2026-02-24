@@ -31,11 +31,13 @@ All notable changes to FinderHover will be documented in this file.
 ### 🎨 Settings UI Redesign
 
 #### Card-Style Layout
+
 - Redesigned all settings pages with **grouped card sections** (rounded corners + background fill) matching macOS System Settings style
 - **Behavior page**: settings now grouped into four cards — General Behavior toggles, Hover Delay, Language, and Window Position
 - **Appearance page**: settings now grouped into two cards — Style Options (UI style, blur, compact mode) and Window Dimensions (opacity, max width, font size)
 
 #### Page Headers
+
 - Added **icon badge + title + description header card** to every settings page (Behavior, Appearance, Display, Permissions, About)
 - Header uses a rounded-square icon badge with a subtle background, consistent with macOS design conventions
 
@@ -46,26 +48,28 @@ All notable changes to FinderHover will be documented in this file.
 ### 🚀 Performance & Stability Improvements
 
 #### Memory Pressure Control
+
 - Added **single-flight Accessibility queries** to prevent concurrent task buildup
 - Updated timeout flow to **retry once only** (`0.5s` timeout + short retry delay) and skip when previous timed-out work is still running
 - Added **hover hide check throttling** to reduce repeated high-frequency polling
 
 #### Metadata Extraction Guardrails
+
 - Added **serial metadata extraction queue** with request token invalidation to drop stale hover results
 - Added configurable **Large File Protection** (enabled by default) to skip costly deep parsing for oversized files
 - Added a short in-window analysis notice when heavy analysis is skipped to reduce resource usage
 
 ### ⚙️ Settings & UX
+
 - Added new setting: **Large File Protection**
 - Added localized UI strings for English, Traditional Chinese, and Japanese
-
-
 
 ## Version 1.7.0
 
 ### 🆕 Major Metadata Update - New File Types & Enhanced Support
 
 #### 3D Model Files
+
 - **NEW: 3D Model Metadata** for USDZ, OBJ, GLTF, GLB, FBX, STL, DAE, 3DS, PLY files
   - Format type identification
   - Vertex count and face count
@@ -74,6 +78,7 @@ All notable changes to FinderHover will be documented in this file.
   - Bounding box dimensions
 
 #### Xcode Projects
+
 - **NEW: Xcode Project Metadata** for .xcodeproj and .xcworkspace files
   - Project name and target count
   - Build configuration count
@@ -82,6 +87,7 @@ All notable changes to FinderHover will be documented in this file.
   - Unit test and UI test detection
 
 #### File System Advanced
+
 - **NEW: Advanced File System Metadata** with detailed storage information
   - Allocated disk size (actual blocks used)
   - Attribute modification date
@@ -91,6 +97,7 @@ All notable changes to FinderHover will be documented in this file.
   - Cloud storage provider detection (iCloud, Dropbox, Google Drive, OneDrive)
 
 #### Enhanced Image Metadata
+
 - **Extended EXIF Support** for modern image formats
   - Color profile detection (Display P3, sRGB, Rec.2020)
   - Bit depth information
@@ -99,6 +106,7 @@ All notable changes to FinderHover will be documented in this file.
   - Added WebP and AVIF format support
 
 #### Enhanced Video Metadata
+
 - **Extended Video Analysis** for container and track information
   - Chapter count for long-form content
   - Subtitle track count and languages
@@ -108,6 +116,7 @@ All notable changes to FinderHover will be documented in this file.
 ### 🔧 Technical Improvements
 
 #### Code Architecture Refactoring
+
 - **Modular Metadata Extraction** - Split 4,200+ line FileInfo.swift into 15 focused modules
   - `Models/` directory for metadata struct definitions
   - `Extractors/` directory for extraction logic
@@ -115,11 +124,10 @@ All notable changes to FinderHover will be documented in this file.
   - Better separation of concerns
 
 ### 🌍 Localization Updates
+
 - Full localization for all new metadata types
 - Updated website with new format categories
 - Supported languages: English, Traditional Chinese (繁體中文), Japanese (日本語)
-
-
 
 ## Version 1.6.7
 
@@ -128,15 +136,11 @@ All notable changes to FinderHover will be documented in this file.
 - Fixed window not hiding after clicking copy button and releasing Option key
 - Added local event monitor to detect Option key release when window has focus
 
-
-
 ## Version 1.6.6
 
 ### 🐛 Bug Fixes
 
 - Fixed window staying visible after copy when cursor moved outside file area
-
-
 
 ## Version 1.6.5
 
@@ -145,16 +149,12 @@ All notable changes to FinderHover will be documented in this file.
 - Fixed hover window not hiding after copying when Option key is released
 - Window now correctly hides when cursor is not over a file upon Option release
 
-
-
 ## Version 1.6.4
 
 ### 🎨 Improvements
 
 - Hover window now hides when Option key is released
 - Copy feedback changed from checkmark icon to "Copied" text shown after the value
-
-
 
 ## Version 1.6.3
 
@@ -163,16 +163,12 @@ All notable changes to FinderHover will be documented in this file.
 - Fixed copy button layout stability using opacity instead of conditional rendering
 - Copy button is now always present in layout, preventing height shifts when Option key is pressed
 
-
-
 ## Version 1.6.2
 
 ### 🐛 Bug Fixes
 
 - Fixed copy button still causing row height to increase
 - Removed lock icon indicator
-
-
 
 ## Version 1.6.1
 
@@ -181,13 +177,12 @@ All notable changes to FinderHover will be documented in this file.
 - Fixed copy button causing row height to increase
 - Fixed clicking copy marking multiple rows with same value as copied
 
-
-
 ## Version 1.6.0
 
 ### 🆕 New Feature: Copy Metadata Values
 
 Press **Option (⌥)** key while the hover window is visible to:
+
 - Lock the window in place (won't disappear on mouse movement)
 - Show copy icons on the right side of each metadata value
 - Click any copy icon to copy that value to clipboard
@@ -199,16 +194,12 @@ Release Option key or press Escape to unlock and return to normal behavior.
 
 - Added translations for copy feature in all supported languages
 
-
-
 ## Version 1.5.1
 
 ### 🎨 UI Improvements
 
 - Widened label column for better readability (65 → 75 points)
 - Fixed Japanese localization for "Hard Links" label
-
-
 
 ## Version 1.5.0
 
@@ -217,17 +208,20 @@ Release Option key or press Escape to unlock and return to normal behavior.
 A comprehensive new metadata section displaying macOS-specific file information:
 
 #### Finder Integration
+
 - **Finder Tags** - Display color-coded tags assigned in Finder
 - **Finder Comments** - Show comments added via Get Info
 - **Alias Resolution** - Display original file path for Finder aliases
 
 #### Download Information
+
 - **Download Source** - URL where the file was downloaded from
 - **Download Date** - When the file was downloaded
 - **Downloaded By** - Application used for downloading
 - Powered by macOS quarantine attributes
 
 #### File System Details
+
 - **Symbolic Link Target** - Show where symlinks point to
 - **Hard Link Count** - Number of hard links to the same inode
 - **iCloud Status** - Downloaded, Cloud Only, Downloading, Uploading
@@ -235,6 +229,7 @@ A comprehensive new metadata section displaying macOS-specific file information:
 - **Extended Attributes Count** - Number of xattrs on the file
 
 #### Usage Statistics
+
 - **Open Count** - How many times the file has been opened
 - **Last Used Date** - When the file was last accessed
 
