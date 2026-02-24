@@ -1204,16 +1204,19 @@ class AppSettings: ObservableObject {
         self.windowOpacity = UserDefaults.standard.object(forKey: "windowOpacity") as? Double ?? Constants.Defaults.windowOpacity
         self.windowMaxWidth = UserDefaults.standard.object(forKey: "windowMaxWidth") as? Double ?? Constants.Defaults.windowMaxWidth
         self.fontSize = UserDefaults.standard.object(forKey: "fontSize") as? Double ?? Constants.Defaults.fontSize
-        self.enableBlur = UserDefaults.standard.object(forKey: "enableBlur") as? Bool ?? Constants.Defaults.enableBlur
-        self.enableLiquidGlass = UserDefaults.standard.object(forKey: "enableLiquidGlass") as? Bool ?? Constants.Defaults.enableLiquidGlass
+        let enableBlurValue = UserDefaults.standard.object(forKey: "enableBlur") as? Bool ?? Constants.Defaults.enableBlur
+        let enableLiquidGlassValue = UserDefaults.standard.object(forKey: "enableLiquidGlass") as? Bool ?? Constants.Defaults.enableLiquidGlass
 
         // On macOS 26+, Liquid Glass takes priority — disable blur if both are on
         let osVersion = ProcessInfo.processInfo.operatingSystemVersion
         if osVersion.majorVersion >= Constants.Compatibility.liquidGlassVersion,
-           self.enableLiquidGlass, self.enableBlur {
+           enableLiquidGlassValue, enableBlurValue {
             self.enableBlur = false
             UserDefaults.standard.set(false, forKey: "enableBlur")
+        } else {
+            self.enableBlur = enableBlurValue
         }
+        self.enableLiquidGlass = enableLiquidGlassValue
 
         self.compactMode = UserDefaults.standard.object(forKey: "compactMode") as? Bool ?? Constants.Defaults.compactMode
         self.showCreationDate = UserDefaults.standard.object(forKey: "showCreationDate") as? Bool ?? Constants.Defaults.showCreationDate
