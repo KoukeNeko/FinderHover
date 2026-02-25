@@ -21,10 +21,9 @@
 
 ---
 
-> **🎬 示範影片準備中：** 我們正在製作 GIF/影片來展示 FinderHover 的實際操作。
-> *目前可以先查看[下方的螢幕截圖](#-螢幕截圖)來了解介面樣貌。*
-
-<img width="1926" height="1324" alt="功能概覽" src="https://github.com/user-attachments/assets/7d27934e-5e11-4196-a6ac-5c7ebc6a1f17" />
+<p align="center">
+  <img src="docs/demo.gif" alt="FinderHover 示範" width="800">
+</p>
 
 ---
 

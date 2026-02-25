@@ -21,10 +21,9 @@ Inspect file metadata instantly. No `Cmd+I` required.
 
 ---
 
-> **🎬 Demo Coming Soon:** We're preparing a GIF/Video demo showing FinderHover in action.
-> *For now, check out the [screenshots below](#-screenshots) to see what it looks like.*
-
-<img width="1926" height="1324" alt="Feature Overview" src="https://github.com/user-attachments/assets/7d27934e-5e11-4196-a6ac-5c7ebc6a1f17" />
+<p align="center">
+  <img src="docs/demo.gif" alt="FinderHover Demo" width="800">
+</p>
 
 ---
 

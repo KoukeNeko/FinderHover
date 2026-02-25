@@ -2,7 +2,20 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.8.0 (Current)
+## Version 1.8.1 (Current)
+
+### 🐛 Bug Fixes
+
+#### System Metadata Label Alignment
+
+- Shortened English labels for download metadata to fix alignment issues in hover window
+  - "Downloaded From" → "Source"
+  - "Download Date" → "Date"
+  - "Downloaded By" → "Via"
+
+---
+
+## Version 1.8.0
 
 ### 🔐 Official Code Signing & Notarization
 
