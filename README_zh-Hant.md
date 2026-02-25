@@ -231,12 +231,13 @@ FinderHover/
 
 ## 📝 最新更新
 
-### v1.7.0 - 進階中繼資料更新
-- **新增：** 3D 模型中繼資料（USDZ、OBJ、GLTF、FBX）
-- **新增：** Xcode 專案檢視（Target 數、Swift 版本、部署目標）
-- **新增：** 進階檔案系統中繼資料（已分配空間、Resource Fork、磁碟區資訊）
-- **強化：** 壓縮檔格式支援（新增 ISO、TAR、CPIO）
-- **強化：** 系統中繼資料（Finder 標籤、下載來源、iCloud 狀態）
+### v1.8.0 - 正式簽署與 Liquid Glass
+- **簽署與公證：** 不再需要略過 Gatekeeper，App 直接開啟
+- **Liquid Glass：** macOS 26 (Tahoe) 全新視覺效果選項
+- **Universal Binary：** arm64 + x86_64，搭配強化執行環境
+
+### v1.8.1 - 錯誤修正
+- **修正：** 縮短英文下載中繼資料標籤，改善對齊問題
 
 [查看完整更新日誌](CHANGELOG.md)
 

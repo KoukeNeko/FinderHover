@@ -231,12 +231,13 @@ FinderHover/
 
 ## 📝 What's New
 
-### v1.7.0 - Advanced Metadata Update
-- **New:** 3D model metadata (USDZ, OBJ, GLTF, FBX)
-- **New:** Xcode project inspection (targets, Swift version, deployment target)
-- **New:** Advanced file system metadata (allocated space, resource fork, volume info)
-- **Enhanced:** Archive format support (added ISO, TAR, CPIO)
-- **Enhanced:** System metadata (Finder tags, download source, iCloud status)
+### v1.8.0 - Official Code Signing & Liquid Glass
+- **Signed & Notarized:** No more Gatekeeper bypass — app opens immediately
+- **Liquid Glass:** New visual effect option for macOS 26 (Tahoe)
+- **Universal Binary:** arm64 + x86_64 with Hardened Runtime
+
+### v1.8.1 - Bug Fix
+- **Fixed:** Shortened English download metadata labels for better alignment
 
 [View Full Changelog](CHANGELOG.md)
 
