@@ -178,7 +178,7 @@ xcodebuild -scheme FinderHover -configuration Release
 
 ### Settings
 
-Click the menu bar icon or press `Cmd+,` to access the settings panel.
+Click the menu bar icon to access the settings panel.
 
 **Tip:** Enable "Launch at Login" to start FinderHover automatically when you boot your Mac.
 

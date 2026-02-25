@@ -49,7 +49,6 @@ private struct MenuBarContentView: View {
             openSettings()
             NSApp.activate(ignoringOtherApps: true)
         }
-        .keyboardShortcut(",")
 
         Divider()
 

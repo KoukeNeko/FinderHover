@@ -178,7 +178,7 @@ xcodebuild -scheme FinderHover -configuration Release
 
 ### 偏好設定
 
-點擊選單列圖示或按 `Cmd+,` 開啟設定面板。
+點擊選單列圖示開啟設定面板。
 
 **提示：** 啟用「登入時啟動」，讓 FinderHover 在開機時自動執行。
 
