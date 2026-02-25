@@ -673,9 +673,9 @@
 /* System Metadata Hover Labels */
 "hover.systemMetadata.title" = "System Info";
 "hover.systemMetadata.tags" = "Tags";
-"hover.systemMetadata.whereFrom" = "Downloaded From";
-"hover.systemMetadata.quarantineDate" = "Download Date";
-"hover.systemMetadata.downloadedBy" = "Downloaded By";
+"hover.systemMetadata.whereFrom" = "Source";
+"hover.systemMetadata.quarantineDate" = "Date";
+"hover.systemMetadata.downloadedBy" = "Via";
 "hover.systemMetadata.symlinkTarget" = "Link Target";
 "hover.systemMetadata.hardLinks" = "Hard Links";
 "hover.systemMetadata.useCount" = "Open Count";
