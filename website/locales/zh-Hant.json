@@ -98,7 +98,7 @@
     },
     "q3": {
       "question": "支援哪些 macOS 版本？",
-      "answer": "FinderHover 需要 macOS Sonoma 14.0 或更新版本。我們使用了 Sonoma 引入的新 API 來提供更好的效能和穩定性。"
+      "answer": "FinderHover 需要 macOS Sonoma 14.0 或更新版本。我們使用了 Sonoma 引入的新 API 來提供更好的效能和穩定性。注意：不支援 macOS 26.4 Beta 1，請更新至 Beta 2 或更新版本。"
     },
     "q4": {
       "question": "會影響系統效能嗎？",
@@ -150,7 +150,7 @@
       "title": "系統需求",
       "macos": {
         "title": "macOS Sonoma 14.0+",
-        "desc": "需要 macOS Sonoma 或更新版本"
+        "desc": "需要 macOS Sonoma 或更新版本（不支援 macOS 26.4 Beta 1，Beta 2 以上可用）"
       },
       "accessibility": {
         "title": "輔助使用權限",
