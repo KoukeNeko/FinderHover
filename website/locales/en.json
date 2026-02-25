@@ -98,7 +98,7 @@
     },
     "q3": {
       "question": "Which macOS versions are supported?",
-      "answer": "FinderHover requires macOS Sonoma 14.0 or later. We use new APIs introduced in Sonoma for better performance and stability."
+      "answer": "FinderHover requires macOS Sonoma 14.0 or later. We use new APIs introduced in Sonoma for better performance and stability. Note: macOS 26.4 Beta 1 is not supported; please update to Beta 2 or later."
     },
     "q4": {
       "question": "Will it affect system performance?",
@@ -151,7 +151,7 @@
       "title": "System Requirements",
       "macos": {
         "title": "macOS Sonoma 14.0+",
-        "desc": "Requires macOS Sonoma or later"
+        "desc": "Requires macOS Sonoma or later (macOS 26.4 Beta 1 not supported; Beta 2+ OK)"
       },
       "accessibility": {
         "title": "Accessibility Permission",

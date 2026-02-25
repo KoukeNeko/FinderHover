@@ -165,6 +165,8 @@ xcodebuild -scheme FinderHover -configuration Release
 
 **需求：** Xcode 15+ 與 macOS Sonoma 14.0+
 
+> **注意：** 不支援 macOS 26.4 Beta 1，請更新至 Beta 2 或更新版本。
+
 ---
 
 ## ⚙️ 設定與使用
