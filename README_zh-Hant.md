@@ -14,6 +14,7 @@
 <p align="center">
   <img src="https://img.shields.io/github/v/release/KoukeNeko/FinderHover?style=for-the-badge&logo=github&logoColor=white&label=Release" alt="Release">
   <img src="https://img.shields.io/github/downloads/KoukeNeko/FinderHover/total?style=for-the-badge&logo=github&logoColor=white&label=Downloads" alt="Downloads">
+  <img src="https://img.shields.io/badge/Homebrew-Available-FBB040?style=for-the-badge&logo=homebrew&logoColor=white" alt="Homebrew">
   <img src="https://img.shields.io/badge/macOS-14.0+-000000?style=for-the-badge&logo=apple&logoColor=white" alt="macOS 14.0+">
   <img src="https://img.shields.io/badge/Swift-5.0-F05138?style=for-the-badge&logo=swift&logoColor=white" alt="Swift 5.0">
   <img src="https://img.shields.io/github/license/KoukeNeko/FinderHover?style=for-the-badge" alt="License">
