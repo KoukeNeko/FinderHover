@@ -12,11 +12,12 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/macOS-14.0+-000000.svg?style=flat&logo=apple&logoColor=white" alt="macOS 14.0+">
-  <img src="https://img.shields.io/badge/Swift-5.0-F05138.svg?style=flat&logo=swift&logoColor=white" alt="Swift 5.0">
-  <img src="https://img.shields.io/badge/SwiftUI-007AFF.svg?style=flat&logo=swift&logoColor=white" alt="SwiftUI">
-  <img src="https://img.shields.io/badge/%E9%9A%B1%E7%A7%81%E5%84%AA%E5%85%88-00C853.svg?style=flat&logo=apple&logoColor=white" alt="隱私優先">
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat" alt="License MIT">
+  <img src="https://img.shields.io/github/v/release/KoukeNeko/FinderHover?style=for-the-badge&logo=github&logoColor=white&label=Release" alt="Release">
+  <img src="https://img.shields.io/github/downloads/KoukeNeko/FinderHover/total?style=for-the-badge&logo=github&logoColor=white&label=Downloads" alt="Downloads">
+  <img src="https://img.shields.io/badge/macOS-14.0+-000000?style=for-the-badge&logo=apple&logoColor=white" alt="macOS 14.0+">
+  <img src="https://img.shields.io/badge/Swift-5.0-F05138?style=for-the-badge&logo=swift&logoColor=white" alt="Swift 5.0">
+  <img src="https://img.shields.io/github/license/KoukeNeko/FinderHover?style=for-the-badge" alt="License">
+  <img src="https://img.shields.io/github/stars/KoukeNeko/FinderHover?style=for-the-badge&logo=github&logoColor=white" alt="Stars">
 </p>
 
 ---
