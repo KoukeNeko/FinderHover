@@ -141,16 +141,13 @@ FinderHover 揭露 Finder **永遠不會顯示**的中繼資料：
 brew install koukeneko/tap/finderhover
 ```
 
-**為什麼推薦 Homebrew？** 它會自動處理 Gatekeeper 驗證，省去你在系統設定中手動允許 App 的步驟。
-
 ---
 
 ### 直接下載
 
 1. 從 [Releases](../../releases) 下載 `FinderHover.app.zip`
 2. 解壓縮並移動到「應用程式」資料夾
-3. 右鍵點擊 → 打開（略過 Gatekeeper）
-4. 系統提示時授予輔助使用權限
+3. 系統提示時授予輔助使用權限
 
 ---
 

@@ -141,16 +141,13 @@ Unlike legacy tools that rely on slow AppleScript polling, FinderHover listens t
 brew install koukeneko/tap/finderhover
 ```
 
-**Why Homebrew?** It automatically handles Gatekeeper verification, so you don't need to manually allow the app in System Settings.
-
 ---
 
 ### Direct Download
 
 1. Download `FinderHover.app.zip` from [Releases](../../releases)
 2. Extract and move to Applications folder
-3. Right-click → Open (to bypass Gatekeeper)
-4. Grant Accessibility permission when prompted
+3. Grant Accessibility permission when prompted
 
 ---
 
