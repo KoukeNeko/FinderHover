@@ -218,14 +218,12 @@ FinderHover/
 
 ## 📸 Screenshots
 
-<p float="left">
+<img width="892" height="652" alt="image" src="https://github.com/user-attachments/assets/3632e479-b156-4927-b4fe-cca9a195895a" />
+
+
   <img src="https://github.com/user-attachments/assets/fe969256-a07d-4db6-8715-a3bb3226782b" width="45%" />
   <img src="https://github.com/user-attachments/assets/f492dc51-9fd8-49f2-b854-d9fc4ac026a6" width="45%" />
-</p>
-<p float="left">
   <img src="https://github.com/user-attachments/assets/dc04ba05-2bcb-4308-b0cc-bd5ed2259d07" width="45%" />
-  <img src="https://github.com/user-attachments/assets/140accdd-6034-4b2d-b4d9-ccc55a28586c" width="45%" />
-</p>
 
 ---
 
