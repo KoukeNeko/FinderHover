@@ -61,6 +61,7 @@
 "settings.display.showPermissions" = "Permissions";
 "settings.display.showOwner" = "Owner";
 "settings.display.showFilePath" = "File Path";
+"settings.display.showNotes" = "Notes";
 
 "settings.display.exif" = "Photo Information (EXIF)";
 "settings.display.exif.show" = "Show EXIF Data";
@@ -417,6 +418,7 @@
 "displayItem.fileSystemAdvanced" = "File System Advanced";
 "displayItem.model3D" = "3D Model Information";
 "displayItem.xcodeProject" = "Xcode Project Information";
+"displayItem.notes" = "Notes";
 
 /* Hover Window */
 "hover.fileType.folder" = "Folder";

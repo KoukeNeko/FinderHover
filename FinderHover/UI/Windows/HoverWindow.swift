@@ -15,11 +15,18 @@ extension Notification.Name {
     static let hoverWindowUnlocked = Notification.Name("hoverWindowUnlocked")
 }
 
+// MARK: - Key-capable borderless panel
+/// A borderless NSPanel that can become key, allowing embedded text editors to receive focus.
+class KeyablePanel: NSPanel {
+    override var canBecomeKey: Bool { true }
+}
+
 // MARK: - Shared State for Lock Mode
 class HoverWindowState: ObservableObject {
     static let shared = HoverWindowState()
     @Published var isLocked: Bool = false
     @Published var copiedValue: String?  // For "Copied!" feedback
+    @Published var isEditingNotes: Bool = false
 
     private init() {}
 
@@ -47,6 +54,7 @@ class HoverWindowController: NSWindowController {
     private var flagsMonitor: Any?
     private var localFlagsMonitor: Any?
     private var keyDownMonitor: Any?
+    private var mouseMovedMonitor: Any?
     private let windowState = HoverWindowState.shared
 
     /// Whether the window is locked (Option key is pressed)
@@ -55,31 +63,41 @@ class HoverWindowController: NSWindowController {
     }
 
     convenience init() {
-        let window = NSWindow(
+        // NSPanel with .nonactivatingPanel prevents FinderHover from becoming the active
+        // application when the user clicks inside the popup (e.g. the Notes text editor).
+        // Without this, clicking in the popup fires NSWorkspace.didActivateApplicationNotification
+        // for FinderHover, which triggers appActivateObserver and dismisses the popup before
+        // textDidBeginEditing has a chance to set isEditingNotes = true.
+        let panel = KeyablePanel(
             contentRect: NSRect(x: 0, y: 0, width: 400, height: 250),
-            styleMask: [.borderless],
+            styleMask: [.borderless, .nonactivatingPanel],
             backing: .buffered,
             defer: false
         )
 
-        window.backgroundColor = .clear
-        window.isOpaque = false
-        window.level = .floating
-        window.collectionBehavior = [.canJoinAllSpaces, .stationary]
-        window.ignoresMouseEvents = true
-        window.hasShadow = true
+        // Allow the panel to become key when it contains a text editor (Notes field),
+        // but never make it the main window or steal app focus.
+        panel.becomesKeyOnlyIfNeeded = true
+        panel.hidesOnDeactivate = false
+
+        panel.backgroundColor = .clear
+        panel.isOpaque = false
+        panel.level = .floating
+        panel.collectionBehavior = [.canJoinAllSpaces, .stationary]
+        panel.ignoresMouseEvents = true
+        panel.hasShadow = true
 
         // Ensure no title bar or border is drawn
-        window.titlebarAppearsTransparent = true
-        window.titleVisibility = .hidden
+        panel.titlebarAppearsTransparent = true
+        panel.titleVisibility = .hidden
 
         // Additional settings to prevent border artifacts on older macOS
-        window.isMovableByWindowBackground = false
-        window.standardWindowButton(.closeButton)?.isHidden = true
-        window.standardWindowButton(.miniaturizeButton)?.isHidden = true
-        window.standardWindowButton(.zoomButton)?.isHidden = true
+        panel.isMovableByWindowBackground = false
+        panel.standardWindowButton(.closeButton)?.isHidden = true
+        panel.standardWindowButton(.miniaturizeButton)?.isHidden = true
+        panel.standardWindowButton(.zoomButton)?.isHidden = true
 
-        self.init(window: window)
+        self.init(window: panel)
     }
 
     func show(at position: CGPoint, with fileInfo: FileInfo) {
@@ -110,23 +128,32 @@ class HoverWindowController: NSWindowController {
 
         // Start monitoring Option key
         startKeyMonitoring()
+        // Start tracking mouse position to enable popup interaction
+        startMouseTracking()
+        // Immediately check if cursor is already inside the popup (no mouseMoved fires
+        // if the popup appears under the cursor, so ignoresMouseEvents would stay true).
+        updateMouseInteraction()
     }
 
     func hide() {
-        // Don't hide if locked
+        // Don't hide if locked or editing notes
         guard !windowState.isLocked else { return }
+        guard !windowState.isEditingNotes else { return }
 
         window?.orderOut(nil)
         stopKeyMonitoring()
+        stopMouseTracking()
     }
 
     /// Force hide the window, ignoring lock state
     func forceHide() {
         windowState.isLocked = false
         windowState.copiedValue = nil
+        windowState.isEditingNotes = false
         window?.ignoresMouseEvents = true
         window?.orderOut(nil)
         stopKeyMonitoring()
+        stopMouseTracking()
     }
 
     // MARK: - Key Monitoring
@@ -186,13 +213,51 @@ class HoverWindowController: NSWindowController {
     private func unlock() {
         windowState.isLocked = false
         windowState.copiedValue = nil
-        window?.ignoresMouseEvents = true
+        // Only ignore mouse events if not editing notes
+        if !windowState.isEditingNotes {
+            window?.ignoresMouseEvents = true
+        }
         // Notify HoverManager to re-check cursor position
         NotificationCenter.default.post(name: .hoverWindowUnlocked, object: nil)
     }
 
+    // MARK: - Mouse Tracking (popup hover detection)
+
+    private func startMouseTracking() {
+        stopMouseTracking()
+        mouseMovedMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved, .leftMouseDragged]) { [weak self] _ in
+            self?.updateMouseInteraction()
+        }
+    }
+
+    private func stopMouseTracking() {
+        if let monitor = mouseMovedMonitor {
+            NSEvent.removeMonitor(monitor)
+            mouseMovedMonitor = nil
+        }
+    }
+
+    /// Update ignoresMouseEvents based on whether the mouse is over the popup
+    private func updateMouseInteraction() {
+        guard let window = window, window.isVisible else { return }
+        let mouseLocation = NSEvent.mouseLocation
+        let isOverPopup = window.frame.contains(mouseLocation)
+
+        // When the mouse leaves the popup while editing notes, resign first responder
+        // so that textDidEndEditing fires and isEditingNotes is cleared.
+        if !isOverPopup && !windowState.isLocked && windowState.isEditingNotes {
+            window.makeFirstResponder(nil)
+        }
+
+        let shouldInteract = isOverPopup || windowState.isLocked || windowState.isEditingNotes
+        if window.ignoresMouseEvents == shouldInteract {
+            window.ignoresMouseEvents = !shouldInteract
+        }
+    }
+
     deinit {
         stopKeyMonitoring()
+        stopMouseTracking()
     }
 
     // MARK: - Private Helper Methods
@@ -372,11 +437,104 @@ class HoverWindowController: NSWindowController {
     }
 }
 
+// MARK: - Notes Storage (per-file xattr persistence)
+enum NotesStorage {
+    static let xattrKey = "com.finderhover.notes"
+
+    static func read(for path: String) -> String {
+        let size = getxattr(path, xattrKey, nil, 0, 0, 0)
+        guard size > 0 else { return "" }
+        var buffer = [UInt8](repeating: 0, count: size)
+        let result = getxattr(path, xattrKey, &buffer, size, 0, 0)
+        guard result > 0 else { return "" }
+        return String(bytes: buffer, encoding: .utf8) ?? ""
+    }
+
+    static func save(_ note: String, for path: String) {
+        if note.isEmpty {
+            removexattr(path, xattrKey, 0)
+        } else {
+            let data = Array(note.utf8)
+            setxattr(path, xattrKey, data, data.count, 0, 0)
+        }
+    }
+}
+
+// MARK: - Notes Editor (plain-text NSTextView representable)
+struct NotesEditorView: NSViewRepresentable {
+    @Binding var text: String
+    let fontSize: Double
+
+    func makeNSView(context: Context) -> NSScrollView {
+        let scrollView = NSScrollView()
+        scrollView.hasVerticalScroller = false
+        scrollView.hasHorizontalScroller = false
+        scrollView.autohidesScrollers = true
+        scrollView.borderType = .noBorder
+        scrollView.backgroundColor = .clear
+        scrollView.drawsBackground = false
+
+        let textView = NSTextView(frame: .zero)
+        textView.isRichText = false          // Plain text only — enforces Cmd+V as plain paste
+        textView.isEditable = true
+        textView.isSelectable = true
+        textView.font = .systemFont(ofSize: fontSize)
+        textView.textColor = .labelColor
+        textView.backgroundColor = .clear
+        textView.drawsBackground = false
+        textView.textContainerInset = .zero
+        textView.textContainer?.lineFragmentPadding = 0
+        // Use fixed height — the SwiftUI .frame(minHeight:maxHeight:) controls sizing.
+        // isVerticallyResizable = false prevents the NSTextView from reporting an
+        // unbounded intrinsic size, which would cause a two-pass layout settle
+        // (visible as the popup "twitching" on appearance).
+        textView.isVerticallyResizable = false
+        textView.isHorizontallyResizable = false
+        textView.autoresizingMask = [.width, .height]
+        textView.textContainer?.widthTracksTextView = true
+        textView.delegate = context.coordinator
+        textView.string = text
+
+        scrollView.documentView = textView
+        return scrollView
+    }
+
+    func updateNSView(_ scrollView: NSScrollView, context: Context) {
+        guard let textView = scrollView.documentView as? NSTextView else { return }
+        if textView.string != text {
+            textView.string = text
+        }
+        textView.font = .systemFont(ofSize: fontSize)
+    }
+
+    func makeCoordinator() -> Coordinator { Coordinator(self) }
+
+    class Coordinator: NSObject, NSTextViewDelegate {
+        var parent: NotesEditorView
+
+        init(_ parent: NotesEditorView) { self.parent = parent }
+
+        func textDidBeginEditing(_ notification: Notification) {
+            HoverWindowState.shared.isEditingNotes = true
+        }
+
+        func textDidChange(_ notification: Notification) {
+            guard let textView = notification.object as? NSTextView else { return }
+            parent.text = textView.string
+        }
+
+        func textDidEndEditing(_ notification: Notification) {
+            HoverWindowState.shared.isEditingNotes = false
+        }
+    }
+}
+
 struct HoverContentView: View {
     let fileInfo: FileInfo
     @State private var isExpanded = false
     @State private var thumbnail: NSImage?
     @State private var thumbnailRequest: QLThumbnailGenerator.Request?
+    @State private var noteText: String = ""
     @ObservedObject var settings = AppSettings.shared
     @ObservedObject private var windowState = HoverWindowState.shared
 
@@ -437,11 +595,15 @@ struct HoverContentView: View {
             ForEach(settings.displayOrder) { item in
                 displayItemView(for: item)
             }
+
         }
         .padding(settings.compactMode ? 10 : 14)
         .frame(minWidth: 320, maxWidth: settings.windowMaxWidth)
         .fixedSize(horizontal: false, vertical: true)
         .background(Color.clear)
+        .onAppear {
+            noteText = NotesStorage.read(for: fileInfo.path)
+        }
     }
 
     @ViewBuilder
@@ -1484,6 +1646,37 @@ struct HoverContentView: View {
                     if let hasTests = xcode.hasTests, hasTests {
                         DetailRow(icon: "checkmark.circle", label: "hover.xcodeProject.hasTests".localized, value: "hover.config.yes".localized, fontSize: settings.fontSize)
                     }
+                }
+            }
+
+        case .notes:
+            if settings.showNotes {
+                VStack(alignment: .leading, spacing: settings.compactMode ? 4 : 8) {
+                    HStack(alignment: .top, spacing: 8) {
+                        Image(systemName: "note.text")
+                            .font(.system(size: settings.fontSize))
+                            .foregroundColor(.secondary)
+                            .frame(width: 14, alignment: .center)
+
+                        Text("Notes:")
+                            .font(.system(size: settings.fontSize))
+                            .foregroundColor(.secondary)
+                            .frame(minWidth: 75, alignment: .trailing)
+
+                        ZStack(alignment: .topLeading) {
+                            if noteText.isEmpty {
+                                Text("Add a note...")
+                                    .font(.system(size: settings.fontSize))
+                                    .foregroundColor(Color.secondary.opacity(0.5))
+                                    .allowsHitTesting(false)
+                            }
+                            NotesEditorView(text: $noteText, fontSize: settings.fontSize)
+                                .frame(minHeight: settings.fontSize * 3 + 8, maxHeight: 120)
+                        }
+                    }
+                }
+                .onChange(of: noteText) { newValue in
+                    NotesStorage.save(newValue, for: fileInfo.path)
                 }
             }
         }

@@ -80,6 +80,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
     case fileSystemAdvanced = "File System Advanced"
     case model3D = "3D Model Information"
     case xcodeProject = "Xcode Project Information"
+    case notes = "Notes"
 
     var id: String { rawValue }
 
@@ -119,6 +120,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .fileSystemAdvanced: return "displayItem.fileSystemAdvanced".localized
         case .model3D: return "displayItem.model3D".localized
         case .xcodeProject: return "displayItem.xcodeProject".localized
+        case .notes: return "displayItem.notes".localized
         }
     }
 
@@ -158,6 +160,7 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         case .fileSystemAdvanced: return "internaldrive"
         case .model3D: return "cube.transparent"
         case .xcodeProject: return "hammer"
+        case .notes: return "note.text"
         }
     }
 }
@@ -220,6 +223,9 @@ class AppSettings: ObservableObject {
     }
     @Published var showIcon: Bool {
         didSet { UserDefaults.standard.set(showIcon, forKey: "showIcon") }
+    }
+    @Published var showNotes: Bool {
+        didSet { UserDefaults.standard.set(showNotes, forKey: "showNotes") }
     }
 
     // Additional information display
@@ -1158,6 +1164,9 @@ class AppSettings: ObservableObject {
                     decoded.append(.systemMetadata)
                 }
             }
+            if !decoded.contains(.notes) {
+                decoded.append(.notes)
+            }
             self.displayOrder = decoded
         } else {
             // Default order
@@ -1192,7 +1201,8 @@ class AppSettings: ObservableObject {
                 .sqlite,
                 .git,
                 .systemMetadata,
-                .filePath
+                .filePath,
+                .notes
             ]
         }
 
@@ -1225,6 +1235,7 @@ class AppSettings: ObservableObject {
         self.showFileType = UserDefaults.standard.object(forKey: "showFileType") as? Bool ?? Constants.Defaults.showFileType
         self.showFilePath = UserDefaults.standard.object(forKey: "showFilePath") as? Bool ?? Constants.Defaults.showFilePath
         self.showIcon = UserDefaults.standard.object(forKey: "showIcon") as? Bool ?? Constants.Defaults.showIcon
+        self.showNotes = UserDefaults.standard.object(forKey: "showNotes") as? Bool ?? Constants.Defaults.showNotes
         self.showLastAccessDate = UserDefaults.standard.object(forKey: "showLastAccessDate") as? Bool ?? Constants.Defaults.showLastAccessDate
         self.showPermissions = UserDefaults.standard.object(forKey: "showPermissions") as? Bool ?? Constants.Defaults.showPermissions
         self.showOwner = UserDefaults.standard.object(forKey: "showOwner") as? Bool ?? Constants.Defaults.showOwner
@@ -1728,7 +1739,8 @@ class AppSettings: ObservableObject {
             .fileSystemAdvanced,
             .model3D,
             .xcodeProject,
-            .filePath
+            .filePath,
+            .notes
         ]
         followCursor = Constants.Defaults.followCursor
         windowOffsetX = Constants.Defaults.windowOffsetX

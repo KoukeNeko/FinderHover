@@ -143,6 +143,9 @@ enum Constants {
         /// Default show icon
         static let showIcon: Bool = true
 
+        /// Default show notes
+        static let showNotes: Bool = true
+
         /// Default show last access date
         static let showLastAccessDate: Bool = false
 

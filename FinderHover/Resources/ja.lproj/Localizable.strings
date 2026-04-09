@@ -61,6 +61,7 @@
 "settings.display.showPermissions" = "アクセス権";
 "settings.display.showOwner" = "所有者";
 "settings.display.showFilePath" = "ファイルパス";
+"settings.display.showNotes" = "メモ";
 
 "settings.display.exif" = "写真情報（EXIF）";
 "settings.display.exif.show" = "EXIF データを表示";
@@ -417,6 +418,7 @@
 "displayItem.fileSystemAdvanced" = "ファイルシステム詳細";
 "displayItem.model3D" = "3Dモデル情報";
 "displayItem.xcodeProject" = "Xcodeプロジェクト情報";
+"displayItem.notes" = "メモ";
 
 /* Hover Window */
 "hover.fileType.folder" = "フォルダ";

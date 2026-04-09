@@ -52,6 +52,8 @@ class HoverManager: ObservableObject {
             queue: .main
         ) { [weak self] _ in
             guard let self = self else { return }
+            // Don't dismiss or re-evaluate while the user is editing notes
+            guard !HoverWindowState.shared.isEditingNotes else { return }
             // Force hide first, then check if we need to show again
             self.hoverWindow?.hide()
             self.currentFileInfo = nil
@@ -93,11 +95,20 @@ class HoverManager: ObservableObject {
         // Monitor dragging state - hide window when dragging starts
         mouseTracker.$isDragging
             .sink { [weak self] isDragging in
+                guard let self = self else { return }
                 if isDragging {
-                    self?.hideHoverWindow()
-                    self?.currentFileInfo = nil
-                    self?.invalidateDisplayTimer()
-                    self?.invalidateMetadataRequests()
+                    // A mouseDown fired. If it occurred inside the popup, ignore it —
+                    // the user is clicking to interact with the popup (e.g. notes field).
+                    if let window = self.hoverWindow?.window, window.isVisible,
+                       window.frame.contains(NSEvent.mouseLocation) {
+                        return
+                    }
+                    // Click outside popup: reset any editing state so guards don't block
+                    HoverWindowState.shared.isEditingNotes = false
+                    self.hideHoverWindow()
+                    self.currentFileInfo = nil
+                    self.invalidateDisplayTimer()
+                    self.invalidateMetadataRequests()
                 }
             }
             .store(in: &cancellables)
@@ -115,8 +126,14 @@ class HoverManager: ObservableObject {
                 return
             }
 
-            // If the activated app is NOT Finder, hide the hover window
+            // If the activated app is NOT Finder, hide the hover window.
+            // Guard: don't hide if the activation was caused by clicking inside the popup itself
+            // (e.g. FinderHover activating because the user clicked in the Notes text editor).
             if app.bundleIdentifier != "com.apple.finder" {
+                if let window = self?.hoverWindow?.window, window.isVisible,
+                   window.frame.contains(NSEvent.mouseLocation) {
+                    return
+                }
                 self?.hideHoverWindow()
                 self?.currentFileInfo = nil
                 self?.invalidateDisplayTimer()
@@ -136,7 +153,12 @@ class HoverManager: ObservableObject {
             }
 
             // If Finder is deactivated, hide the hover window
+            // Guard: don't hide if the deactivation was caused by clicking the popup itself
             if app.bundleIdentifier == "com.apple.finder" {
+                if let window = self?.hoverWindow?.window, window.isVisible,
+                   window.frame.contains(NSEvent.mouseLocation) {
+                    return
+                }
                 self?.hideHoverWindow()
                 self?.currentFileInfo = nil
                 self?.invalidateDisplayTimer()
@@ -168,7 +190,9 @@ class HoverManager: ObservableObject {
     func stopMonitoring() {
         Logger.info("Stopping mouse tracking", subsystem: .mouseTracking)
         mouseTracker.stopTracking()
-        hideHoverWindow()
+        // Force-hide unconditionally: we are tearing down all tracking machinery,
+        // so the popup must not remain visible (even during notes editing).
+        hoverWindow?.forceHide()
         invalidateDisplayTimer()
         invalidateRenamingTimer()
         invalidateMetadataRequests()
@@ -180,6 +204,17 @@ class HoverManager: ObservableObject {
 
         // If window is showing and we have current file info
         guard let currentInfo = currentFileInfo else { return }
+
+        // Don't hide if mouse is over the popup window
+        if let window = hoverWindow?.window, window.isVisible,
+           window.frame.contains(location) {
+            return
+        }
+
+        // Don't hide if user is editing notes in the popup
+        if HoverWindowState.shared.isEditingNotes {
+            return
+        }
 
         // Check if Quick Look preview is visible - hide immediately
         if FinderInteraction.isQuickLookVisible() {
@@ -238,8 +273,13 @@ class HoverManager: ObservableObject {
         guard !FinderInteraction.isQuickLookVisible() else { return }
 
         // Try to get file path at current location
-        // This will return nil if user is renaming
+        // This will return nil if user is renaming or if cursor is over the popup itself
         guard let filePath = FinderInteraction.getFileAtMousePosition(location) else {
+            // Don't hide if mouse is over the popup (accessibility returns nil there)
+            if let window = hoverWindow?.window, window.isVisible,
+               window.frame.contains(location) {
+                return
+            }
             hideHoverWindow()
             currentFileInfo = nil
             invalidateMetadataRequests()
@@ -295,6 +335,8 @@ class HoverManager: ObservableObject {
     private func hideHoverWindow() {
         // Don't hide if window is locked (Option key pressed)
         guard hoverWindow?.isLocked != true else { return }
+        // Don't hide if user is editing notes
+        guard !HoverWindowState.shared.isEditingNotes else { return }
 
         hoverWindow?.hide()
 

@@ -61,6 +61,7 @@
 "settings.display.showPermissions" = "權限";
 "settings.display.showOwner" = "擁有者";
 "settings.display.showFilePath" = "檔案路徑";
+"settings.display.showNotes" = "備註";
 
 "settings.display.exif" = "照片資訊（EXIF）";
 "settings.display.exif.show" = "顯示 EXIF 資料";
@@ -417,6 +418,7 @@
 "displayItem.fileSystemAdvanced" = "檔案系統進階資訊";
 "displayItem.model3D" = "3D 模型資訊";
 "displayItem.xcodeProject" = "Xcode 專案資訊";
+"displayItem.notes" = "備註";
 
 /* Hover Window */
 "hover.fileType.folder" = "資料夾";
