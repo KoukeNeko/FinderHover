@@ -99,8 +99,7 @@ class HoverManager: ObservableObject {
                 if isDragging {
                     // A mouseDown fired. If it occurred inside the popup, ignore it —
                     // the user is clicking to interact with the popup (e.g. notes field).
-                    if let window = self.hoverWindow?.window, window.isVisible,
-                       window.frame.contains(NSEvent.mouseLocation) {
+                    if self.isMouseOverHoverWindow() {
                         return
                     }
                     // Click outside popup: reset any editing state so guards don't block
@@ -130,8 +129,7 @@ class HoverManager: ObservableObject {
             // Guard: don't hide if the activation was caused by clicking inside the popup itself
             // (e.g. FinderHover activating because the user clicked in the Notes text editor).
             if app.bundleIdentifier != "com.apple.finder" {
-                if let window = self?.hoverWindow?.window, window.isVisible,
-                   window.frame.contains(NSEvent.mouseLocation) {
+                if self?.isMouseOverHoverWindow() ?? false {
                     return
                 }
                 self?.hideHoverWindow()
@@ -155,8 +153,7 @@ class HoverManager: ObservableObject {
             // If Finder is deactivated, hide the hover window
             // Guard: don't hide if the deactivation was caused by clicking the popup itself
             if app.bundleIdentifier == "com.apple.finder" {
-                if let window = self?.hoverWindow?.window, window.isVisible,
-                   window.frame.contains(NSEvent.mouseLocation) {
+                if self?.isMouseOverHoverWindow() ?? false {
                     return
                 }
                 self?.hideHoverWindow()
@@ -206,8 +203,7 @@ class HoverManager: ObservableObject {
         guard let currentInfo = currentFileInfo else { return }
 
         // Don't hide if mouse is over the popup window
-        if let window = hoverWindow?.window, window.isVisible,
-           window.frame.contains(location) {
+        if isMouseOverHoverWindow(at: location) {
             return
         }
 
@@ -276,8 +272,7 @@ class HoverManager: ObservableObject {
         // This will return nil if user is renaming or if cursor is over the popup itself
         guard let filePath = FinderInteraction.getFileAtMousePosition(location) else {
             // Don't hide if mouse is over the popup (accessibility returns nil there)
-            if let window = hoverWindow?.window, window.isVisible,
-               window.frame.contains(location) {
+            if isMouseOverHoverWindow(at: location) {
                 return
             }
             hideHoverWindow()
@@ -401,6 +396,15 @@ class HoverManager: ObservableObject {
     /// Checks if the async metadata result still belongs to the latest request.
     private func isMetadataRequestCurrent(_ token: UInt64) -> Bool {
         token == metadataRequestToken
+    }
+
+    /// Checks if the mouse is currently over the hover window.
+    /// - Parameter location: The point to check. Defaults to current mouse location if nil.
+    /// - Returns: true if the window is visible and the location is within its frame, false otherwise.
+    private func isMouseOverHoverWindow(at location: NSPoint? = nil) -> Bool {
+        guard let window = hoverWindow?.window, window.isVisible else { return false }
+        let checkLocation = location ?? NSEvent.mouseLocation
+        return window.frame.contains(checkLocation)
     }
 
     private func checkAccessibilityPermissions() {

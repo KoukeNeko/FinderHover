@@ -792,3 +792,6 @@
 "fileProvider.downloaded" = "ダウンロード済み";
 "fileProvider.cloudOnly" = "クラウドのみ";
 "fileProvider.unknown" = "不明";
+
+/* Notes */
+"hover.notes.placeholder" = "メモを入力 ...";

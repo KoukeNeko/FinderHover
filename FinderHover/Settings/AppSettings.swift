@@ -1705,6 +1705,9 @@ class AppSettings: ObservableObject {
         showVideoSubtitleTracks = true
         showVideoContainerFormat = true
 
+        // Notes
+        showNotes = Constants.Defaults.showNotes
+        
         displayOrder = [
             .fileType,
             .fileSize,

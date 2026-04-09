@@ -792,3 +792,6 @@
 "fileProvider.downloaded" = "已下載";
 "fileProvider.cloudOnly" = "僅在雲端";
 "fileProvider.unknown" = "未知";
+
+/* Notes */
+"hover.notes.placeholder" = "輸入備註 ...";

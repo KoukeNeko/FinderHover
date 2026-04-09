@@ -250,9 +250,7 @@ class HoverWindowController: NSWindowController {
         }
 
         let shouldInteract = isOverPopup || windowState.isLocked || windowState.isEditingNotes
-        if window.ignoresMouseEvents == shouldInteract {
-            window.ignoresMouseEvents = !shouldInteract
-        }
+        window.ignoresMouseEvents = !shouldInteract
     }
 
     deinit {
@@ -1658,14 +1656,14 @@ struct HoverContentView: View {
                             .foregroundColor(.secondary)
                             .frame(width: 14, alignment: .center)
 
-                        Text("Notes:")
+                        Text("displayItem.notes".localized + ":")
                             .font(.system(size: settings.fontSize))
                             .foregroundColor(.secondary)
                             .frame(minWidth: 75, alignment: .trailing)
 
                         ZStack(alignment: .topLeading) {
                             if noteText.isEmpty {
-                                Text("Add a note...")
+                                Text("hover.notes.placeholder".localized)
                                     .font(.system(size: settings.fontSize))
                                     .foregroundColor(Color.secondary.opacity(0.5))
                                     .allowsHitTesting(false)

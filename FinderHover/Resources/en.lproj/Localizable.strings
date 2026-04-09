@@ -792,3 +792,6 @@
 "fileProvider.downloaded" = "Downloaded";
 "fileProvider.cloudOnly" = "Cloud Only";
 "fileProvider.unknown" = "Unknown";
+
+/* Notes */
+"hover.notes.placeholder" = "Add a note ...";
