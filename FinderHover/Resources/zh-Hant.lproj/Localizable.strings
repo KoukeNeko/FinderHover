@@ -62,6 +62,7 @@
 "settings.display.showOwner" = "擁有者";
 "settings.display.showFilePath" = "檔案路徑";
 "settings.display.showNotes" = "備註";
+"settings.display.showFileSystemAdvanced" = "進階檔案系統";
 
 "settings.display.exif" = "照片資訊（EXIF）";
 "settings.display.exif.show" = "顯示 EXIF 資料";

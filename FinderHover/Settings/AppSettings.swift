@@ -1674,7 +1674,7 @@ class AppSettings: ObservableObject {
         showAliasTarget = Constants.Defaults.showAliasTarget
 
         // File System Advanced metadata
-        showFileSystemAdvanced = true
+        showFileSystemAdvanced = false
         showAllocatedSize = true
         showAttributeModDate = false
         showResourceForkSize = true

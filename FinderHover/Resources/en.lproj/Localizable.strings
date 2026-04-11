@@ -62,6 +62,7 @@
 "settings.display.showOwner" = "Owner";
 "settings.display.showFilePath" = "File Path";
 "settings.display.showNotes" = "Notes";
+"settings.display.showFileSystemAdvanced" = "File System Advanced";
 
 "settings.display.exif" = "Photo Information (EXIF)";
 "settings.display.exif.show" = "Show EXIF Data";

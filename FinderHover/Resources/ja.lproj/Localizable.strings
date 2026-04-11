@@ -62,6 +62,7 @@
 "settings.display.showOwner" = "所有者";
 "settings.display.showFilePath" = "ファイルパス";
 "settings.display.showNotes" = "メモ";
+"settings.display.showFileSystemAdvanced" = "高度なファイルシステム";
 
 "settings.display.exif" = "写真情報（EXIF）";
 "settings.display.exif.show" = "EXIF データを表示";
