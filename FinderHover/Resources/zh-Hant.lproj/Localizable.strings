@@ -796,3 +796,6 @@
 
 /* Notes */
 "hover.notes.placeholder" = "輸入備註 ...";
+"hover.notes.error.load" = "無法載入備註。";
+"hover.notes.error.save" = "無法儲存備註。";
+"hover.notes.error.delete" = "無法刪除備註。";

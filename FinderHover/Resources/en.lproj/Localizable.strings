@@ -796,3 +796,6 @@
 
 /* Notes */
 "hover.notes.placeholder" = "Add a note ...";
+"hover.notes.error.load" = "Could not load note.";
+"hover.notes.error.save" = "Could not save note.";
+"hover.notes.error.delete" = "Could not delete note.";

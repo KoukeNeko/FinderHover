@@ -439,22 +439,71 @@ class HoverWindowController: NSWindowController {
 enum NotesStorage {
     static let xattrKey = "com.finderhover.notes"
 
-    static func read(for path: String) -> String {
-        let size = getxattr(path, xattrKey, nil, 0, 0, 0)
-        guard size > 0 else { return "" }
-        var buffer = [UInt8](repeating: 0, count: size)
-        let result = getxattr(path, xattrKey, &buffer, size, 0, 0)
-        guard result > 0 else { return "" }
-        return String(bytes: buffer, encoding: .utf8) ?? ""
+    enum StorageError: LocalizedError {
+        case readFailed(path: String, code: Int32)
+        case writeFailed(path: String, code: Int32)
+        case deleteFailed(path: String, code: Int32)
+
+        var errorDescription: String? {
+            switch self {
+            case let .readFailed(path, code):
+                let message = String(cString: strerror(code))
+                return "getxattr failed for xattr \(NotesStorage.xattrKey) at \(path): [\(code)] \(message)"
+            case let .writeFailed(path, code):
+                let message = String(cString: strerror(code))
+                return "setxattr failed for xattr \(NotesStorage.xattrKey) at \(path): [\(code)] \(message)"
+            case let .deleteFailed(path, code):
+                let message = String(cString: strerror(code))
+                return "removexattr failed for xattr \(NotesStorage.xattrKey) at \(path): [\(code)] \(message)"
+            }
+        }
     }
 
-    static func save(_ note: String, for path: String) {
-        if note.isEmpty {
-            removexattr(path, xattrKey, 0)
-        } else {
-            let data = Array(note.utf8)
-            setxattr(path, xattrKey, data, data.count, 0, 0)
+    static func read(for path: String) throws -> String {
+        let size = getxattr(path, xattrKey, nil, 0, 0, 0)
+        guard size >= 0 else {
+            let code = errno
+            if code == ENOATTR {
+                return ""
+            }
+            throw logAndReturn(.readFailed(path: path, code: code))
         }
+
+        var buffer = [UInt8](repeating: 0, count: size)
+        let result = getxattr(path, xattrKey, &buffer, size, 0, 0)
+        guard result >= 0 else {
+            throw logAndReturn(.readFailed(path: path, code: errno))
+        }
+
+        return String(decoding: buffer.prefix(result), as: UTF8.self)
+    }
+
+    static func save(_ note: String, for path: String) throws {
+        if note.isEmpty {
+            try delete(for: path)
+            return
+        }
+
+        let data = Data(note.utf8)
+        let result = data.withUnsafeBytes { bytes in
+            setxattr(path, xattrKey, bytes.baseAddress, data.count, 0, 0)
+        }
+
+        guard result >= 0 else {
+            throw logAndReturn(.writeFailed(path: path, code: errno))
+        }
+    }
+
+    private static func delete(for path: String) throws {
+        let result = removexattr(path, xattrKey, 0)
+        if result < 0, errno != ENOATTR {
+            throw logAndReturn(.deleteFailed(path: path, code: errno))
+        }
+    }
+
+    private static func logAndReturn(_ error: StorageError) -> StorageError {
+        NSLog("%@", error.localizedDescription)
+        return error
     }
 }
 
@@ -533,6 +582,7 @@ struct HoverContentView: View {
     @State private var thumbnail: NSImage?
     @State private var thumbnailRequest: QLThumbnailGenerator.Request?
     @State private var noteText: String = ""
+    @State private var noteErrorMessage: String?
     @ObservedObject var settings = AppSettings.shared
     @ObservedObject private var windowState = HoverWindowState.shared
 
@@ -600,7 +650,7 @@ struct HoverContentView: View {
         .fixedSize(horizontal: false, vertical: true)
         .background(Color.clear)
         .onAppear {
-            noteText = NotesStorage.read(for: fileInfo.path)
+            loadNote()
         }
     }
 
@@ -1672,12 +1722,54 @@ struct HoverContentView: View {
                                 .frame(minHeight: settings.fontSize * 3 + 8, maxHeight: 120)
                         }
                     }
+
+                    if let noteErrorMessage {
+                        Text(noteErrorMessage)
+                            .font(.system(size: settings.fontSize - 1))
+                            .foregroundColor(.red)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
                 }
                 .onChange(of: noteText) { newValue in
-                    NotesStorage.save(newValue, for: fileInfo.path)
+                    saveNote(newValue)
                 }
             }
         }
+    }
+
+    private func loadNote() {
+        do {
+            noteText = try NotesStorage.read(for: fileInfo.path)
+            noteErrorMessage = nil
+        } catch {
+            noteText = ""
+            noteErrorMessage = noteDisplayMessage(for: error)
+        }
+    }
+
+    private func saveNote(_ note: String) {
+        do {
+            try NotesStorage.save(note, for: fileInfo.path)
+            noteErrorMessage = nil
+        } catch {
+            noteErrorMessage = noteDisplayMessage(for: error)
+        }
+    }
+
+    private func noteDisplayMessage(for error: Error) -> String {
+        if let storageError = error as? NotesStorage.StorageError {
+            switch storageError {
+            case .readFailed:
+                return "hover.notes.error.load".localized
+            case .writeFailed:
+                return "hover.notes.error.save".localized
+            case .deleteFailed:
+                return "hover.notes.error.delete".localized
+            }
+        }
+
+        return error.localizedDescription
     }
 
     private func getFileTypeDescription() -> String {

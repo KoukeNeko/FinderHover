@@ -796,3 +796,6 @@
 
 /* Notes */
 "hover.notes.placeholder" = "メモを入力 ...";
+"hover.notes.error.load" = "メモを読み込めませんでした。";
+"hover.notes.error.save" = "メモを保存できませんでした。";
+"hover.notes.error.delete" = "メモを削除できませんでした。";
