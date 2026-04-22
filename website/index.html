@@ -37,25 +37,9 @@
     <meta name="twitter:description" content="在 Finder 中懸停即可顯示豐富的檔案資訊，支援 120+ 種檔案格式的深度中繼資料解析。" />
     <meta name="twitter:image" content="https://finderhover.app.koukeneko.cafe/assets/og-image.png" />
 
-    <script>
-      (function () {
-        var v = Date.now();
-        var stylesheet = document.createElement('link');
-        stylesheet.rel = 'stylesheet';
-        stylesheet.href = '/style.css?v=' + v;
-        document.head.appendChild(stylesheet);
-
-        var components = document.createElement('script');
-        components.src = '/components.js?v=' + v;
-        components.defer = true;
-        document.head.appendChild(components);
-
-        var i18n = document.createElement('script');
-        i18n.src = '/i18n.js?v=' + v;
-        i18n.defer = true;
-        document.head.appendChild(i18n);
-      })();
-    </script>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/components.js" defer></script>
+    <script src="/i18n.js" defer></script>
   </head>
   <body>
     <!-- Navigation -->
