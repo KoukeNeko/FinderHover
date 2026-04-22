@@ -6,19 +6,54 @@
     <title>支援格式 - FinderHover</title>
     <meta
       name="description"
-      content="FinderHover 支援超過 120 種檔案格式，包括圖片、影片、音訊、文件、程式碼等。"
+      content="FinderHover 支援 120+ 種檔案格式，涵蓋圖片、影片、音訊、文件、程式碼、壓縮檔等。"
     />
-    <link rel="icon" type="image/png" href="assets/icon.png" />
+    <link rel="icon" type="image/png" href="/assets/icon.png" />
+
+    <!-- SEO -->
+    <link rel="canonical" href="https://finderhover.app.koukeneko.cafe/formats.html" />
+    <link rel="alternate" hreflang="zh-Hant" href="https://finderhover.app.koukeneko.cafe/formats.html" />
+    <link rel="alternate" hreflang="en" href="https://finderhover.app.koukeneko.cafe/en/formats.html" />
+    <link rel="alternate" hreflang="ja" href="https://finderhover.app.koukeneko.cafe/ja/formats.html" />
+    <link rel="alternate" hreflang="x-default" href="https://finderhover.app.koukeneko.cafe/en/formats.html" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FinderHover" />
+    <meta property="og:title" content="支援格式 - FinderHover" />
+    <meta property="og:description" content="FinderHover 支援 120+ 種檔案格式，涵蓋圖片、影片、音訊、文件、程式碼、壓縮檔等。" />
+    <meta property="og:url" content="https://finderhover.app.koukeneko.cafe/formats.html" />
+    <meta property="og:image" content="https://finderhover.app.koukeneko.cafe/assets/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="zh_TW" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="ja_JP" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="支援格式 - FinderHover" />
+    <meta name="twitter:description" content="FinderHover 支援 120+ 種檔案格式，涵蓋圖片、影片、音訊、文件、程式碼、壓縮檔等。" />
+    <meta name="twitter:image" content="https://finderhover.app.koukeneko.cafe/assets/og-image.png" />
+
     <script>
       (function () {
         var v = Date.now();
-        document.write(
-          '<link rel="stylesheet" href="style.css?v=' + v + '" />',
-        );
-        document.write(
-          '<script src="components.js?v=' + v + '" defer><\/script>',
-        );
-        document.write('<script src="i18n.js?v=' + v + '" defer><\/script>');
+        var stylesheet = document.createElement('link');
+        stylesheet.rel = 'stylesheet';
+        stylesheet.href = '/style.css?v=' + v;
+        document.head.appendChild(stylesheet);
+
+        var components = document.createElement('script');
+        components.src = '/components.js?v=' + v;
+        components.defer = true;
+        document.head.appendChild(components);
+
+        var i18n = document.createElement('script');
+        i18n.src = '/i18n.js?v=' + v;
+        i18n.defer = true;
+        document.head.appendChild(i18n);
       })();
     </script>
   </head>
