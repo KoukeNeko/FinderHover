@@ -116,7 +116,7 @@
     },
     "q2": {
       "question": "Why is Homebrew recommended?",
-      "answer": "Installing via Homebrew automatically handles Gatekeeper verification, saving you from manually bypassing security restrictions. Direct downloads require manual approval in System Settings → Privacy & Security."
+      "answer": "Because installation and updates are effortless. A single command installs it, and running `brew upgrade` later is all you need to stay on the latest release — no manual downloads or .app swaps."
     },
     "q3": {
       "question": "Which macOS versions are supported?",
