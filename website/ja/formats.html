@@ -1,0 +1,1074 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>対応フォーマット - FinderHover</title>
+    <meta
+      name="description"
+      content="FinderHover は画像・動画・音声・ドキュメント・コード・圧縮ファイルなど 120 種類以上のフォーマットに対応。"
+    />
+    <link rel="icon" type="image/png" href="/assets/icon.png" />
+
+    <!-- SEO -->
+    <link rel="canonical" href="https://finderhover.app.koukeneko.cafe/ja/formats.html" />
+    <link rel="alternate" hreflang="zh-Hant" href="https://finderhover.app.koukeneko.cafe/formats.html" />
+    <link rel="alternate" hreflang="en" href="https://finderhover.app.koukeneko.cafe/en/formats.html" />
+    <link rel="alternate" hreflang="ja" href="https://finderhover.app.koukeneko.cafe/ja/formats.html" />
+    <link rel="alternate" hreflang="x-default" href="https://finderhover.app.koukeneko.cafe/en/formats.html" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FinderHover" />
+    <meta property="og:title" content="対応フォーマット - FinderHover" />
+    <meta property="og:description" content="FinderHover は画像・動画・音声・ドキュメント・コード・圧縮ファイルなど 120 種類以上のフォーマットに対応。" />
+    <meta property="og:url" content="https://finderhover.app.koukeneko.cafe/ja/formats.html" />
+    <meta property="og:image" content="https://finderhover.app.koukeneko.cafe/assets/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:locale:alternate" content="zh_TW" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="対応フォーマット - FinderHover" />
+    <meta name="twitter:description" content="FinderHover は画像・動画・音声・ドキュメント・コード・圧縮ファイルなど 120 種類以上のフォーマットに対応。" />
+    <meta name="twitter:image" content="https://finderhover.app.koukeneko.cafe/assets/og-image.png" />
+
+    <script>
+      (function () {
+        var v = Date.now();
+        var stylesheet = document.createElement('link');
+        stylesheet.rel = 'stylesheet';
+        stylesheet.href = '/style.css?v=' + v;
+        document.head.appendChild(stylesheet);
+
+        var components = document.createElement('script');
+        components.src = '/components.js?v=' + v;
+        components.defer = true;
+        document.head.appendChild(components);
+
+        var i18n = document.createElement('script');
+        i18n.src = '/i18n.js?v=' + v;
+        i18n.defer = true;
+        document.head.appendChild(i18n);
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <site-nav></site-nav>
+
+    <!-- Formats Hero -->
+    <section class="page-hero">
+      <h1 data-i18n="formats.pageTitle">支援格式</h1>
+      <p data-i18n="formats.pageSubtitle">
+        超過 120 種檔案格式，完整的中繼資料支援
+      </p>
+    </section>
+
+    <!-- Formats Content -->
+    <section class="formats-section">
+      <div class="formats-container">
+        <!-- Image Formats -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <polyline points="21 15 16 10 5 21" />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.image.title">影像檔案</h2>
+              <p data-i18n="formats.categories.image.desc">
+                支援 EXIF、IPTC、XMP 完整中繼資料讀取
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag">JPG</span>
+            <span class="format-tag">JPEG</span>
+            <span class="format-tag">PNG</span>
+            <span class="format-tag">TIFF</span>
+            <span class="format-tag">TIF</span>
+            <span class="format-tag">HEIC</span>
+            <span class="format-tag">HEIF</span>
+            <span class="format-tag">RAW</span>
+            <span class="format-tag">CR2</span>
+            <span class="format-tag">NEF</span>
+            <span class="format-tag">ARW</span>
+            <span class="format-tag">DNG</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.image.meta1">
+                相機型號、鏡頭資訊、焦距
+              </li>
+              <li data-i18n="formats.categories.image.meta2">
+                光圈、快門速度、ISO
+              </li>
+              <li data-i18n="formats.categories.image.meta3">
+                拍攝日期、色彩空間
+              </li>
+              <li data-i18n="formats.categories.image.meta4">GPS 座標</li>
+              <li data-i18n="formats.categories.image.meta5">
+                IPTC/XMP（作者、版權、關鍵字、評分）
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Video Formats -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
+                <line x1="7" y1="2" x2="7" y2="22" />
+                <line x1="17" y1="2" x2="17" y2="22" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <line x1="2" y1="7" x2="7" y2="7" />
+                <line x1="2" y1="17" x2="7" y2="17" />
+                <line x1="17" y1="17" x2="22" y2="17" />
+                <line x1="17" y1="7" x2="22" y2="7" />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.video.title">影片檔案</h2>
+              <p data-i18n="formats.categories.video.desc">
+                支援各種影音編碼格式的詳細資訊
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag">MP4</span>
+            <span class="format-tag">MOV</span>
+            <span class="format-tag">M4V</span>
+            <span class="format-tag">AVI</span>
+            <span class="format-tag">MKV</span>
+            <span class="format-tag">FLV</span>
+            <span class="format-tag">WMV</span>
+            <span class="format-tag">WebM</span>
+            <span class="format-tag">MPEG</span>
+            <span class="format-tag">MPG</span>
+            <span class="format-tag">3GP</span>
+            <span class="format-tag">MTS</span>
+            <span class="format-tag">M2TS</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.video.meta1">
+                影片時長、解析度
+              </li>
+              <li data-i18n="formats.categories.video.meta2">
+                影片編碼（H.264、HEVC 等）
+              </li>
+              <li data-i18n="formats.categories.video.meta3">幀率、位元率</li>
+              <li data-i18n="formats.categories.video.meta4">影音軌道數量</li>
+              <li data-i18n="formats.categories.video.meta5">
+                HDR 格式（Dolby Vision、HDR10、HLG）
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Audio Formats -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M9 18V5l12-2v13" />
+                <circle cx="6" cy="18" r="3" />
+                <circle cx="18" cy="16" r="3" />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.audio.title">音訊檔案</h2>
+              <p data-i18n="formats.categories.audio.desc">
+                支援 ID3 標籤與音訊技術參數
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag">MP3</span>
+            <span class="format-tag">M4A</span>
+            <span class="format-tag">AAC</span>
+            <span class="format-tag">WAV</span>
+            <span class="format-tag">FLAC</span>
+            <span class="format-tag">AIFF</span>
+            <span class="format-tag">AIF</span>
+            <span class="format-tag">WMA</span>
+            <span class="format-tag">OGG</span>
+            <span class="format-tag">Opus</span>
+            <span class="format-tag">ALAC</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.audio.meta1">
+                曲目名稱、演出者、專輯
+              </li>
+              <li data-i18n="formats.categories.audio.meta2">
+                專輯演出者、類型、年份
+              </li>
+              <li data-i18n="formats.categories.audio.meta3">時長、位元率</li>
+              <li data-i18n="formats.categories.audio.meta4">取樣率、聲道數</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Document Formats -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+                <polyline points="10 9 9 9 8 9" />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.document.title">文件檔案</h2>
+              <p data-i18n="formats.categories.document.desc">
+                支援 PDF 與 Microsoft Office 文件
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag">PDF</span>
+            <span class="format-tag">DOCX</span>
+            <span class="format-tag">DOC</span>
+            <span class="format-tag">XLSX</span>
+            <span class="format-tag">XLS</span>
+            <span class="format-tag">PPTX</span>
+            <span class="format-tag">PPT</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.document.meta1">
+                文件標題、作者、主旨
+              </li>
+              <li data-i18n="formats.categories.document.meta2">
+                關鍵字、建立/修改日期
+              </li>
+              <li data-i18n="formats.categories.document.meta3">
+                頁數、字數（Word）
+              </li>
+              <li data-i18n="formats.categories.document.meta4">
+                工作表數（Excel）、投影片數（PowerPoint）
+              </li>
+              <li data-i18n="formats.categories.document.meta5">
+                PDF 版本、加密狀態、頁面尺寸
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Code Formats -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="16 18 22 12 16 6" />
+                <polyline points="8 6 2 12 8 18" />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.code.title">程式碼檔案</h2>
+              <p data-i18n="formats.categories.code.desc">
+                支援 38 種程式語言的行數統計
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag">Swift</span>
+            <span class="format-tag">C</span>
+            <span class="format-tag">C++</span>
+            <span class="format-tag">Objective-C</span>
+            <span class="format-tag">C#</span>
+            <span class="format-tag">Java</span>
+            <span class="format-tag">Kotlin</span>
+            <span class="format-tag">Python</span>
+            <span class="format-tag">JavaScript</span>
+            <span class="format-tag">TypeScript</span>
+            <span class="format-tag">Go</span>
+            <span class="format-tag">Rust</span>
+            <span class="format-tag">Ruby</span>
+            <span class="format-tag">PHP</span>
+            <span class="format-tag">Scala</span>
+            <span class="format-tag">Dart</span>
+            <span class="format-tag">Perl</span>
+            <span class="format-tag">Lua</span>
+            <span class="format-tag">R</span>
+            <span class="format-tag">SQL</span>
+            <span class="format-tag">Shell</span>
+            <span class="format-tag">Bash</span>
+            <span class="format-tag">HTML</span>
+            <span class="format-tag">CSS</span>
+            <span class="format-tag">SCSS</span>
+            <span class="format-tag">Vue</span>
+            <span class="format-tag">JSX</span>
+            <span class="format-tag">XML</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.code.meta1">
+                程式語言自動偵測
+              </li>
+              <li data-i18n="formats.categories.code.meta2">
+                總行數、程式碼行數
+              </li>
+              <li data-i18n="formats.categories.code.meta3">
+                註解行數、空白行數
+              </li>
+              <li data-i18n="formats.categories.code.meta4">
+                檔案編碼（UTF-8、ASCII 等）
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Config Formats -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="3" />
+                <path
+                  d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+                />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.config.title">
+                設定檔與資料格式
+              </h2>
+              <p data-i18n="formats.categories.config.desc">
+                支援結構分析與語法驗證
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag">JSON</span>
+            <span class="format-tag">YAML</span>
+            <span class="format-tag">YML</span>
+            <span class="format-tag">TOML</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.config.meta1">
+                格式類型、語法有效性
+              </li>
+              <li data-i18n="formats.categories.config.meta2">
+                鍵值數量、最大巢狀深度
+              </li>
+              <li data-i18n="formats.categories.config.meta3">是否包含註解</li>
+              <li data-i18n="formats.categories.config.meta4">檔案編碼</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Markdown Formats -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                />
+                <path
+                  d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.markdown.title">
+                Markdown 檔案
+              </h2>
+              <p data-i18n="formats.categories.markdown.desc">
+                支援 Frontmatter 與內容結構分析
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag">MD</span>
+            <span class="format-tag">Markdown</span>
+            <span class="format-tag">MDown</span>
+            <span class="format-tag">MKD</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.markdown.meta1">
+                Frontmatter 內容（YAML/TOML/JSON）
+              </li>
+              <li data-i18n="formats.categories.markdown.meta2">
+                文件標題（H1 或 Frontmatter）
+              </li>
+              <li data-i18n="formats.categories.markdown.meta3">
+                字數、標題數量
+              </li>
+              <li data-i18n="formats.categories.markdown.meta4">
+                連結數量、圖片數量、程式碼區塊數量
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Web Formats -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <path
+                  d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.web.title">網頁檔案</h2>
+              <p data-i18n="formats.categories.web.desc">
+                支援 Meta 標籤與 Open Graph 資訊
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag">HTML</span>
+            <span class="format-tag">HTM</span>
+            <span class="format-tag">XHTML</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.web.meta1">
+                頁面標題、描述、關鍵字
+              </li>
+              <li data-i18n="formats.categories.web.meta2">
+                作者、語言、字元編碼
+              </li>
+              <li data-i18n="formats.categories.web.meta3">
+                Open Graph（og:title, og:description, og:image）
+              </li>
+              <li data-i18n="formats.categories.web.meta4">
+                Twitter Card 類型
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Archive Formats -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="21 8 21 21 3 21 3 8" />
+                <rect x="1" y="3" width="22" height="5" />
+                <line x1="10" y1="12" x2="14" y2="12" />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.archive.title">壓縮檔案</h2>
+              <p data-i18n="formats.categories.archive.desc">
+                支援多種壓縮格式的內容預覽
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag">ZIP</span>
+            <span class="format-tag">RAR</span>
+            <span class="format-tag">7Z</span>
+            <span class="format-tag">TAR</span>
+            <span class="format-tag">GZ</span>
+            <span class="format-tag">BZ2</span>
+            <span class="format-tag">XZ</span>
+            <span class="format-tag">TGZ</span>
+            <span class="format-tag">TBZ2</span>
+            <span class="format-tag">TXZ</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.archive.meta1">壓縮格式類型</li>
+              <li data-i18n="formats.categories.archive.meta2">
+                檔案數量、解壓縮後大小
+              </li>
+              <li data-i18n="formats.categories.archive.meta3">壓縮比例</li>
+              <li data-i18n="formats.categories.archive.meta4">是否加密</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Ebook Formats -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path
+                  d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+                />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.ebook.title">電子書檔案</h2>
+              <p data-i18n="formats.categories.ebook.desc">
+                支援 EPUB 與 Kindle 格式
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag">EPUB</span>
+            <span class="format-tag">MOBI</span>
+            <span class="format-tag">AZW</span>
+            <span class="format-tag">AZW3</span>
+            <span class="format-tag">FB2</span>
+            <span class="format-tag">LIT</span>
+            <span class="format-tag">PRC</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.ebook.meta1">
+                書名、作者、出版商
+              </li>
+              <li data-i18n="formats.categories.ebook.meta2">出版日期、ISBN</li>
+              <li data-i18n="formats.categories.ebook.meta3">語言、書籍描述</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Font Formats -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="4 7 4 4 20 4 20 7" />
+                <line x1="9" y1="20" x2="15" y2="20" />
+                <line x1="12" y1="4" x2="12" y2="20" />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.font.title">字型檔案</h2>
+              <p data-i18n="formats.categories.font.desc">
+                支援桌面與網頁字型格式
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag">TTF</span>
+            <span class="format-tag">OTF</span>
+            <span class="format-tag">TTC</span>
+            <span class="format-tag">OTC</span>
+            <span class="format-tag">WOFF</span>
+            <span class="format-tag">WOFF2</span>
+            <span class="format-tag">PFB</span>
+            <span class="format-tag">PFM</span>
+            <span class="format-tag">FON</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.font.meta1">
+                字型全名、字型家族
+              </li>
+              <li data-i18n="formats.categories.font.meta2">
+                字型風格（Regular、Bold 等）
+              </li>
+              <li data-i18n="formats.categories.font.meta3">版本、設計師</li>
+              <li data-i18n="formats.categories.font.meta4">
+                版權資訊、字符數量
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Vector Formats -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="13.5" cy="6.5" r=".5" />
+                <circle cx="17.5" cy="10.5" r=".5" />
+                <circle cx="8.5" cy="7.5" r=".5" />
+                <circle cx="6.5" cy="12.5" r=".5" />
+                <path
+                  d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.555C21.965 6.012 17.461 2 12 2z"
+                />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.vector.title">
+                向量圖形與設計檔案
+              </h2>
+              <p data-i18n="formats.categories.vector.desc">
+                支援 SVG、EPS 與 Adobe 格式
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag">SVG</span>
+            <span class="format-tag">SVGZ</span>
+            <span class="format-tag">EPS</span>
+            <span class="format-tag">AI</span>
+            <span class="format-tag">PSD</span>
+            <span class="format-tag">PSB</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.vector.meta1">
+                格式類型、尺寸
+              </li>
+              <li data-i18n="formats.categories.vector.meta2">
+                ViewBox（SVG）、元素數量
+              </li>
+              <li data-i18n="formats.categories.vector.meta3">
+                色彩模式（RGB、CMYK）
+              </li>
+              <li data-i18n="formats.categories.vector.meta4">
+                圖層數量（PSD）、位元深度
+              </li>
+              <li data-i18n="formats.categories.vector.meta5">
+                解析度、透明度支援
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Subtitle Formats -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.subtitle.title">字幕檔案</h2>
+              <p data-i18n="formats.categories.subtitle.desc">
+                支援多種字幕格式的內容分析
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag">SRT</span>
+            <span class="format-tag">VTT</span>
+            <span class="format-tag">ASS</span>
+            <span class="format-tag">SSA</span>
+            <span class="format-tag">SUB</span>
+            <span class="format-tag">SBV</span>
+            <span class="format-tag">LRC</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.subtitle.meta1">
+                字幕格式、文字編碼
+              </li>
+              <li data-i18n="formats.categories.subtitle.meta2">
+                字幕條目數量、總時長
+              </li>
+              <li data-i18n="formats.categories.subtitle.meta3">語言代碼</li>
+              <li data-i18n="formats.categories.subtitle.meta4">
+                是否包含格式化樣式
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Disk Image Formats -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.diskImage.title">磁碙映像檔</h2>
+              <p data-i18n="formats.categories.diskImage.desc">
+                支援 macOS 與 ISO 映像
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag">DMG</span>
+            <span class="format-tag">ISO</span>
+            <span class="format-tag">IMG</span>
+            <span class="format-tag">CDR</span>
+            <span class="format-tag">Toast</span>
+            <span class="format-tag">SparseImage</span>
+            <span class="format-tag">SparseBundle</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.diskImage.meta1">
+                映像格式（UDIF、ISO 9660 等）
+              </li>
+              <li data-i18n="formats.categories.diskImage.meta2">
+                總大小、壓縮後大小
+              </li>
+              <li data-i18n="formats.categories.diskImage.meta3">
+                壓縮比例、加密狀態
+              </li>
+              <li data-i18n="formats.categories.diskImage.meta4">
+                分割區架構、檔案系統
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Database Formats -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <ellipse cx="12" cy="5" rx="9" ry="3" />
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.database.title">資料庫檔案</h2>
+              <p data-i18n="formats.categories.database.desc">
+                支援 SQLite 資料庫結構分析
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag">DB</span>
+            <span class="format-tag">SQLite</span>
+            <span class="format-tag">SQLite3</span>
+            <span class="format-tag">DB3</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.database.meta1">
+                資料表數量、索引數量
+              </li>
+              <li data-i18n="formats.categories.database.meta2">
+                觸發器數量、檢視數量
+              </li>
+              <li data-i18n="formats.categories.database.meta3">
+                Schema 版本、頁面大小
+              </li>
+              <li data-i18n="formats.categories.database.meta4">資料庫編碼</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- App Bundle -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+                <line x1="12" y1="18" x2="12.01" y2="18" />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.appBundle.title">
+                應用程式套件
+              </h2>
+              <p data-i18n="formats.categories.appBundle.desc">
+                支援 macOS App 與可執行檔資訊
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag">.app</span>
+            <span class="format-tag">Mach-O</span>
+            <span class="format-tag">dylib</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.appBundle.meta1">
+                Bundle ID、版本號、Build 號
+              </li>
+              <li data-i18n="formats.categories.appBundle.meta2">
+                最低 macOS 版本需求
+              </li>
+              <li data-i18n="formats.categories.appBundle.meta3">
+                應用程式類別、版權
+              </li>
+              <li data-i18n="formats.categories.appBundle.meta4">
+                程式碼簽章狀態、Entitlements
+              </li>
+              <li data-i18n="formats.categories.appBundle.meta5">
+                架構（arm64、x86_64、Universal）
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Git Repository -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="18" r="3" />
+                <circle cx="6" cy="6" r="3" />
+                <circle cx="18" cy="6" r="3" />
+                <path d="M18 9a9 9 0 0 1-9 9" />
+                <path d="M6 9a9 9 0 0 0 9 9" />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.git.title">Git 儲存庫</h2>
+              <p data-i18n="formats.categories.git.desc">
+                支援 Git 版本控制資訊
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag special">.git 目錄</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.git.meta1">
+                目前分支、分支數量
+              </li>
+              <li data-i18n="formats.categories.git.meta2">
+                Commit 數量、標籤數量
+              </li>
+              <li data-i18n="formats.categories.git.meta3">
+                最後 Commit 日期與訊息
+              </li>
+              <li data-i18n="formats.categories.git.meta4">遠端 URL</li>
+              <li data-i18n="formats.categories.git.meta5">未提交的變更狀態</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- System Metadata -->
+        <article class="formats-category">
+          <div class="formats-header">
+            <span class="formats-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 20h9" />
+                <path
+                  d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
+                />
+              </svg>
+            </span>
+            <div>
+              <h2 data-i18n="formats.categories.systemMeta.title">
+                系統中繼資料
+              </h2>
+              <p data-i18n="formats.categories.systemMeta.desc">
+                支援 macOS 特有的檔案屬性與擴充資訊
+              </p>
+            </div>
+          </div>
+          <div class="formats-grid">
+            <span class="format-tag special">所有檔案</span>
+          </div>
+          <div class="formats-meta">
+            <h4 data-i18n="formats.metadataReadable">可讀取的中繼資料</h4>
+            <ul>
+              <li data-i18n="formats.categories.systemMeta.meta1">
+                Finder 標籤（顏色與自訂標籤）
+              </li>
+              <li data-i18n="formats.categories.systemMeta.meta2">
+                下載來源（來自哪個網站或應用程式）
+              </li>
+              <li data-i18n="formats.categories.systemMeta.meta3">
+                隔離資訊（Gatekeeper 狀態）
+              </li>
+              <li data-i18n="formats.categories.systemMeta.meta4">
+                連結資訊（符號連結、硬連結）
+              </li>
+              <li data-i18n="formats.categories.systemMeta.meta5">
+                使用統計（開啟次數、最後使用日期）
+              </li>
+              <li data-i18n="formats.categories.systemMeta.meta6">
+                iCloud 狀態（同步、下載中、僅在雲端）
+              </li>
+              <li data-i18n="formats.categories.systemMeta.meta7">
+                Finder 註解、UTI 類型識別碼
+              </li>
+              <li data-i18n="formats.categories.systemMeta.meta8">
+                延伸屬性列表、替身目標路徑
+              </li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="formats-stats">
+      <div class="stats-container">
+        <div class="stat-item">
+          <span class="stat-number">120+</span>
+          <span class="stat-label" data-i18n="formats.stats.formats"
+            >支援格式</span
+          >
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">18</span>
+          <span class="stat-label" data-i18n="formats.stats.categories"
+            >檔案類別</span
+          >
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">38</span>
+          <span class="stat-label" data-i18n="formats.stats.languages"
+            >程式語言</span
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <site-footer></site-footer>
+  </body>
+</html>

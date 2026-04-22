@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Download - FinderHover</title>
+    <meta
+      name="description"
+      content="Install FinderHover via Homebrew or direct download. Requires macOS Sonoma 14.0 or later."
+    />
+    <link rel="icon" type="image/png" href="/assets/icon.png" />
+
+    <!-- SEO -->
+    <link rel="canonical" href="https://finderhover.app.koukeneko.cafe/en/download.html" />
+    <link rel="alternate" hreflang="zh-Hant" href="https://finderhover.app.koukeneko.cafe/download.html" />
+    <link rel="alternate" hreflang="en" href="https://finderhover.app.koukeneko.cafe/en/download.html" />
+    <link rel="alternate" hreflang="ja" href="https://finderhover.app.koukeneko.cafe/ja/download.html" />
+    <link rel="alternate" hreflang="x-default" href="https://finderhover.app.koukeneko.cafe/en/download.html" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FinderHover" />
+    <meta property="og:title" content="Download - FinderHover" />
+    <meta property="og:description" content="Install FinderHover via Homebrew or direct download. Requires macOS Sonoma 14.0 or later." />
+    <meta property="og:url" content="https://finderhover.app.koukeneko.cafe/en/download.html" />
+    <meta property="og:image" content="https://finderhover.app.koukeneko.cafe/assets/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="zh_TW" />
+    <meta property="og:locale:alternate" content="ja_JP" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Download - FinderHover" />
+    <meta name="twitter:description" content="Install FinderHover via Homebrew or direct download. Requires macOS Sonoma 14.0 or later." />
+    <meta name="twitter:image" content="https://finderhover.app.koukeneko.cafe/assets/og-image.png" />
+
+    <script>
+      (function () {
+        var v = Date.now();
+        var stylesheet = document.createElement('link');
+        stylesheet.rel = 'stylesheet';
+        stylesheet.href = '/style.css?v=' + v;
+        document.head.appendChild(stylesheet);
+
+        var components = document.createElement('script');
+        components.src = '/components.js?v=' + v;
+        components.defer = true;
+        document.head.appendChild(components);
+
+        var i18n = document.createElement('script');
+        i18n.src = '/i18n.js?v=' + v;
+        i18n.defer = true;
+        document.head.appendChild(i18n);
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <site-nav></site-nav>
+
+    <!-- Download Hero -->
+    <section class="page-hero">
+      <h1 class="page-headline" data-i18n="download.pageTitle">下載</h1>
+      <p class="page-subheadline" data-i18n="download.pageSubtitle">
+        選擇最適合你的安裝方式
+      </p>
+    </section>
+
+    <!-- Download Options -->
+    <section class="download-section">
+      <div class="download-grid">
+        <!-- Homebrew -->
+        <div class="download-card recommended">
+          <div class="download-badge" data-i18n="download.recommended">
+            推薦
+          </div>
+          <div class="download-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <path
+                d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+          <h2 data-i18n="download.homebrew.title">Homebrew</h2>
+          <p class="download-desc" data-i18n="download.homebrew.desc">
+            使用 macOS 套件管理器安裝，自動處理 Gatekeeper 驗證，更新更方便。
+          </p>
+          <div class="download-code">
+            <code>brew install koukeneko/tap/finderhover</code>
+            <button
+              class="copy-btn"
+              onclick="
+                copyCommand(this, 'brew install koukeneko/tap/finderhover')
+              "
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path
+                  d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="download-steps">
+            <h4 data-i18n="download.homebrew.stepsTitle">安裝步驟</h4>
+            <ol>
+              <li data-i18n="download.homebrew.step1">開啟終端機 (Terminal)</li>
+              <li data-i18n="download.homebrew.step2">
+                貼上上方指令並按 Enter
+              </li>
+              <li data-i18n="download.homebrew.step3">等待安裝完成</li>
+              <li data-i18n="download.homebrew.step4">
+                在 Launchpad 中開啟 FinderHover
+              </li>
+            </ol>
+          </div>
+          <div class="download-prereq">
+            <p data-i18n="download.homebrew.noHomebrew">沒有 Homebrew？</p>
+            <div class="download-code">
+              <code
+                >/bin/bash -c "$(curl -fsSL https://brew.sh/install.sh)"</code
+              >
+              <button
+                class="copy-btn"
+                onclick="
+                  copyCommand(
+                    this,
+                    '/bin/bash -c &quot;$(curl -fsSL https://brew.sh/install.sh)&quot;',
+                  )
+                "
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path
+                    d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                  />
+                </svg>
+              </button>
+            </div>
+            <a
+              href="https://brew.sh"
+              target="_blank"
+              class="download-prereq-link"
+              data-i18n="download.homebrew.visitBrew"
+            >
+              前往 brew.sh 了解更多
+            </a>
+          </div>
+        </div>
+
+        <!-- Direct Download -->
+        <div class="download-card">
+          <div class="download-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+          </div>
+          <h2 data-i18n="download.direct.title">直接下載</h2>
+          <p class="download-desc" data-i18n="download.direct.desc">
+            從 GitHub Releases 下載最新版本的 .app 檔案。
+          </p>
+          <a
+            href="https://github.com/KoukeNeko/FinderHover/releases/latest"
+            class="download-btn"
+            data-i18n="download.direct.downloadBtn"
+          >
+            下載 FinderHover.app.zip
+          </a>
+          <div class="download-steps">
+            <h4 data-i18n="download.direct.stepsTitle">安裝步驟</h4>
+            <ol>
+              <li data-i18n="download.direct.step1">下載並解壓縮 .zip 檔案</li>
+              <li data-i18n="download.direct.step2">
+                將 FinderHover.app 拖曳到「應用程式」資料夾
+              </li>
+              <li data-i18n="download.direct.step3">雙擊開啟 FinderHover</li>
+              <li data-i18n="download.direct.step4">
+                依照提示授予輔助使用權限
+              </li>
+            </ol>
+          </div>
+          <div class="download-note">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Build from Source -->
+        <div class="download-card">
+          <div class="download-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg>
+          </div>
+          <h2 data-i18n="download.source.title">從原始碼建置</h2>
+          <p class="download-desc" data-i18n="download.source.desc">
+            適合開發者或想要自訂功能的使用者。
+          </p>
+          <div class="download-code">
+            <code>git clone https://github.com/KoukeNeko/FinderHover.git</code>
+            <button
+              class="copy-btn"
+              onclick="
+                copyCommand(
+                  this,
+                  'git clone https://github.com/KoukeNeko/FinderHover.git',
+                )
+              "
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path
+                  d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="download-steps">
+            <h4 data-i18n="download.source.stepsTitle">建置步驟</h4>
+            <ol>
+              <li data-i18n="download.source.step1">
+                確保已安裝 Xcode 15 或更新版本
+              </li>
+              <li data-i18n="download.source.step2">Clone 儲存庫</li>
+              <li>
+                <span data-i18n="download.source.step3"
+                  >執行 xcodebuild -scheme FinderHover -configuration
+                  Release</span
+                >
+              </li>
+              <li data-i18n="download.source.step4">
+                或在 Xcode 中開啟專案並按 ⌘B 建置
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- System Requirements -->
+    <section class="requirements-section">
+      <h2 class="section-headline" data-i18n="download.requirements.title">
+        系統需求
+      </h2>
+      <div class="requirements-grid">
+        <div class="requirement-item">
+          <div class="requirement-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg>
+          </div>
+          <h3 data-i18n="download.requirements.macos.title">
+            macOS Sonoma 14.0+
+          </h3>
+          <p data-i18n="download.requirements.macos.desc">
+            需要 macOS Sonoma 或更新版本（不支援 macOS 26.4 Beta 1，Beta 2 以上可用）
+          </p>
+        </div>
+        <div class="requirement-item">
+          <div class="requirement-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <h3 data-i18n="download.requirements.accessibility.title">
+            輔助使用權限
+          </h3>
+          <p data-i18n="download.requirements.accessibility.desc">
+            需要授予輔助使用權限以偵測滑鼠位置
+          </p>
+        </div>
+        <div class="requirement-item">
+          <div class="requirement-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </div>
+          <h3 data-i18n="download.requirements.silicon.title">Apple Silicon</h3>
+          <p data-i18n="download.requirements.silicon.desc">
+            支援 M1/M2/M3/M4 及 M5 處理器
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <site-footer></site-footer>
+
+    <script>
+      function copyCommand(btn, command) {
+        navigator.clipboard.writeText(command).then(() => {
+          const originalHTML = btn.innerHTML;
+          btn.innerHTML =
+            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+          btn.classList.add("copied");
+          setTimeout(() => {
+            btn.innerHTML = originalHTML;
+            btn.classList.remove("copied");
+          }, 2000);
+        });
+      }
+    </script>
+  </body>
+</html>

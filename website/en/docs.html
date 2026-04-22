@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation - FinderHover</title>
+    <meta name="description" content="FinderHover documentation: installation, configuration, shortcuts, and usage guide." />
+    <link rel="icon" type="image/png" href="/assets/icon.png" />
+
+    <!-- SEO -->
+    <link rel="canonical" href="https://finderhover.app.koukeneko.cafe/en/docs.html" />
+    <link rel="alternate" hreflang="zh-Hant" href="https://finderhover.app.koukeneko.cafe/docs.html" />
+    <link rel="alternate" hreflang="en" href="https://finderhover.app.koukeneko.cafe/en/docs.html" />
+    <link rel="alternate" hreflang="ja" href="https://finderhover.app.koukeneko.cafe/ja/docs.html" />
+    <link rel="alternate" hreflang="x-default" href="https://finderhover.app.koukeneko.cafe/en/docs.html" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FinderHover" />
+    <meta property="og:title" content="Documentation - FinderHover" />
+    <meta property="og:description" content="FinderHover documentation: installation, configuration, shortcuts, and usage guide." />
+    <meta property="og:url" content="https://finderhover.app.koukeneko.cafe/en/docs.html" />
+    <meta property="og:image" content="https://finderhover.app.koukeneko.cafe/assets/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="zh_TW" />
+    <meta property="og:locale:alternate" content="ja_JP" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Documentation - FinderHover" />
+    <meta name="twitter:description" content="FinderHover documentation: installation, configuration, shortcuts, and usage guide." />
+    <meta name="twitter:image" content="https://finderhover.app.koukeneko.cafe/assets/og-image.png" />
+
+    <script>
+      (function () {
+        var v = Date.now();
+        var stylesheet = document.createElement('link');
+        stylesheet.rel = 'stylesheet';
+        stylesheet.href = '/style.css?v=' + v;
+        document.head.appendChild(stylesheet);
+
+        var components = document.createElement('script');
+        components.src = '/components.js?v=' + v;
+        components.defer = true;
+        document.head.appendChild(components);
+
+        var i18n = document.createElement('script');
+        i18n.src = '/i18n.js?v=' + v;
+        i18n.defer = true;
+        document.head.appendChild(i18n);
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <site-nav></site-nav>
+
+    <!-- Docs Hero -->
+    <section class="page-hero">
+      <h1 data-i18n="docs.pageTitle">使用說明</h1>
+      <p data-i18n="docs.pageSubtitle">快速上手 FinderHover</p>
+    </section>
+
+    <!-- Docs Content -->
+    <section class="docs-section">
+      <div class="docs-container">
+        <!-- Sidebar -->
+        <aside class="docs-sidebar">
+          <nav class="docs-nav">
+            <h4 data-i18n="docs.sidebar.gettingStarted">開始使用</h4>
+            <a href="#setup" data-i18n="docs.sidebar.setup">初次設定</a>
+            <a href="#permissions" data-i18n="docs.sidebar.permissions"
+              >授予權限</a
+            >
+            <h4 data-i18n="docs.sidebar.features">功能介紹</h4>
+            <a href="#hover" data-i18n="docs.sidebar.hover">懸停預覽</a>
+            <a href="#settings" data-i18n="docs.sidebar.settings">偏好設定</a>
+            <a href="#styles" data-i18n="docs.sidebar.styles">介面風格</a>
+            <h4 data-i18n="docs.sidebar.advanced">進階</h4>
+            <a href="#metadata-fields" data-i18n="docs.sidebar.metadataFields"
+              >中繼資料欄位</a
+            >
+            <a href="#troubleshooting" data-i18n="docs.sidebar.troubleshooting"
+              >疑難排解</a
+            >
+          </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="docs-content">
+          <article id="setup" class="docs-article">
+            <h2 data-i18n="docs.setup.title">初次設定</h2>
+            <p data-i18n="docs.setup.intro">
+              安裝 FinderHover 後，首次啟動需要完成以下設定：
+            </p>
+            <ol>
+              <li data-i18n="docs.setup.step1">
+                從 Launchpad 或應用程式資料夾開啟 FinderHover
+              </li>
+              <li data-i18n="docs.setup.step2">
+                App 會自動出現在選單列（Menu Bar）
+              </li>
+              <li data-i18n="docs.setup.step3">系統會提示你授予輔助使用權限</li>
+              <li data-i18n="docs.setup.step4">
+                完成授權後，將滑鼠移到 Finder 中的任何檔案上即可看到預覽
+              </li>
+            </ol>
+            <div class="docs-tip">
+              <strong data-i18n="docs.tip">提示：</strong
+              ><span data-i18n="docs.setup.tip"
+                >你可以在設定中啟用「登入時啟動」，讓 FinderHover
+                在每次開機時自動執行。</span
+              >
+            </div>
+          </article>
+
+          <article id="permissions" class="docs-article">
+            <h2 data-i18n="docs.permissions.title">授予權限</h2>
+            <p data-i18n="docs.permissions.intro">
+              FinderHover 需要輔助使用權限才能偵測你目前指向的檔案。這是 macOS
+              的安全機制，確保只有經過授權的 App 才能存取這些資訊。
+            </p>
+
+            <h3 data-i18n="docs.permissions.manualTitle">手動授予權限</h3>
+            <ol>
+              <li data-i18n="docs.permissions.step1">
+                開啟「系統設定」(System Settings)
+              </li>
+              <li data-i18n="docs.permissions.step2">
+                前往「隱私與安全性」>「輔助使用」
+              </li>
+              <li data-i18n="docs.permissions.step3">
+                找到 FinderHover 並開啟開關
+              </li>
+              <li data-i18n="docs.permissions.step4">
+                如果看不到 FinderHover，點擊「+」按鈕手動加入
+              </li>
+            </ol>
+
+            <div class="docs-warning">
+              <strong data-i18n="docs.warning">注意：</strong
+              ><span data-i18n="docs.permissions.warning"
+                >授予權限後可能需要重新啟動 FinderHover 才能生效。</span
+              >
+            </div>
+          </article>
+
+          <article id="hover" class="docs-article">
+            <h2 data-i18n="docs.hover.title">懸停預覽</h2>
+            <p data-i18n="docs.hover.intro">
+              FinderHover 的核心功能是在你將滑鼠停留在 Finder
+              中的檔案時，自動顯示該檔案的詳細資訊。
+            </p>
+
+            <h3 data-i18n="docs.hover.howTitle">運作方式</h3>
+            <ul>
+              <li data-i18n="docs.hover.how1">
+                將滑鼠移到 Finder 視窗中的任何檔案或資料夾
+              </li>
+              <li data-i18n="docs.hover.how2">
+                等待設定的延遲時間（預設 0.5 秒）
+              </li>
+              <li data-i18n="docs.hover.how3">預覽視窗會自動出現在滑鼠旁邊</li>
+              <li data-i18n="docs.hover.how4">
+                移動滑鼠到其他檔案會更新預覽內容
+              </li>
+              <li data-i18n="docs.hover.how5">
+                移出 Finder 視窗或移到空白區域會隱藏預覽
+              </li>
+            </ul>
+
+            <h3 data-i18n="docs.hover.smartTitle">智慧偵測</h3>
+            <p data-i18n="docs.hover.smartIntro">
+              FinderHover 會自動偵測以下情況並暫時隱藏預覽：
+            </p>
+            <ul>
+              <li data-i18n="docs.hover.smart1">正在重新命名檔案</li>
+              <li data-i18n="docs.hover.smart2">正在拖曳檔案</li>
+              <li data-i18n="docs.hover.smart3">正在使用右鍵選單</li>
+            </ul>
+          </article>
+
+          <article id="settings" class="docs-article">
+            <h2 data-i18n="docs.settings.title">偏好設定</h2>
+            <p data-i18n="docs.settings.intro">
+              點擊選單列圖示，然後選擇「偏好設定...」或按 <kbd>⌘</kbd> +
+              <kbd>,</kbd> 開啟設定視窗。
+            </p>
+
+            <h3 data-i18n="docs.settings.generalTitle">一般設定</h3>
+            <table class="docs-table">
+              <tr>
+                <td>
+                  <strong data-i18n="docs.settings.launchAtLogin"
+                    >登入時啟動</strong
+                  >
+                </td>
+                <td data-i18n="docs.settings.launchAtLoginDesc">
+                  開機時自動啟動 FinderHover
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong data-i18n="docs.settings.hoverDelay">懸停延遲</strong>
+                </td>
+                <td data-i18n="docs.settings.hoverDelayDesc">
+                  滑鼠停留多久後顯示預覽（0.1 - 2.0 秒）
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong data-i18n="docs.settings.windowSize">視窗大小</strong>
+                </td>
+                <td data-i18n="docs.settings.windowSizeDesc">
+                  調整預覽視窗的尺寸
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong data-i18n="docs.settings.opacity">透明度</strong>
+                </td>
+                <td data-i18n="docs.settings.opacityDesc">
+                  調整預覽視窗的透明度（70% - 100%）
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong data-i18n="docs.settings.fontScale">字體縮放</strong>
+                </td>
+                <td data-i18n="docs.settings.fontScaleDesc">
+                  調整預覽視窗中的文字大小
+                </td>
+              </tr>
+            </table>
+          </article>
+
+          <article id="styles" class="docs-article">
+            <h2 data-i18n="docs.styles.title">介面風格</h2>
+            <p data-i18n="docs.styles.intro">
+              FinderHover 提供兩種預覽視窗風格：
+            </p>
+
+            <div class="docs-grid">
+              <div class="docs-card">
+                <h4 data-i18n="docs.styles.macosTitle">macOS 風格</h4>
+                <p data-i18n="docs.styles.macosDesc">
+                  豐富的視覺呈現，包含縮圖預覽、圖示和完整的中繼資料。適合需要詳細檔案資訊的使用者。
+                </p>
+              </div>
+              <div class="docs-card">
+                <h4 data-i18n="docs.styles.windowsTitle">Windows 風格</h4>
+                <p data-i18n="docs.styles.windowsDesc">
+                  簡約的工具提示樣式，只顯示基本資訊。適合偏好簡潔介面的使用者。
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article id="metadata-fields" class="docs-article">
+            <h2 data-i18n="docs.metadata.title">中繼資料欄位</h2>
+            <p data-i18n="docs.metadata.intro">
+              你可以在設定中自訂要顯示哪些中繼資料欄位。以下是各類檔案支援的欄位：
+            </p>
+
+            <h3 data-i18n="docs.metadata.imageTitle">影像檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.image1">相機型號、鏡頭資訊、焦距</li>
+              <li data-i18n="docs.metadata.image2">光圈、快門速度、ISO</li>
+              <li data-i18n="docs.metadata.image3">拍攝日期、色彩空間、GPS 座標</li>
+              <li data-i18n="docs.metadata.image4">IPTC/XMP（作者、版權、關鍵字、評分）</li>
+              <li data-i18n="docs.metadata.image5">色彩描述檔、位元深度、HDR 增益圖偵測</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.videoTitle">影片檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.video1">影片時長、解析度、影片編碼</li>
+              <li data-i18n="docs.metadata.video2">幀率、位元率、影音軌道數量</li>
+              <li data-i18n="docs.metadata.video3">HDR 格式（Dolby Vision、HDR10、HLG）</li>
+              <li data-i18n="docs.metadata.video4">章節數、字幕軌道、容器格式</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.audioTitle">音訊檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.audio1">曲目名稱、演出者、專輯</li>
+              <li data-i18n="docs.metadata.audio2">專輯演出者、類型、年份</li>
+              <li data-i18n="docs.metadata.audio3">時長、位元率、取樣率、聲道數</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.documentTitle">文件檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.document1">文件標題、作者、主旨、關鍵字</li>
+              <li data-i18n="docs.metadata.document2">建立/修改日期、頁數、字數</li>
+              <li data-i18n="docs.metadata.document3">工作表數（Excel）、投影片數（PowerPoint）</li>
+              <li data-i18n="docs.metadata.document4">PDF 版本、加密狀態、頁面尺寸</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.codeTitle">程式碼檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.code1">程式語言自動偵測（38 種語言）</li>
+              <li data-i18n="docs.metadata.code2">總行數、程式碼行數</li>
+              <li data-i18n="docs.metadata.code3">註解行數、空白行數、檔案編碼</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.configTitle">設定檔與資料格式</h3>
+            <ul>
+              <li data-i18n="docs.metadata.config1">格式類型、語法有效性</li>
+              <li data-i18n="docs.metadata.config2">鍵值數量、最大巢狀深度</li>
+              <li data-i18n="docs.metadata.config3">是否包含註解、檔案編碼</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.markdownTitle">Markdown 檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.markdown1">Frontmatter 內容（YAML/TOML/JSON）</li>
+              <li data-i18n="docs.metadata.markdown2">文件標題（H1 或 Frontmatter）</li>
+              <li data-i18n="docs.metadata.markdown3">字數、標題數量、連結數量、圖片數量</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.webTitle">網頁檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.web1">頁面標題、描述、關鍵字</li>
+              <li data-i18n="docs.metadata.web2">作者、語言、字元編碼</li>
+              <li data-i18n="docs.metadata.web3">Open Graph（og:title, og:description, og:image）</li>
+              <li data-i18n="docs.metadata.web4">Twitter Card 類型</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.archiveTitle">壓縮檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.archive1">壓縮格式類型</li>
+              <li data-i18n="docs.metadata.archive2">檔案數量、解壓縮後大小</li>
+              <li data-i18n="docs.metadata.archive3">壓縮比例、是否加密</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.ebookTitle">電子書檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.ebook1">書名、作者、出版商</li>
+              <li data-i18n="docs.metadata.ebook2">出版日期、ISBN、語言</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.fontTitle">字型檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.font1">字型全名、字型家族</li>
+              <li data-i18n="docs.metadata.font2">字型風格（Regular、Bold 等）</li>
+              <li data-i18n="docs.metadata.font3">版本、設計師、版權資訊、字符數量</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.vectorTitle">向量圖形與設計檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.vector1">格式類型、尺寸、ViewBox</li>
+              <li data-i18n="docs.metadata.vector2">色彩模式（RGB、CMYK）</li>
+              <li data-i18n="docs.metadata.vector3">圖層數量（PSD）、位元深度、解析度</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.subtitleTitle">字幕檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.subtitle1">字幕格式、文字編碼</li>
+              <li data-i18n="docs.metadata.subtitle2">字幕條目數量、總時長</li>
+              <li data-i18n="docs.metadata.subtitle3">語言代碼、是否包含格式化樣式</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.diskImageTitle">磁碟映像檔</h3>
+            <ul>
+              <li data-i18n="docs.metadata.diskImage1">映像格式（UDIF、ISO 9660 等）</li>
+              <li data-i18n="docs.metadata.diskImage2">總大小、壓縮後大小、壓縮比例</li>
+              <li data-i18n="docs.metadata.diskImage3">加密狀態、分割區架構、檔案系統</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.databaseTitle">資料庫檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.database1">資料表數量、索引數量</li>
+              <li data-i18n="docs.metadata.database2">觸發器數量、檢視數量</li>
+              <li data-i18n="docs.metadata.database3">Schema 版本、頁面大小、資料庫編碼</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.appBundleTitle">應用程式套件</h3>
+            <ul>
+              <li data-i18n="docs.metadata.appBundle1">Bundle ID、版本號、Build 號</li>
+              <li data-i18n="docs.metadata.appBundle2">最低 macOS 版本需求</li>
+              <li data-i18n="docs.metadata.appBundle3">應用程式類別、版權</li>
+              <li data-i18n="docs.metadata.appBundle4">程式碼簽章狀態、Entitlements</li>
+              <li data-i18n="docs.metadata.appBundle5">架構（arm64、x86_64、Universal）</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.gitTitle">Git 儲存庫</h3>
+            <ul>
+              <li data-i18n="docs.metadata.git1">目前分支、分支數量</li>
+              <li data-i18n="docs.metadata.git2">Commit 數量、標籤數量</li>
+              <li data-i18n="docs.metadata.git3">最後 Commit 日期與訊息</li>
+              <li data-i18n="docs.metadata.git4">遠端 URL、未提交的變更狀態</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.systemMetaTitle">系統中繼資料</h3>
+            <ul>
+              <li data-i18n="docs.metadata.systemMeta1">Finder 標籤（顏色與自訂標籤）</li>
+              <li data-i18n="docs.metadata.systemMeta2">下載來源（來自哪個網站或應用程式）</li>
+              <li data-i18n="docs.metadata.systemMeta3">隔離資訊（Gatekeeper 狀態）</li>
+              <li data-i18n="docs.metadata.systemMeta4">連結資訊（符號連結、硬連結）</li>
+              <li data-i18n="docs.metadata.systemMeta5">使用統計（開啟次數、最後使用日期）</li>
+              <li data-i18n="docs.metadata.systemMeta6">iCloud 狀態、Finder 註解、UTI 類型識別碼</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.model3DTitle">3D 模型檔案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.model3D1">格式類型（USDZ、OBJ、GLTF、FBX 等）</li>
+              <li data-i18n="docs.metadata.model3D2">頂點數、面數、網格數、材質數</li>
+              <li data-i18n="docs.metadata.model3D3">動畫數、骨架偵測、邊界框尺寸</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.xcodeProjectTitle">Xcode 專案</h3>
+            <ul>
+              <li data-i18n="docs.metadata.xcodeProject1">專案名稱、Target 數、建置配置數</li>
+              <li data-i18n="docs.metadata.xcodeProject2">Swift 版本、部署目標</li>
+              <li data-i18n="docs.metadata.xcodeProject3">組織名稱、單元測試 / UI 測試偵測</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.fileSystemTitle">檔案系統進階</h3>
+            <ul>
+              <li data-i18n="docs.metadata.fileSystem1">已分配磁碟空間（實際使用的區塊）</li>
+              <li data-i18n="docs.metadata.fileSystem2">屬性修改日期、Resource Fork 大小</li>
+              <li data-i18n="docs.metadata.fileSystem3">磁碟區資訊（名稱、格式、可用空間）</li>
+              <li data-i18n="docs.metadata.fileSystem4">Spotlight 索引狀態</li>
+              <li data-i18n="docs.metadata.fileSystem5">雲端儲存偵測（iCloud、Dropbox、Google Drive、OneDrive）</li>
+            </ul>
+
+            <h3 data-i18n="docs.metadata.moreTitle">查看完整清單</h3>
+            <p data-i18n="docs.metadata.moreDesc">
+              以上僅列出部分欄位，完整支援請參閱格式頁面。
+            </p>
+            <p>
+              <a href="formats.html" class="docs-link" data-i18n="docs.metadata.viewFormats">查看完整格式清單 →</a>
+            </p>
+          </article>
+
+          <article id="troubleshooting" class="docs-article">
+            <h2 data-i18n="docs.troubleshooting.title">疑難排解</h2>
+
+            <h3 data-i18n="docs.troubleshooting.noPreviewTitle">
+              預覽視窗沒有出現
+            </h3>
+            <ol>
+              <li data-i18n="docs.troubleshooting.noPreview1">
+                確認 FinderHover 正在執行（選單列應該有圖示）
+              </li>
+              <li data-i18n="docs.troubleshooting.noPreview2">
+                確認已授予輔助使用權限
+              </li>
+              <li data-i18n="docs.troubleshooting.noPreview3">
+                嘗試重新啟動 FinderHover
+              </li>
+              <li data-i18n="docs.troubleshooting.noPreview4">
+                確認滑鼠停留時間超過設定的延遲時間
+              </li>
+            </ol>
+
+            <h3 data-i18n="docs.troubleshooting.permissionTitle">
+              權限授予後仍無法使用
+            </h3>
+            <ol>
+              <li data-i18n="docs.troubleshooting.permission1">
+                完全退出 FinderHover
+              </li>
+              <li data-i18n="docs.troubleshooting.permission2">
+                在系統設定中移除 FinderHover 的權限
+              </li>
+              <li data-i18n="docs.troubleshooting.permission3">
+                重新開啟 FinderHover
+              </li>
+              <li data-i18n="docs.troubleshooting.permission4">重新授予權限</li>
+            </ol>
+
+            <h3 data-i18n="docs.troubleshooting.positionTitle">
+              預覽視窗位置不正確
+            </h3>
+            <p data-i18n="docs.troubleshooting.positionDesc">
+              預覽視窗會自動調整位置以避免超出螢幕邊界。如果你使用多螢幕配置，可能會在某些邊界情況下出現位置問題。請回報此問題讓我們改進。
+            </p>
+
+            <div class="docs-tip">
+              <strong data-i18n="docs.troubleshooting.stillIssue"
+                >仍有問題？</strong
+              ><span data-i18n="docs.troubleshooting.stillIssueDesc"
+                >請到
+                <a href="https://github.com/KoukeNeko/FinderHover/issues"
+                  >GitHub Issues</a
+                >
+                回報問題，我們會盡快協助你。</span
+              >
+            </div>
+          </article>
+        </main>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <site-footer></site-footer>
+
+    <script>
+      // Smooth scroll for sidebar links
+      document.querySelectorAll(".docs-nav a").forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const target = document.querySelector(link.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      });
+
+      // Highlight current section in sidebar
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              document.querySelectorAll(".docs-nav a").forEach((link) => {
+                link.classList.remove("active");
+                if (link.getAttribute("href") === "#" + entry.target.id) {
+                  link.classList.add("active");
+                }
+              });
+            }
+          });
+        },
+        { threshold: 0.5 },
+      );
+
+      document.querySelectorAll(".docs-article").forEach((article) => {
+        observer.observe(article);
+      });
+    </script>
+  </body>
+</html>

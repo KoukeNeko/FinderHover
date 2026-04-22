@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Changelog - FinderHover</title>
+    <meta name="description" content="FinderHover release notes: new features, bug fixes, and improvements across every version." />
+    <link rel="icon" type="image/png" href="/assets/icon.png" />
+
+    <!-- SEO -->
+    <link rel="canonical" href="https://finderhover.app.koukeneko.cafe/en/changelog.html" />
+    <link rel="alternate" hreflang="zh-Hant" href="https://finderhover.app.koukeneko.cafe/changelog.html" />
+    <link rel="alternate" hreflang="en" href="https://finderhover.app.koukeneko.cafe/en/changelog.html" />
+    <link rel="alternate" hreflang="ja" href="https://finderhover.app.koukeneko.cafe/ja/changelog.html" />
+    <link rel="alternate" hreflang="x-default" href="https://finderhover.app.koukeneko.cafe/en/changelog.html" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FinderHover" />
+    <meta property="og:title" content="Changelog - FinderHover" />
+    <meta property="og:description" content="FinderHover release notes: new features, bug fixes, and improvements across every version." />
+    <meta property="og:url" content="https://finderhover.app.koukeneko.cafe/en/changelog.html" />
+    <meta property="og:image" content="https://finderhover.app.koukeneko.cafe/assets/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="zh_TW" />
+    <meta property="og:locale:alternate" content="ja_JP" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Changelog - FinderHover" />
+    <meta name="twitter:description" content="FinderHover release notes: new features, bug fixes, and improvements across every version." />
+    <meta name="twitter:image" content="https://finderhover.app.koukeneko.cafe/assets/og-image.png" />
+
+    <script>
+      (function () {
+        var v = Date.now();
+        var stylesheet = document.createElement('link');
+        stylesheet.rel = 'stylesheet';
+        stylesheet.href = '/style.css?v=' + v;
+        document.head.appendChild(stylesheet);
+
+        var components = document.createElement('script');
+        components.src = '/components.js?v=' + v;
+        components.defer = true;
+        document.head.appendChild(components);
+
+        var i18n = document.createElement('script');
+        i18n.src = '/i18n.js?v=' + v;
+        i18n.defer = true;
+        document.head.appendChild(i18n);
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <site-nav></site-nav>
+
+    <!-- Changelog Hero -->
+    <section class="page-hero">
+      <h1 class="page-headline" data-i18n="changelog.pageTitle">更新日誌</h1>
+      <p class="page-subheadline" data-i18n="changelog.pageSubtitle">
+        追蹤 FinderHover 的每一個改進
+      </p>
+    </section>
+
+    <!-- Changelog Content -->
+    <section class="changelog-section">
+      <div class="changelog-container" id="changelog-content">
+        <!-- Loading State -->
+        <div class="changelog-loading">
+          <div class="loading-spinner"></div>
+          <p data-i18n="changelog.loading">正在從 GitHub 載入更新日誌...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <site-footer></site-footer>
+
+    <script>
+      // Helper to get translation with fallback
+      function t(key, fallback) {
+        if (window.i18n && typeof window.i18n.t === "function") {
+          return window.i18n.t(key) || fallback;
+        }
+        return fallback;
+      }
+
+      // Fetch and parse CHANGELOG.md from GitHub
+      async function loadChangelog() {
+        const container = document.getElementById("changelog-content");
+        const rawUrl =
+          "https://raw.githubusercontent.com/KoukeNeko/FinderHover/main/CHANGELOG.md";
+
+        try {
+          const response = await fetch(rawUrl);
+          if (!response.ok) throw new Error("Failed to fetch changelog");
+
+          const markdown = await response.text();
+          const html = parseChangelog(markdown);
+          container.innerHTML = html;
+        } catch (error) {
+          console.error("Error loading changelog:", error);
+          container.innerHTML = `
+            <div class="changelog-error">
+              <p>${t("changelog.error", "無法載入更新日誌")}</p>
+              <a href="https://github.com/KoukeNeko/FinderHover/blob/main/CHANGELOG.md" 
+                 class="changelog-link" target="_blank">
+                ${t("changelog.viewOnGithub", "在 GitHub 上查看")}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+              </a>
+            </div>
+          `;
+        }
+      }
+
+      function parseChangelog(markdown) {
+        // Split by version headers (## Version x.x.x)
+        const versionRegex = /^## Version (\d+\.\d+\.\d+)(?: \(Current\))?/gm;
+        const versions = [];
+
+        // Find all version headers
+        const matches = [...markdown.matchAll(versionRegex)];
+
+        matches.forEach((match, i) => {
+          const version = match[1];
+          const isCurrent = match[0].includes("(Current)");
+          const startIndex = match.index + match[0].length;
+          const endIndex = matches[i + 1]?.index || markdown.length;
+          const content = markdown.slice(startIndex, endIndex).trim();
+
+          versions.push({ version, isCurrent, content });
+        });
+
+        // Convert to HTML
+        let html = versions
+          .map((v, index) => {
+            const isMajor =
+              v.version.endsWith(".0") && !v.version.endsWith(".0.0");
+            const isLatest = index === 0 || v.isCurrent;
+
+            const currentBadge = t("changelog.currentVersion", "目前版本");
+            const majorBadge = t("changelog.majorUpdate", "重大更新");
+
+            return `
+            <article class="changelog-entry${isMajor ? " major" : ""}">
+              <div class="changelog-header">
+                <span class="changelog-version">${v.version}</span>
+                ${isLatest ? `<span class="changelog-badge current">${currentBadge}</span>` : ""}
+                ${isMajor && !isLatest ? `<span class="changelog-badge major">${majorBadge}</span>` : ""}
+              </div>
+              <div class="changelog-content">
+                ${parseMarkdownContent(v.content)}
+              </div>
+            </article>
+          `;
+          })
+          .join("");
+
+        // Add footer
+        const viewFullChangelog = t(
+          "changelog.viewFullChangelog",
+          "在 GitHub 上查看完整更新日誌",
+        );
+        html += `
+          <div class="changelog-footer">
+            <a href="https://github.com/KoukeNeko/FinderHover/blob/main/CHANGELOG.md" 
+               class="changelog-link" target="_blank">
+              ${viewFullChangelog}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+            </a>
+          </div>
+        `;
+
+        return html;
+      }
+
+      function parseMarkdownContent(content) {
+        // Parse markdown sections into HTML
+        let html = content;
+
+        // Remove horizontal rules
+        html = html.replace(/^---$/gm, "");
+
+        // Convert ### headers to h3
+        html = html.replace(/^### (.+)$/gm, "<h3>$1</h3>");
+
+        // Convert #### headers to h4
+        html = html.replace(/^#### (.+)$/gm, "<h4>$1</h4>");
+
+        // Convert bullet points to list items
+        // First, wrap consecutive list items in <ul>
+        const lines = html.split("\n");
+        let result = [];
+        let inList = false;
+
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          const isListItem = line.trim().startsWith("- ");
+
+          if (isListItem && !inList) {
+            result.push("<ul>");
+            inList = true;
+          } else if (!isListItem && inList && line.trim() !== "") {
+            result.push("</ul>");
+            inList = false;
+          }
+
+          if (isListItem) {
+            const text = line.trim().substring(2);
+            // Convert inline code
+            const escapedText = text
+              .replace(/`([^`]+)`/g, "<code>$1</code>")
+              .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+            result.push(`<li>${escapedText}</li>`);
+          } else if (line.trim() !== "" || !inList) {
+            result.push(line);
+          }
+        }
+
+        if (inList) {
+          result.push("</ul>");
+        }
+
+        return result.join("\n");
+      }
+
+      // Wait for i18n to be ready before loading changelog
+      async function waitForI18n(maxWait = 3000) {
+        const start = Date.now();
+        while (Date.now() - start < maxWait) {
+          if (window.i18n &&
+              window.i18n.translations &&
+              window.i18n.translations.changelog) {
+            return true;
+          }
+          await new Promise(resolve => setTimeout(resolve, 50));
+        }
+        return false;
+      }
+
+      // Load changelog when page loads, after i18n is ready
+      document.addEventListener("DOMContentLoaded", async () => {
+        await waitForI18n();
+        loadChangelog();
+      });
+    </script>
+
+    <style>
+      .changelog-loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem 2rem;
+        color: var(--color-text-secondary);
+      }
+
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid var(--color-border);
+        border-top-color: var(--color-accent);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .changelog-error {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--color-text-secondary);
+      }
+
+      .changelog-error p {
+        margin-bottom: 1rem;
+      }
+    </style>
+  </body>
+</html>

@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>OG Card — FinderHover</title>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      html, body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+          "Helvetica Neue", Arial, sans-serif;
+        color: #f5f5f7;
+        background: #000;
+        background-image:
+          radial-gradient(1200px 600px at 20% 20%, rgba(41, 151, 255, 0.22), transparent 60%),
+          radial-gradient(900px 500px at 90% 110%, rgba(138, 43, 226, 0.18), transparent 60%),
+          linear-gradient(160deg, #0a0a0c 0%, #1a1a1f 100%);
+      }
+
+      .card {
+        width: 1200px;
+        height: 630px;
+        padding: 88px 96px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+        background-size: 22px 22px;
+        pointer-events: none;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        position: relative;
+      }
+
+      .brand-icon {
+        width: 128px;
+        height: 128px;
+        border-radius: 28px;
+        box-shadow:
+          0 8px 28px rgba(0, 0, 0, 0.45),
+          0 0 0 1px rgba(255, 255, 255, 0.06);
+      }
+
+      .brand-name {
+        font-size: 72px;
+        font-weight: 700;
+        letter-spacing: -1.5px;
+        line-height: 1;
+      }
+
+      .headline {
+        position: relative;
+        max-width: 900px;
+      }
+
+      .headline h1 {
+        font-size: 88px;
+        font-weight: 700;
+        line-height: 1.05;
+        letter-spacing: -2px;
+        margin-bottom: 28px;
+      }
+
+      .headline p {
+        font-size: 32px;
+        color: #a1a1a6;
+        font-weight: 400;
+        line-height: 1.4;
+        letter-spacing: -0.3px;
+      }
+
+      .footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 22px;
+        border-radius: 999px;
+        background: rgba(41, 151, 255, 0.14);
+        border: 1px solid rgba(41, 151, 255, 0.4);
+        color: #2997ff;
+        font-size: 22px;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+      }
+
+      .tag-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #2997ff;
+        box-shadow: 0 0 12px rgba(41, 151, 255, 0.9);
+      }
+
+      .url {
+        font-family: "SF Mono", SFMono-Regular, Menlo, monospace;
+        font-size: 22px;
+        color: #86868b;
+        letter-spacing: 0.4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="brand">
+        <img src="../website/assets/icon.png" alt="FinderHover icon" class="brand-icon" />
+        <div class="brand-name">FinderHover</div>
+      </div>
+
+      <div class="headline">
+        <h1>See everything.<br />At a glance.</h1>
+        <p>
+          Hover in Finder to reveal rich metadata for 120+ file formats —
+          EXIF, codecs, dimensions, line counts, and more.
+        </p>
+      </div>
+
+      <div class="footer">
+        <div class="tag">
+          <span class="tag-dot"></span>
+          <span>macOS · Swift Native</span>
+        </div>
+        <div class="url">finderhover.app.koukeneko.cafe</div>
+      </div>
+    </div>
+  </body>
+</html>
