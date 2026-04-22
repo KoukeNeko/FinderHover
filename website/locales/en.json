@@ -1,7 +1,29 @@
 {
   "meta": {
     "title": "FinderHover - macOS File Preview Tool",
-    "description": "Hover over files in Finder to display rich file information with deep metadata parsing for 120+ file formats."
+    "description": "Hover over files in Finder to display rich file information with deep metadata parsing for 120+ file formats.",
+    "pages": {
+      "download": {
+        "title": "Download - FinderHover",
+        "description": "Install FinderHover via Homebrew or direct download. Requires macOS Sonoma 14.0 or later."
+      },
+      "docs": {
+        "title": "Documentation - FinderHover",
+        "description": "FinderHover documentation: installation, configuration, shortcuts, and usage guide."
+      },
+      "formats": {
+        "title": "Supported Formats - FinderHover",
+        "description": "FinderHover supports 120+ file formats including images, video, audio, documents, code, archives, and more."
+      },
+      "changelog": {
+        "title": "Changelog - FinderHover",
+        "description": "FinderHover release notes: new features, bug fixes, and improvements across every version."
+      },
+      "license": {
+        "title": "License - FinderHover",
+        "description": "FinderHover is released under the MIT license — free to use, modify, and distribute."
+      }
+    }
   },
   "nav": {
     "features": "Features",

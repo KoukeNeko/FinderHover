@@ -1,7 +1,29 @@
 {
   "meta": {
     "title": "FinderHover - macOS ファイルプレビューツール",
-    "description": "Finder でホバーするだけで、120 種類以上のファイル形式の詳細なメタデータを表示できます。"
+    "description": "Finder でホバーするだけで、120 種類以上のファイル形式の詳細なメタデータを表示できます。",
+    "pages": {
+      "download": {
+        "title": "ダウンロード - FinderHover",
+        "description": "Homebrew または直接ダウンロードで FinderHover をインストール。macOS Sonoma 14.0 以降に対応。"
+      },
+      "docs": {
+        "title": "ドキュメント - FinderHover",
+        "description": "FinderHover のインストール、設定、ショートカット、使い方をまとめたガイド。"
+      },
+      "formats": {
+        "title": "対応フォーマット - FinderHover",
+        "description": "FinderHover は画像・動画・音声・ドキュメント・コード・圧縮ファイルなど 120 種類以上のフォーマットに対応。"
+      },
+      "changelog": {
+        "title": "更新履歴 - FinderHover",
+        "description": "FinderHover 各バージョンの新機能・修正・改善点をまとめたリリースノート。"
+      },
+      "license": {
+        "title": "ライセンス - FinderHover",
+        "description": "FinderHover は MIT ライセンスで公開され、自由に利用・改変・配布できます。"
+      }
+    }
   },
   "nav": {
     "features": "機能",

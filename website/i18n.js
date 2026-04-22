@@ -1,17 +1,40 @@
 /**
  * i18n - Internationalization module for FinderHover website
- * Supports: zh-Hant, ja, en
+ * Supports: zh-Hant (root), en (/en/), ja (/ja/)
+ *
+ * Language is encoded in the URL path:
+ *   /            → zh-Hant
+ *   /en/...      → en
+ *   /ja/...      → ja
  */
 
+const SUPPORTED_LANGS = ['zh-Hant', 'en', 'ja'];
+const DEFAULT_LANG = 'zh-Hant';
+const LANG_STORAGE_KEY = 'finderhover-lang';
+
+/**
+ * Parse a locale-authored HTML fragment into DOM nodes.
+ * Locale strings contain markup like <br> for intentional line breaks;
+ * we use DOMParser (which doesn't execute scripts) instead of an innerHTML
+ * assignment to avoid handing raw strings to the HTML parser via a setter.
+ */
+function parseHtmlFragment(html) {
+    const doc = new DOMParser().parseFromString(`<div id="root">${html}</div>`, 'text/html');
+    const root = doc.getElementById('root');
+    return root ? Array.from(root.childNodes) : [];
+}
+
+function replaceWithHtml(el, html) {
+    const nodes = parseHtmlFragment(html);
+    el.replaceChildren(...nodes);
+}
+
 const i18n = {
-    supportedLangs: ['zh-Hant', 'ja', 'en'],
-    defaultLang: 'zh-Hant',
+    supportedLangs: SUPPORTED_LANGS,
+    defaultLang: DEFAULT_LANG,
     currentLang: null,
     translations: {},
 
-    /**
-     * Initialize i18n system
-     */
     async init() {
         this.currentLang = this.detectLanguage();
         await this.loadTranslation(this.currentLang);
@@ -21,57 +44,67 @@ const i18n = {
     },
 
     /**
-     * Detect user's preferred language
+     * Detect user's preferred language.
+     * Path prefix wins. When at the zh-Hant root we only redirect if the
+     * visitor has explicitly chosen a different language on a prior visit
+     * (stored via the language switcher). Browser-language-only redirects
+     * are deliberately avoided because they confuse crawlers — Googlebot
+     * would hit "/" and be bounced to "/en/", contradicting our canonical.
      */
     detectLanguage() {
-        // Check URL param first
-        const urlParams = new URLSearchParams(window.location.search);
-        const urlLang = urlParams.get('lang');
-        if (urlLang && this.supportedLangs.includes(urlLang)) {
-            localStorage.setItem('finderhover-lang', urlLang);
-            return urlLang;
-        }
+        const pathLang = this.detectLanguageFromPath();
+        if (pathLang) return pathLang;
 
-        // Check localStorage
-        const savedLang = localStorage.getItem('finderhover-lang');
-        if (savedLang && this.supportedLangs.includes(savedLang)) {
-            return savedLang;
+        const saved = localStorage.getItem(LANG_STORAGE_KEY);
+        if (saved && saved !== DEFAULT_LANG && SUPPORTED_LANGS.includes(saved)) {
+            this.redirectToLang(saved);
         }
+        return DEFAULT_LANG;
+    },
 
-        // Check browser language
-        const browserLang = navigator.language;
-        if (browserLang.startsWith('zh')) {
-            return 'zh-Hant';
-        } else if (browserLang.startsWith('ja')) {
-            return 'ja';
-        } else if (browserLang.startsWith('en')) {
-            return 'en';
+    detectLanguageFromPath() {
+        const segments = window.location.pathname.split('/').filter(Boolean);
+        const firstSegment = segments[0];
+        if (firstSegment && SUPPORTED_LANGS.includes(firstSegment) && firstSegment !== DEFAULT_LANG) {
+            return firstSegment;
         }
+        return null;
+    },
 
-        return this.defaultLang;
+    redirectToLang(targetLang) {
+        const targetPath = this.rewritePathForLang(window.location.pathname, targetLang);
+        window.location.replace(targetPath + window.location.search + window.location.hash);
     },
 
     /**
-     * Load translation file
+     * Rewrite a pathname so it points at the given language tree.
+     *   ("/docs.html", "en")      → "/en/docs.html"
+     *   ("/en/docs.html", "ja")   → "/ja/docs.html"
+     *   ("/ja/docs.html", "zh-Hant") → "/docs.html"
      */
+    rewritePathForLang(pathname, targetLang) {
+        const segments = pathname.split('/').filter(Boolean);
+        if (segments[0] && SUPPORTED_LANGS.includes(segments[0]) && segments[0] !== DEFAULT_LANG) {
+            segments.shift();
+        }
+        const prefix = targetLang === DEFAULT_LANG ? '' : `/${targetLang}`;
+        const tail = segments.length === 0 ? '/' : `/${segments.join('/')}`;
+        return prefix + tail;
+    },
+
     async loadTranslation(lang) {
         try {
-            // Use relative path to work with any hosting location
-            const response = await fetch(`locales/${lang}.json`);
-            if (!response.ok) throw new Error('Failed to load translation');
+            const response = await fetch(`/locales/${lang}.json`);
+            if (!response.ok) throw new Error(`Failed to load translation: ${lang}`);
             this.translations = await response.json();
         } catch (error) {
             console.error('i18n load error:', error);
-            // Fallback to default
-            if (lang !== this.defaultLang) {
-                await this.loadTranslation(this.defaultLang);
+            if (lang !== DEFAULT_LANG) {
+                await this.loadTranslation(DEFAULT_LANG);
             }
         }
     },
 
-    /**
-     * Get translation by key path (e.g., "hero.headline")
-     */
     t(keyPath) {
         const keys = keyPath.split('.');
         let value = this.translations;
@@ -79,140 +112,143 @@ const i18n = {
             if (value && typeof value === 'object' && key in value) {
                 value = value[key];
             } else {
-                return keyPath; // Return key if not found
+                return keyPath;
             }
         }
         return value;
     },
 
     /**
-     * Apply translations to all elements with data-i18n attribute
+     * Infer the page slug from the current URL so we can pick per-page meta.
+     *   "/"                 → "index"
+     *   "/en/"              → "index"
+     *   "/download.html"    → "download"
+     *   "/ja/docs.html"     → "docs"
      */
+    getPageSlug() {
+        const segments = window.location.pathname.split('/').filter(Boolean);
+        if (segments[0] && SUPPORTED_LANGS.includes(segments[0]) && segments[0] !== DEFAULT_LANG) {
+            segments.shift();
+        }
+        const file = segments[segments.length - 1];
+        if (!file || !file.endsWith('.html')) return 'index';
+        return file.replace(/\.html$/, '');
+    },
+
+    getPageMeta() {
+        const slug = this.getPageSlug();
+        const rootMeta = this.translations.meta || {};
+        const pageMeta = (rootMeta.pages && rootMeta.pages[slug]) || {};
+        return {
+            title: pageMeta.title || rootMeta.title,
+            description: pageMeta.description || rootMeta.description,
+        };
+    },
+
     applyTranslations() {
-        // Update document title
-        if (this.translations.meta?.title) {
-            document.title = this.translations.meta.title;
-        }
-
-        // Update meta description
-        const metaDesc = document.querySelector('meta[name="description"]');
-        if (metaDesc && this.translations.meta?.description) {
-            metaDesc.content = this.translations.meta.description;
-        }
-
-        // Apply to elements with data-i18n
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            const value = this.t(key);
-            if (value !== key) {
-                el.innerHTML = value;
-            }
-        });
-
-        // Apply to elements with data-i18n-placeholder
-        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-            const key = el.getAttribute('data-i18n-placeholder');
-            const value = this.t(key);
-            if (value !== key) {
-                el.placeholder = value;
-            }
-        });
-
-        // Apply to elements with data-i18n-title
-        document.querySelectorAll('[data-i18n-title]').forEach(el => {
-            const key = el.getAttribute('data-i18n-title');
-            const value = this.t(key);
-            if (value !== key) {
-                el.title = value;
-            }
-        });
-
-        // Sync marquee duplicate content
+        this.applyMetaTranslations();
+        this.applyElementTranslations();
         this.syncMarqueeContent();
     },
 
-    /**
-     * Sync marquee content - copy first marquee-content to all duplicates
-     */
-    syncMarqueeContent() {
-        document.querySelectorAll('.marquee-row').forEach(row => {
-            const contents = row.querySelectorAll('.marquee-content');
-            if (contents.length > 1) {
-                const firstContent = contents[0];
-                for (let i = 1; i < contents.length; i++) {
-                    contents[i].innerHTML = firstContent.innerHTML;
-                }
-            }
+    applyMetaTranslations() {
+        const { title, description } = this.getPageMeta();
+        if (title) document.title = title;
+
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc && description) metaDesc.setAttribute('content', description);
+
+        if (title) this.setMetaAttr('meta[property="og:title"]', 'content', title);
+        if (description) this.setMetaAttr('meta[property="og:description"]', 'content', description);
+        if (title) this.setMetaAttr('meta[name="twitter:title"]', 'content', title);
+        if (description) this.setMetaAttr('meta[name="twitter:description"]', 'content', description);
+    },
+
+    setMetaAttr(selector, attr, value) {
+        const el = document.querySelector(selector);
+        if (el) el.setAttribute(attr, value);
+    },
+
+    applyElementTranslations() {
+        document.querySelectorAll('[data-i18n]').forEach((el) => {
+            const key = el.getAttribute('data-i18n');
+            const value = this.t(key);
+            if (value !== key) replaceWithHtml(el, value);
+        });
+
+        document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            const value = this.t(key);
+            if (value !== key) el.placeholder = value;
+        });
+
+        document.querySelectorAll('[data-i18n-title]').forEach((el) => {
+            const key = el.getAttribute('data-i18n-title');
+            const value = this.t(key);
+            if (value !== key) el.title = value;
         });
     },
 
     /**
-     * Update language switcher UI
+     * Duplicate the first marquee-content node across every sibling so the
+     * CSS-based infinite scroll always renders identical frames.
      */
+    syncMarqueeContent() {
+        document.querySelectorAll('.marquee-row').forEach((row) => {
+            const contents = row.querySelectorAll('.marquee-content');
+            if (contents.length <= 1) return;
+            const source = contents[0];
+            for (let i = 1; i < contents.length; i++) {
+                const clones = Array.from(source.childNodes).map((node) => node.cloneNode(true));
+                contents[i].replaceChildren(...clones);
+            }
+        });
+    },
+
     updateLangSwitcher() {
         const switcher = document.querySelector('.lang-switcher');
         if (!switcher) return;
 
-        const langNames = {
-            'zh-Hant': '繁',
-            'ja': '日',
-            'en': 'EN'
-        };
+        const shortNames = { 'zh-Hant': '繁', 'ja': '日', 'en': 'EN' };
+        const fullNames = { 'zh-Hant': '繁體中文', 'ja': '日本語', 'en': 'English' };
 
-        const langFullNames = {
-            'zh-Hant': '繁體中文',
-            'ja': '日本語',
-            'en': 'English'
-        };
-
-        // Update current language display
         const current = switcher.querySelector('.lang-current');
         if (current) {
             const desktopSpan = current.querySelector('.lang-text-desktop');
             const mobileSpan = current.querySelector('.lang-text-mobile');
 
             if (desktopSpan && mobileSpan) {
-                desktopSpan.textContent = langNames[this.currentLang];
-                mobileSpan.textContent = langFullNames[this.currentLang];
+                desktopSpan.textContent = shortNames[this.currentLang];
+                mobileSpan.textContent = fullNames[this.currentLang];
             } else {
-                current.textContent = langNames[this.currentLang];
+                current.textContent = shortNames[this.currentLang];
             }
         }
 
-        // Update active state
-        switcher.querySelectorAll('.lang-option').forEach(opt => {
+        switcher.querySelectorAll('.lang-option').forEach((opt) => {
             const lang = opt.getAttribute('data-lang');
             opt.classList.toggle('active', lang === this.currentLang);
         });
     },
 
     /**
-     * Switch to a different language
+     * Switch to a different language by navigating to that language's URL.
+     * A full navigation (rather than SPA-style swap) keeps the URL, canonical
+     * tags, and hreflang metadata consistent for the reader and search engines.
      */
-    async switchTo(lang) {
-        if (!this.supportedLangs.includes(lang)) return;
+    switchTo(lang) {
+        if (!SUPPORTED_LANGS.includes(lang)) return;
         if (lang === this.currentLang) return;
-
-        localStorage.setItem('finderhover-lang', lang);
-        this.currentLang = lang;
-        await this.loadTranslation(lang);
-        this.applyTranslations();
-        this.updateLangSwitcher();
-        document.documentElement.lang = lang;
-
-        // Update URL without reload
-        const url = new URL(window.location);
-        url.searchParams.set('lang', lang);
-        window.history.replaceState({}, '', url);
-    }
+        localStorage.setItem(LANG_STORAGE_KEY, lang);
+        const targetPath = this.rewritePathForLang(window.location.pathname, lang);
+        window.location.href = targetPath + window.location.hash;
+    },
 };
 
-// Auto-initialize when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => i18n.init());
 } else {
     i18n.init();
 }
 
-// Export for use in other scripts
 window.i18n = i18n;

@@ -1,7 +1,29 @@
 {
   "meta": {
     "title": "FinderHover - macOS 檔案預覽工具",
-    "description": "在 Finder 中懸停即可顯示豐富的檔案資訊，支援 120+ 種檔案格式的深度中繼資料解析。"
+    "description": "在 Finder 中懸停即可顯示豐富的檔案資訊，支援 120+ 種檔案格式的深度中繼資料解析。",
+    "pages": {
+      "download": {
+        "title": "下載 - FinderHover",
+        "description": "透過 Homebrew 或直接下載 FinderHover，輕鬆在 macOS Sonoma 14.0 或更新版本上安裝。"
+      },
+      "docs": {
+        "title": "使用說明 - FinderHover",
+        "description": "FinderHover 使用說明、安裝流程、設定選項與快速鍵一次看懂。"
+      },
+      "formats": {
+        "title": "支援格式 - FinderHover",
+        "description": "FinderHover 支援 120+ 種檔案格式，涵蓋圖片、影片、音訊、文件、程式碼、壓縮檔等。"
+      },
+      "changelog": {
+        "title": "更新日誌 - FinderHover",
+        "description": "FinderHover 各版本新增功能、錯誤修正與改進的完整變更歷史。"
+      },
+      "license": {
+        "title": "授權條款 - FinderHover",
+        "description": "FinderHover 以 MIT 授權條款釋出，可自由使用、修改與散布。"
+      }
+    }
   },
   "nav": {
     "features": "功能",
