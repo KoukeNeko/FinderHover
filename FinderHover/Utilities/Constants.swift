@@ -14,8 +14,9 @@ enum Constants {
     // MARK: - Mouse Tracking
     enum MouseTracking {
         /// Debounce delay for hover detection (milliseconds)
-        /// This prevents showing the window on brief mouse movements
-        static let hoverDebounceDelay: Int = 300
+        /// This prevents showing the window on every pixel of mouse movement.
+        /// Intentionally small — hoverDelay (user setting) is the real felt delay.
+        static let hoverDebounceDelay: Int = 50
 
         /// Timer interval for checking if file is being renamed (seconds)
         /// Checks frequently to quickly hide window when renaming starts
@@ -142,6 +143,9 @@ enum Constants {
 
         /// Default show icon
         static let showIcon: Bool = true
+
+        /// Default show notes
+        static let showNotes: Bool = true
 
         /// Default show last access date
         static let showLastAccessDate: Bool = false

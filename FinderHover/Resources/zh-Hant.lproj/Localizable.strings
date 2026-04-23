@@ -61,6 +61,8 @@
 "settings.display.showPermissions" = "權限";
 "settings.display.showOwner" = "擁有者";
 "settings.display.showFilePath" = "檔案路徑";
+"settings.display.showNotes" = "備註";
+"settings.display.showFileSystemAdvanced" = "進階檔案系統";
 
 "settings.display.exif" = "照片資訊（EXIF）";
 "settings.display.exif.show" = "顯示 EXIF 資料";
@@ -417,6 +419,7 @@
 "displayItem.fileSystemAdvanced" = "檔案系統進階資訊";
 "displayItem.model3D" = "3D 模型資訊";
 "displayItem.xcodeProject" = "Xcode 專案資訊";
+"displayItem.notes" = "備註";
 
 /* Hover Window */
 "hover.fileType.folder" = "資料夾";
@@ -790,3 +793,9 @@
 "fileProvider.downloaded" = "已下載";
 "fileProvider.cloudOnly" = "僅在雲端";
 "fileProvider.unknown" = "未知";
+
+/* Notes */
+"hover.notes.placeholder" = "輸入備註 ...";
+"hover.notes.error.load" = "無法載入備註。";
+"hover.notes.error.save" = "無法儲存備註。";
+"hover.notes.error.delete" = "無法刪除備註。";

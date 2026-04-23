@@ -61,6 +61,8 @@
 "settings.display.showPermissions" = "アクセス権";
 "settings.display.showOwner" = "所有者";
 "settings.display.showFilePath" = "ファイルパス";
+"settings.display.showNotes" = "メモ";
+"settings.display.showFileSystemAdvanced" = "高度なファイルシステム";
 
 "settings.display.exif" = "写真情報（EXIF）";
 "settings.display.exif.show" = "EXIF データを表示";
@@ -417,6 +419,7 @@
 "displayItem.fileSystemAdvanced" = "ファイルシステム詳細";
 "displayItem.model3D" = "3Dモデル情報";
 "displayItem.xcodeProject" = "Xcodeプロジェクト情報";
+"displayItem.notes" = "メモ";
 
 /* Hover Window */
 "hover.fileType.folder" = "フォルダ";
@@ -790,3 +793,9 @@
 "fileProvider.downloaded" = "ダウンロード済み";
 "fileProvider.cloudOnly" = "クラウドのみ";
 "fileProvider.unknown" = "不明";
+
+/* Notes */
+"hover.notes.placeholder" = "メモを入力 ...";
+"hover.notes.error.load" = "メモを読み込めませんでした。";
+"hover.notes.error.save" = "メモを保存できませんでした。";
+"hover.notes.error.delete" = "メモを削除できませんでした。";
