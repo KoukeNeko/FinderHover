@@ -61,6 +61,8 @@
 "settings.display.showPermissions" = "Permissions";
 "settings.display.showOwner" = "Owner";
 "settings.display.showFilePath" = "File Path";
+"settings.display.showNotes" = "Notes";
+"settings.display.showFileSystemAdvanced" = "File System Advanced";
 
 "settings.display.exif" = "Photo Information (EXIF)";
 "settings.display.exif.show" = "Show EXIF Data";
@@ -417,6 +419,7 @@
 "displayItem.fileSystemAdvanced" = "File System Advanced";
 "displayItem.model3D" = "3D Model Information";
 "displayItem.xcodeProject" = "Xcode Project Information";
+"displayItem.notes" = "Notes";
 
 /* Hover Window */
 "hover.fileType.folder" = "Folder";
@@ -790,3 +793,9 @@
 "fileProvider.downloaded" = "Downloaded";
 "fileProvider.cloudOnly" = "Cloud Only";
 "fileProvider.unknown" = "Unknown";
+
+/* Notes */
+"hover.notes.placeholder" = "Add a note ...";
+"hover.notes.error.load" = "Could not load note.";
+"hover.notes.error.save" = "Could not save note.";
+"hover.notes.error.delete" = "Could not delete note.";

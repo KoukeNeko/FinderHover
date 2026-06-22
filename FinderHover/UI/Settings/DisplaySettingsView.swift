@@ -47,6 +47,10 @@ struct DisplaySettingsView: View {
                         DisplayToggleRow(title: "settings.display.showOwner".localized, icon: "person", isOn: $settings.showOwner)
                         Divider().padding(.leading, 60)
                         DisplayToggleRow(title: "settings.display.showFilePath".localized, icon: "folder", isOn: $settings.showFilePath)
+                        Divider().padding(.leading, 60)
+                        DisplayToggleRow(title: "settings.display.showNotes".localized, icon: "note.text", isOn: $settings.showNotes)
+                        Divider().padding(.leading, 60)
+                        DisplayToggleRow(title: "settings.display.showFileSystemAdvanced".localized, icon: "internaldrive", isOn: $settings.showFileSystemAdvanced)
                     }
                     .background(Color(NSColor.controlBackgroundColor))
                     .cornerRadius(8)
