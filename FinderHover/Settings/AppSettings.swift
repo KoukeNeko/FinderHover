@@ -84,6 +84,69 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
+    /// Canonical display order — the single source of truth used by
+    /// initial load, migration of saved orders, and resetToDefaults.
+    /// Add new cases here in their intended position; migration slots
+    /// them into existing users' saved orders automatically.
+    static let defaultOrder: [DisplayItem] = [
+        .fileType,
+        .fileSize,
+        .itemCount,
+        .creationDate,
+        .modificationDate,
+        .lastAccessDate,
+        .permissions,
+        .owner,
+        .exif,
+        .video,
+        .audio,
+        .pdf,
+        .office,
+        .archive,
+        .ebook,
+        .code,
+        .font,
+        .diskImage,
+        .vectorGraphics,
+        .subtitle,
+        .html,
+        .imageExtended,
+        .markdown,
+        .config,
+        .psd,
+        .executable,
+        .appBundle,
+        .sqlite,
+        .git,
+        .systemMetadata,
+        .fileSystemAdvanced,
+        .model3D,
+        .xcodeProject,
+        .filePath,
+        .notes
+    ]
+
+    /// Returns `savedOrder` with any cases from `defaultOrder` that are
+    /// missing inserted into their canonical-relative position (right
+    /// after the nearest preceding canonical item already present).
+    /// Preserves the user's custom ordering of items they already have.
+    static func migrated(_ savedOrder: [DisplayItem]) -> [DisplayItem] {
+        var result = savedOrder
+        var lastInsertedIndex: Int? = nil
+        for item in defaultOrder {
+            if let existingIndex = result.firstIndex(of: item) {
+                lastInsertedIndex = existingIndex
+                continue
+            }
+            // Item missing from the saved order: insert it just after the
+            // most recent canonical predecessor we have placed/found.
+            let insertIndex = lastInsertedIndex.map { $0 + 1 } ?? 0
+            result.insert(item, at: insertIndex)
+            lastInsertedIndex = insertIndex
+        }
+        return result
+    }
+
     var localizedName: String {
         switch self {
         case .fileType: return "displayItem.fileType".localized
@@ -970,240 +1033,16 @@ class AppSettings: ObservableObject {
     }
 
     private init() {
-        // Load display order or use default
+        // Load saved display order resiliently: decode the persisted raw
+        // values element-wise so a single renamed/removed entry drops just
+        // that entry instead of discarding the user's entire saved order.
+        // Missing canonical items are then re-inserted by migration.
         if let data = UserDefaults.standard.data(forKey: "displayOrder"),
-           var decoded = try? JSONDecoder().decode([DisplayItem].self, from: data) {
-            // Migration: Add new items if they don't exist
-            if !decoded.contains(.video) {
-                if let exifIndex = decoded.firstIndex(of: .exif) {
-                    decoded.insert(.video, at: exifIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.video, at: filePathIndex)
-                } else {
-                    decoded.append(.video)
-                }
-            }
-            if !decoded.contains(.audio) {
-                if let videoIndex = decoded.firstIndex(of: .video) {
-                    decoded.insert(.audio, at: videoIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.audio, at: filePathIndex)
-                } else {
-                    decoded.append(.audio)
-                }
-            }
-            if !decoded.contains(.pdf) {
-                if let audioIndex = decoded.firstIndex(of: .audio) {
-                    decoded.insert(.pdf, at: audioIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.pdf, at: filePathIndex)
-                } else {
-                    decoded.append(.pdf)
-                }
-            }
-            if !decoded.contains(.office) {
-                if let pdfIndex = decoded.firstIndex(of: .pdf) {
-                    decoded.insert(.office, at: pdfIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.office, at: filePathIndex)
-                } else {
-                    decoded.append(.office)
-                }
-            }
-            if !decoded.contains(.archive) {
-                if let officeIndex = decoded.firstIndex(of: .office) {
-                    decoded.insert(.archive, at: officeIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.archive, at: filePathIndex)
-                } else {
-                    decoded.append(.archive)
-                }
-            }
-            if !decoded.contains(.ebook) {
-                if let archiveIndex = decoded.firstIndex(of: .archive) {
-                    decoded.insert(.ebook, at: archiveIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.ebook, at: filePathIndex)
-                } else {
-                    decoded.append(.ebook)
-                }
-            }
-            if !decoded.contains(.code) {
-                if let ebookIndex = decoded.firstIndex(of: .ebook) {
-                    decoded.insert(.code, at: ebookIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.code, at: filePathIndex)
-                } else {
-                    decoded.append(.code)
-                }
-            }
-            if !decoded.contains(.font) {
-                if let codeIndex = decoded.firstIndex(of: .code) {
-                    decoded.insert(.font, at: codeIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.font, at: filePathIndex)
-                } else {
-                    decoded.append(.font)
-                }
-            }
-            if !decoded.contains(.diskImage) {
-                if let fontIndex = decoded.firstIndex(of: .font) {
-                    decoded.insert(.diskImage, at: fontIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.diskImage, at: filePathIndex)
-                } else {
-                    decoded.append(.diskImage)
-                }
-            }
-            if !decoded.contains(.vectorGraphics) {
-                if let diskImageIndex = decoded.firstIndex(of: .diskImage) {
-                    decoded.insert(.vectorGraphics, at: diskImageIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.vectorGraphics, at: filePathIndex)
-                } else {
-                    decoded.append(.vectorGraphics)
-                }
-            }
-            if !decoded.contains(.subtitle) {
-                if let vectorGraphicsIndex = decoded.firstIndex(of: .vectorGraphics) {
-                    decoded.insert(.subtitle, at: vectorGraphicsIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.subtitle, at: filePathIndex)
-                } else {
-                    decoded.append(.subtitle)
-                }
-            }
-            // Migration for new metadata types
-            if !decoded.contains(.html) {
-                if let subtitleIndex = decoded.firstIndex(of: .subtitle) {
-                    decoded.insert(.html, at: subtitleIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.html, at: filePathIndex)
-                } else {
-                    decoded.append(.html)
-                }
-            }
-            if !decoded.contains(.imageExtended) {
-                if let htmlIndex = decoded.firstIndex(of: .html) {
-                    decoded.insert(.imageExtended, at: htmlIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.imageExtended, at: filePathIndex)
-                } else {
-                    decoded.append(.imageExtended)
-                }
-            }
-            if !decoded.contains(.markdown) {
-                if let imageExtendedIndex = decoded.firstIndex(of: .imageExtended) {
-                    decoded.insert(.markdown, at: imageExtendedIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.markdown, at: filePathIndex)
-                } else {
-                    decoded.append(.markdown)
-                }
-            }
-            if !decoded.contains(.config) {
-                if let markdownIndex = decoded.firstIndex(of: .markdown) {
-                    decoded.insert(.config, at: markdownIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.config, at: filePathIndex)
-                } else {
-                    decoded.append(.config)
-                }
-            }
-            if !decoded.contains(.psd) {
-                if let configIndex = decoded.firstIndex(of: .config) {
-                    decoded.insert(.psd, at: configIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.psd, at: filePathIndex)
-                } else {
-                    decoded.append(.psd)
-                }
-            }
-            if !decoded.contains(.executable) {
-                if let psdIndex = decoded.firstIndex(of: .psd) {
-                    decoded.insert(.executable, at: psdIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.executable, at: filePathIndex)
-                } else {
-                    decoded.append(.executable)
-                }
-            }
-            if !decoded.contains(.appBundle) {
-                if let executableIndex = decoded.firstIndex(of: .executable) {
-                    decoded.insert(.appBundle, at: executableIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.appBundle, at: filePathIndex)
-                } else {
-                    decoded.append(.appBundle)
-                }
-            }
-            if !decoded.contains(.sqlite) {
-                if let appBundleIndex = decoded.firstIndex(of: .appBundle) {
-                    decoded.insert(.sqlite, at: appBundleIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.sqlite, at: filePathIndex)
-                } else {
-                    decoded.append(.sqlite)
-                }
-            }
-            if !decoded.contains(.git) {
-                if let sqliteIndex = decoded.firstIndex(of: .sqlite) {
-                    decoded.insert(.git, at: sqliteIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.git, at: filePathIndex)
-                } else {
-                    decoded.append(.git)
-                }
-            }
-            if !decoded.contains(.systemMetadata) {
-                if let gitIndex = decoded.firstIndex(of: .git) {
-                    decoded.insert(.systemMetadata, at: gitIndex + 1)
-                } else if let filePathIndex = decoded.firstIndex(of: .filePath) {
-                    decoded.insert(.systemMetadata, at: filePathIndex)
-                } else {
-                    decoded.append(.systemMetadata)
-                }
-            }
-            if !decoded.contains(.notes) {
-                decoded.append(.notes)
-            }
-            self.displayOrder = decoded
+           let savedRawValues = try? JSONDecoder().decode([String].self, from: data) {
+            let decoded = savedRawValues.compactMap(DisplayItem.init(rawValue:))
+            self.displayOrder = DisplayItem.migrated(decoded)
         } else {
-            // Default order
-            self.displayOrder = [
-                .fileType,
-                .fileSize,
-                .itemCount,
-                .creationDate,
-                .modificationDate,
-                .lastAccessDate,
-                .permissions,
-                .owner,
-                .exif,
-                .video,
-                .audio,
-                .pdf,
-                .office,
-                .archive,
-                .ebook,
-                .code,
-                .font,
-                .diskImage,
-                .vectorGraphics,
-                .subtitle,
-                .html,
-                .imageExtended,
-                .markdown,
-                .config,
-                .psd,
-                .executable,
-                .appBundle,
-                .sqlite,
-                .git,
-                .systemMetadata,
-                .filePath,
-                .notes
-            ]
+            self.displayOrder = DisplayItem.defaultOrder
         }
 
         // Load values from UserDefaults
@@ -1708,43 +1547,7 @@ class AppSettings: ObservableObject {
         // Notes
         showNotes = Constants.Defaults.showNotes
         
-        displayOrder = [
-            .fileType,
-            .fileSize,
-            .itemCount,
-            .creationDate,
-            .modificationDate,
-            .lastAccessDate,
-            .permissions,
-            .owner,
-            .exif,
-            .video,
-            .audio,
-            .pdf,
-            .office,
-            .archive,
-            .ebook,
-            .code,
-            .font,
-            .diskImage,
-            .vectorGraphics,
-            .subtitle,
-            .html,
-            .imageExtended,
-            .markdown,
-            .config,
-            .psd,
-            .executable,
-            .appBundle,
-            .sqlite,
-            .git,
-            .systemMetadata,
-            .fileSystemAdvanced,
-            .model3D,
-            .xcodeProject,
-            .filePath,
-            .notes
-        ]
+        displayOrder = DisplayItem.defaultOrder
         followCursor = Constants.Defaults.followCursor
         windowOffsetX = Constants.Defaults.windowOffsetX
         windowOffsetY = Constants.Defaults.windowOffsetY
