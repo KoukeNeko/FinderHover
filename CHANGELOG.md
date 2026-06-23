@@ -4,6 +4,10 @@ All notable changes to FinderHover will be documented in this file.
 
 ## Version 1.9.0 (Current)
 
+<img width="1800" height="1169" alt="image" src="https://github.com/user-attachments/assets/260a46a5-dd24-43f0-a3a1-1a03684bdc96" />
+
+
+
 ### ✨ Notes — attach a note to any file
 
 - Add a personal note to any file right from the hover popup
