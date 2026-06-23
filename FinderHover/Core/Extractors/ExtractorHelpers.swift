@@ -40,22 +40,52 @@ func runProcessWithTimeout(_ process: Process, timeout: TimeInterval = 5.0) -> B
 // MARK: - Encoding Detection
 
 func detectEncoding(data: Data) -> String {
-    // Try UTF-8
+    // A byte-order mark is authoritative when present.
+    if let bomEncoding = encodingFromBOM(data) {
+        return bomEncoding
+    }
+
+    // Plain 7-bit ASCII is a meaningful, common answer and a strict subset of
+    // UTF-8, so report it explicitly before the broader UTF-8 check.
+    if data.allSatisfy({ $0 < 0x80 }) {
+        return "ASCII"
+    }
+
+    // Valid UTF-8 (with high bytes) is the overwhelmingly common modern case.
     if String(data: data, encoding: .utf8) != nil {
         return "UTF-8"
     }
-    // Try ASCII
-    if String(data: data, encoding: .ascii) != nil {
-        return "ASCII"
+
+    // Fall back to Foundation's statistical detector instead of "does this
+    // lossless decoder accept the bytes" — .utf16/.isoLatin1 accept almost any
+    // byte sequence, which is why "Unknown" was previously unreachable.
+    var converted: NSString?
+    let detected = NSString.stringEncoding(
+        for: data,
+        encodingOptions: nil,
+        convertedString: &converted,
+        usedLossyConversion: nil
+    )
+    if detected != 0 {
+        let cfEncoding = CFStringConvertNSStringEncodingToEncoding(detected)
+        if let ianaName = CFStringConvertEncodingToIANACharSetName(cfEncoding) as String? {
+            return ianaName.uppercased()
+        }
     }
-    // Try other encodings
-    if String(data: data, encoding: .utf16) != nil {
-        return "UTF-16"
-    }
-    if String(data: data, encoding: .isoLatin1) != nil {
-        return "ISO-8859-1"
-    }
+
     return "Unknown"
+}
+
+/// Returns a human-readable encoding name if `data` begins with a recognized
+/// byte-order mark, otherwise nil.
+private func encodingFromBOM(_ data: Data) -> String? {
+    let bytes = [UInt8](data.prefix(4))
+    if bytes.starts(with: [0xEF, 0xBB, 0xBF]) { return "UTF-8" }
+    if bytes.starts(with: [0x00, 0x00, 0xFE, 0xFF]) { return "UTF-32BE" }
+    if bytes.starts(with: [0xFF, 0xFE, 0x00, 0x00]) { return "UTF-32LE" }
+    if bytes.starts(with: [0xFE, 0xFF]) { return "UTF-16BE" }
+    if bytes.starts(with: [0xFF, 0xFE]) { return "UTF-16LE" }
+    return nil
 }
 
 // MARK: - Comment Syntax for Code Analysis

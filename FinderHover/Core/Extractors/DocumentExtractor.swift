@@ -339,12 +339,6 @@ enum DocumentExtractor {
             hasFrontmatter = false
         }
 
-        if title == nil {
-            if let h1Line = lines.first(where: { $0.hasPrefix("# ") }) {
-                title = h1Line.replacingOccurrences(of: "# ", with: "")
-            }
-        }
-
         var inCodeBlock = false
         var inFrontmatterBlock = hasFrontmatter == true
         var words = 0
@@ -371,6 +365,11 @@ enum DocumentExtractor {
             if !inCodeBlock {
                 if line.hasPrefix("#") {
                     headings += 1
+                }
+                // Capture the first real H1 (outside code fences and frontmatter)
+                // when none was supplied by frontmatter.
+                if title == nil, line.hasPrefix("# ") {
+                    title = String(line.dropFirst(2))
                 }
                 let lineWords = line.split(separator: " ").count
                 words += lineWords

@@ -55,7 +55,7 @@ enum ArchiveExtractor {
         var isEncrypted: Bool? = nil
         var comment: String? = nil
 
-        if ext == "zip" || ext == "jar" {
+        if ext == "zip" {
             let process = Process()
             process.executableURL = URL(fileURLWithPath: "/usr/bin/zipinfo")
             process.arguments = ["-t", url.path]
@@ -85,21 +85,35 @@ enum ArchiveExtractor {
                 }
             }
 
-            // Check for encryption
+            // Check for encryption via the verbose central-directory listing.
+            // `unzip -Z -v` prints a per-entry table; each entry has a
+            // "file security status:" line whose value is "encrypted" or
+            // "not encrypted". `unzip -Z -1` only lists names and exits 0 even
+            // on encrypted archives, so it can never reveal encryption.
+            // Match only the security-status line and exclude "not encrypted",
+            // because that string also contains the substring "encrypted".
             let listProcess = Process()
             listProcess.executableURL = URL(fileURLWithPath: "/usr/bin/unzip")
-            listProcess.arguments = ["-Z", "-1", url.path]
+            listProcess.arguments = ["-Z", "-v", url.path]
 
             let listPipe = Pipe()
-            let errorPipe = Pipe()
             listProcess.standardOutput = listPipe
-            listProcess.standardError = errorPipe
+            listProcess.standardError = Pipe()
 
-            if !runProcessWithTimeout(listProcess, timeout: 3.0) {
-                let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
-                if let errorOutput = String(data: errorData, encoding: .utf8),
-                   errorOutput.contains("password") || errorOutput.contains("encrypted") {
-                    isEncrypted = true
+            if runProcessWithTimeout(listProcess, timeout: 3.0) {
+                let listData = listPipe.fileHandleForReading.readDataToEndOfFile()
+                if let listOutput = String(data: listData, encoding: .utf8) {
+                    let hasEncryptedEntry = listOutput
+                        .components(separatedBy: .newlines)
+                        .contains { line in
+                            let lowered = line.lowercased()
+                            return lowered.contains("security status:")
+                                && lowered.contains("encrypted")
+                                && !lowered.contains("not encrypted")
+                        }
+                    if hasEncryptedEntry {
+                        isEncrypted = true
+                    }
                 }
             }
 

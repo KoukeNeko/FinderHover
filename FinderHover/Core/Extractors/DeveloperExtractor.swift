@@ -44,38 +44,14 @@ enum DeveloperExtractor {
         let commentSyntax = getCommentSyntax(for: language)
 
         for line in lines {
-            let trimmed = line.trimmingCharacters(in: .whitespaces)
-
-            if trimmed.isEmpty {
-                blankLines += 1
-                continue
-            }
-
-            if let multiStart = commentSyntax.multiLineStart, let multiEnd = commentSyntax.multiLineEnd {
-                if trimmed.contains(multiStart) {
-                    inMultiLineComment = true
-                }
-                if inMultiLineComment {
-                    commentLines += 1
-                    if trimmed.contains(multiEnd) {
-                        inMultiLineComment = false
-                    }
-                    continue
-                }
-            }
-
-            var isComment = false
-            for prefix in commentSyntax.singleLine {
-                if trimmed.hasPrefix(prefix) {
-                    commentLines += 1
-                    isComment = true
-                    break
-                }
-            }
-
-            if !isComment {
-                codeLines += 1
-            }
+            classifyLine(
+                line,
+                syntax: commentSyntax,
+                inMultiLineComment: &inMultiLineComment,
+                blankLines: &blankLines,
+                commentLines: &commentLines,
+                codeLines: &codeLines
+            )
         }
 
         return CodeMetadata(
@@ -86,6 +62,98 @@ enum DeveloperExtractor {
             blankLines: blankLines,
             encoding: encoding
         )
+    }
+
+    /// Classifies one source line as blank / comment / code, updating the
+    /// running totals and the multi-line-comment state. The scan walks the
+    /// trimmed line so that delimiters appearing inside string literals do not
+    /// flip comment state, and a line that contains both code and a comment is
+    /// counted as code.
+    private static func classifyLine(
+        _ line: String,
+        syntax: CommentSyntax,
+        inMultiLineComment: inout Bool,
+        blankLines: inout Int,
+        commentLines: inout Int,
+        codeLines: inout Int
+    ) {
+        let trimmed = line.trimmingCharacters(in: .whitespaces)
+
+        if trimmed.isEmpty {
+            blankLines += 1
+            return
+        }
+
+        let scalars = Array(trimmed)
+        var index = 0
+        var sawCode = false
+        var sawComment = false
+        var inStringLiteral = false
+        var stringDelimiter: Character = "\""
+
+        func matches(_ token: String, at position: Int) -> Bool {
+            let tokenChars = Array(token)
+            guard position + tokenChars.count <= scalars.count else { return false }
+            for offset in 0..<tokenChars.count where scalars[position + offset] != tokenChars[offset] {
+                return false
+            }
+            return true
+        }
+
+        while index < scalars.count {
+            let character = scalars[index]
+
+            if inMultiLineComment {
+                sawComment = true
+                if let end = syntax.multiLineEnd, matches(end, at: index) {
+                    inMultiLineComment = false
+                    index += end.count
+                    continue
+                }
+                index += 1
+                continue
+            }
+
+            if inStringLiteral {
+                if character == "\\" {
+                    index += 2 // skip escaped char
+                    continue
+                }
+                if character == stringDelimiter {
+                    inStringLiteral = false
+                }
+                index += 1
+                continue
+            }
+
+            if let start = syntax.multiLineStart, matches(start, at: index) {
+                inMultiLineComment = true
+                index += start.count
+                continue
+            }
+
+            if syntax.singleLine.contains(where: { matches($0, at: index) }) {
+                sawComment = true
+                break // rest of line is a comment
+            }
+
+            if character == "\"" || character == "'" {
+                inStringLiteral = true
+                stringDelimiter = character
+                sawCode = true
+                index += 1
+                continue
+            }
+
+            sawCode = true
+            index += 1
+        }
+
+        if sawCode {
+            codeLines += 1
+        } else if sawComment {
+            commentLines += 1
+        }
     }
 
     // MARK: - Git Repository Metadata Extraction

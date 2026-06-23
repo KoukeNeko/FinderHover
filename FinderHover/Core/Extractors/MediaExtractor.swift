@@ -14,6 +14,11 @@ import AVFoundation
 
 enum MediaExtractor {
 
+    /// Matches a 4-digit year in 1900-2099. Compiled once: hoisted out of the
+    /// metadata-scanning loops in extractAudioMetadata where it was previously
+    /// recompiled per metadata item.
+    private static let yearRegex = try? NSRegularExpression(pattern: #"\b(19|20)\d{2}\b"#)
+
     // MARK: - EXIF Data Extraction
 
     static func extractEXIFData(from url: URL) -> EXIFData? {
@@ -64,7 +69,8 @@ enum MediaExtractor {
 
         // Extract shutter speed (exposure time)
         var shutterSpeed: String? = nil
-        if let exposureTime = exifDict?[kCGImagePropertyExifExposureTime as String] as? Double {
+        if let exposureTime = exifDict?[kCGImagePropertyExifExposureTime as String] as? Double,
+           exposureTime > 0 {
             if exposureTime < 1 {
                 shutterSpeed = String(format: "1/%.0f", 1.0 / exposureTime)
             } else {
@@ -472,9 +478,8 @@ enum MediaExtractor {
                 if item.identifier?.rawValue.contains("creationDate") == true ||
                    item.identifier?.rawValue.contains("year") == true {
                     if let value = item.stringValue, year == nil {
-                        // Extract year from date string
-                        let yearRegex = try? NSRegularExpression(pattern: "\\b(19|20)\\d{2}\\b")
-                        if let match = yearRegex?.firstMatch(in: value, range: NSRange(value.startIndex..., in: value)) {
+                        // Extract year from date string using the hoisted regex.
+                        if let match = Self.yearRegex?.firstMatch(in: value, range: NSRange(value.startIndex..., in: value)) {
                             if let range = Range(match.range, in: value) {
                                 year = String(value[range])
                             }

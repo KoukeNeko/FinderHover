@@ -119,14 +119,21 @@ enum SystemExtractor {
             )
         }
 
-        // Extract Extended Attributes
+        // Extract Extended Attributes.
+        // listxattr fills `buffer` with a packed sequence of NUL-terminated
+        // names; the meaningful length is the syscall's return value, NOT the
+        // first NUL. String(cString:) would stop at the first name and silently
+        // drop the rest (including com.finderhover.notes), so parse the raw
+        // bytes up to `result` and split on NUL.
         let xattrLength = listxattr(path, nil, 0, 0)
         if xattrLength > 0 {
             var buffer = [CChar](repeating: 0, count: xattrLength)
             let result = listxattr(path, &buffer, xattrLength, 0)
             if result > 0 {
-                let xattrString = String(cString: buffer)
-                let attrs = xattrString.split(separator: "\0").map { String($0) }
+                let nameBytes = buffer.prefix(result).map { UInt8(bitPattern: $0) }
+                let attrs = nameBytes
+                    .split(separator: 0, omittingEmptySubsequences: true)
+                    .compactMap { String(bytes: $0, encoding: .utf8) }
                 if !attrs.isEmpty {
                     extendedAttributes = attrs
                 }
