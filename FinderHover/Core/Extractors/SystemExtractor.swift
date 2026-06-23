@@ -276,11 +276,7 @@ enum SystemExtractor {
         }
 
         // Check Spotlight indexing
-        if let mdItem = MDItemCreateWithURL(nil, url as CFURL) {
-            spotlightIndexed = true
-        } else {
-            spotlightIndexed = false
-        }
+        spotlightIndexed = MDItemCreateWithURL(nil, url as CFURL) != nil
 
         // Extract file provider information
         do {

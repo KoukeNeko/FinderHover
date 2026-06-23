@@ -53,7 +53,7 @@ enum ArchiveExtractor {
         var fileCount: Int? = nil
         var uncompressedSize: Int64? = nil
         var isEncrypted: Bool? = nil
-        var comment: String? = nil
+        let comment: String? = nil
 
         if ext == "zip" {
             let process = Process()
@@ -187,7 +187,7 @@ enum ArchiveExtractor {
         var compressionRatio: Double? = nil
         var isEncrypted: Bool? = nil
         var partitionScheme: String? = nil
-        var fileSystem: String? = nil
+        let fileSystem: String? = nil
 
         // Get file size as compressed size
         if let attrs = try? FileManager.default.attributesOfItem(atPath: url.path),

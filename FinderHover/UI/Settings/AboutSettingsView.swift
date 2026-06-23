@@ -15,7 +15,7 @@ struct AboutSettingsView: View {
         // Get the app's build date from the bundle
         if let infoPath = Bundle.main.path(forResource: "Info", ofType: "plist"),
            let infoDict = NSDictionary(contentsOfFile: infoPath) as? [String: Any],
-           let buildDate = infoDict["CFBundleVersion"] as? String {
+           (infoDict["CFBundleVersion"] as? String) != nil {
             // Try to get year from build timestamp or use current year
             if let executableURL = Bundle.main.executableURL,
                let attributes = try? FileManager.default.attributesOfItem(atPath: executableURL.path),

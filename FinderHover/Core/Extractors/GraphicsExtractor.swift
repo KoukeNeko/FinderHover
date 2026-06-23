@@ -40,8 +40,8 @@ enum GraphicsExtractor {
         var dimensions: String? = nil
         var viewBox: String? = nil
         var elementCount: Int? = nil
-        var colorMode: String? = nil
-        var creator: String? = nil
+        let colorMode: String? = nil
+        let creator: String? = nil
         var version: String? = nil
 
         switch ext {
@@ -133,7 +133,7 @@ enum GraphicsExtractor {
             return nil
         }
 
-        var layerCount: Int? = nil
+        let layerCount: Int? = nil
         var colorMode: String? = nil
         var bitDepth: Int? = nil
         var dimensions: String?
@@ -205,7 +205,7 @@ enum GraphicsExtractor {
         var materialCount: Int? = nil
         var animationCount: Int? = nil
         var hasSkeleton: Bool? = nil
-        var boundingBox: String? = nil
+        let boundingBox: String? = nil
 
         // Determine format name
         switch ext {

@@ -30,8 +30,8 @@ enum TextExtractor {
         var encoding: String? = nil
         var entryCount: Int? = nil
         var duration: String? = nil
-        var language: String? = nil
-        var frameRate: String? = nil
+        let language: String? = nil
+        let frameRate: String? = nil
         var hasFormatting: Bool? = nil
 
         // Determine format
