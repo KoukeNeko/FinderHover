@@ -8,8 +8,11 @@
 import Foundation
 import os
 
-/// Centralized logging system with different severity levels
-enum Logger {
+/// Centralized logging system with different severity levels.
+/// `nonisolated` because logging is thread-safe (`os.Logger` is `Sendable`) and must
+/// be callable from any isolation domain — background queues and actors included —
+/// without hopping to the main actor.
+nonisolated enum Logger {
 
     // MARK: - Log Levels
 

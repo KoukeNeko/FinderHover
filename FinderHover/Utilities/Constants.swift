@@ -8,8 +8,11 @@
 import Foundation
 import CoreGraphics
 
-/// Application-wide constants
-enum Constants {
+/// Application-wide constants.
+/// `nonisolated` because these are immutable, thread-safe values that must be
+/// readable from any isolation domain (e.g. the off-main `NotesStorage` actor and
+/// background metadata/accessibility queues), not just the main actor.
+nonisolated enum Constants {
 
     // MARK: - Mouse Tracking
     enum MouseTracking {
