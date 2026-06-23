@@ -1807,7 +1807,7 @@ struct HoverContentView: View {
                                 if abs(noteEditorHeight - height) > 0.5 { noteEditorHeight = height }
                             }
                         }
-                        .frame(height: noteHeight(minLines: windowState.isEditingNotes ? 3 : 1))
+                        .frame(height: noteHeight(minLines: 3))
                         .padding(.horizontal, 6)
                         .background(
                             RoundedRectangle(cornerRadius: 6, style: .continuous)
