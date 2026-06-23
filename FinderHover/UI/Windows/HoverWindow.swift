@@ -657,12 +657,23 @@ struct HoverContentView: View {
     @ObservedObject var settings = AppSettings.shared
     @ObservedObject private var windowState = HoverWindowState.shared
 
-    /// The note editor's visible height: a 3-line minimum that grows with content up to a
-    /// ~12-line cap, after which the field scrolls instead of growing further.
-    private var clampedNoteHeight: CGFloat {
-        let line = ceil(settings.fontSize * 1.7)
-        let verticalPadding: CGFloat = 4
-        return min(max(noteEditorHeight, line * 3 + verticalPadding), line * 12 + verticalPadding)
+    /// Whether the editable note frame (recessed background + border) is shown: always in
+    /// "always show" mode, otherwise only while the field is being edited.
+    private var noteFrameVisible: Bool {
+        settings.notesAlwaysShowFrame || windowState.isEditingNotes
+    }
+
+    /// Actual per-line height of the note text (used to size the field in whole rows).
+    private var noteLineHeight: CGFloat {
+        NSLayoutManager().defaultLineHeight(for: .systemFont(ofSize: settings.fontSize))
+    }
+
+    /// The note editor's visible height: at least `minLines` rows, growing with content up
+    /// to a 12-row cap, after which the field scrolls instead of growing further.
+    private func noteHeight(minLines: Int) -> CGFloat {
+        let pad: CGFloat = 4
+        return min(max(noteEditorHeight, noteLineHeight * CGFloat(minLines) + pad),
+                   noteLineHeight * 12 + pad)
     }
 
     var body: some View {
@@ -1802,24 +1813,26 @@ struct HoverContentView: View {
                                 if abs(noteEditorHeight - height) > 0.5 { noteEditorHeight = height }
                             }
                         }
-                        .frame(height: clampedNoteHeight)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 4)
+                        .frame(height: noteHeight(minLines: noteFrameVisible ? 3 : 1))
+                        .padding(.horizontal, noteFrameVisible ? 6 : 0)
+                        .padding(.vertical, noteFrameVisible ? 4 : 0)
                         .background(
                             RoundedRectangle(cornerRadius: 6, style: .continuous)
                                 .fill(Color(nsColor: .textBackgroundColor)
-                                    .opacity(windowState.isEditingNotes ? 0.85 : 0.3))
+                                    .opacity(noteFrameVisible ? (windowState.isEditingNotes ? 0.85 : 0.5) : 0))
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 6, style: .continuous)
                                 .strokeBorder(
-                                    windowState.isEditingNotes
-                                        ? Color.accentColor.opacity(0.7)
-                                        : Color.secondary.opacity(0.25),
+                                    noteFrameVisible
+                                        ? (windowState.isEditingNotes
+                                            ? Color.accentColor.opacity(0.7)
+                                            : Color.secondary.opacity(0.3))
+                                        : Color.clear,
                                     lineWidth: 1
                                 )
                         )
-                        .animation(.easeInOut(duration: 0.15), value: windowState.isEditingNotes)
+                        .animation(.easeInOut(duration: 0.15), value: noteFrameVisible)
                     }
 
                     if let noteErrorMessage {

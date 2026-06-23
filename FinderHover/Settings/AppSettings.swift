@@ -290,6 +290,10 @@ class AppSettings: ObservableObject {
     @Published var showNotes: Bool {
         didSet { UserDefaults.standard.set(showNotes, forKey: "showNotes") }
     }
+    /// false = show the note's editable frame only while editing; true = always show it.
+    @Published var notesAlwaysShowFrame: Bool {
+        didSet { UserDefaults.standard.set(notesAlwaysShowFrame, forKey: "notesAlwaysShowFrame") }
+    }
 
     // Additional information display
     @Published var showLastAccessDate: Bool {
@@ -1085,6 +1089,7 @@ class AppSettings: ObservableObject {
         self.showFilePath = UserDefaults.standard.object(forKey: "showFilePath") as? Bool ?? Constants.Defaults.showFilePath
         self.showIcon = UserDefaults.standard.object(forKey: "showIcon") as? Bool ?? Constants.Defaults.showIcon
         self.showNotes = UserDefaults.standard.object(forKey: "showNotes") as? Bool ?? Constants.Defaults.showNotes
+        self.notesAlwaysShowFrame = UserDefaults.standard.object(forKey: "notesAlwaysShowFrame") as? Bool ?? Constants.Defaults.notesAlwaysShowFrame
         self.showLastAccessDate = UserDefaults.standard.object(forKey: "showLastAccessDate") as? Bool ?? Constants.Defaults.showLastAccessDate
         self.showPermissions = UserDefaults.standard.object(forKey: "showPermissions") as? Bool ?? Constants.Defaults.showPermissions
         self.showOwner = UserDefaults.standard.object(forKey: "showOwner") as? Bool ?? Constants.Defaults.showOwner
@@ -1562,6 +1567,7 @@ class AppSettings: ObservableObject {
 
         // Notes
         showNotes = Constants.Defaults.showNotes
+        notesAlwaysShowFrame = Constants.Defaults.notesAlwaysShowFrame
         
         displayOrder = DisplayItem.defaultOrder
         followCursor = Constants.Defaults.followCursor

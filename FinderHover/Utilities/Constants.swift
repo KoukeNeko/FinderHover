@@ -171,6 +171,10 @@ nonisolated enum Constants {
         /// Default show notes
         static let showNotes: Bool = true
 
+        /// Default note-field display mode. false = show the editable frame only while
+        /// editing; true = always show it.
+        static let notesAlwaysShowFrame: Bool = false
+
         /// Default show last access date
         static let showLastAccessDate: Bool = false
 
