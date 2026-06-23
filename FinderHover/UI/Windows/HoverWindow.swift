@@ -453,9 +453,7 @@ class HoverWindowController: NSWindowController {
 }
 
 // MARK: - Notes Storage (per-file xattr persistence)
-actor NotesStorage {
-    static let shared = NotesStorage()
-
+enum NotesStorage {
     static let xattrKey = "com.finderhover.notes"
 
     enum StorageError: LocalizedError {
@@ -481,31 +479,31 @@ actor NotesStorage {
         }
     }
 
-    func read(for path: String) throws -> String {
+    static func read(for path: String) throws -> String {
         // ERANGE re-probe loop: another writer may grow the value between the size
         // probe and the buffered fetch, so re-probe instead of trusting the first
         // size. Bounded by maxReadProbeRetries to avoid a livelock. (#25)
         for _ in 0...Constants.Notes.maxReadProbeRetries {
-            let size = getxattr(path, Self.xattrKey, nil, 0, 0, 0)
+            let size = getxattr(path, xattrKey, nil, 0, 0, 0)
             guard size >= 0 else {
                 let code = errno
                 if code == ENOATTR { return "" }
-                throw Self.logAndReturn(.readFailed(path: path, code: code))
+                throw logAndReturn(.readFailed(path: path, code: code))
             }
 
             let cappedSize = min(size, Constants.Notes.maxByteCount)
             var buffer = [UInt8](repeating: 0, count: cappedSize)
-            let result = getxattr(path, Self.xattrKey, &buffer, cappedSize, 0, 0)
+            let result = getxattr(path, xattrKey, &buffer, cappedSize, 0, 0)
             if result >= 0 {
                 return String(decoding: buffer.prefix(result), as: UTF8.self)
             }
             if errno == ERANGE { continue } // value grew between probe and fetch; re-probe
-            throw Self.logAndReturn(.readFailed(path: path, code: errno))
+            throw logAndReturn(.readFailed(path: path, code: errno))
         }
-        throw Self.logAndReturn(.readFailed(path: path, code: ERANGE))
+        throw logAndReturn(.readFailed(path: path, code: ERANGE))
     }
 
-    func save(_ note: String, for path: String) throws {
+    static func save(_ note: String, for path: String) throws {
         if note.isEmpty {
             try delete(for: path)
             return
@@ -513,22 +511,22 @@ actor NotesStorage {
 
         let data = Data(note.utf8)
         guard data.count <= Constants.Notes.maxByteCount else {
-            throw Self.logAndReturn(.tooLarge(path: path, byteCount: data.count))
+            throw logAndReturn(.tooLarge(path: path, byteCount: data.count))
         }
 
         let result = data.withUnsafeBytes { bytes in
-            setxattr(path, Self.xattrKey, bytes.baseAddress, data.count, 0, 0)
+            setxattr(path, xattrKey, bytes.baseAddress, data.count, 0, 0)
         }
 
         guard result >= 0 else {
-            throw Self.logAndReturn(.writeFailed(path: path, code: errno))
+            throw logAndReturn(.writeFailed(path: path, code: errno))
         }
     }
 
-    private func delete(for path: String) throws {
-        let result = removexattr(path, Self.xattrKey, 0)
+    private static func delete(for path: String) throws {
+        let result = removexattr(path, xattrKey, 0)
         if result < 0, errno != ENOATTR {
-            throw Self.logAndReturn(.deleteFailed(path: path, code: errno))
+            throw logAndReturn(.deleteFailed(path: path, code: errno))
         }
     }
 
@@ -542,12 +540,6 @@ actor NotesStorage {
 struct NotesEditorView: NSViewRepresentable {
     @Binding var text: String
     let fontSize: Double
-    /// Invoked only on user-driven edits (textDidChange), never on programmatic
-    /// updates pushed through `text`. Lets the parent debounce real typing only (#12).
-    var onUserEdit: () -> Void = {}
-    /// Invoked when the field resigns first responder. The parent flushes the final
-    /// value immediately so a note isn't lost if the popup closes inside the debounce.
-    var onEndEditing: () -> Void = {}
 
     func makeNSView(context: Context) -> NSScrollView {
         let scrollView = NSScrollView()
@@ -609,17 +601,11 @@ struct NotesEditorView: NSViewRepresentable {
 
         func textDidChange(_ notification: Notification) {
             guard let textView = notification.object as? NSTextView else { return }
-            // Skip while a multi-stroke composition (e.g. a CJK IME) is still in flight so
-            // half-composed glyphs are never propagated to the binding or persisted to xattr.
-            // The final textDidChange after the IME commits carries the completed text.
-            guard !textView.hasMarkedText() else { return }
             parent.text = textView.string
-            parent.onUserEdit()
         }
 
         func textDidEndEditing(_ notification: Notification) {
             HoverWindowState.shared.isEditingNotes = false
-            parent.onEndEditing()
         }
     }
 }
@@ -641,10 +627,6 @@ struct HoverContentView: View {
     @State private var thumbnailRequest: QLThumbnailGenerator.Request?
     @State private var noteText: String = ""
     @State private var noteErrorMessage: String?
-    // Distinguishes the programmatic load assignment from genuine user edits so the
-    // initial load does not echo back into a save (#12). Bumped only by the editor's
-    // user-driven onUserEdit; the debounced save task keys off this token, not noteText.
-    @State private var noteEditToken: Int = 0
     @ObservedObject var settings = AppSettings.shared
     @ObservedObject private var windowState = HoverWindowState.shared
 
@@ -711,8 +693,8 @@ struct HoverContentView: View {
         .frame(minWidth: 320, maxWidth: settings.windowMaxWidth)
         .fixedSize(horizontal: false, vertical: true)
         .background(Color.clear)
-        .task(id: fileInfo.path) {
-            await loadNote()
+        .onAppear {
+            loadNote()
         }
     }
 
@@ -1780,21 +1762,7 @@ struct HoverContentView: View {
                                     .foregroundColor(Color.secondary.opacity(0.5))
                                     .allowsHitTesting(false)
                             }
-                            NotesEditorView(
-                                text: $noteText,
-                                fontSize: settings.fontSize,
-                                onUserEdit: {
-                                    // Fired only on user-driven textDidChange, never on the
-                                    // programmatic load assignment — this breaks the echo-write (#12).
-                                    noteEditToken &+= 1
-                                },
-                                onEndEditing: {
-                                    // Immediate, non-debounced flush so the final value survives
-                                    // the popup tearing down inside the debounce window.
-                                    let pending = noteText
-                                    Task { await saveNote(pending) }
-                                }
-                            )
+                            NotesEditorView(text: $noteText, fontSize: settings.fontSize)
                                 .frame(minHeight: settings.fontSize * 3 + 8, maxHeight: 120)
                         }
                     }
@@ -1813,28 +1781,17 @@ struct HoverContentView: View {
                         .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                // Debounced, off-main save driven by user edits only. `.task(id:)`
-                // auto-cancels the prior in-flight task whenever noteEditToken changes,
-                // collapsing a burst of keystrokes into a single trailing write (M2).
-                .task(id: noteEditToken) {
-                    guard noteEditToken > 0 else { return } // skip the initial load state
-                    let pending = noteText
-                    do {
-                        try await Task.sleep(for: .milliseconds(Constants.Notes.saveDebounceMs))
-                    } catch {
-                        return // cancelled by a newer keystroke; the newer task will save
-                    }
-                    await saveNote(pending)
+                // Persist whenever the text changes — the original, working save flow.
+                .onChange(of: noteText) { _, newValue in
+                    saveNote(newValue)
                 }
             }
         }
     }
 
-    @MainActor
-    private func loadNote() async {
+    private func loadNote() {
         do {
-            let loaded = try await NotesStorage.shared.read(for: fileInfo.path)
-            noteText = loaded
+            noteText = try NotesStorage.read(for: fileInfo.path)
             noteErrorMessage = nil
         } catch {
             noteText = ""
@@ -1842,10 +1799,9 @@ struct HoverContentView: View {
         }
     }
 
-    @MainActor
-    private func saveNote(_ note: String) async {
+    private func saveNote(_ note: String) {
         do {
-            try await NotesStorage.shared.save(note, for: fileInfo.path)
+            try NotesStorage.save(note, for: fileInfo.path)
             noteErrorMessage = nil
         } catch {
             noteErrorMessage = noteDisplayMessage(for: error)
