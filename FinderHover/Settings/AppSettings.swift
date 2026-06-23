@@ -1024,8 +1024,18 @@ class AppSettings: ObservableObject {
         didSet {
             UserDefaults.standard.set(preferredLanguage.rawValue, forKey: "preferredLanguage")
             applyLanguagePreference()
+            // A relaunch is required for the new language to take full effect; track it on the
+            // model so the Restart prompt survives Settings tab switches. (didSet does NOT run
+            // during init, so the launch value comes from languageRestartRequired's default.)
+            languageRestartRequired = (preferredLanguage != launchLanguage)
         }
     }
+
+    /// The language the app launched with; the Restart prompt shows only while the
+    /// current selection differs from it. Assigned once in init.
+    let launchLanguage: AppLanguage
+
+    @Published var languageRestartRequired: Bool = false
 
     // Update preferences
     @Published var includePrereleases: Bool {
@@ -1341,12 +1351,18 @@ class AppSettings: ObservableObject {
         }
 
         // Load language preference
+        let loadedLanguage: AppLanguage
         if let langString = UserDefaults.standard.string(forKey: "preferredLanguage"),
            let language = AppLanguage(rawValue: langString) {
-            self.preferredLanguage = language
+            loadedLanguage = language
         } else {
-            self.preferredLanguage = .system
+            loadedLanguage = .system
         }
+        // launchLanguage is a `let` and must be assigned before preferredLanguage. Property
+        // observers do not fire during init, so languageRestartRequired keeps its `= false`
+        // default here — the correct launch state.
+        self.launchLanguage = loadedLanguage
+        self.preferredLanguage = loadedLanguage
 
         // Load update preferences
         self.includePrereleases = UserDefaults.standard.object(forKey: "includePrereleases") as? Bool ?? Constants.Defaults.includePrereleases

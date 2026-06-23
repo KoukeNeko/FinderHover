@@ -9,7 +9,6 @@ import SwiftUI
 
 struct BehaviorSettingsView: SettingsPageView {
     @ObservedObject var settings: AppSettings
-    @State private var initialLanguage: AppLanguage? = nil
 
     var pageTitle: String { "settings.behavior.title".localized }
     var pageIcon: String { "hand.point.up.left" }
@@ -99,9 +98,9 @@ struct BehaviorSettingsView: SettingsPageView {
                     .fixedSize()
 
                     Button("settings.language.restart".localized) {
-                        NSApplication.shared.terminate(nil)
+                        AppRelauncher.relaunch()
                     }
-                    .disabled(settings.preferredLanguage == initialLanguage)
+                    .disabled(!settings.languageRestartRequired)
                     .buttonStyle(.bordered)
                     .fixedSize()
                 }
@@ -110,11 +109,6 @@ struct BehaviorSettingsView: SettingsPageView {
             .background(Color(NSColor.controlBackgroundColor))
             .cornerRadius(10)
             .padding(.horizontal, 20)
-            .onAppear {
-                if initialLanguage == nil {
-                    initialLanguage = settings.preferredLanguage
-                }
-            }
 
             // Window Position Card
             VStack(alignment: .leading, spacing: 12) {

@@ -178,14 +178,11 @@ struct DisplayItemDropDelegate: DropDelegate {
               let fromIndex = items.firstIndex(of: draggingItem),
               let toIndex = items.firstIndex(of: item) else { return }
 
+        // Reordering the bound array writes through to AppSettings.displayOrder,
+        // whose didSet persists it; no manual save needed.
         if items[toIndex] != draggingItem {
             withAnimation(.default) {
                 items.move(fromOffsets: IndexSet(integer: fromIndex), toOffset: toIndex > fromIndex ? toIndex + 1 : toIndex)
-            }
-
-            // Manually save to UserDefaults since move() doesn't trigger didSet
-            if let encoded = try? JSONEncoder().encode(items) {
-                UserDefaults.standard.set(encoded, forKey: "displayOrder")
             }
         }
     }

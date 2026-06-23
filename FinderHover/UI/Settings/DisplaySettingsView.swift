@@ -13,6 +13,247 @@ struct DisplaySettingsView: View {
     @ObservedObject var settings: AppSettings
     @State private var draggingItem: DisplayItem?
 
+    // Data-driven declaration of every toggle section, in on-screen order. Each section's
+    // first spec is the master toggle; detail specs pass `gatedBy:` the master key path,
+    // reproducing the former `.disabled(!master)` / `.opacity(... ? 1 : 0.5)` gating.
+    // `basicInfo` has no master and no gating. `hintKey` is non-nil only where a hint
+    // previously rendered. This list is a 1:1 transcription of the old hand-written rows.
+    static let sections: [DisplaySection] = [
+        DisplaySection(titleKey: "settings.display.basicInfo", hintKey: nil, rows: [
+            DisplayToggleSpec("settings.display.showIcon", icon: "photo", \.showIcon),
+            DisplayToggleSpec("settings.display.showFileType", icon: "doc.text", \.showFileType),
+            DisplayToggleSpec("settings.display.showFileSize", icon: "archivebox", \.showFileSize),
+            DisplayToggleSpec("settings.display.showItemCount", icon: "number", \.showItemCount),
+            DisplayToggleSpec("settings.display.showCreationDate", icon: "calendar", \.showCreationDate),
+            DisplayToggleSpec("settings.display.showModificationDate", icon: "clock", \.showModificationDate),
+            DisplayToggleSpec("settings.display.showLastAccessDate", icon: "eye", \.showLastAccessDate),
+            DisplayToggleSpec("settings.display.showPermissions", icon: "lock.shield", \.showPermissions),
+            DisplayToggleSpec("settings.display.showOwner", icon: "person", \.showOwner),
+            DisplayToggleSpec("settings.display.showFilePath", icon: "folder", \.showFilePath),
+            DisplayToggleSpec("settings.display.showNotes", icon: "note.text", \.showNotes),
+            DisplayToggleSpec("settings.display.showFileSystemAdvanced", icon: "internaldrive", \.showFileSystemAdvanced),
+        ]),
+        DisplaySection(titleKey: "settings.display.exif", hintKey: "settings.display.exif.hint", rows: [
+            DisplayToggleSpec("settings.display.exif.show", icon: IconManager.Photo.camera, \.showEXIF),
+            DisplayToggleSpec("settings.display.exif.camera", icon: IconManager.Photo.camera, \.showEXIFCamera, gatedBy: \.showEXIF),
+            DisplayToggleSpec("settings.display.exif.lens", icon: IconManager.Photo.lens, \.showEXIFLens, gatedBy: \.showEXIF),
+            DisplayToggleSpec("settings.display.exif.settings", icon: IconManager.Photo.settings, \.showEXIFSettings, gatedBy: \.showEXIF),
+            DisplayToggleSpec("settings.display.exif.dateTaken", icon: IconManager.Photo.calendarClock, \.showEXIFDateTaken, gatedBy: \.showEXIF),
+            DisplayToggleSpec("settings.display.exif.dimensions", icon: IconManager.Photo.dimensions, \.showEXIFDimensions, gatedBy: \.showEXIF),
+            DisplayToggleSpec("settings.display.exif.gps", icon: IconManager.Photo.location, \.showEXIFGPS, gatedBy: \.showEXIF),
+        ]),
+        DisplaySection(titleKey: "settings.display.video", hintKey: "settings.display.video.hint", rows: [
+            DisplayToggleSpec("settings.display.video.show", icon: IconManager.Video.video, \.showVideo),
+            DisplayToggleSpec("settings.display.video.duration", icon: IconManager.Video.duration, \.showVideoDuration, gatedBy: \.showVideo),
+            DisplayToggleSpec("settings.display.video.resolution", icon: IconManager.Video.resolution, \.showVideoResolution, gatedBy: \.showVideo),
+            DisplayToggleSpec("settings.display.video.codec", icon: IconManager.Video.codec, \.showVideoCodec, gatedBy: \.showVideo),
+            DisplayToggleSpec("settings.display.video.framerate", icon: IconManager.Video.frameRate, \.showVideoFrameRate, gatedBy: \.showVideo),
+            DisplayToggleSpec("settings.display.video.bitrate", icon: IconManager.Video.bitrate, \.showVideoBitrate, gatedBy: \.showVideo),
+        ]),
+        DisplaySection(titleKey: "settings.display.audio", hintKey: "settings.display.audio.hint", rows: [
+            DisplayToggleSpec("settings.display.audio.show", icon: IconManager.Audio.music, \.showAudio),
+            DisplayToggleSpec("settings.display.audio.title", icon: IconManager.Audio.songTitle, \.showAudioTitle, gatedBy: \.showAudio),
+            DisplayToggleSpec("settings.display.audio.artist", icon: IconManager.Audio.artist, \.showAudioArtist, gatedBy: \.showAudio),
+            DisplayToggleSpec("settings.display.audio.album", icon: IconManager.Audio.album, \.showAudioAlbum, gatedBy: \.showAudio),
+            DisplayToggleSpec("settings.display.audio.genre", icon: IconManager.Audio.genre, \.showAudioGenre, gatedBy: \.showAudio),
+            DisplayToggleSpec("settings.display.audio.year", icon: IconManager.Audio.year, \.showAudioYear, gatedBy: \.showAudio),
+            DisplayToggleSpec("settings.display.audio.duration", icon: IconManager.Audio.duration, \.showAudioDuration, gatedBy: \.showAudio),
+            DisplayToggleSpec("settings.display.audio.bitrate", icon: IconManager.Audio.bitrate, \.showAudioBitrate, gatedBy: \.showAudio),
+            DisplayToggleSpec("settings.display.audio.samplerate", icon: IconManager.Audio.sampleRate, \.showAudioSampleRate, gatedBy: \.showAudio),
+        ]),
+        DisplaySection(titleKey: "settings.display.pdf", hintKey: "settings.display.pdf.hint", rows: [
+            DisplayToggleSpec("settings.display.pdf.show", icon: "doc.richtext", \.showPDF),
+            DisplayToggleSpec("settings.display.pdf.pageCount", icon: "doc.text", \.showPDFPageCount, gatedBy: \.showPDF),
+            DisplayToggleSpec("settings.display.pdf.pageSize", icon: "ruler", \.showPDFPageSize, gatedBy: \.showPDF),
+            DisplayToggleSpec("settings.display.pdf.version", icon: "info.circle", \.showPDFVersion, gatedBy: \.showPDF),
+            DisplayToggleSpec("settings.display.pdf.title", icon: "textformat", \.showPDFTitle, gatedBy: \.showPDF),
+            DisplayToggleSpec("settings.display.pdf.author", icon: "person", \.showPDFAuthor, gatedBy: \.showPDF),
+            DisplayToggleSpec("settings.display.pdf.subject", icon: "text.alignleft", \.showPDFSubject, gatedBy: \.showPDF),
+            DisplayToggleSpec("settings.display.pdf.creator", icon: "app", \.showPDFCreator, gatedBy: \.showPDF),
+            DisplayToggleSpec("settings.display.pdf.producer", icon: "gearshape", \.showPDFProducer, gatedBy: \.showPDF),
+            DisplayToggleSpec("settings.display.pdf.creationDate", icon: "calendar", \.showPDFCreationDate, gatedBy: \.showPDF),
+            DisplayToggleSpec("settings.display.pdf.modificationDate", icon: "clock", \.showPDFModificationDate, gatedBy: \.showPDF),
+            DisplayToggleSpec("settings.display.pdf.keywords", icon: "tag", \.showPDFKeywords, gatedBy: \.showPDF),
+            DisplayToggleSpec("settings.display.pdf.encrypted", icon: "lock.fill", \.showPDFEncrypted, gatedBy: \.showPDF),
+        ]),
+        DisplaySection(titleKey: "settings.display.office", hintKey: "settings.display.office.hint", rows: [
+            DisplayToggleSpec("settings.display.office.show", icon: "doc.richtext", \.showOffice),
+            DisplayToggleSpec("settings.display.office.title", icon: "textformat", \.showOfficeTitle, gatedBy: \.showOffice),
+            DisplayToggleSpec("settings.display.office.author", icon: "person", \.showOfficeAuthor, gatedBy: \.showOffice),
+            DisplayToggleSpec("settings.display.office.subject", icon: "text.alignleft", \.showOfficeSubject, gatedBy: \.showOffice),
+            DisplayToggleSpec("settings.display.office.keywords", icon: "tag", \.showOfficeKeywords, gatedBy: \.showOffice),
+            DisplayToggleSpec("settings.display.office.comment", icon: "text.bubble", \.showOfficeComment, gatedBy: \.showOffice),
+            DisplayToggleSpec("settings.display.office.lastModifiedBy", icon: "person.crop.circle", \.showOfficeLastModifiedBy, gatedBy: \.showOffice),
+            DisplayToggleSpec("settings.display.office.creationDate", icon: "calendar", \.showOfficeCreationDate, gatedBy: \.showOffice),
+            DisplayToggleSpec("settings.display.office.modificationDate", icon: "clock", \.showOfficeModificationDate, gatedBy: \.showOffice),
+            DisplayToggleSpec("settings.display.office.pageCount", icon: "doc.text", \.showOfficePageCount, gatedBy: \.showOffice),
+            DisplayToggleSpec("settings.display.office.wordCount", icon: "textformat.size", \.showOfficeWordCount, gatedBy: \.showOffice),
+            DisplayToggleSpec("settings.display.office.sheetCount", icon: "tablecells", \.showOfficeSheetCount, gatedBy: \.showOffice),
+            DisplayToggleSpec("settings.display.office.slideCount", icon: "rectangle.stack", \.showOfficeSlideCount, gatedBy: \.showOffice),
+            DisplayToggleSpec("settings.display.office.company", icon: "building.2", \.showOfficeCompany, gatedBy: \.showOffice),
+            DisplayToggleSpec("settings.display.office.category", icon: "folder", \.showOfficeCategory, gatedBy: \.showOffice),
+        ]),
+        DisplaySection(titleKey: "settings.display.archive", hintKey: "settings.display.archive.hint", rows: [
+            DisplayToggleSpec("settings.display.archive.show", icon: "doc.zipper", \.showArchive),
+            DisplayToggleSpec("settings.display.archive.format", icon: "doc.zipper", \.showArchiveFormat, gatedBy: \.showArchive),
+            DisplayToggleSpec("settings.display.archive.fileCount", icon: "doc.on.doc", \.showArchiveFileCount, gatedBy: \.showArchive),
+            DisplayToggleSpec("settings.display.archive.uncompressedSize", icon: "arrow.up.doc", \.showArchiveUncompressedSize, gatedBy: \.showArchive),
+            DisplayToggleSpec("settings.display.archive.compressionRatio", icon: "chart.bar", \.showArchiveCompressionRatio, gatedBy: \.showArchive),
+            DisplayToggleSpec("settings.display.archive.encrypted", icon: "lock.fill", \.showArchiveEncrypted, gatedBy: \.showArchive),
+        ]),
+        DisplaySection(titleKey: "settings.display.ebook", hintKey: "settings.display.ebook.hint", rows: [
+            DisplayToggleSpec("settings.display.ebook.show", icon: "book.closed", \.showEbook),
+            DisplayToggleSpec("settings.display.ebook.title", icon: "book.closed", \.showEbookTitle, gatedBy: \.showEbook),
+            DisplayToggleSpec("settings.display.ebook.author", icon: "person", \.showEbookAuthor, gatedBy: \.showEbook),
+            DisplayToggleSpec("settings.display.ebook.publisher", icon: "building.2", \.showEbookPublisher, gatedBy: \.showEbook),
+            DisplayToggleSpec("settings.display.ebook.publicationDate", icon: "calendar", \.showEbookPublicationDate, gatedBy: \.showEbook),
+            DisplayToggleSpec("settings.display.ebook.isbn", icon: "barcode", \.showEbookISBN, gatedBy: \.showEbook),
+            DisplayToggleSpec("settings.display.ebook.language", icon: "globe", \.showEbookLanguage, gatedBy: \.showEbook),
+            DisplayToggleSpec("settings.display.ebook.description", icon: "text.alignleft", \.showEbookDescription, gatedBy: \.showEbook),
+            DisplayToggleSpec("settings.display.ebook.pageCount", icon: "doc.text", \.showEbookPageCount, gatedBy: \.showEbook),
+        ]),
+        DisplaySection(titleKey: "settings.display.code", hintKey: "settings.display.code.hint", rows: [
+            DisplayToggleSpec("settings.display.code.show", icon: "chevron.left.forwardslash.chevron.right", \.showCode),
+            DisplayToggleSpec("settings.display.code.language", icon: "chevron.left.forwardslash.chevron.right", \.showCodeLanguage, gatedBy: \.showCode),
+            DisplayToggleSpec("settings.display.code.lineCount", icon: "number", \.showCodeLineCount, gatedBy: \.showCode),
+            DisplayToggleSpec("settings.display.code.codeLines", icon: "curlybraces", \.showCodeLines, gatedBy: \.showCode),
+            DisplayToggleSpec("settings.display.code.commentLines", icon: "text.bubble", \.showCodeCommentLines, gatedBy: \.showCode),
+            DisplayToggleSpec("settings.display.code.blankLines", icon: "minus", \.showCodeBlankLines, gatedBy: \.showCode),
+            DisplayToggleSpec("settings.display.code.encoding", icon: "textformat.abc", \.showCodeEncoding, gatedBy: \.showCode),
+        ]),
+        DisplaySection(titleKey: "settings.display.font.title", hintKey: "settings.display.font.hint", rows: [
+            DisplayToggleSpec("settings.display.font.show", icon: "textformat", \.showFont),
+            DisplayToggleSpec("settings.display.font.name", icon: "textformat", \.showFontName, gatedBy: \.showFont),
+            DisplayToggleSpec("settings.display.font.family", icon: "textformat.alt", \.showFontFamily, gatedBy: \.showFont),
+            DisplayToggleSpec("settings.display.font.style", icon: "italic", \.showFontStyle, gatedBy: \.showFont),
+            DisplayToggleSpec("settings.display.font.version", icon: "number", \.showFontVersion, gatedBy: \.showFont),
+            DisplayToggleSpec("settings.display.font.designer", icon: "person", \.showFontDesigner, gatedBy: \.showFont),
+            DisplayToggleSpec("settings.display.font.copyright", icon: "c.circle", \.showFontCopyright, gatedBy: \.showFont),
+            DisplayToggleSpec("settings.display.font.glyphCount", icon: "character.textbox", \.showFontGlyphCount, gatedBy: \.showFont),
+        ]),
+        DisplaySection(titleKey: "settings.display.diskImage.title", hintKey: "settings.display.diskImage.hint", rows: [
+            DisplayToggleSpec("settings.display.diskImage.show", icon: "opticaldiscdrive", \.showDiskImage),
+            DisplayToggleSpec("settings.display.diskImage.format", icon: "opticaldiscdrive", \.showDiskImageFormat, gatedBy: \.showDiskImage),
+            DisplayToggleSpec("settings.display.diskImage.totalSize", icon: "externaldrive", \.showDiskImageTotalSize, gatedBy: \.showDiskImage),
+            DisplayToggleSpec("settings.display.diskImage.compressedSize", icon: "arrow.down.circle", \.showDiskImageCompressedSize, gatedBy: \.showDiskImage),
+            DisplayToggleSpec("settings.display.diskImage.compressionRatio", icon: "chart.bar", \.showDiskImageCompressionRatio, gatedBy: \.showDiskImage),
+            DisplayToggleSpec("settings.display.diskImage.encrypted", icon: "lock.shield", \.showDiskImageEncrypted, gatedBy: \.showDiskImage),
+            DisplayToggleSpec("settings.display.diskImage.partitionScheme", icon: "square.split.2x2", \.showDiskImagePartitionScheme, gatedBy: \.showDiskImage),
+            DisplayToggleSpec("settings.display.diskImage.fileSystem", icon: "doc.text", \.showDiskImageFileSystem, gatedBy: \.showDiskImage),
+        ]),
+        DisplaySection(titleKey: "settings.display.vectorGraphics.title", hintKey: "settings.display.vectorGraphics.hint", rows: [
+            DisplayToggleSpec("settings.display.vectorGraphics.show", icon: "paintbrush.pointed", \.showVectorGraphics),
+            DisplayToggleSpec("settings.display.vectorGraphics.format", icon: "paintbrush.pointed", \.showVectorGraphicsFormat, gatedBy: \.showVectorGraphics),
+            DisplayToggleSpec("settings.display.vectorGraphics.dimensions", icon: "arrow.up.left.and.arrow.down.right", \.showVectorGraphicsDimensions, gatedBy: \.showVectorGraphics),
+            DisplayToggleSpec("settings.display.vectorGraphics.viewBox", icon: "rectangle.dashed", \.showVectorGraphicsViewBox, gatedBy: \.showVectorGraphics),
+            DisplayToggleSpec("settings.display.vectorGraphics.elementCount", icon: "square.stack.3d.up", \.showVectorGraphicsElementCount, gatedBy: \.showVectorGraphics),
+            DisplayToggleSpec("settings.display.vectorGraphics.colorMode", icon: "paintpalette", \.showVectorGraphicsColorMode, gatedBy: \.showVectorGraphics),
+            DisplayToggleSpec("settings.display.vectorGraphics.creator", icon: "hammer", \.showVectorGraphicsCreator, gatedBy: \.showVectorGraphics),
+            DisplayToggleSpec("settings.display.vectorGraphics.version", icon: "number", \.showVectorGraphicsVersion, gatedBy: \.showVectorGraphics),
+        ]),
+        DisplaySection(titleKey: "settings.display.subtitle.title", hintKey: "settings.display.subtitle.hint", rows: [
+            DisplayToggleSpec("settings.display.subtitle.show", icon: "captions.bubble", \.showSubtitle),
+            DisplayToggleSpec("settings.display.subtitle.format", icon: "captions.bubble", \.showSubtitleFormat, gatedBy: \.showSubtitle),
+            DisplayToggleSpec("settings.display.subtitle.encoding", icon: "textformat.abc", \.showSubtitleEncoding, gatedBy: \.showSubtitle),
+            DisplayToggleSpec("settings.display.subtitle.entryCount", icon: "list.number", \.showSubtitleEntryCount, gatedBy: \.showSubtitle),
+            DisplayToggleSpec("settings.display.subtitle.duration", icon: "clock", \.showSubtitleDuration, gatedBy: \.showSubtitle),
+            DisplayToggleSpec("settings.display.subtitle.language", icon: "globe", \.showSubtitleLanguage, gatedBy: \.showSubtitle),
+            DisplayToggleSpec("settings.display.subtitle.frameRate", icon: "film", \.showSubtitleFrameRate, gatedBy: \.showSubtitle),
+            DisplayToggleSpec("settings.display.subtitle.hasFormatting", icon: "textformat", \.showSubtitleFormatting, gatedBy: \.showSubtitle),
+        ]),
+        DisplaySection(titleKey: "settings.display.html.title", hintKey: nil, rows: [
+            DisplayToggleSpec("settings.display.html.show", icon: "globe", \.showHTML),
+            DisplayToggleSpec("settings.display.html.title.field", icon: "textformat", \.showHTMLTitle, gatedBy: \.showHTML),
+            DisplayToggleSpec("settings.display.html.description", icon: "text.alignleft", \.showHTMLDescription, gatedBy: \.showHTML),
+            DisplayToggleSpec("settings.display.html.charset", icon: "textformat.abc", \.showHTMLCharset, gatedBy: \.showHTML),
+            DisplayToggleSpec("settings.display.html.openGraph", icon: "square.and.arrow.up", \.showHTMLOpenGraph, gatedBy: \.showHTML),
+            DisplayToggleSpec("settings.display.html.twitterCard", icon: "bubble.left", \.showHTMLTwitterCard, gatedBy: \.showHTML),
+            DisplayToggleSpec("settings.display.html.keywords", icon: "tag", \.showHTMLKeywords, gatedBy: \.showHTML),
+            DisplayToggleSpec("settings.display.html.author", icon: "person", \.showHTMLAuthor, gatedBy: \.showHTML),
+            DisplayToggleSpec("settings.display.html.language", icon: "globe", \.showHTMLLanguage, gatedBy: \.showHTML),
+        ]),
+        DisplaySection(titleKey: "settings.display.imageExtended.title", hintKey: nil, rows: [
+            DisplayToggleSpec("settings.display.imageExtended.show", icon: "photo.badge.plus", \.showImageExtended),
+            DisplayToggleSpec("settings.display.imageExtended.copyright", icon: "c.circle", \.showImageCopyright, gatedBy: \.showImageExtended),
+            DisplayToggleSpec("settings.display.imageExtended.creator", icon: "person", \.showImageCreator, gatedBy: \.showImageExtended),
+            DisplayToggleSpec("settings.display.imageExtended.keywords", icon: "tag", \.showImageKeywords, gatedBy: \.showImageExtended),
+            DisplayToggleSpec("settings.display.imageExtended.rating", icon: "star", \.showImageRating, gatedBy: \.showImageExtended),
+            DisplayToggleSpec("settings.display.imageExtended.creatorTool", icon: "wrench.and.screwdriver", \.showImageCreatorTool, gatedBy: \.showImageExtended),
+            DisplayToggleSpec("settings.display.imageExtended.description", icon: "text.alignleft", \.showImageDescription, gatedBy: \.showImageExtended),
+            DisplayToggleSpec("settings.display.imageExtended.headline", icon: "textformat", \.showImageHeadline, gatedBy: \.showImageExtended),
+        ]),
+        DisplaySection(titleKey: "settings.display.markdown.title", hintKey: nil, rows: [
+            DisplayToggleSpec("settings.display.markdown.show", icon: "text.document", \.showMarkdown),
+            DisplayToggleSpec("settings.display.markdown.frontmatter", icon: "doc.text", \.showMarkdownFrontmatter, gatedBy: \.showMarkdown),
+            DisplayToggleSpec("settings.display.markdown.title.field", icon: "textformat", \.showMarkdownTitle, gatedBy: \.showMarkdown),
+            DisplayToggleSpec("settings.display.markdown.wordCount", icon: "character.cursor.ibeam", \.showMarkdownWordCount, gatedBy: \.showMarkdown),
+            DisplayToggleSpec("settings.display.markdown.headingCount", icon: "number", \.showMarkdownHeadingCount, gatedBy: \.showMarkdown),
+            DisplayToggleSpec("settings.display.markdown.linkCount", icon: "link", \.showMarkdownLinkCount, gatedBy: \.showMarkdown),
+            DisplayToggleSpec("settings.display.markdown.imageCount", icon: "photo", \.showMarkdownImageCount, gatedBy: \.showMarkdown),
+            DisplayToggleSpec("settings.display.markdown.codeBlockCount", icon: "chevron.left.forwardslash.chevron.right", \.showMarkdownCodeBlockCount, gatedBy: \.showMarkdown),
+        ]),
+        DisplaySection(titleKey: "settings.display.config.title", hintKey: nil, rows: [
+            DisplayToggleSpec("settings.display.config.show", icon: "gearshape.2", \.showConfig),
+            DisplayToggleSpec("settings.display.config.format", icon: "doc.text", \.showConfigFormat, gatedBy: \.showConfig),
+            DisplayToggleSpec("settings.display.config.valid", icon: "checkmark.circle", \.showConfigValid, gatedBy: \.showConfig),
+            DisplayToggleSpec("settings.display.config.keyCount", icon: "number", \.showConfigKeyCount, gatedBy: \.showConfig),
+            DisplayToggleSpec("settings.display.config.maxDepth", icon: "arrow.down.right", \.showConfigMaxDepth, gatedBy: \.showConfig),
+            DisplayToggleSpec("settings.display.config.hasComments", icon: "text.bubble", \.showConfigHasComments, gatedBy: \.showConfig),
+            DisplayToggleSpec("settings.display.config.encoding", icon: "textformat.abc", \.showConfigEncoding, gatedBy: \.showConfig),
+        ]),
+        DisplaySection(titleKey: "settings.display.psd.title", hintKey: nil, rows: [
+            DisplayToggleSpec("settings.display.psd.show", icon: "square.3.layers.3d", \.showPSD),
+            DisplayToggleSpec("settings.display.psd.layerCount", icon: "square.stack.3d.up", \.showPSDLayerCount, gatedBy: \.showPSD),
+            DisplayToggleSpec("settings.display.psd.colorMode", icon: "paintpalette", \.showPSDColorMode, gatedBy: \.showPSD),
+            DisplayToggleSpec("settings.display.psd.bitDepth", icon: "number", \.showPSDBitDepth, gatedBy: \.showPSD),
+            DisplayToggleSpec("settings.display.psd.resolution", icon: "square.dashed", \.showPSDResolution, gatedBy: \.showPSD),
+            DisplayToggleSpec("settings.display.psd.transparency", icon: "checkerboard.rectangle", \.showPSDTransparency, gatedBy: \.showPSD),
+            DisplayToggleSpec("settings.display.psd.dimensions", icon: "aspectratio", \.showPSDDimensions, gatedBy: \.showPSD),
+        ]),
+        DisplaySection(titleKey: "settings.display.executable.title", hintKey: nil, rows: [
+            DisplayToggleSpec("settings.display.executable.show", icon: "terminal", \.showExecutable),
+            DisplayToggleSpec("settings.display.executable.architecture", icon: "cpu", \.showExecutableArchitecture, gatedBy: \.showExecutable),
+            DisplayToggleSpec("settings.display.executable.codeSigned", icon: "checkmark.seal", \.showExecutableCodeSigned, gatedBy: \.showExecutable),
+            DisplayToggleSpec("settings.display.executable.signingAuthority", icon: "signature", \.showExecutableSigningAuthority, gatedBy: \.showExecutable),
+            DisplayToggleSpec("settings.display.executable.minimumOS", icon: "desktopcomputer", \.showExecutableMinimumOS, gatedBy: \.showExecutable),
+            DisplayToggleSpec("settings.display.executable.sdkVersion", icon: "wrench.and.screwdriver", \.showExecutableSDKVersion, gatedBy: \.showExecutable),
+            DisplayToggleSpec("settings.display.executable.fileType", icon: "doc", \.showExecutableFileType, gatedBy: \.showExecutable),
+        ]),
+        DisplaySection(titleKey: "settings.display.appBundle.title", hintKey: nil, rows: [
+            DisplayToggleSpec("settings.display.appBundle.show", icon: "app.badge", \.showAppBundle),
+            DisplayToggleSpec("settings.display.appBundle.bundleID", icon: "app", \.showAppBundleID, gatedBy: \.showAppBundle),
+            DisplayToggleSpec("settings.display.appBundle.version", icon: "number", \.showAppBundleVersion, gatedBy: \.showAppBundle),
+            DisplayToggleSpec("settings.display.appBundle.buildNumber", icon: "hammer", \.showAppBundleBuildNumber, gatedBy: \.showAppBundle),
+            DisplayToggleSpec("settings.display.appBundle.minimumOS", icon: "desktopcomputer", \.showAppBundleMinimumOS, gatedBy: \.showAppBundle),
+            DisplayToggleSpec("settings.display.appBundle.category", icon: "folder", \.showAppBundleCategory, gatedBy: \.showAppBundle),
+            DisplayToggleSpec("settings.display.appBundle.copyright", icon: "c.circle", \.showAppBundleCopyright, gatedBy: \.showAppBundle),
+            DisplayToggleSpec("settings.display.appBundle.codeSigned", icon: "checkmark.seal", \.showAppBundleCodeSigned, gatedBy: \.showAppBundle),
+            DisplayToggleSpec("settings.display.appBundle.entitlements", icon: "lock.shield", \.showAppBundleEntitlements, gatedBy: \.showAppBundle),
+        ]),
+        DisplaySection(titleKey: "settings.display.sqlite.title", hintKey: nil, rows: [
+            DisplayToggleSpec("settings.display.sqlite.show", icon: "cylinder", \.showSQLite),
+            DisplayToggleSpec("settings.display.sqlite.tableCount", icon: "tablecells", \.showSQLiteTableCount, gatedBy: \.showSQLite),
+            DisplayToggleSpec("settings.display.sqlite.indexCount", icon: "list.number", \.showSQLiteIndexCount, gatedBy: \.showSQLite),
+            DisplayToggleSpec("settings.display.sqlite.triggerCount", icon: "bolt", \.showSQLiteTriggerCount, gatedBy: \.showSQLite),
+            DisplayToggleSpec("settings.display.sqlite.viewCount", icon: "eye", \.showSQLiteViewCount, gatedBy: \.showSQLite),
+            DisplayToggleSpec("settings.display.sqlite.totalRows", icon: "number", \.showSQLiteTotalRows, gatedBy: \.showSQLite),
+            DisplayToggleSpec("settings.display.sqlite.schemaVersion", icon: "tag", \.showSQLiteSchemaVersion, gatedBy: \.showSQLite),
+            DisplayToggleSpec("settings.display.sqlite.pageSize", icon: "doc", \.showSQLitePageSize, gatedBy: \.showSQLite),
+            DisplayToggleSpec("settings.display.sqlite.encoding", icon: "textformat.abc", \.showSQLiteEncoding, gatedBy: \.showSQLite),
+        ]),
+        DisplaySection(titleKey: "settings.display.git.title", hintKey: nil, rows: [
+            DisplayToggleSpec("settings.display.git.show", icon: "arrow.triangle.branch", \.showGit),
+            DisplayToggleSpec("settings.display.git.branchCount", icon: "arrow.triangle.branch", \.showGitBranchCount, gatedBy: \.showGit),
+            DisplayToggleSpec("settings.display.git.currentBranch", icon: "arrow.right.circle", \.showGitCurrentBranch, gatedBy: \.showGit),
+            DisplayToggleSpec("settings.display.git.commitCount", icon: "number", \.showGitCommitCount, gatedBy: \.showGit),
+            DisplayToggleSpec("settings.display.git.lastCommitDate", icon: "calendar", \.showGitLastCommitDate, gatedBy: \.showGit),
+            DisplayToggleSpec("settings.display.git.lastCommitMessage", icon: "text.bubble", \.showGitLastCommitMessage, gatedBy: \.showGit),
+            DisplayToggleSpec("settings.display.git.remoteURL", icon: "link", \.showGitRemoteURL, gatedBy: \.showGit),
+            DisplayToggleSpec("settings.display.git.uncommittedChanges", icon: "exclamationmark.triangle", \.showGitUncommittedChanges, gatedBy: \.showGit),
+            DisplayToggleSpec("settings.display.git.tagCount", icon: "tag", \.showGitTagCount, gatedBy: \.showGit),
+        ]),
+    ]
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
@@ -22,1074 +263,16 @@ struct DisplaySettingsView: View {
                     description: "settings.page.description.display".localized
                 )
 
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("settings.display.basicInfo".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.showIcon".localized, icon: "photo", isOn: $settings.showIcon)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.showFileType".localized, icon: "doc.text", isOn: $settings.showFileType)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.showFileSize".localized, icon: "archivebox", isOn: $settings.showFileSize)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.showItemCount".localized, icon: "number", isOn: $settings.showItemCount)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.showCreationDate".localized, icon: "calendar", isOn: $settings.showCreationDate)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.showModificationDate".localized, icon: "clock", isOn: $settings.showModificationDate)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.showLastAccessDate".localized, icon: "eye", isOn: $settings.showLastAccessDate)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.showPermissions".localized, icon: "lock.shield", isOn: $settings.showPermissions)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.showOwner".localized, icon: "person", isOn: $settings.showOwner)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.showFilePath".localized, icon: "folder", isOn: $settings.showFilePath)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.showNotes".localized, icon: "note.text", isOn: $settings.showNotes)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.showFileSystemAdvanced".localized, icon: "internaldrive", isOn: $settings.showFileSystemAdvanced)
+                LazyVStack(alignment: .leading, spacing: SettingsLayout.sectionSpacing) {
+                    ForEach(Self.sections) { section in
+                        DisplaySectionView(settings: settings, section: section)
                     }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(8)
-                    .padding(.horizontal, 20)
 
-                    // EXIF Section
-                    Text("settings.display.exif".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 8)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.exif.show".localized, icon: IconManager.Photo.camera, isOn: $settings.showEXIF)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.exif.camera".localized, icon: IconManager.Photo.camera, isOn: $settings.showEXIFCamera)
-                            .disabled(!settings.showEXIF)
-                            .opacity(settings.showEXIF ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.exif.lens".localized, icon: IconManager.Photo.lens, isOn: $settings.showEXIFLens)
-                            .disabled(!settings.showEXIF)
-                            .opacity(settings.showEXIF ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.exif.settings".localized, icon: IconManager.Photo.settings, isOn: $settings.showEXIFSettings)
-                            .disabled(!settings.showEXIF)
-                            .opacity(settings.showEXIF ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.exif.dateTaken".localized, icon: IconManager.Photo.calendarClock, isOn: $settings.showEXIFDateTaken)
-                            .disabled(!settings.showEXIF)
-                            .opacity(settings.showEXIF ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.exif.dimensions".localized, icon: IconManager.Photo.dimensions, isOn: $settings.showEXIFDimensions)
-                            .disabled(!settings.showEXIF)
-                            .opacity(settings.showEXIF ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.exif.gps".localized, icon: IconManager.Photo.location, isOn: $settings.showEXIFGPS)
-                            .disabled(!settings.showEXIF)
-                            .opacity(settings.showEXIF ? 1.0 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(8)
-                    .padding(.horizontal, 20)
-
-                    HStack(spacing: 6) {
-                        Image(systemName: "info.circle")
-                            .font(.system(size: 11))
-                        Text("settings.display.exif.hint".localized)
-                            .font(.system(size: 11))
-                    }
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 8)
-
-                    // Video Section
-                    Text("settings.display.video".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 8)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.video.show".localized, icon: IconManager.Video.video, isOn: $settings.showVideo)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.video.duration".localized, icon: IconManager.Video.duration, isOn: $settings.showVideoDuration)
-                            .disabled(!settings.showVideo)
-                            .opacity(settings.showVideo ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.video.resolution".localized, icon: IconManager.Video.resolution, isOn: $settings.showVideoResolution)
-                            .disabled(!settings.showVideo)
-                            .opacity(settings.showVideo ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.video.codec".localized, icon: IconManager.Video.codec, isOn: $settings.showVideoCodec)
-                            .disabled(!settings.showVideo)
-                            .opacity(settings.showVideo ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.video.framerate".localized, icon: IconManager.Video.frameRate, isOn: $settings.showVideoFrameRate)
-                            .disabled(!settings.showVideo)
-                            .opacity(settings.showVideo ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.video.bitrate".localized, icon: IconManager.Video.bitrate, isOn: $settings.showVideoBitrate)
-                            .disabled(!settings.showVideo)
-                            .opacity(settings.showVideo ? 1.0 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(8)
-                    .padding(.horizontal, 20)
-
-                    HStack(spacing: 6) {
-                        Image(systemName: "info.circle")
-                            .font(.system(size: 11))
-                        Text("settings.display.video.hint".localized)
-                            .font(.system(size: 11))
-                    }
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 8)
-
-                    // Audio Section
-                    Text("settings.display.audio".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 8)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.audio.show".localized, icon: IconManager.Audio.music, isOn: $settings.showAudio)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.audio.title".localized, icon: IconManager.Audio.songTitle, isOn: $settings.showAudioTitle)
-                            .disabled(!settings.showAudio)
-                            .opacity(settings.showAudio ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.audio.artist".localized, icon: IconManager.Audio.artist, isOn: $settings.showAudioArtist)
-                            .disabled(!settings.showAudio)
-                            .opacity(settings.showAudio ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.audio.album".localized, icon: IconManager.Audio.album, isOn: $settings.showAudioAlbum)
-                            .disabled(!settings.showAudio)
-                            .opacity(settings.showAudio ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.audio.genre".localized, icon: IconManager.Audio.genre, isOn: $settings.showAudioGenre)
-                            .disabled(!settings.showAudio)
-                            .opacity(settings.showAudio ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.audio.year".localized, icon: IconManager.Audio.year, isOn: $settings.showAudioYear)
-                            .disabled(!settings.showAudio)
-                            .opacity(settings.showAudio ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.audio.duration".localized, icon: IconManager.Audio.duration, isOn: $settings.showAudioDuration)
-                            .disabled(!settings.showAudio)
-                            .opacity(settings.showAudio ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.audio.bitrate".localized, icon: IconManager.Audio.bitrate, isOn: $settings.showAudioBitrate)
-                            .disabled(!settings.showAudio)
-                            .opacity(settings.showAudio ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.audio.samplerate".localized, icon: IconManager.Audio.sampleRate, isOn: $settings.showAudioSampleRate)
-                            .disabled(!settings.showAudio)
-                            .opacity(settings.showAudio ? 1.0 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(8)
-                    .padding(.horizontal, 20)
-
-                    HStack(spacing: 6) {
-                        Image(systemName: "info.circle")
-                            .font(.system(size: 11))
-                        Text("settings.display.audio.hint".localized)
-                            .font(.system(size: 11))
-                    }
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 8)
-
-                    // PDF Section
-                    Text("settings.display.pdf".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 8)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.pdf.show".localized, icon: "doc.richtext", isOn: $settings.showPDF)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.pdf.pageCount".localized, icon: "doc.text", isOn: $settings.showPDFPageCount)
-                            .disabled(!settings.showPDF)
-                            .opacity(settings.showPDF ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.pdf.pageSize".localized, icon: "ruler", isOn: $settings.showPDFPageSize)
-                            .disabled(!settings.showPDF)
-                            .opacity(settings.showPDF ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.pdf.version".localized, icon: "info.circle", isOn: $settings.showPDFVersion)
-                            .disabled(!settings.showPDF)
-                            .opacity(settings.showPDF ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.pdf.title".localized, icon: "textformat", isOn: $settings.showPDFTitle)
-                            .disabled(!settings.showPDF)
-                            .opacity(settings.showPDF ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.pdf.author".localized, icon: "person", isOn: $settings.showPDFAuthor)
-                            .disabled(!settings.showPDF)
-                            .opacity(settings.showPDF ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.pdf.subject".localized, icon: "text.alignleft", isOn: $settings.showPDFSubject)
-                            .disabled(!settings.showPDF)
-                            .opacity(settings.showPDF ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.pdf.creator".localized, icon: "app", isOn: $settings.showPDFCreator)
-                            .disabled(!settings.showPDF)
-                            .opacity(settings.showPDF ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.pdf.producer".localized, icon: "gearshape", isOn: $settings.showPDFProducer)
-                            .disabled(!settings.showPDF)
-                            .opacity(settings.showPDF ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.pdf.creationDate".localized, icon: "calendar", isOn: $settings.showPDFCreationDate)
-                            .disabled(!settings.showPDF)
-                            .opacity(settings.showPDF ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.pdf.modificationDate".localized, icon: "clock", isOn: $settings.showPDFModificationDate)
-                            .disabled(!settings.showPDF)
-                            .opacity(settings.showPDF ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.pdf.keywords".localized, icon: "tag", isOn: $settings.showPDFKeywords)
-                            .disabled(!settings.showPDF)
-                            .opacity(settings.showPDF ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.pdf.encrypted".localized, icon: "lock.fill", isOn: $settings.showPDFEncrypted)
-                            .disabled(!settings.showPDF)
-                            .opacity(settings.showPDF ? 1.0 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(8)
-                    .padding(.horizontal, 20)
-
-                    HStack(spacing: 6) {
-                        Image(systemName: "info.circle")
-                            .font(.system(size: 11))
-                        Text("settings.display.pdf.hint".localized)
-                            .font(.system(size: 11))
-                    }
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 8)
-
-                    // Office Section
-                    Text("settings.display.office".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 8)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.office.show".localized, icon: "doc.richtext", isOn: $settings.showOffice)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.office.title".localized, icon: "textformat", isOn: $settings.showOfficeTitle)
-                            .disabled(!settings.showOffice)
-                            .opacity(settings.showOffice ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.office.author".localized, icon: "person", isOn: $settings.showOfficeAuthor)
-                            .disabled(!settings.showOffice)
-                            .opacity(settings.showOffice ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.office.subject".localized, icon: "text.alignleft", isOn: $settings.showOfficeSubject)
-                            .disabled(!settings.showOffice)
-                            .opacity(settings.showOffice ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.office.keywords".localized, icon: "tag", isOn: $settings.showOfficeKeywords)
-                            .disabled(!settings.showOffice)
-                            .opacity(settings.showOffice ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.office.comment".localized, icon: "text.bubble", isOn: $settings.showOfficeComment)
-                            .disabled(!settings.showOffice)
-                            .opacity(settings.showOffice ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.office.lastModifiedBy".localized, icon: "person.crop.circle", isOn: $settings.showOfficeLastModifiedBy)
-                            .disabled(!settings.showOffice)
-                            .opacity(settings.showOffice ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.office.creationDate".localized, icon: "calendar", isOn: $settings.showOfficeCreationDate)
-                            .disabled(!settings.showOffice)
-                            .opacity(settings.showOffice ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.office.modificationDate".localized, icon: "clock", isOn: $settings.showOfficeModificationDate)
-                            .disabled(!settings.showOffice)
-                            .opacity(settings.showOffice ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.office.pageCount".localized, icon: "doc.text", isOn: $settings.showOfficePageCount)
-                            .disabled(!settings.showOffice)
-                            .opacity(settings.showOffice ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.office.wordCount".localized, icon: "textformat.size", isOn: $settings.showOfficeWordCount)
-                            .disabled(!settings.showOffice)
-                            .opacity(settings.showOffice ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.office.sheetCount".localized, icon: "tablecells", isOn: $settings.showOfficeSheetCount)
-                            .disabled(!settings.showOffice)
-                            .opacity(settings.showOffice ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.office.slideCount".localized, icon: "rectangle.stack", isOn: $settings.showOfficeSlideCount)
-                            .disabled(!settings.showOffice)
-                            .opacity(settings.showOffice ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.office.company".localized, icon: "building.2", isOn: $settings.showOfficeCompany)
-                            .disabled(!settings.showOffice)
-                            .opacity(settings.showOffice ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.office.category".localized, icon: "folder", isOn: $settings.showOfficeCategory)
-                            .disabled(!settings.showOffice)
-                            .opacity(settings.showOffice ? 1.0 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(8)
-                    .padding(.horizontal, 20)
-
-                    HStack(spacing: 6) {
-                        Image(systemName: "info.circle")
-                            .font(.system(size: 11))
-                        Text("settings.display.office.hint".localized)
-                            .font(.system(size: 11))
-                    }
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 8)
-
-                    // Archive Section
-                    Text("settings.display.archive".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 8)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.archive.show".localized, icon: "doc.zipper", isOn: $settings.showArchive)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.archive.format".localized, icon: "doc.zipper", isOn: $settings.showArchiveFormat)
-                            .disabled(!settings.showArchive)
-                            .opacity(settings.showArchive ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.archive.fileCount".localized, icon: "doc.on.doc", isOn: $settings.showArchiveFileCount)
-                            .disabled(!settings.showArchive)
-                            .opacity(settings.showArchive ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.archive.uncompressedSize".localized, icon: "arrow.up.doc", isOn: $settings.showArchiveUncompressedSize)
-                            .disabled(!settings.showArchive)
-                            .opacity(settings.showArchive ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.archive.compressionRatio".localized, icon: "chart.bar", isOn: $settings.showArchiveCompressionRatio)
-                            .disabled(!settings.showArchive)
-                            .opacity(settings.showArchive ? 1.0 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.archive.encrypted".localized, icon: "lock.fill", isOn: $settings.showArchiveEncrypted)
-                            .disabled(!settings.showArchive)
-                            .opacity(settings.showArchive ? 1.0 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(8)
-                    .padding(.horizontal, 20)
-
-                    HStack(spacing: 6) {
-                        Image(systemName: "info.circle")
-                            .font(.system(size: 11))
-                        Text("settings.display.archive.hint".localized)
-                            .font(.system(size: 11))
-                    }
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 8)
-
-                    // E-book Section
-                    Text("settings.display.ebook".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 16)
-                        .padding(.bottom, 8)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.ebook.show".localized, icon: "book.closed", isOn: $settings.showEbook)
-
-                        DisplayToggleRow(title: "settings.display.ebook.title".localized, icon: "book.closed", isOn: $settings.showEbookTitle)
-                            .disabled(!settings.showEbook)
-                            .opacity(settings.showEbook ? 1 : 0.5)
-
-                        DisplayToggleRow(title: "settings.display.ebook.author".localized, icon: "person", isOn: $settings.showEbookAuthor)
-                            .disabled(!settings.showEbook)
-                            .opacity(settings.showEbook ? 1 : 0.5)
-
-                        DisplayToggleRow(title: "settings.display.ebook.publisher".localized, icon: "building.2", isOn: $settings.showEbookPublisher)
-                            .disabled(!settings.showEbook)
-                            .opacity(settings.showEbook ? 1 : 0.5)
-
-                        DisplayToggleRow(title: "settings.display.ebook.publicationDate".localized, icon: "calendar", isOn: $settings.showEbookPublicationDate)
-                            .disabled(!settings.showEbook)
-                            .opacity(settings.showEbook ? 1 : 0.5)
-
-                        DisplayToggleRow(title: "settings.display.ebook.isbn".localized, icon: "barcode", isOn: $settings.showEbookISBN)
-                            .disabled(!settings.showEbook)
-                            .opacity(settings.showEbook ? 1 : 0.5)
-
-                        DisplayToggleRow(title: "settings.display.ebook.language".localized, icon: "globe", isOn: $settings.showEbookLanguage)
-                            .disabled(!settings.showEbook)
-                            .opacity(settings.showEbook ? 1 : 0.5)
-
-                        DisplayToggleRow(title: "settings.display.ebook.description".localized, icon: "text.alignleft", isOn: $settings.showEbookDescription)
-                            .disabled(!settings.showEbook)
-                            .opacity(settings.showEbook ? 1 : 0.5)
-
-                        DisplayToggleRow(title: "settings.display.ebook.pageCount".localized, icon: "doc.text", isOn: $settings.showEbookPageCount)
-                            .disabled(!settings.showEbook)
-                            .opacity(settings.showEbook ? 1 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(6)
-                    .padding(.horizontal, 20)
-
-                    HStack(spacing: 6) {
-                        Image(systemName: "info.circle")
-                            .font(.system(size: 11))
-                        Text("settings.display.ebook.hint".localized)
-                            .font(.system(size: 11))
-                    }
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 8)
-
-                    // Code File Section
-                    Text("settings.display.code".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 16)
-                        .padding(.bottom, 8)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.code.show".localized, icon: "chevron.left.forwardslash.chevron.right", isOn: $settings.showCode)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.code.language".localized, icon: "chevron.left.forwardslash.chevron.right", isOn: $settings.showCodeLanguage)
-                            .disabled(!settings.showCode)
-                            .opacity(settings.showCode ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.code.lineCount".localized, icon: "number", isOn: $settings.showCodeLineCount)
-                            .disabled(!settings.showCode)
-                            .opacity(settings.showCode ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.code.codeLines".localized, icon: "curlybraces", isOn: $settings.showCodeLines)
-                            .disabled(!settings.showCode)
-                            .opacity(settings.showCode ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.code.commentLines".localized, icon: "text.bubble", isOn: $settings.showCodeCommentLines)
-                            .disabled(!settings.showCode)
-                            .opacity(settings.showCode ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.code.blankLines".localized, icon: "minus", isOn: $settings.showCodeBlankLines)
-                            .disabled(!settings.showCode)
-                            .opacity(settings.showCode ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.code.encoding".localized, icon: "textformat.abc", isOn: $settings.showCodeEncoding)
-                            .disabled(!settings.showCode)
-                            .opacity(settings.showCode ? 1 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(6)
-                    .padding(.horizontal, 20)
-
-                    HStack(spacing: 6) {
-                        Image(systemName: "info.circle")
-                            .font(.system(size: 11))
-                        Text("settings.display.code.hint".localized)
-                            .font(.system(size: 11))
-                    }
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 8)
-                    
-                    // Font Information
-                    Text("settings.display.font.title".localized)
-                        .font(.system(size: 13, weight: .medium))
-                        .foregroundColor(Color(NSColor.labelColor))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 20)
-                        .padding(.top, 16)
-                        .padding(.bottom, 8)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.font.show".localized, icon: "textformat", isOn: $settings.showFont)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.font.name".localized, icon: "textformat", isOn: $settings.showFontName)
-                            .disabled(!settings.showFont)
-                            .opacity(settings.showFont ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.font.family".localized, icon: "textformat.alt", isOn: $settings.showFontFamily)
-                            .disabled(!settings.showFont)
-                            .opacity(settings.showFont ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.font.style".localized, icon: "italic", isOn: $settings.showFontStyle)
-                            .disabled(!settings.showFont)
-                            .opacity(settings.showFont ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.font.version".localized, icon: "number", isOn: $settings.showFontVersion)
-                            .disabled(!settings.showFont)
-                            .opacity(settings.showFont ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.font.designer".localized, icon: "person", isOn: $settings.showFontDesigner)
-                            .disabled(!settings.showFont)
-                            .opacity(settings.showFont ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.font.copyright".localized, icon: "c.circle", isOn: $settings.showFontCopyright)
-                            .disabled(!settings.showFont)
-                            .opacity(settings.showFont ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.font.glyphCount".localized, icon: "character.textbox", isOn: $settings.showFontGlyphCount)
-                            .disabled(!settings.showFont)
-                            .opacity(settings.showFont ? 1 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(6)
-                    .padding(.horizontal, 20)
-
-                    HStack(spacing: 6) {
-                        Image(systemName: "info.circle")
-                            .font(.system(size: 11))
-                        Text("settings.display.font.hint".localized)
-                            .font(.system(size: 11))
-                    }
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 8)
-                    
-                    // Disk Image Information
-                    Text("settings.display.diskImage.title".localized)
-                        .font(.system(size: 13, weight: .medium))
-                        .foregroundColor(Color(NSColor.labelColor))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 20)
-                        .padding(.top, 16)
-                        .padding(.bottom, 8)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.diskImage.show".localized, icon: "opticaldiscdrive", isOn: $settings.showDiskImage)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.diskImage.format".localized, icon: "opticaldiscdrive", isOn: $settings.showDiskImageFormat)
-                            .disabled(!settings.showDiskImage)
-                            .opacity(settings.showDiskImage ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.diskImage.totalSize".localized, icon: "externaldrive", isOn: $settings.showDiskImageTotalSize)
-                            .disabled(!settings.showDiskImage)
-                            .opacity(settings.showDiskImage ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.diskImage.compressedSize".localized, icon: "arrow.down.circle", isOn: $settings.showDiskImageCompressedSize)
-                            .disabled(!settings.showDiskImage)
-                            .opacity(settings.showDiskImage ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.diskImage.compressionRatio".localized, icon: "chart.bar", isOn: $settings.showDiskImageCompressionRatio)
-                            .disabled(!settings.showDiskImage)
-                            .opacity(settings.showDiskImage ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.diskImage.encrypted".localized, icon: "lock.shield", isOn: $settings.showDiskImageEncrypted)
-                            .disabled(!settings.showDiskImage)
-                            .opacity(settings.showDiskImage ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.diskImage.partitionScheme".localized, icon: "square.split.2x2", isOn: $settings.showDiskImagePartitionScheme)
-                            .disabled(!settings.showDiskImage)
-                            .opacity(settings.showDiskImage ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.diskImage.fileSystem".localized, icon: "doc.text", isOn: $settings.showDiskImageFileSystem)
-                            .disabled(!settings.showDiskImage)
-                            .opacity(settings.showDiskImage ? 1 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(6)
-                    .padding(.horizontal, 20)
-
-                    HStack(spacing: 6) {
-                        Image(systemName: "info.circle")
-                            .font(.system(size: 11))
-                        Text("settings.display.diskImage.hint".localized)
-                            .font(.system(size: 11))
-                    }
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 8)
-                    
-                    // Vector Graphics Section
-                    Text("settings.display.vectorGraphics.title".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 16)
-
-                    VStack(spacing: 0) {
-                        // Main toggle
-                        DisplayToggleRow(title: "settings.display.vectorGraphics.show".localized, icon: "paintbrush.pointed", isOn: $settings.showVectorGraphics)
-                        Divider().padding(.leading, 60)
-                        // Detail toggles
-                        DisplayToggleRow(title: "settings.display.vectorGraphics.format".localized, icon: "paintbrush.pointed", isOn: $settings.showVectorGraphicsFormat)
-                            .disabled(!settings.showVectorGraphics)
-                            .opacity(settings.showVectorGraphics ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.vectorGraphics.dimensions".localized, icon: "arrow.up.left.and.arrow.down.right", isOn: $settings.showVectorGraphicsDimensions)
-                            .disabled(!settings.showVectorGraphics)
-                            .opacity(settings.showVectorGraphics ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.vectorGraphics.viewBox".localized, icon: "rectangle.dashed", isOn: $settings.showVectorGraphicsViewBox)
-                            .disabled(!settings.showVectorGraphics)
-                            .opacity(settings.showVectorGraphics ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.vectorGraphics.elementCount".localized, icon: "square.stack.3d.up", isOn: $settings.showVectorGraphicsElementCount)
-                            .disabled(!settings.showVectorGraphics)
-                            .opacity(settings.showVectorGraphics ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.vectorGraphics.colorMode".localized, icon: "paintpalette", isOn: $settings.showVectorGraphicsColorMode)
-                            .disabled(!settings.showVectorGraphics)
-                            .opacity(settings.showVectorGraphics ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.vectorGraphics.creator".localized, icon: "hammer", isOn: $settings.showVectorGraphicsCreator)
-                            .disabled(!settings.showVectorGraphics)
-                            .opacity(settings.showVectorGraphics ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.vectorGraphics.version".localized, icon: "number", isOn: $settings.showVectorGraphicsVersion)
-                            .disabled(!settings.showVectorGraphics)
-                            .opacity(settings.showVectorGraphics ? 1 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(6)
-                    .padding(.horizontal, 20)
-
-                    HStack(spacing: 6) {
-                        Image(systemName: "info.circle")
-                            .font(.system(size: 11))
-                        Text("settings.display.vectorGraphics.hint".localized)
-                            .font(.system(size: 11))
-                    }
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 8)
-                    
-                    // Subtitle Section
-                    Text("settings.display.subtitle.title".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 16)
-
-                    VStack(spacing: 0) {
-                        // Main toggle
-                        DisplayToggleRow(title: "settings.display.subtitle.show".localized, icon: "captions.bubble", isOn: $settings.showSubtitle)
-                        Divider().padding(.leading, 60)
-                        // Detail toggles
-                        DisplayToggleRow(title: "settings.display.subtitle.format".localized, icon: "captions.bubble", isOn: $settings.showSubtitleFormat)
-                            .disabled(!settings.showSubtitle)
-                            .opacity(settings.showSubtitle ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.subtitle.encoding".localized, icon: "textformat.abc", isOn: $settings.showSubtitleEncoding)
-                            .disabled(!settings.showSubtitle)
-                            .opacity(settings.showSubtitle ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.subtitle.entryCount".localized, icon: "list.number", isOn: $settings.showSubtitleEntryCount)
-                            .disabled(!settings.showSubtitle)
-                            .opacity(settings.showSubtitle ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.subtitle.duration".localized, icon: "clock", isOn: $settings.showSubtitleDuration)
-                            .disabled(!settings.showSubtitle)
-                            .opacity(settings.showSubtitle ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.subtitle.language".localized, icon: "globe", isOn: $settings.showSubtitleLanguage)
-                            .disabled(!settings.showSubtitle)
-                            .opacity(settings.showSubtitle ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.subtitle.frameRate".localized, icon: "film", isOn: $settings.showSubtitleFrameRate)
-                            .disabled(!settings.showSubtitle)
-                            .opacity(settings.showSubtitle ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.subtitle.hasFormatting".localized, icon: "textformat", isOn: $settings.showSubtitleFormatting)
-                            .disabled(!settings.showSubtitle)
-                            .opacity(settings.showSubtitle ? 1 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(6)
-                    .padding(.horizontal, 20)
-
-                    HStack(spacing: 6) {
-                        Image(systemName: "info.circle")
-                            .font(.system(size: 11))
-                        Text("settings.display.subtitle.hint".localized)
-                            .font(.system(size: 11))
-                    }
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 8)
-
-                    // HTML Section
-                    Text("settings.display.html.title".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 16)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.html.show".localized, icon: "globe", isOn: $settings.showHTML)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.html.title.field".localized, icon: "textformat", isOn: $settings.showHTMLTitle)
-                            .disabled(!settings.showHTML)
-                            .opacity(settings.showHTML ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.html.description".localized, icon: "text.alignleft", isOn: $settings.showHTMLDescription)
-                            .disabled(!settings.showHTML)
-                            .opacity(settings.showHTML ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.html.charset".localized, icon: "textformat.abc", isOn: $settings.showHTMLCharset)
-                            .disabled(!settings.showHTML)
-                            .opacity(settings.showHTML ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.html.openGraph".localized, icon: "square.and.arrow.up", isOn: $settings.showHTMLOpenGraph)
-                            .disabled(!settings.showHTML)
-                            .opacity(settings.showHTML ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.html.twitterCard".localized, icon: "bubble.left", isOn: $settings.showHTMLTwitterCard)
-                            .disabled(!settings.showHTML)
-                            .opacity(settings.showHTML ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.html.keywords".localized, icon: "tag", isOn: $settings.showHTMLKeywords)
-                            .disabled(!settings.showHTML)
-                            .opacity(settings.showHTML ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.html.author".localized, icon: "person", isOn: $settings.showHTMLAuthor)
-                            .disabled(!settings.showHTML)
-                            .opacity(settings.showHTML ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.html.language".localized, icon: "globe", isOn: $settings.showHTMLLanguage)
-                            .disabled(!settings.showHTML)
-                            .opacity(settings.showHTML ? 1 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(6)
-                    .padding(.horizontal, 20)
-
-                    // Extended Image Section (IPTC/XMP)
-                    Text("settings.display.imageExtended.title".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 16)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.imageExtended.show".localized, icon: "photo.badge.plus", isOn: $settings.showImageExtended)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.imageExtended.copyright".localized, icon: "c.circle", isOn: $settings.showImageCopyright)
-                            .disabled(!settings.showImageExtended)
-                            .opacity(settings.showImageExtended ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.imageExtended.creator".localized, icon: "person", isOn: $settings.showImageCreator)
-                            .disabled(!settings.showImageExtended)
-                            .opacity(settings.showImageExtended ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.imageExtended.keywords".localized, icon: "tag", isOn: $settings.showImageKeywords)
-                            .disabled(!settings.showImageExtended)
-                            .opacity(settings.showImageExtended ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.imageExtended.rating".localized, icon: "star", isOn: $settings.showImageRating)
-                            .disabled(!settings.showImageExtended)
-                            .opacity(settings.showImageExtended ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.imageExtended.creatorTool".localized, icon: "wrench.and.screwdriver", isOn: $settings.showImageCreatorTool)
-                            .disabled(!settings.showImageExtended)
-                            .opacity(settings.showImageExtended ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.imageExtended.description".localized, icon: "text.alignleft", isOn: $settings.showImageDescription)
-                            .disabled(!settings.showImageExtended)
-                            .opacity(settings.showImageExtended ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.imageExtended.headline".localized, icon: "textformat", isOn: $settings.showImageHeadline)
-                            .disabled(!settings.showImageExtended)
-                            .opacity(settings.showImageExtended ? 1 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(6)
-                    .padding(.horizontal, 20)
-
-                    // Markdown Section
-                    Text("settings.display.markdown.title".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 16)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.markdown.show".localized, icon: "text.document", isOn: $settings.showMarkdown)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.markdown.frontmatter".localized, icon: "doc.text", isOn: $settings.showMarkdownFrontmatter)
-                            .disabled(!settings.showMarkdown)
-                            .opacity(settings.showMarkdown ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.markdown.title.field".localized, icon: "textformat", isOn: $settings.showMarkdownTitle)
-                            .disabled(!settings.showMarkdown)
-                            .opacity(settings.showMarkdown ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.markdown.wordCount".localized, icon: "character.cursor.ibeam", isOn: $settings.showMarkdownWordCount)
-                            .disabled(!settings.showMarkdown)
-                            .opacity(settings.showMarkdown ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.markdown.headingCount".localized, icon: "number", isOn: $settings.showMarkdownHeadingCount)
-                            .disabled(!settings.showMarkdown)
-                            .opacity(settings.showMarkdown ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.markdown.linkCount".localized, icon: "link", isOn: $settings.showMarkdownLinkCount)
-                            .disabled(!settings.showMarkdown)
-                            .opacity(settings.showMarkdown ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.markdown.imageCount".localized, icon: "photo", isOn: $settings.showMarkdownImageCount)
-                            .disabled(!settings.showMarkdown)
-                            .opacity(settings.showMarkdown ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.markdown.codeBlockCount".localized, icon: "chevron.left.forwardslash.chevron.right", isOn: $settings.showMarkdownCodeBlockCount)
-                            .disabled(!settings.showMarkdown)
-                            .opacity(settings.showMarkdown ? 1 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(6)
-                    .padding(.horizontal, 20)
-
-                    // Config File Section (JSON/YAML/TOML)
-                    Text("settings.display.config.title".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 16)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.config.show".localized, icon: "gearshape.2", isOn: $settings.showConfig)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.config.format".localized, icon: "doc.text", isOn: $settings.showConfigFormat)
-                            .disabled(!settings.showConfig)
-                            .opacity(settings.showConfig ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.config.valid".localized, icon: "checkmark.circle", isOn: $settings.showConfigValid)
-                            .disabled(!settings.showConfig)
-                            .opacity(settings.showConfig ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.config.keyCount".localized, icon: "number", isOn: $settings.showConfigKeyCount)
-                            .disabled(!settings.showConfig)
-                            .opacity(settings.showConfig ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.config.maxDepth".localized, icon: "arrow.down.right", isOn: $settings.showConfigMaxDepth)
-                            .disabled(!settings.showConfig)
-                            .opacity(settings.showConfig ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.config.hasComments".localized, icon: "text.bubble", isOn: $settings.showConfigHasComments)
-                            .disabled(!settings.showConfig)
-                            .opacity(settings.showConfig ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.config.encoding".localized, icon: "textformat.abc", isOn: $settings.showConfigEncoding)
-                            .disabled(!settings.showConfig)
-                            .opacity(settings.showConfig ? 1 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(6)
-                    .padding(.horizontal, 20)
-
-                    // PSD Section
-                    Text("settings.display.psd.title".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 16)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.psd.show".localized, icon: "square.3.layers.3d", isOn: $settings.showPSD)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.psd.layerCount".localized, icon: "square.stack.3d.up", isOn: $settings.showPSDLayerCount)
-                            .disabled(!settings.showPSD)
-                            .opacity(settings.showPSD ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.psd.colorMode".localized, icon: "paintpalette", isOn: $settings.showPSDColorMode)
-                            .disabled(!settings.showPSD)
-                            .opacity(settings.showPSD ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.psd.bitDepth".localized, icon: "number", isOn: $settings.showPSDBitDepth)
-                            .disabled(!settings.showPSD)
-                            .opacity(settings.showPSD ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.psd.resolution".localized, icon: "square.dashed", isOn: $settings.showPSDResolution)
-                            .disabled(!settings.showPSD)
-                            .opacity(settings.showPSD ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.psd.transparency".localized, icon: "checkerboard.rectangle", isOn: $settings.showPSDTransparency)
-                            .disabled(!settings.showPSD)
-                            .opacity(settings.showPSD ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.psd.dimensions".localized, icon: "aspectratio", isOn: $settings.showPSDDimensions)
-                            .disabled(!settings.showPSD)
-                            .opacity(settings.showPSD ? 1 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(6)
-                    .padding(.horizontal, 20)
-
-                    // Executable Section
-                    Text("settings.display.executable.title".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 16)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.executable.show".localized, icon: "terminal", isOn: $settings.showExecutable)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.executable.architecture".localized, icon: "cpu", isOn: $settings.showExecutableArchitecture)
-                            .disabled(!settings.showExecutable)
-                            .opacity(settings.showExecutable ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.executable.codeSigned".localized, icon: "checkmark.seal", isOn: $settings.showExecutableCodeSigned)
-                            .disabled(!settings.showExecutable)
-                            .opacity(settings.showExecutable ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.executable.signingAuthority".localized, icon: "signature", isOn: $settings.showExecutableSigningAuthority)
-                            .disabled(!settings.showExecutable)
-                            .opacity(settings.showExecutable ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.executable.minimumOS".localized, icon: "desktopcomputer", isOn: $settings.showExecutableMinimumOS)
-                            .disabled(!settings.showExecutable)
-                            .opacity(settings.showExecutable ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.executable.sdkVersion".localized, icon: "wrench.and.screwdriver", isOn: $settings.showExecutableSDKVersion)
-                            .disabled(!settings.showExecutable)
-                            .opacity(settings.showExecutable ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.executable.fileType".localized, icon: "doc", isOn: $settings.showExecutableFileType)
-                            .disabled(!settings.showExecutable)
-                            .opacity(settings.showExecutable ? 1 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(6)
-                    .padding(.horizontal, 20)
-
-                    // App Bundle Section
-                    Text("settings.display.appBundle.title".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 16)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.appBundle.show".localized, icon: "app.badge", isOn: $settings.showAppBundle)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.appBundle.bundleID".localized, icon: "app", isOn: $settings.showAppBundleID)
-                            .disabled(!settings.showAppBundle)
-                            .opacity(settings.showAppBundle ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.appBundle.version".localized, icon: "number", isOn: $settings.showAppBundleVersion)
-                            .disabled(!settings.showAppBundle)
-                            .opacity(settings.showAppBundle ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.appBundle.buildNumber".localized, icon: "hammer", isOn: $settings.showAppBundleBuildNumber)
-                            .disabled(!settings.showAppBundle)
-                            .opacity(settings.showAppBundle ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.appBundle.minimumOS".localized, icon: "desktopcomputer", isOn: $settings.showAppBundleMinimumOS)
-                            .disabled(!settings.showAppBundle)
-                            .opacity(settings.showAppBundle ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.appBundle.category".localized, icon: "folder", isOn: $settings.showAppBundleCategory)
-                            .disabled(!settings.showAppBundle)
-                            .opacity(settings.showAppBundle ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.appBundle.copyright".localized, icon: "c.circle", isOn: $settings.showAppBundleCopyright)
-                            .disabled(!settings.showAppBundle)
-                            .opacity(settings.showAppBundle ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.appBundle.codeSigned".localized, icon: "checkmark.seal", isOn: $settings.showAppBundleCodeSigned)
-                            .disabled(!settings.showAppBundle)
-                            .opacity(settings.showAppBundle ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.appBundle.entitlements".localized, icon: "lock.shield", isOn: $settings.showAppBundleEntitlements)
-                            .disabled(!settings.showAppBundle)
-                            .opacity(settings.showAppBundle ? 1 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(6)
-                    .padding(.horizontal, 20)
-
-                    // SQLite Section
-                    Text("settings.display.sqlite.title".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 16)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.sqlite.show".localized, icon: "cylinder", isOn: $settings.showSQLite)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.sqlite.tableCount".localized, icon: "tablecells", isOn: $settings.showSQLiteTableCount)
-                            .disabled(!settings.showSQLite)
-                            .opacity(settings.showSQLite ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.sqlite.indexCount".localized, icon: "list.number", isOn: $settings.showSQLiteIndexCount)
-                            .disabled(!settings.showSQLite)
-                            .opacity(settings.showSQLite ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.sqlite.triggerCount".localized, icon: "bolt", isOn: $settings.showSQLiteTriggerCount)
-                            .disabled(!settings.showSQLite)
-                            .opacity(settings.showSQLite ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.sqlite.viewCount".localized, icon: "eye", isOn: $settings.showSQLiteViewCount)
-                            .disabled(!settings.showSQLite)
-                            .opacity(settings.showSQLite ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.sqlite.totalRows".localized, icon: "number", isOn: $settings.showSQLiteTotalRows)
-                            .disabled(!settings.showSQLite)
-                            .opacity(settings.showSQLite ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.sqlite.schemaVersion".localized, icon: "tag", isOn: $settings.showSQLiteSchemaVersion)
-                            .disabled(!settings.showSQLite)
-                            .opacity(settings.showSQLite ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.sqlite.pageSize".localized, icon: "doc", isOn: $settings.showSQLitePageSize)
-                            .disabled(!settings.showSQLite)
-                            .opacity(settings.showSQLite ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.sqlite.encoding".localized, icon: "textformat.abc", isOn: $settings.showSQLiteEncoding)
-                            .disabled(!settings.showSQLite)
-                            .opacity(settings.showSQLite ? 1 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(6)
-                    .padding(.horizontal, 20)
-
-                    // Git Repository Section
-                    Text("settings.display.git.title".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 16)
-
-                    VStack(spacing: 0) {
-                        DisplayToggleRow(title: "settings.display.git.show".localized, icon: "arrow.triangle.branch", isOn: $settings.showGit)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.git.branchCount".localized, icon: "arrow.triangle.branch", isOn: $settings.showGitBranchCount)
-                            .disabled(!settings.showGit)
-                            .opacity(settings.showGit ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.git.currentBranch".localized, icon: "arrow.right.circle", isOn: $settings.showGitCurrentBranch)
-                            .disabled(!settings.showGit)
-                            .opacity(settings.showGit ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.git.commitCount".localized, icon: "number", isOn: $settings.showGitCommitCount)
-                            .disabled(!settings.showGit)
-                            .opacity(settings.showGit ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.git.lastCommitDate".localized, icon: "calendar", isOn: $settings.showGitLastCommitDate)
-                            .disabled(!settings.showGit)
-                            .opacity(settings.showGit ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.git.lastCommitMessage".localized, icon: "text.bubble", isOn: $settings.showGitLastCommitMessage)
-                            .disabled(!settings.showGit)
-                            .opacity(settings.showGit ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.git.remoteURL".localized, icon: "link", isOn: $settings.showGitRemoteURL)
-                            .disabled(!settings.showGit)
-                            .opacity(settings.showGit ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.git.uncommittedChanges".localized, icon: "exclamationmark.triangle", isOn: $settings.showGitUncommittedChanges)
-                            .disabled(!settings.showGit)
-                            .opacity(settings.showGit ? 1 : 0.5)
-                        Divider().padding(.leading, 60)
-                        DisplayToggleRow(title: "settings.display.git.tagCount".localized, icon: "tag", isOn: $settings.showGitTagCount)
-                            .disabled(!settings.showGit)
-                            .opacity(settings.showGit ? 1 : 0.5)
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(6)
-                    .padding(.horizontal, 20)
-
-                    // Display Order Section
+                    // Display Order Section (bespoke: needs @State draggingItem + onDrag/onDrop,
+                    // so it stays hand-written rather than being expressed as a DisplaySection).
                     Text("settings.display.order".localized)
-                        .font(.system(size: 13, weight: .semibold))
-                        .padding(.horizontal, 20)
-                        .padding(.top, 16)
+                        .font(.system(size: SettingsLayout.sectionTitleSize, weight: .semibold))
+                        .padding(.horizontal, SettingsLayout.horizontalPadding)
 
                     VStack(spacing: 0) {
                         ForEach(settings.displayOrder) { item in
