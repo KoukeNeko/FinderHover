@@ -769,5 +769,76 @@ nonisolated enum Constants {
 
         /// Default include prereleases
         static let includePrereleases: Bool = false
+
+        // MARK: - File System Advanced Metadata Defaults
+        /// Default show file system advanced metadata (section gate)
+        static let showFileSystemAdvanced: Bool = true
+
+        /// Default show allocated size on disk
+        static let showAllocatedSize: Bool = true
+
+        /// Default show attribute modification date
+        static let showAttributeModDate: Bool = false
+
+        /// Default show resource fork size
+        static let showResourceForkSize: Bool = true
+
+        /// Default show volume info
+        static let showVolumeInfo: Bool = true
+
+        /// Default show Spotlight indexed status
+        static let showSpotlightIndexed: Bool = false
+
+        /// Default show file provider
+        static let showFileProvider: Bool = true
+
+        // MARK: - 3D Model Metadata Defaults
+        /// Default show 3D model metadata (section gate)
+        static let showModel3D: Bool = true
+
+        /// Default show 3D model format
+        static let showModel3DFormat: Bool = true
+
+        /// Default show 3D model vertices
+        static let showModel3DVertices: Bool = true
+
+        /// Default show 3D model materials
+        static let showModel3DMaterials: Bool = true
+
+        /// Default show 3D model animations
+        static let showModel3DAnimations: Bool = true
+
+        // MARK: - Xcode Project Metadata Defaults
+        /// Default show Xcode project metadata (section gate)
+        static let showXcodeProject: Bool = true
+
+        /// Default show Xcode targets
+        static let showXcodeTargets: Bool = true
+
+        /// Default show Xcode Swift version
+        static let showXcodeSwiftVersion: Bool = true
+
+        /// Default show Xcode deployment target
+        static let showXcodeDeploymentTarget: Bool = true
+
+        // MARK: - Extended EXIF Metadata Defaults (HDR/Color)
+        /// Default show EXIF color profile
+        static let showEXIFColorProfile: Bool = true
+
+        /// Default show EXIF bit depth
+        static let showEXIFBitDepth: Bool = true
+
+        /// Default show EXIF HDR info
+        static let showEXIFHDRInfo: Bool = true
+
+        // MARK: - Extended Video Metadata Defaults (Chapters/Subtitles)
+        /// Default show video chapters
+        static let showVideoChapters: Bool = true
+
+        /// Default show video subtitle tracks
+        static let showVideoSubtitleTracks: Bool = true
+
+        /// Default show video container format
+        static let showVideoContainerFormat: Bool = true
     }
 }

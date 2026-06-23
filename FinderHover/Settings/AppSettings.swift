@@ -1297,36 +1297,36 @@ class AppSettings: ObservableObject {
         self.showAliasTarget = UserDefaults.standard.object(forKey: "showAliasTarget") as? Bool ?? Constants.Defaults.showAliasTarget
 
         // File System Advanced metadata
-        self.showFileSystemAdvanced = UserDefaults.standard.object(forKey: "showFileSystemAdvanced") as? Bool ?? true
-        self.showAllocatedSize = UserDefaults.standard.object(forKey: "showAllocatedSize") as? Bool ?? true
-        self.showAttributeModDate = UserDefaults.standard.object(forKey: "showAttributeModDate") as? Bool ?? false
-        self.showResourceForkSize = UserDefaults.standard.object(forKey: "showResourceForkSize") as? Bool ?? true
-        self.showVolumeInfo = UserDefaults.standard.object(forKey: "showVolumeInfo") as? Bool ?? true
-        self.showSpotlightIndexed = UserDefaults.standard.object(forKey: "showSpotlightIndexed") as? Bool ?? false
-        self.showFileProvider = UserDefaults.standard.object(forKey: "showFileProvider") as? Bool ?? true
+        self.showFileSystemAdvanced = UserDefaults.standard.object(forKey: "showFileSystemAdvanced") as? Bool ?? Constants.Defaults.showFileSystemAdvanced
+        self.showAllocatedSize = UserDefaults.standard.object(forKey: "showAllocatedSize") as? Bool ?? Constants.Defaults.showAllocatedSize
+        self.showAttributeModDate = UserDefaults.standard.object(forKey: "showAttributeModDate") as? Bool ?? Constants.Defaults.showAttributeModDate
+        self.showResourceForkSize = UserDefaults.standard.object(forKey: "showResourceForkSize") as? Bool ?? Constants.Defaults.showResourceForkSize
+        self.showVolumeInfo = UserDefaults.standard.object(forKey: "showVolumeInfo") as? Bool ?? Constants.Defaults.showVolumeInfo
+        self.showSpotlightIndexed = UserDefaults.standard.object(forKey: "showSpotlightIndexed") as? Bool ?? Constants.Defaults.showSpotlightIndexed
+        self.showFileProvider = UserDefaults.standard.object(forKey: "showFileProvider") as? Bool ?? Constants.Defaults.showFileProvider
 
         // 3D Model metadata
-        self.showModel3D = UserDefaults.standard.object(forKey: "showModel3D") as? Bool ?? true
-        self.showModel3DFormat = UserDefaults.standard.object(forKey: "showModel3DFormat") as? Bool ?? true
-        self.showModel3DVertices = UserDefaults.standard.object(forKey: "showModel3DVertices") as? Bool ?? true
-        self.showModel3DMaterials = UserDefaults.standard.object(forKey: "showModel3DMaterials") as? Bool ?? true
-        self.showModel3DAnimations = UserDefaults.standard.object(forKey: "showModel3DAnimations") as? Bool ?? true
+        self.showModel3D = UserDefaults.standard.object(forKey: "showModel3D") as? Bool ?? Constants.Defaults.showModel3D
+        self.showModel3DFormat = UserDefaults.standard.object(forKey: "showModel3DFormat") as? Bool ?? Constants.Defaults.showModel3DFormat
+        self.showModel3DVertices = UserDefaults.standard.object(forKey: "showModel3DVertices") as? Bool ?? Constants.Defaults.showModel3DVertices
+        self.showModel3DMaterials = UserDefaults.standard.object(forKey: "showModel3DMaterials") as? Bool ?? Constants.Defaults.showModel3DMaterials
+        self.showModel3DAnimations = UserDefaults.standard.object(forKey: "showModel3DAnimations") as? Bool ?? Constants.Defaults.showModel3DAnimations
 
         // Xcode Project metadata
-        self.showXcodeProject = UserDefaults.standard.object(forKey: "showXcodeProject") as? Bool ?? true
-        self.showXcodeTargets = UserDefaults.standard.object(forKey: "showXcodeTargets") as? Bool ?? true
-        self.showXcodeSwiftVersion = UserDefaults.standard.object(forKey: "showXcodeSwiftVersion") as? Bool ?? true
-        self.showXcodeDeploymentTarget = UserDefaults.standard.object(forKey: "showXcodeDeploymentTarget") as? Bool ?? true
+        self.showXcodeProject = UserDefaults.standard.object(forKey: "showXcodeProject") as? Bool ?? Constants.Defaults.showXcodeProject
+        self.showXcodeTargets = UserDefaults.standard.object(forKey: "showXcodeTargets") as? Bool ?? Constants.Defaults.showXcodeTargets
+        self.showXcodeSwiftVersion = UserDefaults.standard.object(forKey: "showXcodeSwiftVersion") as? Bool ?? Constants.Defaults.showXcodeSwiftVersion
+        self.showXcodeDeploymentTarget = UserDefaults.standard.object(forKey: "showXcodeDeploymentTarget") as? Bool ?? Constants.Defaults.showXcodeDeploymentTarget
 
         // Extended EXIF (HDR/Color)
-        self.showEXIFColorProfile = UserDefaults.standard.object(forKey: "showEXIFColorProfile") as? Bool ?? true
-        self.showEXIFBitDepth = UserDefaults.standard.object(forKey: "showEXIFBitDepth") as? Bool ?? true
-        self.showEXIFHDRInfo = UserDefaults.standard.object(forKey: "showEXIFHDRInfo") as? Bool ?? true
+        self.showEXIFColorProfile = UserDefaults.standard.object(forKey: "showEXIFColorProfile") as? Bool ?? Constants.Defaults.showEXIFColorProfile
+        self.showEXIFBitDepth = UserDefaults.standard.object(forKey: "showEXIFBitDepth") as? Bool ?? Constants.Defaults.showEXIFBitDepth
+        self.showEXIFHDRInfo = UserDefaults.standard.object(forKey: "showEXIFHDRInfo") as? Bool ?? Constants.Defaults.showEXIFHDRInfo
 
         // Extended Video (Chapters/Subtitles)
-        self.showVideoChapters = UserDefaults.standard.object(forKey: "showVideoChapters") as? Bool ?? true
-        self.showVideoSubtitleTracks = UserDefaults.standard.object(forKey: "showVideoSubtitleTracks") as? Bool ?? true
-        self.showVideoContainerFormat = UserDefaults.standard.object(forKey: "showVideoContainerFormat") as? Bool ?? true
+        self.showVideoChapters = UserDefaults.standard.object(forKey: "showVideoChapters") as? Bool ?? Constants.Defaults.showVideoChapters
+        self.showVideoSubtitleTracks = UserDefaults.standard.object(forKey: "showVideoSubtitleTracks") as? Bool ?? Constants.Defaults.showVideoSubtitleTracks
+        self.showVideoContainerFormat = UserDefaults.standard.object(forKey: "showVideoContainerFormat") as? Bool ?? Constants.Defaults.showVideoContainerFormat
 
         self.followCursor = UserDefaults.standard.object(forKey: "followCursor") as? Bool ?? Constants.Defaults.followCursor
         self.windowOffsetX = UserDefaults.standard.object(forKey: "windowOffsetX") as? Double ?? Constants.Defaults.windowOffsetX
@@ -1513,36 +1513,36 @@ class AppSettings: ObservableObject {
         showAliasTarget = Constants.Defaults.showAliasTarget
 
         // File System Advanced metadata
-        showFileSystemAdvanced = false
-        showAllocatedSize = true
-        showAttributeModDate = false
-        showResourceForkSize = true
-        showVolumeInfo = true
-        showSpotlightIndexed = false
-        showFileProvider = true
+        showFileSystemAdvanced = Constants.Defaults.showFileSystemAdvanced
+        showAllocatedSize = Constants.Defaults.showAllocatedSize
+        showAttributeModDate = Constants.Defaults.showAttributeModDate
+        showResourceForkSize = Constants.Defaults.showResourceForkSize
+        showVolumeInfo = Constants.Defaults.showVolumeInfo
+        showSpotlightIndexed = Constants.Defaults.showSpotlightIndexed
+        showFileProvider = Constants.Defaults.showFileProvider
 
         // 3D Model metadata
-        showModel3D = true
-        showModel3DFormat = true
-        showModel3DVertices = true
-        showModel3DMaterials = true
-        showModel3DAnimations = true
+        showModel3D = Constants.Defaults.showModel3D
+        showModel3DFormat = Constants.Defaults.showModel3DFormat
+        showModel3DVertices = Constants.Defaults.showModel3DVertices
+        showModel3DMaterials = Constants.Defaults.showModel3DMaterials
+        showModel3DAnimations = Constants.Defaults.showModel3DAnimations
 
         // Xcode Project metadata
-        showXcodeProject = true
-        showXcodeTargets = true
-        showXcodeSwiftVersion = true
-        showXcodeDeploymentTarget = true
+        showXcodeProject = Constants.Defaults.showXcodeProject
+        showXcodeTargets = Constants.Defaults.showXcodeTargets
+        showXcodeSwiftVersion = Constants.Defaults.showXcodeSwiftVersion
+        showXcodeDeploymentTarget = Constants.Defaults.showXcodeDeploymentTarget
 
         // Extended EXIF (HDR/Color)
-        showEXIFColorProfile = true
-        showEXIFBitDepth = true
-        showEXIFHDRInfo = true
+        showEXIFColorProfile = Constants.Defaults.showEXIFColorProfile
+        showEXIFBitDepth = Constants.Defaults.showEXIFBitDepth
+        showEXIFHDRInfo = Constants.Defaults.showEXIFHDRInfo
 
         // Extended Video (Chapters/Subtitles)
-        showVideoChapters = true
-        showVideoSubtitleTracks = true
-        showVideoContainerFormat = true
+        showVideoChapters = Constants.Defaults.showVideoChapters
+        showVideoSubtitleTracks = Constants.Defaults.showVideoSubtitleTracks
+        showVideoContainerFormat = Constants.Defaults.showVideoContainerFormat
 
         // Notes
         showNotes = Constants.Defaults.showNotes
