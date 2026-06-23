@@ -244,8 +244,13 @@ class HoverWindowController: NSWindowController {
         let isOverPopup = window.frame.contains(mouseLocation)
 
         // When the mouse leaves the popup while editing notes, resign first responder
-        // so that textDidEndEditing fires and isEditingNotes is cleared.
+        // so that textDidEndEditing fires and isEditingNotes is cleared. Cancel any
+        // in-flight IME composition first: makeFirstResponder(nil) alone force-commits
+        // half-composed marked text, which then leaks into the saved note.
         if !isOverPopup && !windowState.isLocked && windowState.isEditingNotes {
+            if let editor = window.firstResponder as? NSTextView, editor.hasMarkedText() {
+                editor.inputContext?.discardMarkedText()
+            }
             window.makeFirstResponder(nil)
         }
 
@@ -568,7 +573,12 @@ struct NotesEditorView: NSViewRepresentable {
 
     func updateNSView(_ scrollView: NSScrollView, context: Context) {
         guard let textView = scrollView.documentView as? NSTextView else { return }
-        if textView.string != text {
+        // Only push *external* state into the live editor. While the user is typing
+        // (a CJK composition leaves uncommitted marked text) or while this view owns
+        // first responder, the NSTextView is the source of truth: overwriting `string`
+        // would corrupt marked text and reset the undo stack. SwiftUI re-runs this on
+        // every HoverWindowState change, so the guard must stay conservative.
+        if !textView.isComposingOrEditing, textView.string != text {
             textView.string = text
         }
         textView.font = .systemFont(ofSize: fontSize)
@@ -587,6 +597,10 @@ struct NotesEditorView: NSViewRepresentable {
 
         func textDidChange(_ notification: Notification) {
             guard let textView = notification.object as? NSTextView else { return }
+            // Skip while a multi-stroke composition (e.g. a CJK IME) is still in flight so
+            // half-composed glyphs are never propagated to the binding or persisted to xattr.
+            // The final textDidChange after the IME commits carries the completed text.
+            guard !textView.hasMarkedText() else { return }
             parent.text = textView.string
             parent.onUserEdit()
         }
@@ -595,6 +609,16 @@ struct NotesEditorView: NSViewRepresentable {
             HoverWindowState.shared.isEditingNotes = false
             parent.onEndEditing()
         }
+    }
+}
+
+// MARK: - NSTextView IME helpers
+private extension NSTextView {
+    /// True when this text view should be treated as the source of truth and left
+    /// untouched by external state sync: either it has uncommitted IME marked text,
+    /// or it is the active first responder in its window.
+    var isComposingOrEditing: Bool {
+        hasMarkedText() || window?.firstResponder === self
     }
 }
 
@@ -1770,6 +1794,12 @@ struct HoverContentView: View {
                             .fixedSize(horizontal: false, vertical: true)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
+
+                    Text("hover.notes.disclosure".localized)
+                        .font(.system(size: settings.fontSize - 2))
+                        .foregroundColor(Color.secondary.opacity(0.7))
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 // Debounced, off-main save driven by user edits only. `.task(id:)`
                 // auto-cancels the prior in-flight task whenever noteEditToken changes,

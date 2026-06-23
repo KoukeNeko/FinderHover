@@ -800,3 +800,4 @@
 "hover.notes.error.load" = "Could not load note.";
 "hover.notes.error.save" = "Could not save note.";
 "hover.notes.error.delete" = "Could not delete note.";
+"hover.notes.disclosure" = "Notes are stored with the file and travel with it when copied.";

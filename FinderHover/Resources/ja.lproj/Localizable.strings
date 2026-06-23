@@ -800,3 +800,4 @@
 "hover.notes.error.load" = "メモを読み込めませんでした。";
 "hover.notes.error.save" = "メモを保存できませんでした。";
 "hover.notes.error.delete" = "メモを削除できませんでした。";
+"hover.notes.disclosure" = "メモはファイルと共に保存され、コピー時に一緒に移動します。";

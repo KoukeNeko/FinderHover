@@ -800,3 +800,4 @@
 "hover.notes.error.load" = "無法載入備註。";
 "hover.notes.error.save" = "無法儲存備註。";
 "hover.notes.error.delete" = "無法刪除備註。";
+"hover.notes.disclosure" = "備註會隨檔案一起儲存，複製檔案時會一併帶走。";
