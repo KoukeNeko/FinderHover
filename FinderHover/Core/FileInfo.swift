@@ -252,8 +252,9 @@ struct FileInfo {
             // Check if hidden (starts with .)
             let isHidden = url.lastPathComponent.hasPrefix(".")
 
-            // Get last access date (may not be available on all file systems)
-            let lastAccessDate = attributes[.modificationDate] as? Date
+            // Get last access date. atime is not a FileAttributeKey, so read it via
+            // URLResourceValues; nil when the file system does not record it.
+            let lastAccessDate = (try? url.resourceValues(forKeys: [.contentAccessDateKey]))?.contentAccessDate
             var analysisNotices = Set<AnalysisNotice>()
 
             // Extract metadata using the new Extractor modules
