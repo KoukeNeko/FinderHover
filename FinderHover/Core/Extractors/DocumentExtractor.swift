@@ -137,8 +137,10 @@ enum DocumentExtractor {
 
         let pageCount = MDItemCopyAttribute(mdItem, kMDItemNumberOfPages) as? Int
 
-        let wordCount = MDItemCopyAttribute(mdItem, kMDItemTextContent) as? String
-        let actualWordCount: Int? = wordCount != nil ? wordCount!.split(separator: " ").count : nil
+        // kMDItemTextContent is a write-only Spotlight importer key (see MDItem.h), so it is
+        // not readable via MDItemCopyAttribute and there is no Spotlight word-count attribute.
+        // Avoid materialising the document body; report no word count rather than loading the file.
+        let actualWordCount: Int? = nil
 
         var sheetCount: Int? = nil
         if ext == "xlsx" || ext == "xls" {

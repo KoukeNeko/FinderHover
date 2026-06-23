@@ -11,6 +11,17 @@ import Foundation
 
 enum GraphicsExtractor {
 
+    // MARK: - Parse Limits
+
+    /// Bytes needed to read every fixed-offset field of the PSD header (color mode ends at offset 24..<26).
+    private static let psdHeaderByteCount = 26
+
+    /// Bytes needed to validate the GLB magic number ("glTF") and 12-byte container header.
+    private static let glbHeaderByteCount = 12
+
+    /// Maximum lines scanned for line-oriented text model formats (OBJ, STL) to bound work on untrusted files.
+    private static let maxModelTextLines = 50000
+
     // MARK: - Vector Graphics Metadata Extraction
 
     static func extractVectorGraphicsMetadata(
@@ -111,8 +122,8 @@ enum GraphicsExtractor {
     static func extractPSDMetadata(from url: URL) -> PSDMetadata? {
         guard url.pathExtension.lowercased() == "psd" else { return nil }
 
-        guard let data = try? Data(contentsOf: url, options: .mappedIfSafe),
-              data.count >= 30 else {
+        guard let data = readFileHeader(of: url, maxByteCount: psdHeaderByteCount),
+              data.count >= psdHeaderByteCount else {
             return nil
         }
 
@@ -235,7 +246,7 @@ enum GraphicsExtractor {
                         var fCount = 0
                         var mtlSet = Set<String>()
 
-                        for line in lines.prefix(50000) {
+                        for line in lines.prefix(maxModelTextLines) {
                             let trimmed = line.trimmingCharacters(in: .whitespaces)
                             if trimmed.hasPrefix("v ") {
                                 vCount += 1
@@ -253,7 +264,7 @@ enum GraphicsExtractor {
 
                     case "stl":
                         var facetCount = 0
-                        for line in lines {
+                        for line in lines.prefix(maxModelTextLines) {
                             if line.trimmingCharacters(in: .whitespaces).lowercased().hasPrefix("facet normal") {
                                 facetCount += 1
                             }
@@ -291,16 +302,12 @@ enum GraphicsExtractor {
 
         // Parse binary GLB
         if ext == "glb" {
-            do {
-                let data = try Data(contentsOf: url)
-                if data.count >= 12 {
-                    let magic = data.subdata(in: 0..<4)
-                    if magic == Data([0x67, 0x6C, 0x54, 0x46]) {
-                        format = "glTF (Binary)"
-                    }
+            if let data = readFileHeader(of: url, maxByteCount: glbHeaderByteCount),
+               data.count >= glbHeaderByteCount {
+                let magic = data.subdata(in: 0..<4)
+                if magic == Data([0x67, 0x6C, 0x54, 0x46]) {
+                    format = "glTF (Binary)"
                 }
-            } catch {
-                Logger.debug("Failed to read GLB header: \(error.localizedDescription)", subsystem: .fileSystem)
             }
         }
 

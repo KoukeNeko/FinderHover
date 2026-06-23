@@ -37,6 +37,30 @@ func runProcessWithTimeout(_ process: Process, timeout: TimeInterval = 5.0) -> B
     return process.terminationStatus == 0
 }
 
+// MARK: - Bounded Header Read
+
+/// Reads at most the first `maxByteCount` bytes of a file into owned (non-mapped) memory.
+///
+/// Unlike `Data(contentsOf:)` this never allocates the whole file, and unlike
+/// `Data(contentsOf:, .mappedIfSafe)` the returned bytes are copied onto the heap, so
+/// dereferencing them cannot raise SIGBUS if the file is truncated after the read.
+/// The returned `Data.count` is the number of bytes actually available (it may be less
+/// than `maxByteCount` for short files), so callers can length-check it directly.
+/// - Returns: the leading bytes, or `nil` if the file cannot be opened or read.
+func readFileHeader(of url: URL, maxByteCount: Int) -> Data? {
+    guard let handle = try? FileHandle(forReadingFrom: url) else {
+        return nil
+    }
+    defer { try? handle.close() }
+
+    do {
+        return try handle.read(upToCount: maxByteCount)
+    } catch {
+        Logger.debug("Failed to read file header: \(error.localizedDescription)", subsystem: .fileSystem)
+        return nil
+    }
+}
+
 // MARK: - Encoding Detection
 
 func detectEncoding(data: Data) -> String {
