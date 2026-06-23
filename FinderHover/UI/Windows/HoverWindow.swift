@@ -318,13 +318,25 @@ class HoverWindowController: NSWindowController {
     private func setupLiquidGlassContent(window: NSWindow, hostingView: NSHostingView<AnyView>, size: NSSize, cornerRadius: CGFloat) {
         let glassView = NSGlassEffectView(frame: NSRect(origin: .zero, size: size))
         glassView.cornerRadius = cornerRadius
+        glassView.autoresizingMask = [.width, .height]
         // Ensure the hosting view is transparent so the glass renders behind content
         hostingView.wantsLayer = true
         hostingView.layer?.backgroundColor = CGColor.clear
         hostingView.frame = glassView.bounds
         hostingView.autoresizingMask = [.width, .height]
         glassView.contentView = hostingView
-        window.contentView = glassView
+
+        // Wrap the glass in a clear, rounded, clipping container. NSGlassEffectView does not
+        // clip the borderless window's square corners — they show as a black edge when the
+        // panel becomes key (e.g. focusing the Notes field) — and its own layer mask is reset
+        // when the window resizes, so a plain clipping container (which the glass cannot reset)
+        // is the robust fix.
+        let clipContainer = NSView(frame: NSRect(origin: .zero, size: size))
+        clipContainer.wantsLayer = true
+        clipContainer.layer?.cornerRadius = cornerRadius
+        clipContainer.layer?.masksToBounds = true
+        clipContainer.addSubview(glassView)
+        window.contentView = clipContainer
         self.visualEffectView = nil
     }
 
