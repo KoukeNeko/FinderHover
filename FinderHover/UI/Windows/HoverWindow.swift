@@ -456,6 +456,12 @@ class HoverWindowController: NSWindowController {
 enum NotesStorage {
     static let xattrKey = "com.finderhover.notes"
 
+    /// Serial queue for xattr I/O. Saves are dispatched here immediately (no debounce) and
+    /// run to completion independently of the popup's SwiftUI lifecycle — so a note is never
+    /// lost when the popup tears down right after editing, while still keeping the blocking
+    /// getxattr/setxattr syscalls off the main thread.
+    static let ioQueue = DispatchQueue(label: "com.finderhover.notes.io", qos: .utility)
+
     enum StorageError: LocalizedError {
         case readFailed(path: String, code: Int32)
         case writeFailed(path: String, code: Int32)
@@ -540,10 +546,12 @@ enum NotesStorage {
 struct NotesEditorView: NSViewRepresentable {
     @Binding var text: String
     let fontSize: Double
+    /// Reports the laid-out text height so the parent can grow the field to fit the content.
+    var onHeightChange: (CGFloat) -> Void = { _ in }
 
     func makeNSView(context: Context) -> NSScrollView {
         let scrollView = NSScrollView()
-        scrollView.hasVerticalScroller = false
+        scrollView.hasVerticalScroller = true
         scrollView.hasHorizontalScroller = false
         scrollView.autohidesScrollers = true
         scrollView.borderType = .noBorder
@@ -558,16 +566,18 @@ struct NotesEditorView: NSViewRepresentable {
         textView.textColor = .labelColor
         textView.backgroundColor = .clear
         textView.drawsBackground = false
-        textView.textContainerInset = .zero
+        textView.textContainerInset = NSSize(width: 0, height: 2)
         textView.textContainer?.lineFragmentPadding = 0
-        // Use fixed height — the SwiftUI .frame(minHeight:maxHeight:) controls sizing.
-        // isVerticallyResizable = false prevents the NSTextView from reporting an
-        // unbounded intrinsic size, which would cause a two-pass layout settle
-        // (visible as the popup "twitching" on appearance).
-        textView.isVerticallyResizable = false
+        // Auto-grow: the text view sizes vertically to its content; the parent clamps the
+        // visible height via .frame(height:) and the scroll view scrolls past the cap.
+        textView.isVerticallyResizable = true
         textView.isHorizontallyResizable = false
-        textView.autoresizingMask = [.width, .height]
+        textView.minSize = NSSize(width: 0, height: 0)
+        textView.maxSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+        textView.autoresizingMask = [.width]
         textView.textContainer?.widthTracksTextView = true
+        textView.textContainer?.heightTracksTextView = false
+        textView.textContainer?.containerSize = NSSize(width: 0, height: CGFloat.greatestFiniteMagnitude)
         textView.delegate = context.coordinator
         textView.string = text
 
@@ -586,6 +596,21 @@ struct NotesEditorView: NSViewRepresentable {
             textView.string = text
         }
         textView.font = .systemFont(ofSize: fontSize)
+        reportContentHeight(of: textView)
+    }
+
+    /// Measures the laid-out text height and reports it (deferred so we never mutate
+    /// SwiftUI state during the view-update pass).
+    private func reportContentHeight(of textView: NSTextView) {
+        // Skip until the view has a real width, otherwise the text wraps per-character and
+        // reports a wildly tall (wrong) height before layout settles.
+        guard textView.bounds.width > 1,
+              let layoutManager = textView.layoutManager,
+              let container = textView.textContainer else { return }
+        layoutManager.ensureLayout(for: container)
+        let contentHeight = ceil(layoutManager.usedRect(for: container).height)
+            + textView.textContainerInset.height * 2
+        DispatchQueue.main.async { onHeightChange(contentHeight) }
     }
 
     func makeCoordinator() -> Coordinator { Coordinator(self) }
@@ -627,8 +652,18 @@ struct HoverContentView: View {
     @State private var thumbnailRequest: QLThumbnailGenerator.Request?
     @State private var noteText: String = ""
     @State private var noteErrorMessage: String?
+    /// Measured content height of the note editor; drives its auto-growing frame.
+    @State private var noteEditorHeight: CGFloat = 0
     @ObservedObject var settings = AppSettings.shared
     @ObservedObject private var windowState = HoverWindowState.shared
+
+    /// The note editor's visible height: a 3-line minimum that grows with content up to a
+    /// ~12-line cap, after which the field scrolls instead of growing further.
+    private var clampedNoteHeight: CGFloat {
+        let line = ceil(settings.fontSize * 1.7)
+        let verticalPadding: CGFloat = 4
+        return min(max(noteEditorHeight, line * 3 + verticalPadding), line * 12 + verticalPadding)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: settings.compactMode ? 6 : 10) {
@@ -1761,10 +1796,30 @@ struct HoverContentView: View {
                                     .font(.system(size: settings.fontSize))
                                     .foregroundColor(Color.secondary.opacity(0.5))
                                     .allowsHitTesting(false)
+                                    .padding(.top, 2)
                             }
-                            NotesEditorView(text: $noteText, fontSize: settings.fontSize)
-                                .frame(minHeight: settings.fontSize * 3 + 8, maxHeight: 120)
+                            NotesEditorView(text: $noteText, fontSize: settings.fontSize) { height in
+                                if abs(noteEditorHeight - height) > 0.5 { noteEditorHeight = height }
+                            }
                         }
+                        .frame(height: clampedNoteHeight)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 4)
+                        .background(
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .fill(Color(nsColor: .textBackgroundColor)
+                                    .opacity(windowState.isEditingNotes ? 0.85 : 0.3))
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .strokeBorder(
+                                    windowState.isEditingNotes
+                                        ? Color.accentColor.opacity(0.7)
+                                        : Color.secondary.opacity(0.25),
+                                    lineWidth: 1
+                                )
+                        )
+                        .animation(.easeInOut(duration: 0.15), value: windowState.isEditingNotes)
                     }
 
                     if let noteErrorMessage {
@@ -1790,6 +1845,8 @@ struct HoverContentView: View {
     }
 
     private func loadNote() {
+        // Synchronous so the existing note shows the instant the popup appears (a read is
+        // a single fast getxattr); only the per-keystroke write needs to be off-main.
         do {
             noteText = try NotesStorage.read(for: fileInfo.path)
             noteErrorMessage = nil
@@ -1800,11 +1857,17 @@ struct HoverContentView: View {
     }
 
     private func saveNote(_ note: String) {
-        do {
-            try NotesStorage.save(note, for: fileInfo.path)
-            noteErrorMessage = nil
-        } catch {
-            noteErrorMessage = noteDisplayMessage(for: error)
+        let path = fileInfo.path
+        // Dispatch immediately and detached from the view lifecycle: the block runs to
+        // completion even if the popup hides the instant editing ends (which is what broke
+        // the earlier debounced/.task-based save), while keeping setxattr off the main thread.
+        NotesStorage.ioQueue.async {
+            do {
+                try NotesStorage.save(note, for: path)
+                DispatchQueue.main.async { noteErrorMessage = nil }
+            } catch {
+                DispatchQueue.main.async { noteErrorMessage = noteDisplayMessage(for: error) }
+            }
         }
     }
 
