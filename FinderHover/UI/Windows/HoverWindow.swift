@@ -436,13 +436,16 @@ class HoverWindowController: NSWindowController {
 }
 
 // MARK: - Notes Storage (per-file xattr persistence)
-enum NotesStorage {
+actor NotesStorage {
+    static let shared = NotesStorage()
+
     static let xattrKey = "com.finderhover.notes"
 
     enum StorageError: LocalizedError {
         case readFailed(path: String, code: Int32)
         case writeFailed(path: String, code: Int32)
         case deleteFailed(path: String, code: Int32)
+        case tooLarge(path: String, byteCount: Int)
 
         var errorDescription: String? {
             switch self {
@@ -455,54 +458,65 @@ enum NotesStorage {
             case let .deleteFailed(path, code):
                 let message = String(cString: strerror(code))
                 return "removexattr failed for xattr \(NotesStorage.xattrKey) at \(path): [\(code)] \(message)"
+            case let .tooLarge(path, byteCount):
+                return "note exceeds \(Constants.Notes.maxByteCount) bytes (\(byteCount)) at \(path)"
             }
         }
     }
 
-    static func read(for path: String) throws -> String {
-        let size = getxattr(path, xattrKey, nil, 0, 0, 0)
-        guard size >= 0 else {
-            let code = errno
-            if code == ENOATTR {
-                return ""
+    func read(for path: String) throws -> String {
+        // ERANGE re-probe loop: another writer may grow the value between the size
+        // probe and the buffered fetch, so re-probe instead of trusting the first
+        // size. Bounded by maxReadProbeRetries to avoid a livelock. (#25)
+        for _ in 0...Constants.Notes.maxReadProbeRetries {
+            let size = getxattr(path, Self.xattrKey, nil, 0, 0, 0)
+            guard size >= 0 else {
+                let code = errno
+                if code == ENOATTR { return "" }
+                throw Self.logAndReturn(.readFailed(path: path, code: code))
             }
-            throw logAndReturn(.readFailed(path: path, code: code))
-        }
 
-        var buffer = [UInt8](repeating: 0, count: size)
-        let result = getxattr(path, xattrKey, &buffer, size, 0, 0)
-        guard result >= 0 else {
-            throw logAndReturn(.readFailed(path: path, code: errno))
+            let cappedSize = min(size, Constants.Notes.maxByteCount)
+            var buffer = [UInt8](repeating: 0, count: cappedSize)
+            let result = getxattr(path, Self.xattrKey, &buffer, cappedSize, 0, 0)
+            if result >= 0 {
+                return String(decoding: buffer.prefix(result), as: UTF8.self)
+            }
+            if errno == ERANGE { continue } // value grew between probe and fetch; re-probe
+            throw Self.logAndReturn(.readFailed(path: path, code: errno))
         }
-
-        return String(decoding: buffer.prefix(result), as: UTF8.self)
+        throw Self.logAndReturn(.readFailed(path: path, code: ERANGE))
     }
 
-    static func save(_ note: String, for path: String) throws {
+    func save(_ note: String, for path: String) throws {
         if note.isEmpty {
             try delete(for: path)
             return
         }
 
         let data = Data(note.utf8)
+        guard data.count <= Constants.Notes.maxByteCount else {
+            throw Self.logAndReturn(.tooLarge(path: path, byteCount: data.count))
+        }
+
         let result = data.withUnsafeBytes { bytes in
-            setxattr(path, xattrKey, bytes.baseAddress, data.count, 0, 0)
+            setxattr(path, Self.xattrKey, bytes.baseAddress, data.count, 0, 0)
         }
 
         guard result >= 0 else {
-            throw logAndReturn(.writeFailed(path: path, code: errno))
+            throw Self.logAndReturn(.writeFailed(path: path, code: errno))
         }
     }
 
-    private static func delete(for path: String) throws {
-        let result = removexattr(path, xattrKey, 0)
+    private func delete(for path: String) throws {
+        let result = removexattr(path, Self.xattrKey, 0)
         if result < 0, errno != ENOATTR {
-            throw logAndReturn(.deleteFailed(path: path, code: errno))
+            throw Self.logAndReturn(.deleteFailed(path: path, code: errno))
         }
     }
 
     private static func logAndReturn(_ error: StorageError) -> StorageError {
-        NSLog("%@", error.localizedDescription)
+        Logger.error("Notes xattr operation failed", error: error, subsystem: .fileSystem)
         return error
     }
 }
@@ -511,6 +525,12 @@ enum NotesStorage {
 struct NotesEditorView: NSViewRepresentable {
     @Binding var text: String
     let fontSize: Double
+    /// Invoked only on user-driven edits (textDidChange), never on programmatic
+    /// updates pushed through `text`. Lets the parent debounce real typing only (#12).
+    var onUserEdit: () -> Void = {}
+    /// Invoked when the field resigns first responder. The parent flushes the final
+    /// value immediately so a note isn't lost if the popup closes inside the debounce.
+    var onEndEditing: () -> Void = {}
 
     func makeNSView(context: Context) -> NSScrollView {
         let scrollView = NSScrollView()
@@ -568,10 +588,12 @@ struct NotesEditorView: NSViewRepresentable {
         func textDidChange(_ notification: Notification) {
             guard let textView = notification.object as? NSTextView else { return }
             parent.text = textView.string
+            parent.onUserEdit()
         }
 
         func textDidEndEditing(_ notification: Notification) {
             HoverWindowState.shared.isEditingNotes = false
+            parent.onEndEditing()
         }
     }
 }
@@ -583,6 +605,10 @@ struct HoverContentView: View {
     @State private var thumbnailRequest: QLThumbnailGenerator.Request?
     @State private var noteText: String = ""
     @State private var noteErrorMessage: String?
+    // Distinguishes the programmatic load assignment from genuine user edits so the
+    // initial load does not echo back into a save (#12). Bumped only by the editor's
+    // user-driven onUserEdit; the debounced save task keys off this token, not noteText.
+    @State private var noteEditToken: Int = 0
     @ObservedObject var settings = AppSettings.shared
     @ObservedObject private var windowState = HoverWindowState.shared
 
@@ -649,8 +675,8 @@ struct HoverContentView: View {
         .frame(minWidth: 320, maxWidth: settings.windowMaxWidth)
         .fixedSize(horizontal: false, vertical: true)
         .background(Color.clear)
-        .onAppear {
-            loadNote()
+        .task(id: fileInfo.path) {
+            await loadNote()
         }
     }
 
@@ -1718,7 +1744,21 @@ struct HoverContentView: View {
                                     .foregroundColor(Color.secondary.opacity(0.5))
                                     .allowsHitTesting(false)
                             }
-                            NotesEditorView(text: $noteText, fontSize: settings.fontSize)
+                            NotesEditorView(
+                                text: $noteText,
+                                fontSize: settings.fontSize,
+                                onUserEdit: {
+                                    // Fired only on user-driven textDidChange, never on the
+                                    // programmatic load assignment — this breaks the echo-write (#12).
+                                    noteEditToken &+= 1
+                                },
+                                onEndEditing: {
+                                    // Immediate, non-debounced flush so the final value survives
+                                    // the popup tearing down inside the debounce window.
+                                    let pending = noteText
+                                    Task { await saveNote(pending) }
+                                }
+                            )
                                 .frame(minHeight: settings.fontSize * 3 + 8, maxHeight: 120)
                         }
                     }
@@ -1731,16 +1771,28 @@ struct HoverContentView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
-                .onChange(of: noteText) { newValue in
-                    saveNote(newValue)
+                // Debounced, off-main save driven by user edits only. `.task(id:)`
+                // auto-cancels the prior in-flight task whenever noteEditToken changes,
+                // collapsing a burst of keystrokes into a single trailing write (M2).
+                .task(id: noteEditToken) {
+                    guard noteEditToken > 0 else { return } // skip the initial load state
+                    let pending = noteText
+                    do {
+                        try await Task.sleep(for: .milliseconds(Constants.Notes.saveDebounceMs))
+                    } catch {
+                        return // cancelled by a newer keystroke; the newer task will save
+                    }
+                    await saveNote(pending)
                 }
             }
         }
     }
 
-    private func loadNote() {
+    @MainActor
+    private func loadNote() async {
         do {
-            noteText = try NotesStorage.read(for: fileInfo.path)
+            let loaded = try await NotesStorage.shared.read(for: fileInfo.path)
+            noteText = loaded
             noteErrorMessage = nil
         } catch {
             noteText = ""
@@ -1748,9 +1800,10 @@ struct HoverContentView: View {
         }
     }
 
-    private func saveNote(_ note: String) {
+    @MainActor
+    private func saveNote(_ note: String) async {
         do {
-            try NotesStorage.save(note, for: fileInfo.path)
+            try await NotesStorage.shared.save(note, for: fileInfo.path)
             noteErrorMessage = nil
         } catch {
             noteErrorMessage = noteDisplayMessage(for: error)
@@ -1762,7 +1815,7 @@ struct HoverContentView: View {
             switch storageError {
             case .readFailed:
                 return "hover.notes.error.load".localized
-            case .writeFailed:
+            case .writeFailed, .tooLarge:
                 return "hover.notes.error.save".localized
             case .deleteFailed:
                 return "hover.notes.error.delete".localized

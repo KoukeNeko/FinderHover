@@ -23,6 +23,22 @@ enum Constants {
         static let renamingCheckInterval: TimeInterval = 0.1
     }
 
+    // MARK: - Notes
+    enum Notes {
+        /// Debounce before persisting a note edit (milliseconds). Collapses a burst
+        /// of keystrokes into a single trailing setxattr off the main thread.
+        static let saveDebounceMs: Int = 400
+
+        /// Upper bound on a single note (bytes). macOS caps an xattr near 64 KiB on
+        /// APFS/HFS+; we stay well under so a corrupt/huge value can't balloon memory
+        /// on read, and we refuse to write past it.
+        static let maxByteCount: Int = 16 * 1024
+
+        /// Max getxattr re-probe attempts when the value grows between size probe and
+        /// fetch (transient ERANGE). Bounded to avoid a livelock.
+        static let maxReadProbeRetries: Int = 4
+    }
+
     // MARK: - Performance
     enum Performance {
         /// Throttle interval for hide checks on mouse move (milliseconds)
