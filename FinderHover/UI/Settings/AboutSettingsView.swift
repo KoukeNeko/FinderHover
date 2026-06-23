@@ -321,7 +321,10 @@ struct AboutSettingsView: View {
                         }
                     }
                     .task {
-                        if githubService.contributors.isEmpty && !githubService.isLoading {
+                        // Always refresh from GitHub on appear; the cached list (loaded in
+                        // GitHubService.init) is only an instant placeholder + offline fallback,
+                        // so a one-time stale cache no longer hides newly added contributors.
+                        if !githubService.isLoading {
                             await githubService.fetchContributors()
                         }
                     }
