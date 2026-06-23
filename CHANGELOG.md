@@ -19,7 +19,7 @@ All notable changes to FinderHover will be documented in this file.
 ### 🐛 Bug Fixes
 
 - Fixed a black rectangular edge that appeared behind the rounded Liquid Glass popup on macOS 27  beta 2 when it became focused (e.g. while editing a note)
-- **Hotfix:** The in-app **Contributors** list no longer stays frozen on a stale cache — it now refreshes from GitHub on every visit, so new contributors (such as [@zmlim](https://github.com/zmlim)) appear
+- **Hotfix:** The in-app **Contributors** list no longer stays frozen on a stale cache — it now refreshes from GitHub on every visit, so new contributors appear
 
 ### ⚡ Performance & Stability
 
