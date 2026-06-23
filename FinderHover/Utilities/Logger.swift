@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import os.log
+import os
 
 /// Centralized logging system with different severity levels
 enum Logger {
@@ -43,14 +43,33 @@ enum Logger {
 
     // MARK: - Subsystems
 
-    enum Subsystem: String {
+    enum Subsystem: String, CaseIterable {
         case general = "FinderHover"
         case mouseTracking = "FinderHover.MouseTracking"
         case fileSystem = "FinderHover.FileSystem"
         case accessibility = "FinderHover.Accessibility"
         case ui = "FinderHover.UI"
         case settings = "FinderHover.Settings"
+
+        var categoryName: String {
+            switch self {
+            case .general: return "General"
+            case .mouseTracking: return "MouseTracking"
+            case .fileSystem: return "FileSystem"
+            case .accessibility: return "Accessibility"
+            case .ui: return "UI"
+            case .settings: return "Settings"
+            }
+        }
     }
+
+    // MARK: - Cached Loggers
+
+    private static let loggers: [Subsystem: os.Logger] = Dictionary(
+        uniqueKeysWithValues: Subsystem.allCases.map { subsystem in
+            (subsystem, os.Logger(subsystem: subsystem.rawValue, category: subsystem.categoryName))
+        }
+    )
 
     // MARK: - Logging Methods
 
@@ -93,16 +112,18 @@ enum Logger {
 
     private static func log(_ message: String, level: Level, subsystem: Subsystem, file: String, function: String, line: Int) {
         let fileName = (file as NSString).lastPathComponent
-        let formattedMessage = "[\(fileName):\(line)] \(function) - \(message)"
+        let location = "[\(fileName):\(line)] \(function)"
 
-        // Use os_log for system integration
-        let log = OSLog(subsystem: subsystem.rawValue, category: level.prefix)
-        os_log("%{public}@", log: log, type: level.osLogType, formattedMessage)
+        let logger = loggers[subsystem] ?? loggers[.general]!
+        logger.log(
+            level: level.osLogType,
+            "\(location, privacy: .public) - \(message, privacy: .private)"
+        )
 
         // Also print to console in debug mode
         #if DEBUG
         let timestamp = ISO8601DateFormatter().string(from: Date())
-        print("[\(timestamp)] \(level.prefix) [\(subsystem.rawValue)] \(formattedMessage)")
+        print("[\(timestamp)] \(level.prefix) [\(subsystem.rawValue)] \(location) - \(message)")
         #endif
     }
 }
