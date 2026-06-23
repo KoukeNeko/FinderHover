@@ -33,6 +33,7 @@ Inspect file metadata instantly. No `Cmd+I` required.
 
 **The Problem:**
 Want to check image resolution? Video codec? Zip contents? You have to:
+
 1. Right-click → Get Info (or press `Cmd+I`)
 2. Wait for the window to open
 3. Close it manually
@@ -43,34 +44,40 @@ FinderHover acts as an **X-ray layer** over Finder. Just hover your mouse over a
 
 ### Comparison: Get Info vs FinderHover
 
-|  | macOS Get Info (`Cmd+I`) | FinderHover |
-|---|---|---|
-| **Trigger** | Right-click → Get Info (or `Cmd+I`) | Hover mouse |
-| **Speed** | Slow, window stacks up | Instant, auto-hides |
-| **Depth** | Basic (size, kind, dates) | **Deep metadata** (EXIF, codecs, archive contents, Git info) |
-| **Workflow** | Interrupts your flow | Non-intrusive overlay |
+|              | macOS Get Info (`Cmd+I`)            | FinderHover                                                  |
+| ------------ | ----------------------------------- | ------------------------------------------------------------ |
+| **Trigger**  | Right-click → Get Info (or `Cmd+I`) | Hover mouse                                                  |
+| **Speed**    | Slow, window stacks up              | Instant, auto-hides                                          |
+| **Depth**    | Basic (size, kind, dates)           | **Deep metadata** (EXIF, codecs, archive contents, Git info) |
+| **Workflow** | Interrupts your flow                | Non-intrusive overlay                                        |
 
 ---
 
 ## ✨ Features
 
 ### 🔍 Beyond Finder
+
 FinderHover reveals metadata that Finder **never shows**:
 
 #### 📦 X-Ray for Archives
+
 Peek inside `zip`, `rar`, `7z`, `tar.gz`, and `iso` files **without extracting them**.
+
 - 📋 Instantly see file lists & file counts
 - 🔐 Detect encryption status (know if it's password-protected before opening)
 - 📊 Check compression ratios and real uncompressed sizes
 
 #### 💻 Developer Centric
+
 Built by a developer, for developers.
+
 - **Code Insights:** Instant line counts and syntax detection for **38+ languages**
 - **Git Aware:** See current branch, commit count, remote URL, and uncommitted changes on repo folders
 - **Binary Analysis:** Inspect Mach-O headers, architectures (`arm64`/`x86_64`/Universal), code signing status, and SDK versions for executables
 - **Xcode Projects:** View targets, build configurations, Swift version, and deployment targets
 
 #### 📸 Photography & Media
+
 - **Photos:** Camera model, lens info, focal length, ISO, aperture, shutter speed, GPS coordinates, IPTC/XMP metadata (author, copyright, keywords, rating)
 - **Videos:** Codec (H.264, HEVC, etc.), resolution, bitrate, frame rate, HDR format (Dolby Vision, HDR10, HLG), chapters, subtitle tracks
 - **Audio:** Track name, artist, album, genre, duration, bitrate, sample rate, channels
@@ -80,15 +87,18 @@ Built by a developer, for developers.
 ### 🎨 Smart & Customizable
 
 #### 🧠 Intelligent Context Awareness
+
 - **Instant Preview:** Adjustable hover delay (0.1s - 2.0s)
 - **Auto-Hide:** Disappears when renaming files, dragging items, or using context menus
 - **QuickLook Integration:** Native thumbnails for PDFs, images, and documents
 
 #### 🌈 Dual Personalities
+
 - **macOS Style:** Rich visual presentation with thumbnails, icons, and full metadata
 - **Windows Style:** Minimal tooltip-style display with essential info only
 
 #### 🎛️ Full Control
+
 - Adjustable window size, opacity (70-100%), and font scaling
 - **Layout Editor:** Drag-to-reorder metadata fields and toggle visibility per category
 - **Localization:** Native support for **English**, **Traditional Chinese (繁體中文)**, and **Japanese (日本語)**
@@ -97,27 +107,27 @@ Built by a developer, for developers.
 
 ### 📊 Rich Metadata Support (120+ File Formats)
 
-| Category | Supported Metadata |
-|----------|-------------------|
-| **📷 Photography** | Camera model, lens, ISO, aperture, shutter speed, GPS, IPTC/XMP data, color profiles, HDR gain maps |
-| **🎬 Video** | Codec, resolution, bitrate, frame rate, HDR formats (Dolby Vision, HDR10, HLG), chapters, subtitle tracks |
-| **🎵 Audio** | Track name, artist, album, genre, duration, bitrate, sample rate, channels |
-| **💻 Code** | Line counts for 38+ languages, file encoding, syntax detection |
-| **📝 Markdown** | Title, frontmatter (YAML/TOML/JSON), heading/image/link/code block counts |
-| **🌐 HTML/Web** | Title, meta description, keywords, author, language, Open Graph tags |
-| **⚙️ Config** | JSON/YAML/TOML key counts, nesting depth, syntax validity |
-| **🎨 Design** | PSD layers/color mode/bit depth, SVG/AI dimensions, font glyphs |
-| **📦 Archives** | Format type, file count, compression ratio, encryption status |
-| **📚 eBooks** | Title, author, publisher, ISBN, language |
-| **🖼️ Vector** | SVG viewBox, EPS color mode, element counts |
-| **📱 App Bundles** | Bundle ID, version, minimum macOS, code signing, entitlements, architectures |
-| **⚡ Executables** | Architecture (arm64/x86_64), code signing, minimum OS, SDK version |
-| **🗄️ SQLite** | Table/index/trigger/view counts, total rows, schema version, encoding |
-| **📂 Git Repos** | Current branch, commit count, remote URL, uncommitted changes, tags |
-| **💿 Disk Images** | Format (DMG, ISO), compression ratio, encryption status, partition scheme |
-| **🧊 3D Models** | Vertex/face counts, mesh/material counts, animations, bounding box |
-| **🛠️ Xcode** | Project name, targets, build configs, Swift version, deployment target |
-| **🏷️ System** | Finder tags, download source, quarantine info, iCloud status, symlink targets |
+| Category           | Supported Metadata                                                                                        |
+| ------------------ | --------------------------------------------------------------------------------------------------------- |
+| **📷 Photography** | Camera model, lens, ISO, aperture, shutter speed, GPS, IPTC/XMP data, color profiles, HDR gain maps       |
+| **🎬 Video**       | Codec, resolution, bitrate, frame rate, HDR formats (Dolby Vision, HDR10, HLG), chapters, subtitle tracks |
+| **🎵 Audio**       | Track name, artist, album, genre, duration, bitrate, sample rate, channels                                |
+| **💻 Code**        | Line counts for 38+ languages, file encoding, syntax detection                                            |
+| **📝 Markdown**    | Title, frontmatter (YAML/TOML/JSON), heading/image/link/code block counts                                 |
+| **🌐 HTML/Web**    | Title, meta description, keywords, author, language, Open Graph tags                                      |
+| **⚙️ Config**      | JSON/YAML/TOML key counts, nesting depth, syntax validity                                                 |
+| **🎨 Design**      | PSD layers/color mode/bit depth, SVG/AI dimensions, font glyphs                                           |
+| **📦 Archives**    | Format type, file count, compression ratio, encryption status                                             |
+| **📚 eBooks**      | Title, author, publisher, ISBN, language                                                                  |
+| **🖼️ Vector**      | SVG viewBox, EPS color mode, element counts                                                               |
+| **📱 App Bundles** | Bundle ID, version, minimum macOS, code signing, entitlements, architectures                              |
+| **⚡ Executables** | Architecture (arm64/x86_64), code signing, minimum OS, SDK version                                        |
+| **🗄️ SQLite**      | Table/index/trigger/view counts, total rows, schema version, encoding                                     |
+| **📂 Git Repos**   | Current branch, commit count, remote URL, uncommitted changes, tags                                       |
+| **💿 Disk Images** | Format (DMG, ISO), compression ratio, encryption status, partition scheme                                 |
+| **🧊 3D Models**   | Vertex/face counts, mesh/material counts, animations, bounding box                                        |
+| **🛠️ Xcode**       | Project name, targets, build configs, Swift version, deployment target                                    |
+| **🏷️ System**      | Finder tags, download source, quarantine info, iCloud status, symlink targets                             |
 
 ---
 
@@ -187,12 +197,15 @@ Click the menu bar icon to access the settings panel.
 ## 🚀 Technical Highlights
 
 ### ⚡️ High-Performance Architecture
+
 - **Reactive UI Updates:** Leverages **Combine** framework with `debounce` operators to ensure fluid UI updates while keeping CPU usage negligible
 - **Native Frameworks:** Built on Apple's `AVFoundation`, `PDFKit`, `QuickLookThumbnailing`, `SQLite3`, and `CoreGraphics`—no external dependencies
 - **Smart Caching:** Thumbnail and metadata caching reduces redundant processing
 
 ### 🛠️ Robust Metadata Engine
+
 Supports **120+ file formats** with deep inspection capabilities:
+
 - **Archives:** Reads zip/rar/7z/iso structure without extraction (using `libarchive` and native APIs)
 - **Media:** Extracts video codecs, HDR metadata, and audio specs using `AVFoundation`
 - **Code:** Detects 38+ programming languages with accurate line counting
@@ -220,7 +233,6 @@ FinderHover/
 
 <img width="892" height="652" alt="image" src="https://github.com/user-attachments/assets/3632e479-b156-4927-b4fe-cca9a195895a" />
 
-
   <img src="https://github.com/user-attachments/assets/fe969256-a07d-4db6-8715-a3bb3226782b" width="45%" />
   <img src="https://github.com/user-attachments/assets/f492dc51-9fd8-49f2-b854-d9fc4ac026a6" width="45%" />
   <img src="https://github.com/user-attachments/assets/dc04ba05-2bcb-4308-b0cc-bd5ed2259d07" width="45%" />
@@ -230,18 +242,21 @@ FinderHover/
 ## 📝 What's New
 
 ### v1.9.0 - Notes
+
 - **Notes:** Attach a personal note to any file, right in the hover popup — stored with the file (so it persists and travels with the file when copied/moved)
 - **Auto-sizing field:** 3-line minimum that grows as you type, with a focused text-field style while editing
 - **More stable:** Accessibility lookups moved off the main thread (no more UI freezes when Finder is slow), plus leaner/safer reading of large files and many fixes
-- **Fixed:** Black edge behind the Liquid Glass popup when focused
+- **Fixed:** Black edge behind the Liquid Glass popup when focused on macOS 27 beta 2
 - 🙏 **Huge thanks to [@zmlim](https://github.com/zmlim)** for designing and contributing the Notes feature ([#14](../../pull/14)) — this release is built on their work
 
 ### v1.8.0 - Official Code Signing & Liquid Glass
+
 - **Signed & Notarized:** No more Gatekeeper bypass — app opens immediately
 - **Liquid Glass:** New visual effect option for macOS 26 (Tahoe)
 - **Universal Binary:** arm64 + x86_64 with Hardened Runtime
 
 ### v1.8.1 - Bug Fix
+
 - **Fixed:** Shortened English download metadata labels for better alignment
 
 [View Full Changelog](CHANGELOG.md)
