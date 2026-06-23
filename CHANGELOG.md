@@ -14,7 +14,7 @@ All notable changes to FinderHover will be documented in this file.
 
 ### 🐛 Bug Fixes
 
-- Fixed a black rectangular edge that appeared behind the rounded Liquid Glass popup when it became focused (e.g. while editing a note)
+- Fixed a black rectangular edge that appeared behind the rounded Liquid Glass popup on macOS 27  beta 2 when it became focused (e.g. while editing a note)
 
 ### ⚡ Performance & Stability
 
