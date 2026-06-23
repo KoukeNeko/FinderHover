@@ -27,6 +27,9 @@ class MouseTracker: ObservableObject {
     private var localMouseUpMonitor: Any?
 
     func startTracking() {
+        // Idempotent: remove existing monitors first so add/remove stay balanced.
+        stopTracking()
+
         // Monitor global mouse movement
         globalMouseMovedMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved]) { [weak self] event in
             self?.handleMouseMoved(event)

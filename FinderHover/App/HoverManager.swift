@@ -31,6 +31,7 @@ class HoverManager: ObservableObject {
     private let metadataQueue = DispatchQueue(label: "com.finderhover.metadataExtraction", qos: .userInitiated)
     private var metadataRequestToken: UInt64 = 0
     private let settings = AppSettings.shared
+    private var isTracking = false
 
     // Store observer tokens for cleanup
     private var appActivateObserver: NSObjectProtocol?
@@ -181,13 +182,16 @@ class HoverManager: ObservableObject {
             Logger.debug("Monitoring not started - disabled by user", subsystem: .mouseTracking)
             return
         }
+        guard !isTracking else { return }
         Logger.info("Starting mouse tracking", subsystem: .mouseTracking)
         mouseTracker.startTracking()
+        isTracking = true
     }
 
     func stopMonitoring() {
         Logger.info("Stopping mouse tracking", subsystem: .mouseTracking)
         mouseTracker.stopTracking()
+        isTracking = false
         // Force-hide unconditionally: we are tearing down all tracking machinery,
         // so the popup must not remain visible (even during notes editing).
         hoverWindow?.forceHide()
@@ -432,8 +436,8 @@ class HoverManager: ObservableObject {
 
         if !accessEnabled {
             Logger.warning("Accessibility permissions not granted", subsystem: .accessibility)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.showAccessibilityAlert()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                self?.showAccessibilityAlert()
             }
         } else {
             Logger.info("Accessibility permissions granted", subsystem: .accessibility)
