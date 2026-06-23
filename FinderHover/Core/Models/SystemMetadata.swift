@@ -26,7 +26,7 @@ struct LinkInfo {
     let hardLinkCount: Int
 
     var hasData: Bool {
-        return isSymlink || hardLinkCount > 1
+        return (isSymlink && symlinkTarget != nil) || hardLinkCount > 1
     }
 }
 

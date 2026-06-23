@@ -51,7 +51,7 @@ enum ArchiveExtractor {
         }
 
         var fileCount: Int? = nil
-        var uncompressedSize: UInt64? = nil
+        var uncompressedSize: Int64? = nil
         var isEncrypted: Bool? = nil
         var comment: String? = nil
 
@@ -77,7 +77,7 @@ enum ArchiveExtractor {
 
                             let components = line.components(separatedBy: " ")
                             if let uncompIndex = components.firstIndex(of: "bytes"), uncompIndex > 0,
-                               let size = UInt64(components[uncompIndex - 1].replacingOccurrences(of: ",", with: "")) {
+                               let size = Int64(components[uncompIndex - 1].replacingOccurrences(of: ",", with: "")) {
                                 uncompressedSize = size
                             }
                         }
@@ -151,7 +151,7 @@ enum ArchiveExtractor {
         if let uncompSize = uncompressedSize, uncompSize > 0 {
             do {
                 let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
-                if let compressedSize = attributes[.size] as? UInt64, compressedSize > 0 {
+                if let compressedSize = attributes[.size] as? Int64, compressedSize > 0 {
                     compressionRatio = (1.0 - Double(compressedSize) / Double(uncompSize)) * 100.0
                 }
             } catch {
@@ -184,7 +184,7 @@ enum ArchiveExtractor {
         var format: String? = nil
         var totalSize: Int64? = nil
         var compressedSize: Int64? = nil
-        var compressionRatio: String? = nil
+        var compressionRatio: Double? = nil
         var isEncrypted: Bool? = nil
         var partitionScheme: String? = nil
         var fileSystem: String? = nil
@@ -230,8 +230,7 @@ enum ArchiveExtractor {
 
         // Calculate compression ratio
         if let total = totalSize, let compressed = compressedSize, compressed > 0 {
-            let ratio = Double(total) / Double(compressed)
-            compressionRatio = String(format: "%.1f:1", ratio)
+            compressionRatio = Double(total) / Double(compressed)
         }
 
         // Determine format from extension if not found

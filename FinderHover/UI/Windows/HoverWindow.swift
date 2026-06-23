@@ -980,7 +980,7 @@ struct HoverContentView: View {
                         DetailRow(icon: "doc.on.doc", label: "hover.archive.fileCount".localized, value: "\(fileCount)", fontSize: settings.fontSize)
                     }
                     if settings.showArchiveUncompressedSize, let uncompressedSize = archive.uncompressedSize {
-                        let sizeStr = ByteCountFormatter.string(fromByteCount: Int64(uncompressedSize), countStyle: .file)
+                        let sizeStr = ByteCountFormatter.string(fromByteCount: uncompressedSize, countStyle: .file)
                         DetailRow(icon: "arrow.up.doc", label: "hover.archive.uncompressedSize".localized, value: sizeStr, fontSize: settings.fontSize)
                     }
                     if settings.showArchiveCompressionRatio, let compressionRatio = archive.compressionRatio {
@@ -1119,7 +1119,7 @@ struct HoverContentView: View {
                         let sizeStr = ByteCountFormatter.string(fromByteCount: compressedSize, countStyle: .file)
                         DetailRow(icon: "arrow.down.circle", label: "hover.diskImage.compressedSize".localized, value: sizeStr, fontSize: settings.fontSize)
                     }
-                    if settings.showDiskImageCompressionRatio, let ratio = diskImage.compressionRatio {
+                    if settings.showDiskImageCompressionRatio, let ratio = diskImage.formattedCompressionRatio {
                         DetailRow(icon: "chart.bar", label: "hover.diskImage.compressionRatio".localized, value: ratio, fontSize: settings.fontSize)
                     }
                     if settings.showDiskImageEncrypted, let isEncrypted = diskImage.isEncrypted {
