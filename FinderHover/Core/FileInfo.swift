@@ -294,7 +294,7 @@ struct FileInfo {
 
             // Document metadata
             let officeMetadata = DocumentExtractor.extractOfficeMetadata(from: url)
-            let ebookMetadata = DocumentExtractor.extractEbookMetadata(from: url)
+            let ebookMetadata = DocumentExtractor.extractEbookMetadata(from: url, policy: policy)
             let markdownMetadata = DocumentExtractor.extractMarkdownMetadata(from: url)
             let htmlMetadata = DocumentExtractor.extractHTMLMetadata(from: url)
             let configMetadata = DocumentExtractor.extractConfigMetadata(from: url)

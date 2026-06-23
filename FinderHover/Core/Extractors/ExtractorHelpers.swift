@@ -37,6 +37,23 @@ func runProcessWithTimeout(_ process: Process, timeout: TimeInterval = 5.0) -> B
     return process.terminationStatus == 0
 }
 
+/// Runs a Process and returns its standard-output bytes, or nil on timeout/failure.
+/// Captures stderr to a discarded pipe so child output never blocks on a full terminal.
+/// - Note: Intended for short-lived commands whose stdout fits the OS pipe buffer
+///   (e.g. listing or streaming a single small archive member). For unbounded output,
+///   read the pipe concurrently instead of after termination.
+func runProcessCapturingOutput(_ process: Process, timeout: TimeInterval = 5.0) -> Data? {
+    let standardOutput = Pipe()
+    process.standardOutput = standardOutput
+    process.standardError = Pipe()
+
+    guard runProcessWithTimeout(process, timeout: timeout) else {
+        return nil
+    }
+
+    return standardOutput.fileHandleForReading.readDataToEndOfFile()
+}
+
 // MARK: - Bounded Header Read
 
 /// Reads at most the first `maxByteCount` bytes of a file into owned (non-mapped) memory.

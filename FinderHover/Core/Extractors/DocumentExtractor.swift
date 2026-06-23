@@ -177,7 +177,10 @@ enum DocumentExtractor {
 
     // MARK: - E-book Metadata Extraction
 
-    static func extractEbookMetadata(from url: URL) -> EbookMetadata? {
+    static func extractEbookMetadata(
+        from url: URL,
+        policy: FileInfo.MetadataExtractionPolicy = .default
+    ) -> EbookMetadata? {
         let ext = url.pathExtension.lowercased()
         let ebookExtensions = ["epub", "mobi", "azw", "azw3", "fb2", "lit", "prc"]
 
@@ -186,85 +189,144 @@ enum DocumentExtractor {
         }
 
         if ext == "epub" {
-            return extractEPUBMetadata(from: url)
+            return extractEPUBMetadata(from: url, policy: policy)
         }
 
         return extractEbookMetadataViaMDItem(from: url)
     }
 
-    private static func extractEPUBMetadata(from url: URL) -> EbookMetadata? {
-        let fileManager = FileManager.default
-        let tempDir = fileManager.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+    /// Fixed location of the EPUB OCF container manifest (OCF spec §3.5.2.1).
+    private static let epubContainerPath = "META-INF/container.xml"
+    private static let unzipExecutable = URL(fileURLWithPath: "/usr/bin/unzip")
+    private static let zipinfoExecutable = URL(fileURLWithPath: "/usr/bin/zipinfo")
+    private static let archiveProcessTimeout: TimeInterval = 5.0
 
-        defer {
-            try? fileManager.removeItem(at: tempDir)
+    /// Reads EPUB metadata by streaming only the two small XML members it needs
+    /// (`META-INF/container.xml` and the OPF package document) to stdout via
+    /// `unzip -p`, never inflating the whole archive to disk.
+    private static func extractEPUBMetadata(
+        from url: URL,
+        policy: FileInfo.MetadataExtractionPolicy
+    ) -> EbookMetadata? {
+        guard withinUncompressedLimit(url: url, policy: policy) else {
+            return nil
+        }
+
+        guard let containerXML = readArchiveMember(epubContainerPath, in: url),
+              let opfRelativePath = opfPath(fromContainer: containerXML),
+              let opfXML = readArchiveMember(opfRelativePath, in: url) else {
+            return nil
+        }
+
+        return ebookMetadata(fromPackage: opfXML)
+    }
+
+    /// Streams a single archive member to stdout and parses it as XML.
+    private static func readArchiveMember(_ member: String, in url: URL) -> XMLDocument? {
+        let process = Process()
+        process.executableURL = unzipExecutable
+        process.arguments = ["-p", url.path, member]
+
+        guard let data = runProcessCapturingOutput(process, timeout: archiveProcessTimeout),
+              !data.isEmpty else {
+            return nil
+        }
+
+        return try? XMLDocument(data: data, options: [])
+    }
+
+    /// Resolves the OPF package path declared in the OCF container manifest.
+    private static func opfPath(fromContainer containerXML: XMLDocument) -> String? {
+        guard let rootfile = try? containerXML.nodes(forXPath: "//rootfile[@media-type='application/oebps-package+xml']").first as? XMLElement else {
+            return nil
+        }
+        return rootfile.attribute(forName: "full-path")?.stringValue
+    }
+
+    /// Maps OPF Dublin Core fields onto EbookMetadata.
+    private static func ebookMetadata(fromPackage opfXML: XMLDocument) -> EbookMetadata? {
+        let title = try? opfXML.nodes(forXPath: "//*[local-name()='title']").first?.stringValue
+        let author = try? opfXML.nodes(forXPath: "//*[local-name()='creator']").first?.stringValue
+        let publisher = try? opfXML.nodes(forXPath: "//*[local-name()='publisher']").first?.stringValue
+        let publicationDate = try? opfXML.nodes(forXPath: "//*[local-name()='date']").first?.stringValue
+        let language = try? opfXML.nodes(forXPath: "//*[local-name()='language']").first?.stringValue
+        let description = try? opfXML.nodes(forXPath: "//*[local-name()='description']").first?.stringValue
+
+        return EbookMetadata(
+            title: title,
+            author: author,
+            publisher: publisher,
+            publicationDate: publicationDate,
+            isbn: isbn(fromPackage: opfXML),
+            language: language,
+            description: description,
+            pageCount: nil
+        )
+    }
+
+    /// Finds the first ISBN identifier, either by `scheme` attribute or inline "ISBN" prefix.
+    private static func isbn(fromPackage opfXML: XMLDocument) -> String? {
+        guard let identifiers = try? opfXML.nodes(forXPath: "//*[local-name()='identifier']") else {
+            return nil
+        }
+        for identifier in identifiers {
+            guard let element = identifier as? XMLElement else { continue }
+            if let scheme = element.attribute(forName: "scheme")?.stringValue?.lowercased(),
+               scheme.contains("isbn") {
+                return element.stringValue
+            }
+            if let value = element.stringValue, value.uppercased().contains("ISBN") {
+                return value
+            }
+        }
+        return nil
+    }
+
+    /// Defense-in-depth: skip EPUBs whose *declared* uncompressed size (from the
+    /// central directory, no decompression) exceeds the configured threshold.
+    private static func withinUncompressedLimit(
+        url: URL,
+        policy: FileInfo.MetadataExtractionPolicy
+    ) -> Bool {
+        guard policy.enableLargeFileProtection else {
+            return true
         }
 
         let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/unzip")
-        process.arguments = ["-q", url.path, "-d", tempDir.path]
+        process.executableURL = zipinfoExecutable
+        process.arguments = ["-t", url.path]
 
-        guard runProcessWithTimeout(process, timeout: 5.0) else {
-            return nil
+        guard let data = runProcessCapturingOutput(process, timeout: archiveProcessTimeout),
+              let summary = String(data: data, encoding: .utf8) else {
+            // zipinfo unavailable/failed: selective extraction is still bounded, so allow.
+            return true
         }
 
-        do {
-            let containerPath = tempDir.appendingPathComponent("META-INF/container.xml")
-            guard fileManager.fileExists(atPath: containerPath.path) else {
-                return nil
-            }
-
-            let containerData = try Data(contentsOf: containerPath)
-            let containerXML = try XMLDocument(data: containerData, options: [])
-
-            guard let rootfile = try containerXML.nodes(forXPath: "//rootfile[@media-type='application/oebps-package+xml']").first as? XMLElement,
-                  let opfRelativePath = rootfile.attribute(forName: "full-path")?.stringValue else {
-                return nil
-            }
-
-            let opfPath = tempDir.appendingPathComponent(opfRelativePath)
-            let opfData = try Data(contentsOf: opfPath)
-            let opfXML = try XMLDocument(data: opfData, options: [])
-
-            let title = try? opfXML.nodes(forXPath: "//*[local-name()='title']").first?.stringValue
-            let author = try? opfXML.nodes(forXPath: "//*[local-name()='creator']").first?.stringValue
-            let publisher = try? opfXML.nodes(forXPath: "//*[local-name()='publisher']").first?.stringValue
-            let publicationDate = try? opfXML.nodes(forXPath: "//*[local-name()='date']").first?.stringValue
-            let language = try? opfXML.nodes(forXPath: "//*[local-name()='language']").first?.stringValue
-            let description = try? opfXML.nodes(forXPath: "//*[local-name()='description']").first?.stringValue
-
-            var isbn: String? = nil
-            if let identifiers = try? opfXML.nodes(forXPath: "//*[local-name()='identifier']") {
-                for identifier in identifiers {
-                    if let element = identifier as? XMLElement,
-                       let scheme = element.attribute(forName: "scheme")?.stringValue?.lowercased(),
-                       scheme.contains("isbn") {
-                        isbn = element.stringValue
-                        break
-                    }
-                    if let element = identifier as? XMLElement,
-                       let value = element.stringValue,
-                       value.uppercased().contains("ISBN") {
-                        isbn = value
-                        break
-                    }
-                }
-            }
-
-            return EbookMetadata(
-                title: title,
-                author: author,
-                publisher: publisher,
-                publicationDate: publicationDate,
-                isbn: isbn,
-                language: language,
-                description: description,
-                pageCount: nil
-            )
-
-        } catch {
-            return nil
+        guard let declaredBytes = reportedUncompressedBytes(fromZipinfoSummary: summary) else {
+            return true
         }
+
+        let limit = policy.largeFileThresholds.epubUncompressedBytes
+        if declaredBytes > limit {
+            Logger.warning("Skipping EPUB metadata: declared \(declaredBytes) bytes exceeds limit \(limit): \(url.lastPathComponent)", subsystem: .fileSystem)
+            return false
+        }
+        return true
+    }
+
+    /// Parses the uncompressed byte count from a `zipinfo -t` summary line,
+    /// e.g. "3 files, 100037 bytes uncompressed, 100057 bytes compressed:  0.0%".
+    /// The byte count is the token two positions before "uncompressed,"
+    /// (the format is `<n> bytes uncompressed,`).
+    private static func reportedUncompressedBytes(fromZipinfoSummary summary: String) -> Int64? {
+        for line in summary.components(separatedBy: .newlines) where line.contains("uncompressed") {
+            let components = line.components(separatedBy: " ")
+            if let uncompressedIndex = components.firstIndex(of: "uncompressed,"), uncompressedIndex >= 2,
+               let bytes = Int64(components[uncompressedIndex - 2]) {
+                return bytes
+            }
+        }
+        return nil
     }
 
     private static func extractEbookMetadataViaMDItem(from url: URL) -> EbookMetadata? {

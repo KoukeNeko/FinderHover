@@ -57,7 +57,8 @@ nonisolated enum Constants {
             subtitleBytes: 2 * 1024 * 1024,
             vectorTextBytes: 2 * 1024 * 1024,
             modelTextBytes: 8 * 1024 * 1024,
-            xcodeProjectBytes: 6 * 1024 * 1024
+            xcodeProjectBytes: 6 * 1024 * 1024,
+            epubUncompressedBytes: 256 * 1024 * 1024
         )
     }
 
@@ -66,6 +67,8 @@ nonisolated enum Constants {
         let vectorTextBytes: Int64
         let modelTextBytes: Int64
         let xcodeProjectBytes: Int64
+        /// Max declared uncompressed size of an EPUB before its metadata is skipped.
+        let epubUncompressedBytes: Int64
     }
 
     // MARK: - Window Layout
