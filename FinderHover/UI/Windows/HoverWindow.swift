@@ -1808,16 +1808,18 @@ struct HoverContentView: View {
                             }
                         }
                         .frame(height: noteHeight(minLines: windowState.isEditingNotes ? 3 : 1))
-                        .padding(.horizontal, windowState.isEditingNotes ? 6 : 0)
+                        .padding(.horizontal, 6)
                         .background(
                             RoundedRectangle(cornerRadius: 6, style: .continuous)
                                 .fill(Color(nsColor: .textBackgroundColor)
-                                    .opacity(windowState.isEditingNotes ? 0.85 : 0))
+                                    .opacity(windowState.isEditingNotes ? 0.85 : 0.3))
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 6, style: .continuous)
                                 .strokeBorder(
-                                    windowState.isEditingNotes ? Color.accentColor.opacity(0.7) : Color.clear,
+                                    windowState.isEditingNotes
+                                        ? Color.accentColor.opacity(0.7)
+                                        : Color.secondary.opacity(0.25),
                                     lineWidth: 1
                                 )
                         )
