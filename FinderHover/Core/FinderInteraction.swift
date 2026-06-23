@@ -10,91 +10,51 @@ import Foundation
 
 class FinderInteraction {
 
-    /// Timeout for Accessibility API operations (in seconds)
-    private static let accessibilityTimeout: TimeInterval = 0.5
-    private static let accessibilityRetryCount: Int = 1
-    private static let accessibilityRetryDelay: TimeInterval =
-        Double(Constants.Performance.accessibilityRetryDelayMs) / 1000.0
+    /// Serial queue on which every Accessibility / CGWindowList probe runs.
+    /// Serial (not concurrent) so probes never overlap and naturally coalesce;
+    /// `.userInteractive` because results gate the hover popup the user is watching.
     private static let accessibilityQueue = DispatchQueue(
-        label: "com.finderhover.accessibility.singleflight",
+        label: "com.finderhover.accessibility",
         qos: .userInteractive
     )
-    private static let accessibilityStateLock = NSLock()
-    private static var hasInFlightAccessibilityOperation = false
 
-    private enum TimeoutAttemptResult<T> {
-        case success(T?)
-        case timedOut
-        case skippedDueToInFlightOperation
-    }
+    /// Cached Quick Look visibility, valid for `quickLookCacheTTL`.
+    /// `checkIfShouldHide` (throttled) and `startRenamingCheck` (0.1s timer) poll
+    /// this many times per second; the cache collapses those into one real
+    /// CGWindowList scan per TTL window. Guarded by `quickLookCacheLock`.
+    private static let quickLookCacheLock = NSLock()
+    private static var cachedQuickLookVisible = false
+    private static var quickLookCacheTimestamp: TimeInterval = 0
+    private static let quickLookCacheTTL: TimeInterval =
+        Double(Constants.Performance.quickLookCacheTTLMs) / 1000.0
 
-    /// Execute an Accessibility operation with timeout to prevent blocking
-    private static func withTimeout<T>(_ timeout: TimeInterval = accessibilityTimeout, operation: @escaping () -> T?) -> T? {
-        for attempt in 0...accessibilityRetryCount {
-            if attempt > 0 {
-                Thread.sleep(forTimeInterval: accessibilityRetryDelay)
-            }
-
-            switch executeSingleFlightOperation(timeout: timeout, operation: operation) {
-            case .success(let result):
-                return result
-            case .timedOut:
-                continue
-            case .skippedDueToInFlightOperation:
-                Logger.debug(
-                    "Skipped accessibility operation because a previous timed-out operation is still running",
-                    subsystem: .accessibility
-                )
-                return nil
-            }
-        }
-
-        return nil
-    }
-
-    private static func executeSingleFlightOperation<T>(
-        timeout: TimeInterval,
-        operation: @escaping () -> T?
-    ) -> TimeoutAttemptResult<T> {
-        guard acquireAccessibilityInFlightSlot() else {
-            return .skippedDueToInFlightOperation
-        }
-
-        var result: T?
-        let semaphore = DispatchSemaphore(value: 0)
-
+    /// Runs a blocking Accessibility probe off the main thread and delivers the
+    /// result back on the main queue. Never blocks the caller — replaces the old
+    /// semaphore.wait() design (no UI freeze, no single-flight slot, no per-call
+    /// timeout). Stale results are discarded by the caller's generation token.
+    private static func runProbe<T>(
+        _ probe: @escaping () -> T,
+        completion: @escaping (T) -> Void
+    ) {
         accessibilityQueue.async {
-            result = operation()
-            releaseAccessibilityInFlightSlot()
-            semaphore.signal()
+            let result = probe()
+            DispatchQueue.main.async { completion(result) }
         }
+    }
 
-        let waitResult = semaphore.wait(timeout: .now() + timeout)
-        if waitResult == .timedOut {
-            Logger.warning("Accessibility operation timed out after \(timeout)s", subsystem: .accessibility)
-            return .timedOut
+    /// Safely bridges a `CFTypeRef` returned by the Accessibility API to an
+    /// `AXUIElement`, verifying the runtime type first. Replaces every `as!`
+    /// force-cast so an unexpected AX return type yields `nil` instead of a crash.
+    private static func axElement(from value: CFTypeRef?) -> AXUIElement? {
+        guard let value, CFGetTypeID(value) == AXUIElementGetTypeID() else {
+            return nil
         }
-
-        return .success(result)
+        return (value as! AXUIElement)
     }
 
-    private static func acquireAccessibilityInFlightSlot() -> Bool {
-        accessibilityStateLock.lock()
-        defer { accessibilityStateLock.unlock() }
-        guard !hasInFlightAccessibilityOperation else { return false }
-        hasInFlightAccessibilityOperation = true
-        return true
-    }
-
-    private static func releaseAccessibilityInFlightSlot() {
-        accessibilityStateLock.lock()
-        hasInFlightAccessibilityOperation = false
-        accessibilityStateLock.unlock()
-    }
-
-    /// Checks if user is currently renaming a file in Finder
-    static func isRenamingFile() -> Bool {
-        return withTimeout { isRenamingFileImpl() } ?? false
+    /// Checks (asynchronously, off main) if the user is renaming a file in Finder.
+    static func isRenamingFile(completion: @escaping (Bool) -> Void) {
+        runProbe({ isRenamingFileImpl() }, completion: completion)
     }
 
     private static func isRenamingFileImpl() -> Bool {
@@ -107,7 +67,7 @@ class FinderInteraction {
         // Get the focused UI element
         var focusedElementRef: CFTypeRef?
         guard AXUIElementCopyAttributeValue(appElement, kAXFocusedUIElementAttribute as CFString, &focusedElementRef) == .success,
-              let focusedElement = (focusedElementRef as! AXUIElement?) else {
+              let focusedElement = axElement(from: focusedElementRef) else {
             return false
         }
 
@@ -122,9 +82,9 @@ class FinderInteraction {
         return false
     }
 
-    /// Gets file at specific position using accessibility API
-    static func getFileAtMousePosition(_ position: CGPoint) -> String? {
-        return withTimeout { getFileAtMousePositionImpl(position) } ?? nil
+    /// Gets (asynchronously, off main) the file at a screen position via the AX API.
+    static func getFileAtMousePosition(_ position: CGPoint, completion: @escaping (String?) -> Void) {
+        runProbe({ getFileAtMousePositionImpl(position) }, completion: completion)
     }
 
     private static func getFileAtMousePositionImpl(_ position: CGPoint) -> String? {
@@ -146,9 +106,9 @@ class FinderInteraction {
         return nil
     }
 
-    /// Gets currently selected files in Finder using Accessibility API
-    static func getSelectedFinderFiles() -> [String] {
-        return withTimeout { getSelectedFinderFilesImpl() } ?? []
+    /// Gets (asynchronously, off main) the currently selected files in Finder.
+    static func getSelectedFinderFiles(completion: @escaping ([String]) -> Void) {
+        runProbe({ getSelectedFinderFilesImpl() }, completion: completion)
     }
 
     private static func getSelectedFinderFilesImpl() -> [String] {
@@ -172,7 +132,8 @@ class FinderInteraction {
         // Note: focusedWindow is CFTypeRef which is bridged to AXUIElement
         // The force cast is safe here as we confirmed it exists above
         var selectedChildrenRef: CFTypeRef?
-        if AXUIElementCopyAttributeValue(focusedWindow as! AXUIElement, kAXSelectedChildrenAttribute as CFString, &selectedChildrenRef) == .success,
+        if let focusedWindowElement = axElement(from: focusedWindow),
+           AXUIElementCopyAttributeValue(focusedWindowElement, kAXSelectedChildrenAttribute as CFString, &selectedChildrenRef) == .success,
            let selectedChildren = selectedChildrenRef as? [AXUIElement] {
 
             var filePaths: [String] = []
@@ -193,7 +154,8 @@ class FinderInteraction {
 
             // Note: focusedElement is CFTypeRef bridged to AXUIElement
             var selectedRef: CFTypeRef?
-            if AXUIElementCopyAttributeValue(focusedElement as! AXUIElement, kAXSelectedChildrenAttribute as CFString, &selectedRef) == .success,
+            if let focusedUIElement = axElement(from: focusedElement),
+               AXUIElementCopyAttributeValue(focusedUIElement, kAXSelectedChildrenAttribute as CFString, &selectedRef) == .success,
                let selected = selectedRef as? [AXUIElement] {
 
                 return selected.compactMap { getFilePathFromElement($0) }
@@ -311,7 +273,8 @@ class FinderInteraction {
             // Note: parent is CFTypeRef bridged to AXUIElement
             // Check parent's URL attribute
             var urlRef: CFTypeRef?
-            if AXUIElementCopyAttributeValue(parent as! AXUIElement, kAXURLAttribute as CFString, &urlRef) == .success,
+            if let parentElement = axElement(from: parent),
+               AXUIElementCopyAttributeValue(parentElement, kAXURLAttribute as CFString, &urlRef) == .success,
                let urlValue = urlRef {
 
                 if let urlString = urlValue as? String, urlString.hasPrefix("file://") {
@@ -360,8 +323,31 @@ class FinderInteraction {
         return nil
     }
 
-    /// Checks if Quick Look preview is currently visible
-    static func isQuickLookVisible() -> Bool {
+    /// Checks (asynchronously, off main) whether a Quick Look preview is visible.
+    /// Serves a cached value when within `quickLookCacheTTL` of the last real scan
+    /// so high-frequency callers don't trigger a CGWindowList scan every tick.
+    static func isQuickLookVisible(completion: @escaping (Bool) -> Void) {
+        let now = Date().timeIntervalSinceReferenceDate
+        quickLookCacheLock.lock()
+        if now - quickLookCacheTimestamp < quickLookCacheTTL {
+            let cached = cachedQuickLookVisible
+            quickLookCacheLock.unlock()
+            DispatchQueue.main.async { completion(cached) }
+            return
+        }
+        quickLookCacheLock.unlock()
+
+        runProbe({ isQuickLookVisibleImpl() }) { visible in
+            quickLookCacheLock.lock()
+            cachedQuickLookVisible = visible
+            quickLookCacheTimestamp = Date().timeIntervalSinceReferenceDate
+            quickLookCacheLock.unlock()
+            completion(visible)
+        }
+    }
+
+    /// Synchronous CGWindowList scan. Runs only on `accessibilityQueue`.
+    private static func isQuickLookVisibleImpl() -> Bool {
         // Quick Look UI Service bundle identifier
         let quickLookBundleIDs = [
             "com.apple.quicklook.QuickLookUIService",
@@ -441,7 +427,8 @@ class FinderInteraction {
         // Try to get document/URL attribute
         // Note: focusedWindow is CFTypeRef bridged to AXUIElement
         var documentRef: CFTypeRef?
-        if AXUIElementCopyAttributeValue(focusedWindow as! AXUIElement, kAXDocumentAttribute as CFString, &documentRef) == .success,
+        if let focusedWindowElement = axElement(from: focusedWindow),
+           AXUIElementCopyAttributeValue(focusedWindowElement, kAXDocumentAttribute as CFString, &documentRef) == .success,
            let document = documentRef {
 
             if let urlString = document as? String {

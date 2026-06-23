@@ -28,8 +28,10 @@ enum Constants {
         /// Throttle interval for hide checks on mouse move (milliseconds)
         static let hoverHideThrottleMs: Int = 100
 
-        /// Delay before retrying timed-out accessibility calls (milliseconds)
-        static let accessibilityRetryDelayMs: Int = 120
+        /// Time-to-live for the cached Quick Look visibility result (milliseconds).
+        /// High-frequency hide checks reuse the cached value within this window
+        /// instead of repeating a CGWindowList scan.
+        static let quickLookCacheTTLMs: Int = 80
 
         /// File size thresholds for protection mode
         static let largeFileThresholds = LargeFileThresholds(

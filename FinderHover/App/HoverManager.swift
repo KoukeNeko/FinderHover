@@ -212,40 +212,41 @@ class HoverManager: ObservableObject {
             return
         }
 
-        // Check if Quick Look preview is visible - hide immediately
-        if FinderInteraction.isQuickLookVisible() {
-            hideHoverWindow()
-            currentFileInfo = nil
-            invalidateDisplayTimer()
-            invalidateMetadataRequests()
-            return
-        }
+        let shownPath = currentInfo.path
 
-        // Check if user is renaming - hide immediately
-        if FinderInteraction.isRenamingFile() {
-            hideHoverWindow()
-            currentFileInfo = nil
-            invalidateDisplayTimer()
-            invalidateMetadataRequests()
-            return
-        }
-
-        // Check if mouse has moved significantly or if we can't find the same file
-        if let currentPath = FinderInteraction.getFileAtMousePosition(location) {
-            // If different file or no file, hide immediately
-            if currentPath != currentInfo.path {
-                hideHoverWindow()
-                currentFileInfo = nil
-                invalidateDisplayTimer()
-                invalidateMetadataRequests()
+        // Probe Quick Look -> renaming -> file-under-cursor off the main thread,
+        // hiding as soon as any check says we should. Each callback re-validates
+        // that the same file is still shown, so a stale probe can't hide a popup
+        // that has since changed to a different file.
+        FinderInteraction.isQuickLookVisible { [weak self] quickLookVisible in
+            guard let self = self, self.currentFileInfo?.path == shownPath else { return }
+            if quickLookVisible {
+                self.hideForStaleHover()
+                return
             }
-        } else {
-            // No file under cursor, hide immediately
-            hideHoverWindow()
-            currentFileInfo = nil
-            invalidateDisplayTimer()
-            invalidateMetadataRequests()
+            FinderInteraction.isRenamingFile { [weak self] isRenaming in
+                guard let self = self, self.currentFileInfo?.path == shownPath else { return }
+                if isRenaming {
+                    self.hideForStaleHover()
+                    return
+                }
+                FinderInteraction.getFileAtMousePosition(location) { [weak self] currentPath in
+                    guard let self = self, self.currentFileInfo?.path == shownPath else { return }
+                    if currentPath != shownPath {
+                        self.hideForStaleHover()
+                    }
+                }
+            }
         }
+    }
+
+    /// Hides the popup and clears all pending hover state. Used whenever a probe
+    /// determines the currently shown file is no longer valid under the cursor.
+    private func hideForStaleHover() {
+        hideHoverWindow()
+        currentFileInfo = nil
+        invalidateDisplayTimer()
+        invalidateMetadataRequests()
     }
 
     private func handleMouseLocation(_ location: CGPoint) {
@@ -266,11 +267,23 @@ class HoverManager: ObservableObject {
         guard !mouseTracker.isDragging else { return }
 
         // Don't show hover window if Quick Look preview is visible
-        guard !FinderInteraction.isQuickLookVisible() else { return }
+        FinderInteraction.isQuickLookVisible { [weak self] quickLookVisible in
+            guard let self = self, !quickLookVisible else { return }
+            guard !self.mouseTracker.isDragging else { return }
 
-        // Try to get file path at current location
-        // This will return nil if user is renaming or if cursor is over the popup itself
-        guard let filePath = FinderInteraction.getFileAtMousePosition(location) else {
+            // Try to get file path at current location. Returns nil if user is
+            // renaming or if cursor is over the popup itself.
+            FinderInteraction.getFileAtMousePosition(location) { [weak self] filePath in
+                guard let self = self else { return }
+                self.handleFilePathForDisplay(filePath, at: location)
+            }
+        }
+    }
+
+    /// Acts on the file path resolved under the cursor: hides if there is none,
+    /// otherwise kicks off metadata extraction for a newly hovered file.
+    private func handleFilePathForDisplay(_ filePath: String?, at location: CGPoint) {
+        guard let filePath = filePath else {
             // Don't hide if mouse is over the popup (accessibility returns nil there)
             if isMouseOverHoverWindow(at: location) {
                 return
@@ -302,16 +315,21 @@ class HoverManager: ObservableObject {
                 guard let self = self else { return }
                 guard self.isMetadataRequestCurrent(requestToken) else { return }
                 guard !self.mouseTracker.isDragging else { return }
-                guard !FinderInteraction.isQuickLookVisible() else { return }
 
-                // Skip stale result if cursor is no longer over the file.
-                if FinderInteraction.getFileAtMousePosition(self.lastMouseLocation) != fileInfo.path {
-                    return
+                // Final staleness gate: Quick Look not up and cursor still on this file.
+                FinderInteraction.isQuickLookVisible { [weak self] quickLookVisible in
+                    guard let self = self, !quickLookVisible else { return }
+                    guard self.isMetadataRequestCurrent(requestToken) else { return }
+                    FinderInteraction.getFileAtMousePosition(self.lastMouseLocation) { [weak self] currentPath in
+                        guard let self = self else { return }
+                        guard self.isMetadataRequestCurrent(requestToken) else { return }
+                        guard currentPath == fileInfo.path else { return }
+
+                        Logger.debug("Displaying hover for file: \(fileInfo.name)", subsystem: .ui)
+                        self.currentFileInfo = fileInfo
+                        self.showHoverWindow(at: location, with: fileInfo)
+                    }
                 }
-
-                Logger.debug("Displaying hover for file: \(fileInfo.name)", subsystem: .ui)
-                self.currentFileInfo = fileInfo
-                self.showHoverWindow(at: location, with: fileInfo)
             }
         }
     }
@@ -348,18 +366,18 @@ class HoverManager: ObservableObject {
             withTimeInterval: Constants.MouseTracking.renamingCheckInterval,
             repeats: true
         ) { [weak self] _ in
-            // Hide if Quick Look preview is shown
-            if FinderInteraction.isQuickLookVisible() {
-                self?.hideHoverWindow()
-                self?.currentFileInfo = nil
-                self?.invalidateMetadataRequests()
-                return
-            }
-            // Hide if user is renaming
-            if FinderInteraction.isRenamingFile() {
-                self?.hideHoverWindow()
-                self?.currentFileInfo = nil
-                self?.invalidateMetadataRequests()
+            // Hide if Quick Look preview is shown, otherwise if the user is renaming.
+            // Both probes run off the main thread and report back on main.
+            FinderInteraction.isQuickLookVisible { [weak self] quickLookVisible in
+                guard let self = self else { return }
+                if quickLookVisible {
+                    self.hideForStaleHover()
+                    return
+                }
+                FinderInteraction.isRenamingFile { [weak self] isRenaming in
+                    guard let self = self, isRenaming else { return }
+                    self.hideForStaleHover()
+                }
             }
         }
     }
