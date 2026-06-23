@@ -29,6 +29,27 @@ Inspect file metadata instantly. No `Cmd+I` required.
 
 ---
 
+## 📝 What's New
+
+### v1.9.0 - Notes
+- **Notes:** Attach a personal note to any file, right in the hover popup — stored with the file (so it persists and travels with the file when copied/moved)
+- **Auto-sizing field:** 3-line minimum that grows as you type, with a focused text-field style while editing
+- **More stable:** Accessibility lookups moved off the main thread (no more UI freezes when Finder is slow), plus leaner/safer reading of large files and many fixes
+- **Fixed:** Black edge behind the Liquid Glass popup when focused
+- 🙏 **Huge thanks to [@zmlim](https://github.com/zmlim)** for designing and contributing the Notes feature ([#14](../../pull/14)) — this release is built on their work
+
+### v1.8.0 - Official Code Signing & Liquid Glass
+- **Signed & Notarized:** No more Gatekeeper bypass — app opens immediately
+- **Liquid Glass:** New visual effect option for macOS 26 (Tahoe)
+- **Universal Binary:** arm64 + x86_64 with Hardened Runtime
+
+### v1.8.1 - Bug Fix
+- **Fixed:** Shortened English download metadata labels for better alignment
+
+[View Full Changelog](CHANGELOG.md)
+
+---
+
 ## ⚡️ Why FinderHover?
 
 **The Problem:**
@@ -236,30 +257,6 @@ FinderHover/
   <img src="https://github.com/user-attachments/assets/fe969256-a07d-4db6-8715-a3bb3226782b" width="45%" />
   <img src="https://github.com/user-attachments/assets/f492dc51-9fd8-49f2-b854-d9fc4ac026a6" width="45%" />
   <img src="https://github.com/user-attachments/assets/dc04ba05-2bcb-4308-b0cc-bd5ed2259d07" width="45%" />
-
----
-
-## 📝 What's New
-
-### v1.9.0 - Notes
-
-- **Notes:** Attach a personal note to any file, right in the hover popup — stored with the file (so it persists and travels with the file when copied/moved)
-- **Auto-sizing field:** 3-line minimum that grows as you type, with a focused text-field style while editing
-- **More stable:** Accessibility lookups moved off the main thread (no more UI freezes when Finder is slow), plus leaner/safer reading of large files and many fixes
-- **Fixed:** Black edge behind the Liquid Glass popup when focused on macOS 27 beta 2
-- 🙏 **Huge thanks to [@zmlim](https://github.com/zmlim)** for designing and contributing the Notes feature ([#14](../../pull/14)) — this release is built on their work
-
-### v1.8.0 - Official Code Signing & Liquid Glass
-
-- **Signed & Notarized:** No more Gatekeeper bypass — app opens immediately
-- **Liquid Glass:** New visual effect option for macOS 26 (Tahoe)
-- **Universal Binary:** arm64 + x86_64 with Hardened Runtime
-
-### v1.8.1 - Bug Fix
-
-- **Fixed:** Shortened English download metadata labels for better alignment
-
-[View Full Changelog](CHANGELOG.md)
 
 ---
 
