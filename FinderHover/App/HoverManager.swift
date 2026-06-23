@@ -28,7 +28,6 @@ class HoverManager: ObservableObject {
     private var displayTimer: Timer?
     private var renamingCheckTimer: Timer?
     private var lastMouseLocation: CGPoint = .zero
-    private let metadataQueue = DispatchQueue(label: "com.finderhover.metadataExtraction", qos: .userInitiated)
     private var metadataRequestToken: UInt64 = 0
     private let settings = AppSettings.shared
     private var isTracking = false
@@ -305,8 +304,8 @@ class HoverManager: ObservableObject {
         let requestToken = beginMetadataRequest()
         let extractionPolicy = FileInfo.MetadataExtractionPolicy.from(settings: settings)
 
-        metadataQueue.async { [weak self] in
-            guard let fileInfo = FileInfo.from(path: filePath, policy: extractionPolicy) else {
+        Task { [weak self] in
+            guard let fileInfo = await FileInfo.from(path: filePath, policy: extractionPolicy) else {
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     guard self.isMetadataRequestCurrent(requestToken) else { return }

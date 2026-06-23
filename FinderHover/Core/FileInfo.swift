@@ -208,11 +208,11 @@ struct FileInfo {
 
     // MARK: - Factory Method
 
-    static func from(path: String) -> FileInfo? {
-        from(path: path, policy: .default)
+    static func from(path: String) async -> FileInfo? {
+        await from(path: path, policy: .default)
     }
 
-    static func from(path: String, policy: MetadataExtractionPolicy) -> FileInfo? {
+    static func from(path: String, policy: MetadataExtractionPolicy) async -> FileInfo? {
         let fileManager = FileManager.default
 
         guard fileManager.fileExists(atPath: path) else {
@@ -259,8 +259,8 @@ struct FileInfo {
 
             // Extract metadata using the new Extractor modules
             let exifData = MediaExtractor.extractEXIFData(from: url)
-            let videoMetadata = MediaExtractor.extractVideoMetadata(from: url)
-            let audioMetadata = MediaExtractor.extractAudioMetadata(from: url)
+            let videoMetadata = await MediaExtractor.extractVideoMetadata(from: url)
+            let audioMetadata = await MediaExtractor.extractAudioMetadata(from: url)
             let imageExtendedMetadata = MediaExtractor.extractImageExtendedMetadata(from: url)
 
             // Handle PDF/Vector graphics logic

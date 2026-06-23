@@ -206,7 +206,7 @@ enum MediaExtractor {
 
     // MARK: - Video Metadata Extraction
 
-    static func extractVideoMetadata(from url: URL) -> VideoMetadata? {
+    static func extractVideoMetadata(from url: URL) async -> VideoMetadata? {
         // Check if file is a video by extension
         let videoExtensions = ["mp4", "mov", "m4v", "avi", "mkv", "flv", "wmv", "webm", "mpeg", "mpg", "3gp", "mts", "m2ts"]
         guard let ext = url.pathExtension.lowercased() as String?,
@@ -216,18 +216,21 @@ enum MediaExtractor {
 
         let asset = AVURLAsset(url: url)
 
-        // Extract duration
+        // Extract duration. A failed load degrades to no duration, matching the
+        // prior guard that ignored non-finite/non-positive values.
         var duration: String? = nil
-        let durationSeconds = CMTimeGetSeconds(asset.duration)
-        if durationSeconds.isFinite && durationSeconds > 0 {
-            let hours = Int(durationSeconds) / 3600
-            let minutes = Int(durationSeconds) % 3600 / 60
-            let seconds = Int(durationSeconds) % 60
+        if let assetDuration = try? await asset.load(.duration) {
+            let durationSeconds = CMTimeGetSeconds(assetDuration)
+            if durationSeconds.isFinite && durationSeconds > 0 {
+                let hours = Int(durationSeconds) / 3600
+                let minutes = Int(durationSeconds) % 3600 / 60
+                let seconds = Int(durationSeconds) % 60
 
-            if hours > 0 {
-                duration = String(format: "%d:%02d:%02d", hours, minutes, seconds)
-            } else {
-                duration = String(format: "%d:%02d", minutes, seconds)
+                if hours > 0 {
+                    duration = String(format: "%d:%02d:%02d", hours, minutes, seconds)
+                } else {
+                    duration = String(format: "%d:%02d", minutes, seconds)
+                }
             }
         }
 
@@ -238,25 +241,31 @@ enum MediaExtractor {
         var videoTrackCount = 0
         var audioTrackCount = 0
 
-        let videoTracks = asset.tracks(withMediaType: .video)
+        let videoTracks = (try? await asset.loadTracks(withMediaType: .video)) ?? []
         videoTrackCount = videoTracks.count
+
+        // Format descriptions of the primary video track, loaded once and reused
+        // for codec and HDR detection below.
+        var videoFormatDescriptions: [CMFormatDescription] = []
 
         if let videoTrack = videoTracks.first {
             // Get resolution
-            let size = videoTrack.naturalSize.applying(videoTrack.preferredTransform)
-            let width = abs(Int(size.width))
-            let height = abs(Int(size.height))
-            resolution = "\(width) × \(height)"
+            if let naturalSize = try? await videoTrack.load(.naturalSize),
+               let preferredTransform = try? await videoTrack.load(.preferredTransform) {
+                let size = naturalSize.applying(preferredTransform)
+                let width = abs(Int(size.width))
+                let height = abs(Int(size.height))
+                resolution = "\(width) × \(height)"
+            }
 
             // Get frame rate
-            let fps = videoTrack.nominalFrameRate
-            if fps > 0 {
+            if let fps = try? await videoTrack.load(.nominalFrameRate), fps > 0 {
                 frameRate = String(format: "%.0f fps", fps)
             }
 
             // Get codec
-            if let formatDescriptions = videoTrack.formatDescriptions as? [CMFormatDescription],
-               let formatDescription = formatDescriptions.first {
+            videoFormatDescriptions = (try? await videoTrack.load(.formatDescriptions)) ?? []
+            if let formatDescription = videoFormatDescriptions.first {
                 let codecType = CMFormatDescriptionGetMediaSubType(formatDescription)
                 let codecString = fourCCToString(codecType)
                 codec = codecString
@@ -264,12 +273,13 @@ enum MediaExtractor {
         }
 
         // Count audio tracks
-        let audioTracks = asset.tracks(withMediaType: .audio)
+        let audioTracks = (try? await asset.loadTracks(withMediaType: .audio)) ?? []
         audioTrackCount = audioTracks.count
 
         // Extract bitrate
         var bitrate: String? = nil
-        if let estimatedDataRate = videoTracks.first?.estimatedDataRate {
+        if let videoTrack = videoTracks.first,
+           let estimatedDataRate = try? await videoTrack.load(.estimatedDataRate) {
             let bitrateKbps = estimatedDataRate / 1000
             if bitrateKbps >= 1000 {
                 bitrate = String(format: "%.1f Mbps", bitrateKbps / 1000)
@@ -283,9 +293,7 @@ enum MediaExtractor {
         var colorPrimaries: String? = nil
         var transferFunction: String? = nil
 
-        if let videoTrack = videoTracks.first,
-           let formatDescriptions = videoTrack.formatDescriptions as? [CMFormatDescription],
-           let formatDescription = formatDescriptions.first {
+        if let formatDescription = videoFormatDescriptions.first {
 
             // Get color primaries
             if let primaries = CMFormatDescriptionGetExtension(formatDescription, extensionKey: kCMFormatDescriptionExtension_ColorPrimaries) as? String {
@@ -317,17 +325,21 @@ enum MediaExtractor {
 
             // Determine HDR format based on codec and transfer function
             if transferFunction == "PQ" || transferFunction == "HLG" {
-                // Check for Dolby Vision
-                let hasDolbyVision = asset.tracks(withMediaType: .video).contains { track in
-                    if let formats = track.formatDescriptions as? [CMFormatDescription] {
-                        return formats.contains { desc in
-                            let codecType = CMFormatDescriptionGetMediaSubType(desc)
-                            // Dolby Vision codec types: dvh1, dvhe, dva1, dvav
-                            let codecStr = fourCCToString(codecType)
-                            return codecStr.hasPrefix("dvh") || codecStr.hasPrefix("dva")
-                        }
+                // Check for Dolby Vision across the already-loaded video tracks'
+                // format descriptions.
+                var hasDolbyVision = false
+                for track in videoTracks {
+                    let formats = (try? await track.load(.formatDescriptions)) ?? []
+                    let trackHasDolbyVision = formats.contains { desc in
+                        let codecType = CMFormatDescriptionGetMediaSubType(desc)
+                        // Dolby Vision codec types: dvh1, dvhe, dva1, dvav
+                        let codecStr = fourCCToString(codecType)
+                        return codecStr.hasPrefix("dvh") || codecStr.hasPrefix("dva")
                     }
-                    return false
+                    if trackHasDolbyVision {
+                        hasDolbyVision = true
+                        break
+                    }
                 }
 
                 if hasDolbyVision {
@@ -371,27 +383,28 @@ enum MediaExtractor {
 
         // Extract chapter count (if available)
         var chapterCount: Int? = nil
-        let chapterMetadataGroups = asset.chapterMetadataGroups(bestMatchingPreferredLanguages: ["en", "*"])
+        let chapterMetadataGroups = (try? await asset.loadChapterMetadataGroups(bestMatchingPreferredLanguages: ["en", "*"])) ?? []
         if !chapterMetadataGroups.isEmpty {
             chapterCount = chapterMetadataGroups.count
         }
 
         // Extract subtitle track count
         var subtitleTracks: Int? = nil
-        let subtitleTrackCount = asset.tracks(withMediaType: .text).count
+        let subtitleTrackCount = ((try? await asset.loadTracks(withMediaType: .text)) ?? []).count
         if subtitleTrackCount > 0 {
             subtitleTracks = subtitleTrackCount
         }
 
         // Also check for closed caption tracks
-        let closedCaptionCount = asset.tracks(withMediaType: .closedCaption).count
+        let closedCaptionCount = ((try? await asset.loadTracks(withMediaType: .closedCaption)) ?? []).count
         if closedCaptionCount > 0 {
             subtitleTracks = (subtitleTracks ?? 0) + closedCaptionCount
         }
 
         // Check for embedded artwork/attachments via metadata
         var attachmentCount: Int? = nil
-        let artworkItems = AVMetadataItem.metadataItems(from: asset.commonMetadata, filteredByIdentifier: .commonIdentifierArtwork)
+        let commonMetadata = (try? await asset.load(.commonMetadata)) ?? []
+        let artworkItems = AVMetadataItem.metadataItems(from: commonMetadata, filteredByIdentifier: .commonIdentifierArtwork)
         if !artworkItems.isEmpty {
             attachmentCount = artworkItems.count
         }
@@ -418,7 +431,7 @@ enum MediaExtractor {
 
     // MARK: - Audio Metadata Extraction
 
-    static func extractAudioMetadata(from url: URL) -> AudioMetadata? {
+    static func extractAudioMetadata(from url: URL) async -> AudioMetadata? {
         // Check if file is an audio by extension
         let audioExtensions = ["mp3", "m4a", "aac", "wav", "flac", "aiff", "aif", "wma", "ogg", "opus", "alac"]
         guard let ext = url.pathExtension.lowercased() as String?,
@@ -436,9 +449,12 @@ enum MediaExtractor {
         var genre: String? = nil
         var year: String? = nil
 
-        for item in asset.commonMetadata {
+        let commonMetadata = (try? await asset.load(.commonMetadata)) ?? []
+        for item in commonMetadata {
+            // load(.stringValue) yields String?; flatten the try? wrapper so the
+            // guard still skips items without a string value, as before.
             guard let key = item.commonKey?.rawValue,
-                  let value = item.stringValue else { continue }
+                  let value = (try? await item.load(.stringValue)) ?? nil else { continue }
 
             switch key {
             case "title":
@@ -459,14 +475,15 @@ enum MediaExtractor {
         }
 
         // Try to extract album artist and year from format-specific metadata
-        for format in asset.availableMetadataFormats {
-            let metadata = asset.metadata(forFormat: format)
+        let availableMetadataFormats = (try? await asset.load(.availableMetadataFormats)) ?? []
+        for format in availableMetadataFormats {
+            let metadata = (try? await asset.loadMetadata(for: format)) ?? []
 
             for item in metadata {
                 if let key = item.commonKey?.rawValue {
                     switch key {
                     case "artist":
-                        if albumArtist == nil, let value = item.stringValue {
+                        if albumArtist == nil, let value = (try? await item.load(.stringValue)) ?? nil {
                             albumArtist = value
                         }
                     default:
@@ -477,7 +494,7 @@ enum MediaExtractor {
                 // Try to get year from creation date
                 if item.identifier?.rawValue.contains("creationDate") == true ||
                    item.identifier?.rawValue.contains("year") == true {
-                    if let value = item.stringValue, year == nil {
+                    if let value = try? await item.load(.stringValue), year == nil {
                         // Extract year from date string using the hoisted regex.
                         if let match = Self.yearRegex?.firstMatch(in: value, range: NSRange(value.startIndex..., in: value)) {
                             if let range = Range(match.range, in: value) {
@@ -491,11 +508,13 @@ enum MediaExtractor {
 
         // Extract duration
         var duration: String? = nil
-        let durationSeconds = CMTimeGetSeconds(asset.duration)
-        if durationSeconds.isFinite && durationSeconds > 0 {
-            let minutes = Int(durationSeconds) / 60
-            let seconds = Int(durationSeconds) % 60
-            duration = String(format: "%d:%02d", minutes, seconds)
+        if let assetDuration = try? await asset.load(.duration) {
+            let durationSeconds = CMTimeGetSeconds(assetDuration)
+            if durationSeconds.isFinite && durationSeconds > 0 {
+                let minutes = Int(durationSeconds) / 60
+                let seconds = Int(durationSeconds) % 60
+                duration = String(format: "%d:%02d", minutes, seconds)
+            }
         }
 
         // Extract audio track information
@@ -503,17 +522,17 @@ enum MediaExtractor {
         var sampleRate: String? = nil
         var channels: String? = nil
 
-        let audioTracks = asset.tracks(withMediaType: .audio)
+        let audioTracks = (try? await asset.loadTracks(withMediaType: .audio)) ?? []
         if let audioTrack = audioTracks.first {
             // Get bitrate
-            let estimatedDataRate = audioTrack.estimatedDataRate
-            if estimatedDataRate > 0 {
+            if let estimatedDataRate = try? await audioTrack.load(.estimatedDataRate),
+               estimatedDataRate > 0 {
                 bitrate = String(format: "%.0f kbps", estimatedDataRate / 1000)
             }
 
             // Get format descriptions for sample rate and channels
-            if let formatDescriptions = audioTrack.formatDescriptions as? [CMFormatDescription],
-               let formatDescription = formatDescriptions.first {
+            let formatDescriptions = (try? await audioTrack.load(.formatDescriptions)) ?? []
+            if let formatDescription = formatDescriptions.first {
                 if let streamBasicDescription = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription) {
                     let sampleRateHz = streamBasicDescription.pointee.mSampleRate
                     if sampleRateHz > 0 {
