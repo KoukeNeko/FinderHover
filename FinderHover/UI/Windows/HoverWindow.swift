@@ -657,12 +657,6 @@ struct HoverContentView: View {
     @ObservedObject var settings = AppSettings.shared
     @ObservedObject private var windowState = HoverWindowState.shared
 
-    /// Whether the editable note frame (recessed background + border) is shown: always in
-    /// "always show" mode, otherwise only while the field is being edited.
-    private var noteFrameVisible: Bool {
-        settings.notesAlwaysShowFrame || windowState.isEditingNotes
-    }
-
     /// Actual per-line height of the note text (used to size the field in whole rows).
     private var noteLineHeight: CGFloat {
         NSLayoutManager().defaultLineHeight(for: .systemFont(ofSize: settings.fontSize))
@@ -1813,26 +1807,22 @@ struct HoverContentView: View {
                                 if abs(noteEditorHeight - height) > 0.5 { noteEditorHeight = height }
                             }
                         }
-                        .frame(height: noteHeight(minLines: noteFrameVisible ? 3 : 1))
-                        .padding(.horizontal, noteFrameVisible ? 6 : 0)
-                        .padding(.vertical, noteFrameVisible ? 4 : 0)
+                        .frame(height: noteHeight(minLines: windowState.isEditingNotes ? 3 : 1))
+                        .padding(.horizontal, windowState.isEditingNotes ? 6 : 0)
+                        .padding(.vertical, windowState.isEditingNotes ? 4 : 0)
                         .background(
                             RoundedRectangle(cornerRadius: 6, style: .continuous)
                                 .fill(Color(nsColor: .textBackgroundColor)
-                                    .opacity(noteFrameVisible ? (windowState.isEditingNotes ? 0.85 : 0.5) : 0))
+                                    .opacity(windowState.isEditingNotes ? 0.85 : 0))
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 6, style: .continuous)
                                 .strokeBorder(
-                                    noteFrameVisible
-                                        ? (windowState.isEditingNotes
-                                            ? Color.accentColor.opacity(0.7)
-                                            : Color.secondary.opacity(0.3))
-                                        : Color.clear,
+                                    windowState.isEditingNotes ? Color.accentColor.opacity(0.7) : Color.clear,
                                     lineWidth: 1
                                 )
                         )
-                        .animation(.easeInOut(duration: 0.15), value: noteFrameVisible)
+                        .animation(.easeInOut(duration: 0.15), value: windowState.isEditingNotes)
                     }
 
                     if let noteErrorMessage {

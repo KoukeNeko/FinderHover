@@ -31,7 +31,6 @@ struct DisplaySettingsView: View {
             DisplayToggleSpec("settings.display.showOwner", icon: "person", \.showOwner),
             DisplayToggleSpec("settings.display.showFilePath", icon: "folder", \.showFilePath),
             DisplayToggleSpec("settings.display.showNotes", icon: "note.text", \.showNotes),
-            DisplayToggleSpec("settings.display.notesAlwaysShowFrame", icon: "rectangle.and.pencil.and.ellipsis", \.notesAlwaysShowFrame, gatedBy: \.showNotes),
             DisplayToggleSpec("settings.display.showFileSystemAdvanced", icon: "internaldrive", \.showFileSystemAdvanced),
         ]),
         DisplaySection(titleKey: "settings.display.exif", hintKey: "settings.display.exif.hint", rows: [
