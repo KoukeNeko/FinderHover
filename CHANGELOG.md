@@ -2,7 +2,29 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.8.1 (Current)
+## Version 1.9.0 (Current)
+
+### ✨ Notes — attach a note to any file
+
+- Add a personal note to any file right from the hover popup
+- Notes are stored **with the file itself** (extended attribute), so they persist across app restarts and **travel with the file** when it is copied or moved
+- The note field auto-sizes to your text — a 3-line minimum that grows as you type — and shows a focused text-field style while editing
+- Toggle **Notes** on/off in Display settings (on by default)
+- 🙏 **Special thanks to [@zmlim](https://github.com/zmlim)**, who designed and contributed the Notes feature in [#14](https://github.com/KoukeNeko/FinderHover/pull/14). This release is built on their work.
+
+### 🐛 Bug Fixes
+
+- Fixed a black rectangular edge that appeared behind the rounded Liquid Glass popup when it became focused (e.g. while editing a note)
+
+### ⚡ Performance & Stability
+
+- Accessibility lookups now run **off the main thread** — the popup and menu bar no longer freeze when Finder is slow to respond
+- Leaner, safer metadata reading for large or malformed files (EPUB, 3D models, images) to avoid memory spikes and edge-case crashes
+- Numerous correctness fixes across the metadata extractors and settings
+
+---
+
+## Version 1.8.1
 
 ### 🐛 Bug Fixes
 

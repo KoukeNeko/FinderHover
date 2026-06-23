@@ -229,6 +229,13 @@ FinderHover/
 
 ## 📝 What's New
 
+### v1.9.0 - Notes
+- **Notes:** Attach a personal note to any file, right in the hover popup — stored with the file (so it persists and travels with the file when copied/moved)
+- **Auto-sizing field:** 3-line minimum that grows as you type, with a focused text-field style while editing
+- **More stable:** Accessibility lookups moved off the main thread (no more UI freezes when Finder is slow), plus leaner/safer reading of large files and many fixes
+- **Fixed:** Black edge behind the Liquid Glass popup when focused
+- 🙏 **Huge thanks to [@zmlim](https://github.com/zmlim)** for designing and contributing the Notes feature ([#14](../../pull/14)) — this release is built on their work
+
 ### v1.8.0 - Official Code Signing & Liquid Glass
 - **Signed & Notarized:** No more Gatekeeper bypass — app opens immediately
 - **Liquid Glass:** New visual effect option for macOS 26 (Tahoe)
@@ -250,6 +257,10 @@ Contributions are welcome! Here's how you can help:
 - **Localization:** Add translations in [Localizable.strings](FinderHover/Utilities/Localizable.strings)
 
 **Feature Requests & Bug Reports:** Open an issue on [GitHub Issues](../../issues).
+
+### 🙏 Acknowledgments
+
+Thanks to everyone who has contributed — especially [@zmlim](https://github.com/zmlim), who designed and contributed the **Notes** feature ([#14](../../pull/14)) that headlines v1.9.0.
 
 ---
 

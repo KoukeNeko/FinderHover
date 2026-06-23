@@ -17,9 +17,9 @@
 	<key>CFBundleName</key>
 	<string>FinderHover</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.8.1</string>
+	<string>1.9.0</string>
 	<key>CFBundleVersion</key>
-	<string>42</string>
+	<string>43</string>
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSAppleEventsUsageDescription</key>
