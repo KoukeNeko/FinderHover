@@ -1809,7 +1809,6 @@ struct HoverContentView: View {
                         }
                         .frame(height: noteHeight(minLines: windowState.isEditingNotes ? 3 : 1))
                         .padding(.horizontal, windowState.isEditingNotes ? 6 : 0)
-                        .padding(.vertical, windowState.isEditingNotes ? 4 : 0)
                         .background(
                             RoundedRectangle(cornerRadius: 6, style: .continuous)
                                 .fill(Color(nsColor: .textBackgroundColor)
