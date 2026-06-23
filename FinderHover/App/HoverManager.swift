@@ -92,11 +92,12 @@ class HoverManager: ObservableObject {
             }
             .store(in: &cancellables)
 
-        // Monitor dragging state - hide window when dragging starts
-        mouseTracker.$isDragging
-            .sink { [weak self] isDragging in
+        // A mouse-button press is the dismissal trigger: pressing anywhere outside the
+        // popup means the user is selecting/clicking away, so tear the popup down.
+        mouseTracker.$isMouseButtonDown
+            .sink { [weak self] isMouseButtonDown in
                 guard let self = self else { return }
-                if isDragging {
+                if isMouseButtonDown {
                     // A mouseDown fired. If it occurred inside the popup, ignore it —
                     // the user is clicking to interact with the popup (e.g. notes field).
                     if self.isMouseOverHoverWindow() {
@@ -252,8 +253,8 @@ class HoverManager: ObservableObject {
     private func handleMouseLocation(_ location: CGPoint) {
         guard isEnabled else { return }
 
-        // Don't show hover window while dragging
-        guard !mouseTracker.isDragging else { return }
+        // Don't show hover window while a mouse button is held (click-hold or drag)
+        guard !mouseTracker.isMouseButtonDown else { return }
 
         // Check if hovering over Finder and get file info
         invalidateDisplayTimer()
@@ -263,13 +264,13 @@ class HoverManager: ObservableObject {
     }
 
     private func checkAndDisplayFileInfo(at location: CGPoint) {
-        // Don't show hover window while dragging
-        guard !mouseTracker.isDragging else { return }
+        // Don't show hover window while a mouse button is held (click-hold or drag)
+        guard !mouseTracker.isMouseButtonDown else { return }
 
         // Don't show hover window if Quick Look preview is visible
         FinderInteraction.isQuickLookVisible { [weak self] quickLookVisible in
             guard let self = self, !quickLookVisible else { return }
-            guard !self.mouseTracker.isDragging else { return }
+            guard !self.mouseTracker.isMouseButtonDown else { return }
 
             // Try to get file path at current location. Returns nil if user is
             // renaming or if cursor is over the popup itself.
@@ -314,7 +315,7 @@ class HoverManager: ObservableObject {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 guard self.isMetadataRequestCurrent(requestToken) else { return }
-                guard !self.mouseTracker.isDragging else { return }
+                guard !self.mouseTracker.isMouseButtonDown else { return }
 
                 // Final staleness gate: Quick Look not up and cursor still on this file.
                 FinderInteraction.isQuickLookVisible { [weak self] quickLookVisible in

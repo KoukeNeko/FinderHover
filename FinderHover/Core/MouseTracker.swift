@@ -10,7 +10,11 @@ import Combine
 
 class MouseTracker: ObservableObject {
     @Published var mouseLocation: CGPoint = .zero
-    @Published var isDragging: Bool = false
+    /// True while a mouse button is held down (covers both a plain click-hold and a
+    /// drag). Named for the press state it actually represents, not just dragging:
+    /// HoverManager uses the down-edge to dismiss the popup and the held state to
+    /// suppress showing a new one.
+    @Published var isMouseButtonDown: Bool = false
 
     // Store all event monitors for proper cleanup
     private var globalMouseMovedMonitor: Any?
@@ -47,30 +51,30 @@ class MouseTracker: ObservableObject {
 
         // Monitor global mouse down to track drag state
         globalMouseDownMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] _ in
-            DispatchQueue.main.async {
-                self?.isDragging = true
+            DispatchQueue.main.async { [weak self] in
+                self?.isMouseButtonDown = true
             }
         }
 
         // Monitor local mouse down to track drag state
         localMouseDownMonitor = NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] event in
-            DispatchQueue.main.async {
-                self?.isDragging = true
+            DispatchQueue.main.async { [weak self] in
+                self?.isMouseButtonDown = true
             }
             return event
         }
 
         // Monitor global mouse up to track drag state
         globalMouseUpMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseUp, .rightMouseUp]) { [weak self] _ in
-            DispatchQueue.main.async {
-                self?.isDragging = false
+            DispatchQueue.main.async { [weak self] in
+                self?.isMouseButtonDown = false
             }
         }
 
         // Monitor local mouse up to track drag state
         localMouseUpMonitor = NSEvent.addLocalMonitorForEvents(matching: [.leftMouseUp, .rightMouseUp]) { [weak self] event in
-            DispatchQueue.main.async {
-                self?.isDragging = false
+            DispatchQueue.main.async { [weak self] in
+                self?.isMouseButtonDown = false
             }
             return event
         }
@@ -116,16 +120,17 @@ class MouseTracker: ObservableObject {
 
     private func handleMouseMoved(_ event: NSEvent) {
         let location = NSEvent.mouseLocation
-        DispatchQueue.main.async {
-            self.mouseLocation = location
+        DispatchQueue.main.async { [weak self] in
+            self?.mouseLocation = location
         }
     }
 
     private func handleMouseDragged(_ event: NSEvent) {
         let location = NSEvent.mouseLocation
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             self.mouseLocation = location
-            self.isDragging = true
+            self.isMouseButtonDown = true
         }
     }
 
