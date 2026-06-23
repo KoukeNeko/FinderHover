@@ -203,6 +203,8 @@ xcodebuild -scheme FinderHover -configuration Release
 
 **ヒント：** 「ログイン時に起動」を有効にすると、Mac の起動時に FinderHover が自動的に立ち上がります。
 
+> **既知の問題（macOS 27 beta）：** 現在 macOS 27 beta では、設定画面が正しく表示されないことがあります。ただし、主要な機能はすべて正常に動作します。
+
 ---
 
 ## 🚀 技術的なハイライト

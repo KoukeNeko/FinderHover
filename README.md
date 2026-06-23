@@ -213,6 +213,8 @@ Click the menu bar icon to access the settings panel.
 
 **Tip:** Enable "Launch at Login" to start FinderHover automatically when you boot your Mac.
 
+> **Known issue (macOS 27 beta):** On macOS 27 beta, the Settings interface may render incorrectly. This is cosmetic — all core hover features work normally.
+
 ---
 
 ## 🚀 Technical Highlights
