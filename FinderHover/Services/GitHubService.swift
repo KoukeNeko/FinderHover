@@ -53,6 +53,84 @@ struct Release: Codable {
     }
 }
 
+// MARK: - Semantic Version
+/// SemVer 2.0.0 value type for correct release-precedence comparison.
+/// Encodes the rule that a release (1.8.1) outranks any of its prereleases
+/// (1.8.1-beta.1), which String.compare(.numeric) gets backwards.
+/// Declared internal (not fileprivate) so it can be unit-tested directly.
+struct SemanticVersion: Comparable {
+    let major: Int
+    let minor: Int
+    let patch: Int
+    /// Dot-separated prerelease identifiers; empty for a normal release.
+    let prereleaseIdentifiers: [String]
+
+    /// Parses "1.8.1", "1.8.1-beta.1", "v1.8" (missing components default to 0).
+    /// Build metadata (after "+") is ignored per SemVer 11.4.
+    /// Returns nil if the core version contains no parseable leading number.
+    init?(_ raw: String) {
+        let trimmed = raw.hasPrefix("v") ? String(raw.dropFirst()) : raw
+        let buildSplit = trimmed.split(separator: "+", maxSplits: 1)
+        guard let withoutBuild = buildSplit.first else { return nil }
+
+        let prereleaseSplit = withoutBuild.split(separator: "-", maxSplits: 1)
+        let core = prereleaseSplit[0]
+        let coreComponents = core.split(separator: ".").map { Int($0) }
+        guard let firstComponent = coreComponents.first, firstComponent != nil else { return nil }
+
+        self.major = coreComponents.count > 0 ? (coreComponents[0] ?? 0) : 0
+        self.minor = coreComponents.count > 1 ? (coreComponents[1] ?? 0) : 0
+        self.patch = coreComponents.count > 2 ? (coreComponents[2] ?? 0) : 0
+
+        if prereleaseSplit.count > 1 {
+            self.prereleaseIdentifiers = prereleaseSplit[1].split(separator: ".").map(String.init)
+        } else {
+            self.prereleaseIdentifiers = []
+        }
+    }
+
+    static func < (lhs: SemanticVersion, rhs: SemanticVersion) -> Bool {
+        if lhs.major != rhs.major { return lhs.major < rhs.major }
+        if lhs.minor != rhs.minor { return lhs.minor < rhs.minor }
+        if lhs.patch != rhs.patch { return lhs.patch < rhs.patch }
+        return Self.comparePrerelease(lhs.prereleaseIdentifiers, rhs.prereleaseIdentifiers) == .orderedAscending
+    }
+
+    static func == (lhs: SemanticVersion, rhs: SemanticVersion) -> Bool {
+        lhs.major == rhs.major && lhs.minor == rhs.minor
+            && lhs.patch == rhs.patch && lhs.prereleaseIdentifiers == rhs.prereleaseIdentifiers
+    }
+
+    /// SemVer 11.3: a release (no identifiers) has higher precedence than a prerelease.
+    /// Numeric identifiers compare numerically, alphanumerics lexically, numeric < alphanumeric.
+    private static func comparePrerelease(_ lhs: [String], _ rhs: [String]) -> ComparisonResult {
+        if lhs.isEmpty && rhs.isEmpty { return .orderedSame }
+        if lhs.isEmpty { return .orderedDescending } // release > prerelease
+        if rhs.isEmpty { return .orderedAscending }
+
+        for (lhsItem, rhsItem) in zip(lhs, rhs) {
+            let lhsNumber = Int(lhsItem)
+            let rhsNumber = Int(rhsItem)
+            switch (lhsNumber, rhsNumber) {
+            case let (.some(left), .some(right)) where left != right:
+                return left < right ? .orderedAscending : .orderedDescending
+            case (.some, .none):
+                return .orderedAscending // numeric < alphanumeric
+            case (.none, .some):
+                return .orderedDescending
+            case (.none, .none) where lhsItem != rhsItem:
+                return lhsItem < rhsItem ? .orderedAscending : .orderedDescending
+            default:
+                continue
+            }
+        }
+        if lhs.count != rhs.count {
+            return lhs.count < rhs.count ? .orderedAscending : .orderedDescending
+        }
+        return .orderedSame
+    }
+}
+
 // MARK: - GitHub Service
 @MainActor
 class GitHubService: ObservableObject {
@@ -119,7 +197,8 @@ class GitHubService: ObservableObject {
                 error = "HTTP \(httpResponse.statusCode)"
             }
         } catch {
-            self.error = error.localizedDescription
+            Logger.error("Failed to fetch contributors", error: error, subsystem: .settings)
+            self.error = "settings.about.error.network".localized
             // If fetch fails and we have no contributors, try to load from cache
             if contributors.isEmpty {
                 loadCachedContributors()
@@ -181,8 +260,15 @@ class GitHubService: ObservableObject {
                 if includePrereleases {
                     // Parse array and get first non-draft release
                     let releases = try decoder.decode([Release].self, from: data)
-                    if let firstRelease = releases.first(where: { !$0.draft }) {
-                        self.latestRelease = firstRelease
+                    let latestByVersion = releases
+                        .filter { !$0.draft }
+                        .max { lhs, rhs in
+                            guard let lhsVersion = SemanticVersion(lhs.version),
+                                  let rhsVersion = SemanticVersion(rhs.version) else { return false }
+                            return lhsVersion < rhsVersion
+                        }
+                    if let latestByVersion {
+                        self.latestRelease = latestByVersion
                         // Show alert if update is available
                         if self.isUpdateAvailable {
                             self.showUpdateAlert = true
@@ -211,22 +297,21 @@ class GitHubService: ObservableObject {
                 updateCheckError = String(format: "settings.about.error.http".localized, "\(httpResponse.statusCode)")
             }
         } catch {
-            self.updateCheckError = error.localizedDescription
+            Logger.error("Failed to fetch latest release", error: error, subsystem: .settings)
+            self.updateCheckError = "settings.about.error.network".localized
         }
 
         isCheckingForUpdates = false
     }
 
-    func compareVersions(current: String, latest: String) -> ComparisonResult {
-        return current.compare(latest, options: .numeric)
-    }
-
     var isUpdateAvailable: Bool {
         guard let latestRelease = latestRelease,
-              let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else {
+              let currentRaw = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
+              let currentVersion = SemanticVersion(currentRaw),
+              let latestVersion = SemanticVersion(latestRelease.version) else {
             return false
         }
-        return compareVersions(current: currentVersion, latest: latestRelease.version) == .orderedAscending
+        return currentVersion < latestVersion
     }
 
     func openReleasePage() {

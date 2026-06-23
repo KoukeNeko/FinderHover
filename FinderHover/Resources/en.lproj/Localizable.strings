@@ -377,6 +377,7 @@
 "settings.about.error.invalidResponse" = "Invalid response";
 "settings.about.error.http" = "HTTP %@";
 "settings.about.error.wait" = "Please wait %d seconds before checking again";
+"settings.about.error.network" = "Network error. Please check your connection and try again";
 "settings.about.github" = "GitHub";
 "settings.about.github.repository" = "Repository";
 "settings.about.github.issues" = "Report Issue";

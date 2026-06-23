@@ -377,6 +377,7 @@
 "settings.about.error.invalidResponse" = "無効な応答";
 "settings.about.error.http" = "HTTP %@";
 "settings.about.error.wait" = "%d 秒待ってから再度確認してください";
+"settings.about.error.network" = "ネットワークエラーです。接続を確認して再度お試しください";
 "settings.about.github" = "GitHub";
 "settings.about.github.repository" = "リポジトリ";
 "settings.about.github.issues" = "問題を報告";

@@ -147,19 +147,16 @@ struct AvatarImageView: View {
         }
     }
 
+    @MainActor
     private func loadImage() async {
+        defer { isLoading = false }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             if let nsImage = NSImage(data: data) {
-                await MainActor.run {
-                    self.image = nsImage
-                    self.isLoading = false
-                }
+                image = nsImage
             }
         } catch {
-            await MainActor.run {
-                self.isLoading = false
-            }
+            Logger.warning("Failed to load avatar image: \(error.localizedDescription)", subsystem: .ui)
         }
     }
 }

@@ -377,6 +377,7 @@
 "settings.about.error.invalidResponse" = "無效的回應";
 "settings.about.error.http" = "HTTP %@";
 "settings.about.error.wait" = "請等待 %d 秒後再檢查";
+"settings.about.error.network" = "網路錯誤，請檢查連線後再試一次";
 "settings.about.github" = "GitHub";
 "settings.about.github.repository" = "儲存庫";
 "settings.about.github.issues" = "回報問題";
