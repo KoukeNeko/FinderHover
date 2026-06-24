@@ -270,16 +270,23 @@ class HoverManager: ObservableObject {
         // Don't show hover window while a mouse button is held (click-hold or drag)
         guard !mouseTracker.isMouseButtonDown else { return }
 
-        // Don't show hover window if Quick Look preview is visible
-        FinderInteraction.isQuickLookVisible { [weak self] quickLookVisible in
-            guard let self = self, !quickLookVisible else { return }
-            guard !self.mouseTracker.isMouseButtonDown else { return }
+        // Don't show hover window while a context/pop-up menu is open. A right-click
+        // menu stays up after the button is released, so isMouseButtonDown alone won't
+        // keep the popup from reappearing on the next mouse-moved event over the menu.
+        FinderInteraction.isContextMenuOpen { [weak self] menuOpen in
+            guard let self = self, !menuOpen else { return }
 
-            // Try to get file path at current location. Returns nil if user is
-            // renaming or if cursor is over the popup itself.
-            FinderInteraction.getFileAtMousePosition(location) { [weak self] filePath in
-                guard let self = self else { return }
-                self.handleFilePathForDisplay(filePath, at: location)
+            // Don't show hover window if Quick Look preview is visible
+            FinderInteraction.isQuickLookVisible { [weak self] quickLookVisible in
+                guard let self = self, !quickLookVisible else { return }
+                guard !self.mouseTracker.isMouseButtonDown else { return }
+
+                // Try to get file path at current location. Returns nil if user is
+                // renaming or if cursor is over the popup itself.
+                FinderInteraction.getFileAtMousePosition(location) { [weak self] filePath in
+                    guard let self = self else { return }
+                    self.handleFilePathForDisplay(filePath, at: location)
+                }
             }
         }
     }

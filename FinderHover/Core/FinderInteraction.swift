@@ -409,6 +409,70 @@ class FinderInteraction {
         return false
     }
 
+    // MARK: - Context Menu Detection
+
+    /// Cached "is a context/pop-up menu open" flag, valid for `quickLookCacheTTL`, so
+    /// the per-hover show path doesn't issue an Accessibility query on every tick.
+    private static let contextMenuCacheLock = NSLock()
+    private static var cachedContextMenuOpen = false
+    private static var contextMenuCacheTimestamp: TimeInterval = 0
+
+    /// Checks (asynchronously, off main) whether a context or pop-up menu is open in
+    /// the frontmost app. A right-click opens a modal menu that stays up after the
+    /// button is released, so the hover popup must not reappear until it closes.
+    static func isContextMenuOpen(completion: @escaping (Bool) -> Void) {
+        let now = Date().timeIntervalSinceReferenceDate
+        contextMenuCacheLock.lock()
+        if now - contextMenuCacheTimestamp < quickLookCacheTTL {
+            let cached = cachedContextMenuOpen
+            contextMenuCacheLock.unlock()
+            DispatchQueue.main.async { completion(cached) }
+            return
+        }
+        contextMenuCacheLock.unlock()
+
+        runProbe({ isContextMenuOpenImpl() }) { open in
+            contextMenuCacheLock.lock()
+            cachedContextMenuOpen = open
+            contextMenuCacheTimestamp = Date().timeIntervalSinceReferenceDate
+            contextMenuCacheLock.unlock()
+            completion(open)
+        }
+    }
+
+    /// Synchronous Accessibility probe; runs only on `accessibilityQueue`. An open menu
+    /// takes keyboard focus, so the system-wide focused element — or one of its
+    /// ancestors — is an `AXMenu` / `AXMenuItem` while the menu is on screen.
+    private static func isContextMenuOpenImpl() -> Bool {
+        let systemWide = AXUIElementCreateSystemWide()
+        var focusedRef: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(systemWide, kAXFocusedUIElementAttribute as CFString, &focusedRef) == .success,
+              let focused = axElement(from: focusedRef) else {
+            return false
+        }
+
+        var element: AXUIElement? = focused
+        var depth = 0
+        let maxAncestorDepth = 8
+        while let current = element, depth < maxAncestorDepth {
+            var roleRef: CFTypeRef?
+            if AXUIElementCopyAttributeValue(current, kAXRoleAttribute as CFString, &roleRef) == .success,
+               let role = roleRef as? String,
+               role == "AXMenu" || role == "AXMenuItem" {
+                Logger.debug("Context menu open: focused ancestry role=\(role) at depth \(depth)", subsystem: .accessibility)
+                return true
+            }
+            var parentRef: CFTypeRef?
+            guard AXUIElementCopyAttributeValue(current, kAXParentAttribute as CFString, &parentRef) == .success,
+                  let parent = axElement(from: parentRef) else {
+                break
+            }
+            element = parent
+            depth += 1
+        }
+        return false
+    }
+
     /// Gets the path of the current Finder window using Accessibility API
     private static func getCurrentFinderWindowPath() -> String? {
         guard let finderApp = NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.finder").first else {
