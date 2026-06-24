@@ -440,37 +440,64 @@ class FinderInteraction {
         }
     }
 
-    /// Synchronous Accessibility probe; runs only on `accessibilityQueue`. An open menu
-    /// takes keyboard focus, so the system-wide focused element — or one of its
-    /// ancestors — is an `AXMenu` / `AXMenuItem` while the menu is on screen.
+    private static func axRole(_ element: AXUIElement) -> String? {
+        var ref: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(element, kAXRoleAttribute as CFString, &ref) == .success else { return nil }
+        return ref as? String
+    }
+
+    private static func axElementAttr(_ element: AXUIElement, _ attribute: CFString) -> AXUIElement? {
+        var ref: CFTypeRef?
+        guard AXUIElementCopyAttributeValue(element, attribute, &ref) == .success else { return nil }
+        return axElement(from: ref)
+    }
+
+    /// Synchronous Accessibility probe; runs only on `accessibilityQueue`. Detects an open
+    /// menu two ways and logs both so the real AX shape can be confirmed on the device:
+    ///   A. the system-wide focused element (or an ancestor) is an `AXMenu`/`AXMenuItem`
+    ///   B. the frontmost app exposes an `AXMenu` among its top-level children
     private static func isContextMenuOpenImpl() -> Bool {
+        var detected = false
+        var debug: [String] = []
+
+        // Signal A: focused-element ancestry.
         let systemWide = AXUIElementCreateSystemWide()
-        var focusedRef: CFTypeRef?
-        guard AXUIElementCopyAttributeValue(systemWide, kAXFocusedUIElementAttribute as CFString, &focusedRef) == .success,
-              let focused = axElement(from: focusedRef) else {
-            return false
+        if let focused = axElementAttr(systemWide, kAXFocusedUIElementAttribute as CFString) {
+            var element: AXUIElement? = focused
+            var depth = 0
+            var roles: [String] = []
+            while let current = element, depth < 8 {
+                let role = axRole(current) ?? "?"
+                roles.append(role)
+                if role == "AXMenu" || role == "AXMenuItem" { detected = true }
+                element = axElementAttr(current, kAXParentAttribute as CFString)
+                depth += 1
+            }
+            debug.append("focus=[\(roles.joined(separator: ">"))]")
+        } else {
+            debug.append("focus=nil")
         }
 
-        var element: AXUIElement? = focused
-        var depth = 0
-        let maxAncestorDepth = 8
-        while let current = element, depth < maxAncestorDepth {
-            var roleRef: CFTypeRef?
-            if AXUIElementCopyAttributeValue(current, kAXRoleAttribute as CFString, &roleRef) == .success,
-               let role = roleRef as? String,
-               role == "AXMenu" || role == "AXMenuItem" {
-                Logger.debug("Context menu open: focused ancestry role=\(role) at depth \(depth)", subsystem: .accessibility)
-                return true
+        // Signal B: frontmost app's top-level children.
+        if let app = NSWorkspace.shared.frontmostApplication {
+            let appElement = AXUIElementCreateApplication(app.processIdentifier)
+            var childrenRef: CFTypeRef?
+            if AXUIElementCopyAttributeValue(appElement, kAXChildrenAttribute as CFString, &childrenRef) == .success,
+               let children = childrenRef as? [AXUIElement] {
+                var childRoles: [String] = []
+                for child in children {
+                    let role = axRole(child) ?? "?"
+                    childRoles.append(role)
+                    if role == "AXMenu" { detected = true }
+                }
+                debug.append("\(app.localizedName ?? "?").children=[\(childRoles.joined(separator: ","))]")
+            } else {
+                debug.append("appChildren=nil")
             }
-            var parentRef: CFTypeRef?
-            guard AXUIElementCopyAttributeValue(current, kAXParentAttribute as CFString, &parentRef) == .success,
-                  let parent = axElement(from: parentRef) else {
-                break
-            }
-            element = parent
-            depth += 1
         }
-        return false
+
+        Logger.debug("menu-probe detected=\(detected) \(debug.joined(separator: " "))", subsystem: .accessibility)
+        return detected
     }
 
     /// Gets the path of the current Finder window using Accessibility API
