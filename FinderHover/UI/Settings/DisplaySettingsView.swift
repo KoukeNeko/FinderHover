@@ -373,9 +373,10 @@ struct DisplaySettingsView: View {
                     .background(Color(NSColor.controlBackgroundColor))
                     .onDrag {
                         draggingItem = item
-                        return NSItemProvider(object: item.rawValue as NSString)
+                        return NSItemProvider(item: item.rawValue as NSString,
+                                              typeIdentifier: UTType.displayItemOrder.identifier)
                     }
-                    .onDrop(of: [.text], delegate: DisplayItemDropDelegate(
+                    .onDrop(of: [UTType.displayItemOrder], delegate: DisplayItemDropDelegate(
                         item: item, items: $settings.displayOrder, draggingItem: $draggingItem
                     ))
                     if item != settings.displayOrder.last {

@@ -57,7 +57,8 @@ read_project_metadata() {
         exit 1
     fi
 
-    VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$INFO_PLIST")
+    # Info.plist stores $(MARKETING_VERSION), which PlistBuddy cannot resolve.
+    VERSION=$(xcodebuild -project FinderHover.xcodeproj -target FinderHover -configuration Release -showBuildSettings 2>/dev/null | awk -F' = ' '/MARKETING_VERSION/{print $2; exit}')
     BUNDLE_ID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" "$INFO_PLIST")
     DMG_NAME="${APP_NAME}-v${VERSION}"
 
