@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// Row layout constants matching the System Settings visual language.
 enum SettingsRowLayout {
@@ -178,6 +179,13 @@ struct AvatarImageView: View {
 }
 
 // MARK: - Drag and Drop Delegate for Display Order
+
+extension UTType {
+    /// App-private type for reorder drags. Accepting `.text` also matched external
+    /// text drags, which carry no `draggingItem` and could reorder with stale state.
+    static let displayItemOrder = UTType(exportedAs: "dev.koukeneko.finderhover.display-item")
+}
+
 struct DisplayItemDropDelegate: DropDelegate {
     let item: DisplayItem
     @Binding var items: [DisplayItem]
