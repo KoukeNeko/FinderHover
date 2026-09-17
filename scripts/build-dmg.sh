@@ -36,6 +36,13 @@ BUNDLE_ID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" "$INFO_PLIST")
 echo "📌 Bundle ID: $BUNDLE_ID"
 
 # Build Release version
+# Clean manually: `clean build` fails when the build dir lacks the Xcode
+# CreatedByBuildSystem xattr, and the failed clean makes xcodebuild exit 65.
+echo "🧹 Cleaning previous build..."
+rm -rf "${PROJECT_ROOT}/build"
+mkdir -p "${PROJECT_ROOT}/build"
+xattr -w com.apple.xcode.CreatedByBuildSystem true "${PROJECT_ROOT}/build" 2>/dev/null || true
+
 echo "🔨 Building Release version..."
 xcodebuild -project FinderHover.xcodeproj \
     -target FinderHover \
@@ -44,7 +51,7 @@ xcodebuild -project FinderHover.xcodeproj \
     CODE_SIGN_IDENTITY="-" \
     CODE_SIGNING_REQUIRED=NO \
     CODE_SIGNING_ALLOWED=NO \
-    clean build
+    build
 
 # Check if Release build succeeded
 if [ ! -d "build/Release/${APP_NAME}.app" ]; then
