@@ -273,7 +273,8 @@ class HoverManager: ObservableObject {
         // Don't show hover window while a context/pop-up menu is open. A right-click
         // menu stays up after the button is released, so isMouseButtonDown alone won't
         // keep the popup from reappearing on the next mouse-moved event over the menu.
-        FinderInteraction.isContextMenuOpen { [weak self] menuOpen in
+        // Bypass the cache: a stale false here would let the popup render over the menu.
+        FinderInteraction.isContextMenuOpen(bypassCache: true) { [weak self] menuOpen in
             guard let self = self, !menuOpen else { return }
 
             // Don't show hover window if Quick Look preview is visible
@@ -377,8 +378,10 @@ class HoverManager: ObservableObject {
             withTimeInterval: Constants.MouseTracking.renamingCheckInterval,
             repeats: true
         ) { [weak self] _ in
-            // Hide if Quick Look preview is shown, otherwise if the user is renaming.
-            // Both probes run off the main thread and report back on main.
+            // Hide if Quick Look preview is shown, the user is renaming, or a context
+            // menu is open (a menu can appear via keyboard without a mouse-button
+            // press, so the mouseDown dismissal alone never sees it).
+            // All probes run off the main thread and report back on main.
             FinderInteraction.isQuickLookVisible { [weak self] quickLookVisible in
                 guard let self = self else { return }
                 if quickLookVisible {
@@ -386,8 +389,15 @@ class HoverManager: ObservableObject {
                     return
                 }
                 FinderInteraction.isRenamingFile { [weak self] isRenaming in
-                    guard let self = self, isRenaming else { return }
-                    self.hideForStaleHover()
+                    guard let self = self else { return }
+                    if isRenaming {
+                        self.hideForStaleHover()
+                        return
+                    }
+                    FinderInteraction.isContextMenuOpen { [weak self] menuOpen in
+                        guard let self = self, menuOpen else { return }
+                        self.hideForStaleHover()
+                    }
                 }
             }
         }

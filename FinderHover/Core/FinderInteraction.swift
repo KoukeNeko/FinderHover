@@ -420,10 +420,14 @@ class FinderInteraction {
     /// Checks (asynchronously, off main) whether a context or pop-up menu is open in
     /// the frontmost app. A right-click opens a modal menu that stays up after the
     /// button is released, so the hover popup must not reappear until it closes.
-    static func isContextMenuOpen(completion: @escaping (Bool) -> Void) {
+    ///
+    /// The pre-display path passes `bypassCache: true`: a cached `false` could let a
+    /// display attempt through while the menu is still up. Periodic hide checks keep
+    /// using the cache to avoid an Accessibility query per tick.
+    static func isContextMenuOpen(bypassCache: Bool = false, completion: @escaping (Bool) -> Void) {
         let now = Date().timeIntervalSinceReferenceDate
         contextMenuCacheLock.lock()
-        if now - contextMenuCacheTimestamp < quickLookCacheTTL {
+        if !bypassCache, now - contextMenuCacheTimestamp < quickLookCacheTTL {
             let cached = cachedContextMenuOpen
             contextMenuCacheLock.unlock()
             DispatchQueue.main.async { completion(cached) }
