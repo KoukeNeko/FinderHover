@@ -13,12 +13,6 @@ struct PermissionsSettingsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                SettingsPageHeader(
-                    icon: "lock.shield",
-                    title: "settings.permissions.title".localized,
-                    description: "settings.page.description.permissions".localized
-                )
-
                 VStack(spacing: 24) {
                     // Accessibility Permission
                     VStack(alignment: .leading, spacing: 12) {
@@ -154,6 +148,7 @@ struct PermissionsSettingsView: View {
                 Spacer(minLength: 40)
             }
         }
+        .frame(maxWidth: SettingsRowLayout.contentMaxWidth)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .task {
             // Use async task which automatically cancels when view disappears

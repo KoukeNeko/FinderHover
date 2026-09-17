@@ -10,25 +10,24 @@ import SwiftUI
 struct AppearanceSettingsView: SettingsPageView {
     @ObservedObject var settings: AppSettings
 
-    var pageTitle: String { "settings.appearance.title".localized }
-    var pageIcon: String { "paintbrush" }
-    var pageDescription: String { "settings.page.description.appearance".localized }
-
     func pageContent() -> some View {
         VStack(spacing: 16) {
             // Style Options Card
             VStack(spacing: 0) {
                 HStack(alignment: .center) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("settings.style".localized)
-                            .font(.system(size: 13, weight: .semibold))
-                        Text("settings.style.description".localized)
-                            .font(.system(size: 11))
-                            .foregroundColor(.secondary)
-                            .fixedSize(horizontal: false, vertical: true)
+                    HStack(alignment: .center, spacing: SettingsRowLayout.tileSpacing) {
+                        SettingsIconTile(icon: "paintbrush", tint: .purple)
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("settings.style".localized)
+                                .font(.system(size: 13, weight: .semibold))
+                            Text("settings.style.description".localized)
+                                .font(.system(size: 11))
+                                .foregroundColor(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
                     }
                     Spacer()
-                    Picker("", selection: $settings.uiStyle) {
+                    Picker("settings.style".localized, selection: $settings.uiStyle) {
                         ForEach(UIStyle.allCases) { style in
                             Text(style.displayName).tag(style)
                         }
@@ -36,15 +35,17 @@ struct AppearanceSettingsView: SettingsPageView {
                     .labelsHidden()
                     .fixedSize()
                 }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 12)
+                .padding(.horizontal, SettingsRowLayout.horizontalPadding)
+                .padding(.vertical, SettingsRowLayout.verticalPadding)
 
-                Divider().padding(.leading, 20)
+                Divider().padding(.leading, SettingsRowLayout.dividerLeading)
 
                 if #available(macOS 26, *) {
                     SettingRow(
                         title: "settings.appearance.liquidGlass".localized,
-                        description: "settings.appearance.liquidGlass.hint".localized
+                        description: "settings.appearance.liquidGlass.hint".localized,
+                        icon: "drop.fill",
+                        tint: .cyan
                     ) {
                         Toggle("", isOn: $settings.enableLiquidGlass)
                             .labelsHidden()
@@ -54,12 +55,14 @@ struct AppearanceSettingsView: SettingsPageView {
                             }
                     }
 
-                    Divider().padding(.leading, 20)
+                    Divider().padding(.leading, SettingsRowLayout.dividerLeading)
                 }
 
                 SettingRow(
                     title: "settings.appearance.blur".localized,
-                    description: "settings.appearance.blur.hint".localized
+                    description: "settings.appearance.blur.hint".localized,
+                    icon: "sparkles",
+                    tint: .purple
                 ) {
                     Toggle("", isOn: $settings.enableBlur)
                         .labelsHidden()
@@ -71,11 +74,13 @@ struct AppearanceSettingsView: SettingsPageView {
                         }
                 }
 
-                Divider().padding(.leading, 20)
+                Divider().padding(.leading, SettingsRowLayout.dividerLeading)
 
                 SettingRow(
                     title: "settings.appearance.compactMode".localized,
-                    description: "settings.appearance.compactMode.hint".localized
+                    description: "settings.appearance.compactMode.hint".localized,
+                    icon: "arrow.down.right.and.arrow.up.left",
+                    tint: .gray
                 ) {
                     Toggle("", isOn: $settings.compactMode)
                         .labelsHidden()
@@ -83,8 +88,8 @@ struct AppearanceSettingsView: SettingsPageView {
                 }
             }
             .background(Color(NSColor.controlBackgroundColor))
-            .cornerRadius(10)
-            .padding(.horizontal, 20)
+            .cornerRadius(SettingsRowLayout.cardCornerRadius)
+            .padding(.horizontal, SettingsRowLayout.horizontalPadding)
 
             // Window Dimensions Card
             VStack(alignment: .leading, spacing: 16) {
@@ -99,6 +104,7 @@ struct AppearanceSettingsView: SettingsPageView {
 
                     HStack(spacing: 12) {
                         Slider(value: $settings.windowOpacity, in: 0.7...1.0, step: 0.05)
+                            .accessibilityLabel("settings.appearance.opacity".localized)
                             .frame(maxWidth: .infinity)
                             .disabled(settings.enableBlur)
                         Text("settings.appearance.opacity.percent".localized(Int(settings.windowOpacity * 100)))
@@ -132,6 +138,7 @@ struct AppearanceSettingsView: SettingsPageView {
 
                     HStack(spacing: 12) {
                         Slider(value: $settings.windowMaxWidth, in: 300...600, step: 20)
+                            .accessibilityLabel("settings.appearance.maxWidth".localized)
                             .frame(maxWidth: .infinity)
                         Text("settings.appearance.maxWidth.pixels".localized(Int(settings.windowMaxWidth)))
                             .font(.system(size: 12, design: .monospaced))
@@ -154,6 +161,7 @@ struct AppearanceSettingsView: SettingsPageView {
 
                     HStack(spacing: 12) {
                         Slider(value: $settings.fontSize, in: 9...14, step: 1)
+                            .accessibilityLabel("settings.appearance.fontSize".localized)
                             .frame(maxWidth: .infinity)
                         Text("settings.appearance.fontSize.points".localized(settings.fontSize))
                             .font(.system(size: 12, design: .monospaced))
