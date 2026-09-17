@@ -6,8 +6,7 @@
 //
 //  Each toggle section used to be ~50 lines of copy-pasted `DisplayToggleRow`s.
 //  Declaring them as data lets a single `DisplaySectionView` render every section,
-//  removing the duplication, applying dividers uniformly, and scoping SwiftUI
-//  invalidation to the section whose value actually changed.
+//  removing the duplication, applying dividers uniformly, and keeping the rendering rules in one place.
 //
 
 import SwiftUI
@@ -41,6 +40,19 @@ struct DisplaySection: Identifiable {
     let hintKey: String?
     let rows: [DisplayToggleSpec]
     var id: String { titleKey }
+
+    /// Keep the master control alongside matching detail rows so search never strands
+    /// a disabled result without the switch needed to enable it.
+    func matching(_ query: String) -> DisplaySection? {
+        if titleKey.localized.localizedStandardContains(query) { return self }
+        let matches = rows.filter { $0.titleKey.localized.localizedStandardContains(query) }
+        guard !matches.isEmpty else { return nil }
+        let gates = matches.compactMap(\.gate)
+        let included = rows.filter { row in
+            matches.contains { $0.id == row.id } || gates.contains(row.keyPath)
+        }
+        return DisplaySection(titleKey: titleKey, hintKey: hintKey, rows: included)
+    }
 }
 
 /// Layout constants previously hard-coded throughout `DisplaySettingsView`.
@@ -51,24 +63,20 @@ struct DisplaySection: Identifiable {
 enum SettingsLayout {
     static let horizontalPadding: CGFloat = 20
     static let dividerLeading: CGFloat = 60
-    static let cardCornerRadius: CGFloat = 8
-    static let sectionTitleSize: CGFloat = 13
+    static let cardCornerRadius: CGFloat = SettingsRowLayout.cardCornerRadius
     static let hintTextSize: CGFloat = 11
     static let sectionSpacing: CGFloat = 16
     static let dimmedOpacity: Double = 0.5
 }
 
-/// Renders one `DisplaySection`. Lives in its own struct so toggling a value inside
-/// one section invalidates only that section's body, not the whole Display page.
+/// Renders one section. AppSettings is still a broad ObservableObject dependency.
 struct DisplaySectionView: View {
     @ObservedObject var settings: AppSettings
     let section: DisplaySection
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(section.titleKey.localized)
-                .font(.system(size: SettingsLayout.sectionTitleSize, weight: .semibold))
-                .padding(.horizontal, SettingsLayout.horizontalPadding)
+            SettingsSectionLabel(titleKey: section.titleKey)
 
             VStack(spacing: 0) {
                 ForEach(Array(section.rows.enumerated()), id: \.element.id) { index, spec in

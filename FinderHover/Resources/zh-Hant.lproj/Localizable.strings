@@ -801,3 +801,16 @@
 "hover.notes.error.save" = "無法儲存備註。";
 "hover.notes.error.delete" = "無法刪除備註。";
 "hover.notes.disclosure" = "備註會隨檔案一起儲存，複製檔案時會一併帶走。";
+
+// Settings navigation and information browser
+"settings.navigation.app" = "應用程式";
+"settings.savedAutomatically" = "變更會自動儲存";
+"settings.resetAll" = "重設所有設定⋯";
+"settings.resetAll.message" = "這會重設行為、外觀、所有顯示選項與排序，以及語言。登入時啟動的設定也可能改變。";
+"settings.display.fields" = "資訊欄位";
+"settings.display.search" = "搜尋所有資訊欄位";
+"settings.display.clearSearch" = "清除搜尋";
+"settings.display.category" = "分類";
+"settings.display.results" = "找到 %d 個分類";
+"settings.display.moveUp" = "將 %@ 上移";
+"settings.display.moveDown" = "將 %@ 下移";

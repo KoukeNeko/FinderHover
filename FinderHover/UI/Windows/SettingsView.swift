@@ -2,11 +2,10 @@
 //  SettingsView.swift
 //  FinderHover
 //
-//  Settings window UI with sidebar navigation
+//  Settings window UI with tab navigation
 //
 
 import SwiftUI
-import UniformTypeIdentifiers
 
 enum SettingsPage: String, CaseIterable, Identifiable {
     case behavior
@@ -38,43 +37,56 @@ enum SettingsPage: String, CaseIterable, Identifiable {
     }
 }
 
-private struct FullHeightSidebarWindowConfigurator: NSViewRepresentable {
-    func makeNSView(context: Context) -> NSView {
-        let view = NSView()
-        DispatchQueue.main.async {
-            guard let window = view.window else { return }
-            // window.titlebarAppearsTransparent = true
-            window.styleMask.insert(.fullSizeContentView)
-            window.toolbarStyle = .unified
-        }
-        return view
-    }
-
-    func updateNSView(_ nsView: NSView, context: Context) {}
-}
-
 struct SettingsView: View {
-    @ObservedObject var settings = AppSettings.shared
+    // Pages observe their own settings. Navigation does not need every preference update.
+    private let settings = AppSettings.shared
     @State private var selectedPage: SettingsPage = .behavior
+    @State private var confirmingReset = false
 
     var body: some View {
-        NavigationSplitView {
-            List(SettingsPage.allCases, id: \.self, selection: $selectedPage) { page in
-                Label(page.localizedName, systemImage: page.icon)
+        windowContent
+            .frame(minWidth: 560, minHeight: 540)
+            .alert("settings.resetAll".localized, isPresented: $confirmingReset) {
+                Button("common.cancel".localized, role: .cancel) {}
+                Button("settings.resetAll".localized, role: .destructive) { settings.resetToDefaults() }
+            } message: {
+                Text("settings.resetAll.message".localized)
             }
-            .listStyle(.sidebar)
-            .navigationSplitViewColumnWidth(min: 180, ideal: 220, max: 240)
-        } detail: {
-            detailView
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+    }
+
+    private var windowContent: some View {
+        VStack(spacing: 0) {
+            TabView(selection: $selectedPage) {
+                ForEach(SettingsPage.allCases) { page in
+                    pageContent(for: page)
+                        .padding(.top, 20)
+                        .tabItem {
+                            Label(page.localizedName, systemImage: page.icon)
+                        }
+                        .tag(page)
+                }
+            }
+
+            Divider()
+
+            HStack(spacing: 10) {
+                Label("settings.savedAutomatically".localized, systemImage: "checkmark.circle")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Button("settings.resetAll".localized) { confirmingReset = true }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            .background(Color(NSColor.windowBackgroundColor))
         }
-        .toolbar(removing: .sidebarToggle)
-        .background(FullHeightSidebarWindowConfigurator())
     }
 
     @ViewBuilder
-    private var detailView: some View {
-        switch selectedPage {
+    private func pageContent(for page: SettingsPage) -> some View {
+        switch page {
         case .behavior:    BehaviorSettingsView(settings: settings)
         case .appearance:  AppearanceSettingsView(settings: settings)
         case .display:     DisplaySettingsView(settings: settings)

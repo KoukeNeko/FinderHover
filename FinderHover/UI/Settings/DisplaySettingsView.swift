@@ -254,95 +254,144 @@ struct DisplaySettingsView: View {
         ]),
     ]
 
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                SettingsPageHeader(
-                    icon: "list.bullet",
-                    title: "settings.display.title".localized,
-                    description: "settings.page.description.display".localized
-                )
+    @State private var selectedSectionID = "settings.display.basicInfo"
+    @State private var searchText = ""
+    @State private var showingOrder = false
 
-                LazyVStack(alignment: .leading, spacing: SettingsLayout.sectionSpacing) {
-                    ForEach(Self.sections) { section in
-                        DisplaySectionView(settings: settings, section: section)
-                    }
-
-                    // Display Order Section (bespoke: needs @State draggingItem + onDrag/onDrop,
-                    // so it stays hand-written rather than being expressed as a DisplaySection).
-                    Text("settings.display.order".localized)
-                        .font(.system(size: SettingsLayout.sectionTitleSize, weight: .semibold))
-                        .padding(.horizontal, SettingsLayout.horizontalPadding)
-
-                    VStack(spacing: 0) {
-                        ForEach(settings.displayOrder) { item in
-                            HStack(spacing: 12) {
-                                Image(systemName: "line.3.horizontal")
-                                    .font(.system(size: 14))
-                                    .foregroundColor(.secondary)
-                                    .frame(width: 20)
-
-                                Image(systemName: item.icon)
-                                    .font(.system(size: 14))
-                                    .foregroundColor(.accentColor)
-                                    .frame(width: 20)
-
-                                Text(item.localizedName)
-                                    .font(.system(size: 13))
-
-                                Spacer()
-                            }
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 12)
-                            .contentShape(Rectangle())
-                            .background(Color(NSColor.controlBackgroundColor))
-                            .opacity(draggingItem == item ? 0.5 : 1.0)
-                            .onDrag {
-                                self.draggingItem = item
-                                return NSItemProvider(object: item.rawValue as NSString)
-                            }
-                            .onDrop(of: [.text], delegate: DisplayItemDropDelegate(
-                                item: item,
-                                items: $settings.displayOrder,
-                                draggingItem: $draggingItem
-                            ))
-
-                            if item != settings.displayOrder.last {
-                                Divider().padding(.leading, 60)
-                            }
-                        }
-                    }
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .cornerRadius(8)
-                    .padding(.horizontal, 20)
-
-                    HStack(spacing: 6) {
-                        Image(systemName: "info.circle")
-                            .font(.system(size: 11))
-                        Text("settings.display.order.hint".localized)
-                            .font(.system(size: 11))
-                    }
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 8)
-                }
-
-                Spacer(minLength: 40)
-
-                // Reset Button
-                HStack {
-                    Spacer()
-                    Button("common.reset".localized) {
-                        withAnimation {
-                            settings.resetToDefaults()
-                        }
-                    }
-                    .buttonStyle(.borderedProminent)
-                }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 20)
-            }
+    private var visibleSections: [DisplaySection] {
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if query.isEmpty {
+            return Self.sections.filter { $0.id == selectedSectionID }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        return Self.sections.compactMap { $0.matching(query) }
+    }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack(alignment: .top, spacing: 20) {
+                Picker("settings.tab.display".localized, selection: $showingOrder) {
+                    Text("settings.display.fields".localized).tag(false)
+                    Text("settings.display.order".localized).tag(true)
+                }
+                .pickerStyle(.segmented)
+                .fixedSize()
+
+                Spacer(minLength: 0)
+
+                if !showingOrder {
+                    VStack(alignment: .trailing, spacing: 12) {
+                        HStack(spacing: 8) {
+                            Image(systemName: "magnifyingglass").foregroundStyle(.secondary)
+                            TextField("settings.display.search".localized, text: $searchText)
+                                .textFieldStyle(.plain)
+                                .accessibilityIdentifier("displaySearch")
+                            if !searchText.isEmpty {
+                                Button { searchText = "" } label: {
+                                    Image(systemName: "xmark.circle.fill")
+                                }
+                                .buttonStyle(.plain)
+                                .foregroundStyle(.secondary)
+                                .accessibilityLabel("settings.display.clearSearch".localized)
+                            }
+                        }
+                        .padding(10)
+                        .background(Color(NSColor.controlBackgroundColor), in: RoundedRectangle(cornerRadius: 8))
+
+                        if searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            Picker("settings.display.category".localized, selection: $selectedSectionID) {
+                                ForEach(Self.sections) { section in
+                                    Text(section.titleKey.localized).tag(section.id)
+                                }
+                            }
+                            .accessibilityIdentifier("displayCategory")
+                        } else {
+                            Text("settings.display.results".localized(visibleSections.count))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .frame(minWidth: 220, idealWidth: 280, maxWidth: 300)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 20)
+            .padding(.bottom, 18)
+
+            Divider()
+
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: SettingsLayout.sectionSpacing) {
+                    if showingOrder {
+                        displayOrder
+                    } else if visibleSections.isEmpty {
+                        ContentUnavailableView.search(text: searchText)
+                            .frame(maxWidth: .infinity)
+                    } else {
+                        ForEach(visibleSections) { section in
+                            DisplaySectionView(settings: settings, section: section)
+                        }
+                    }
+                }
+                .padding(.vertical, 20)
+            }
+            // A newly chosen category starts at its first setting, even after a long section.
+            .id(showingOrder ? "order" : selectedSectionID + searchText)
+        }
+        .frame(maxWidth: SettingsRowLayout.contentMaxWidth)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+    }
+
+    private var displayOrder: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            SettingsHint(textKey: "settings.display.order.hint")
+            VStack(spacing: 0) {
+                ForEach(settings.displayOrder) { item in
+                    HStack(spacing: 12) {
+                        Image(systemName: "line.3.horizontal")
+                            .foregroundStyle(.tertiary)
+                        Image(systemName: item.icon)
+                            .foregroundStyle(Color.accentColor)
+                            .frame(width: 20)
+                        Text(item.localizedName)
+                        Spacer()
+                        Button { move(item, by: -1) } label: {
+                            Image(systemName: "chevron.up")
+                        }
+                        .disabled(settings.displayOrder.first == item)
+                        .accessibilityLabel("settings.display.moveUp".localized(item.localizedName))
+                        Button { move(item, by: 1) } label: {
+                            Image(systemName: "chevron.down")
+                        }
+                        .disabled(settings.displayOrder.last == item)
+                        .accessibilityLabel("settings.display.moveDown".localized(item.localizedName))
+                    }
+                    .buttonStyle(.borderless)
+                    .font(.system(size: 13))
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .contentShape(Rectangle())
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .onDrag {
+                        draggingItem = item
+                        return NSItemProvider(object: item.rawValue as NSString)
+                    }
+                    .onDrop(of: [.text], delegate: DisplayItemDropDelegate(
+                        item: item, items: $settings.displayOrder, draggingItem: $draggingItem
+                    ))
+                    if item != settings.displayOrder.last {
+                        Divider().padding(.leading, 48)
+                    }
+                }
+            }
+            .background(Color(NSColor.controlBackgroundColor), in: RoundedRectangle(cornerRadius: 10))
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .padding(.horizontal, 20)
+        }
+    }
+
+    private func move(_ item: DisplayItem, by offset: Int) {
+        guard let index = settings.displayOrder.firstIndex(of: item),
+              settings.displayOrder.indices.contains(index + offset) else { return }
+        settings.displayOrder.swapAt(index, index + offset)
     }
 }

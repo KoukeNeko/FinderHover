@@ -7,39 +7,45 @@
 
 import SwiftUI
 
-// MARK: - Page Header
+/// Row layout constants matching the System Settings visual language.
+enum SettingsRowLayout {
+    static let horizontalPadding: CGFloat = 20
+    static let verticalPadding: CGFloat = 12
+    static let tileSize: CGFloat = 24
+    static let tileSymbolSize: CGFloat = 13
+    static let tileSpacing: CGFloat = 12
+    static let dividerLeading: CGFloat = horizontalPadding + tileSize + tileSpacing
+    static let cardCornerRadius: CGFloat = 10
+    static let contentMaxWidth: CGFloat = 640
+}
 
-struct SettingsPageHeader: View {
+// MARK: - Icon Tile
+/// Colored rounded-square icon used in the sidebar and on card rows,
+/// matching the icon tiles in macOS System Settings.
+struct SettingsIconTile: View {
     let icon: String
-    let title: String
-    let description: String
+    let tint: Color
+    var size: CGFloat = SettingsRowLayout.tileSize
+    var symbolSize: CGFloat = SettingsRowLayout.tileSymbolSize
 
     var body: some View {
-        VStack(spacing: 8) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(Color(NSColor.systemGray).opacity(0.35))
-                    .frame(width: 64, height: 64)
-                Image(systemName: icon)
-                    .font(.system(size: 32, weight: .light))
-                    .foregroundStyle(.primary)
-            }
+        Image(systemName: icon)
+            .font(.system(size: symbolSize, weight: .medium))
+            .foregroundStyle(.white)
+            .frame(width: size, height: size)
+            .background(tint.gradient, in: RoundedRectangle(cornerRadius: size * 0.29))
+    }
+}
 
-            Text(title)
-                .font(.system(size: 18, weight: .semibold))
+// MARK: - Section Label
+/// Small semibold label shown above a card, like System Settings section titles.
+struct SettingsSectionLabel: View {
+    let titleKey: String
 
-            Text(description)
-                .font(.system(size: 12))
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: 320)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 20)
-        .background(Color(NSColor.controlBackgroundColor))
-        .cornerRadius(10)
-        .padding(.horizontal, 20)
-        .padding(.bottom, 16)
+    var body: some View {
+        Text(titleKey.localized)
+            .font(.system(size: 13, weight: .semibold))
+            .padding(.horizontal, SettingsRowLayout.horizontalPadding)
     }
 }
 
@@ -47,31 +53,41 @@ struct SettingsPageHeader: View {
 struct SettingRow<Content: View>: View {
     let title: String
     let description: String
+    let icon: String?
+    let tint: Color
     let content: Content
 
-    init(title: String, description: String, @ViewBuilder content: () -> Content) {
+    init(title: String, description: String, icon: String? = nil, tint: Color = .accentColor, @ViewBuilder content: () -> Content) {
         self.title = title
         self.description = description
+        self.icon = icon
+        self.tint = tint
         self.content = content()
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .center) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(title)
-                        .font(.system(size: 13, weight: .semibold))
-                    Text(description)
-                        .font(.system(size: 11))
-                        .foregroundColor(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
+                HStack(alignment: .center, spacing: SettingsRowLayout.tileSpacing) {
+                    if let icon {
+                        SettingsIconTile(icon: icon, tint: tint)
+                    }
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(title)
+                            .font(.system(size: 13, weight: .semibold))
+                        Text(description)
+                            .font(.system(size: 11))
+                            .foregroundColor(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
                 Spacer()
                 content
+                    .accessibilityLabel(title)
             }
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 12)
+        .padding(.horizontal, SettingsRowLayout.horizontalPadding)
+        .padding(.vertical, SettingsRowLayout.verticalPadding)
     }
 }
 
@@ -93,7 +109,7 @@ struct DisplayToggleRow: View {
 
             Spacer()
 
-            Toggle("", isOn: $isOn)
+            Toggle(title, isOn: $isOn)
                 .labelsHidden()
                 .toggleStyle(.switch)
         }

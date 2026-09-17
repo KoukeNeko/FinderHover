@@ -801,3 +801,16 @@
 "hover.notes.error.save" = "メモを保存できませんでした。";
 "hover.notes.error.delete" = "メモを削除できませんでした。";
 "hover.notes.disclosure" = "メモはファイルと共に保存され、コピー時に一緒に移動します。";
+
+// Settings navigation and information browser
+"settings.navigation.app" = "アプリケーション";
+"settings.savedAutomatically" = "変更は自動的に保存されます";
+"settings.resetAll" = "すべての設定をリセット…";
+"settings.resetAll.message" = "動作、外観、すべての表示項目と並び順、言語を初期設定に戻します。ログイン時の起動設定も変更される場合があります。";
+"settings.display.fields" = "表示項目";
+"settings.display.search" = "すべての表示項目を検索";
+"settings.display.clearSearch" = "検索をクリア";
+"settings.display.category" = "カテゴリ";
+"settings.display.results" = "%d 個のカテゴリが一致";
+"settings.display.moveUp" = "%@ を上に移動";
+"settings.display.moveDown" = "%@ を下に移動";
