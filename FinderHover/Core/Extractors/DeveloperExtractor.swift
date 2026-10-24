@@ -10,7 +10,7 @@ import SQLite3
 
 // MARK: - Developer Metadata Extractor
 
-enum DeveloperExtractor {
+nonisolated enum DeveloperExtractor {
 
     // MARK: - Code File Metadata Extraction
 
@@ -178,115 +178,42 @@ enum DeveloperExtractor {
         var hasUncommittedChanges: Bool?
         var tagCount: Int?
 
-        // Get current branch
-        let branchProcess = Process()
-        branchProcess.executableURL = URL(fileURLWithPath: "/usr/bin/git")
-        branchProcess.arguments = ["-C", url.path, "branch", "--show-current"]
-        let branchPipe = Pipe()
-        branchProcess.standardOutput = branchPipe
-        branchProcess.standardError = Pipe()
+        // The repository's own config is untrusted: it can name programs that git runs
+        // during `status` (fsmonitor, clean filters). Read it first and skip `status`
+        // when it defines any.
+        let localConfig = git(["config", "--local", "--includes", "--list"], in: url) ?? ""
+        let configKeys = localConfig.split(separator: "\n").map { $0.split(separator: "=", maxSplits: 1).first?.lowercased() ?? "" }
+        let runsPrograms = configKeys.contains { $0.hasPrefix("filter.") || $0 == "core.fsmonitor" }
+        remoteURL = localConfig.split(separator: "\n")
+            .first { $0.lowercased().hasPrefix("remote.origin.url=") }
+            .map { String($0.dropFirst("remote.origin.url=".count)) }
 
-        if runProcessWithTimeout(branchProcess, timeout: 3.0) {
-            let data = branchPipe.fileHandleForReading.readDataToEndOfFile()
-            if let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines), !output.isEmpty {
-                currentBranch = output
+        if !runsPrograms, let status = git(["status", "--porcelain=v2", "--branch", "--ignore-submodules"], in: url) {
+            let lines = status.split(separator: "\n")
+            if let head = lines.first(where: { $0.hasPrefix("# branch.head ") })?.dropFirst("# branch.head ".count),
+               head != "(detached)" {
+                currentBranch = String(head)
             }
+            hasUncommittedChanges = lines.contains { !$0.hasPrefix("#") }
+        } else if let branch = git(["branch", "--show-current"], in: url)?.trimmingCharacters(in: .whitespacesAndNewlines),
+                  !branch.isEmpty {
+            currentBranch = branch
         }
 
-        // Get branch count
-        let branchCountProcess = Process()
-        branchCountProcess.executableURL = URL(fileURLWithPath: "/usr/bin/git")
-        branchCountProcess.arguments = ["-C", url.path, "branch", "-a"]
-        let branchCountPipe = Pipe()
-        branchCountProcess.standardOutput = branchCountPipe
-        branchCountProcess.standardError = Pipe()
-
-        if runProcessWithTimeout(branchCountProcess, timeout: 3.0) {
-            let data = branchCountPipe.fileHandleForReading.readDataToEndOfFile()
-            if let output = String(data: data, encoding: .utf8) {
-                branchCount = output.components(separatedBy: .newlines).filter { !$0.isEmpty }.count
-            }
+        if let refs = git(["for-each-ref", "--format=%(refname)"], in: url) {
+            let names = refs.split(separator: "\n")
+            branchCount = names.filter { $0.hasPrefix("refs/heads/") || $0.hasPrefix("refs/remotes/") }.count
+            tagCount = names.filter { $0.hasPrefix("refs/tags/") }.count
         }
 
-        // Get commit count
-        let commitCountProcess = Process()
-        commitCountProcess.executableURL = URL(fileURLWithPath: "/usr/bin/git")
-        commitCountProcess.arguments = ["-C", url.path, "rev-list", "--count", "HEAD"]
-        let commitCountPipe = Pipe()
-        commitCountProcess.standardOutput = commitCountPipe
-        commitCountProcess.standardError = Pipe()
-
-        if runProcessWithTimeout(commitCountProcess, timeout: 3.0) {
-            let data = commitCountPipe.fileHandleForReading.readDataToEndOfFile()
-            if let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) {
-                commitCount = Int(output)
-            }
+        if let count = git(["rev-list", "--count", "HEAD"], in: url)?.trimmingCharacters(in: .whitespacesAndNewlines) {
+            commitCount = Int(count)
         }
 
-        // Get last commit info
-        let logProcess = Process()
-        logProcess.executableURL = URL(fileURLWithPath: "/usr/bin/git")
-        logProcess.arguments = ["-C", url.path, "log", "-1", "--format=%ci|%s"]
-        let logPipe = Pipe()
-        logProcess.standardOutput = logPipe
-        logProcess.standardError = Pipe()
-
-        if runProcessWithTimeout(logProcess, timeout: 3.0) {
-            let data = logPipe.fileHandleForReading.readDataToEndOfFile()
-            if let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) {
-                let parts = output.components(separatedBy: "|")
-                if parts.count >= 1 {
-                    lastCommitDate = parts[0]
-                }
-                if parts.count >= 2 {
-                    lastCommitMessage = parts[1]
-                }
-            }
-        }
-
-        // Get remote URL
-        let remoteProcess = Process()
-        remoteProcess.executableURL = URL(fileURLWithPath: "/usr/bin/git")
-        remoteProcess.arguments = ["-C", url.path, "remote", "get-url", "origin"]
-        let remotePipe = Pipe()
-        remoteProcess.standardOutput = remotePipe
-        remoteProcess.standardError = Pipe()
-
-        if runProcessWithTimeout(remoteProcess, timeout: 3.0) {
-            let data = remotePipe.fileHandleForReading.readDataToEndOfFile()
-            if let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines), !output.isEmpty {
-                remoteURL = output
-            }
-        }
-
-        // Check for uncommitted changes
-        let statusProcess = Process()
-        statusProcess.executableURL = URL(fileURLWithPath: "/usr/bin/git")
-        statusProcess.arguments = ["-C", url.path, "status", "--porcelain"]
-        let statusPipe = Pipe()
-        statusProcess.standardOutput = statusPipe
-        statusProcess.standardError = Pipe()
-
-        if runProcessWithTimeout(statusProcess, timeout: 3.0) {
-            let data = statusPipe.fileHandleForReading.readDataToEndOfFile()
-            if let output = String(data: data, encoding: .utf8) {
-                hasUncommittedChanges = !output.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            }
-        }
-
-        // Get tag count
-        let tagProcess = Process()
-        tagProcess.executableURL = URL(fileURLWithPath: "/usr/bin/git")
-        tagProcess.arguments = ["-C", url.path, "tag"]
-        let tagPipe = Pipe()
-        tagProcess.standardOutput = tagPipe
-        tagProcess.standardError = Pipe()
-
-        if runProcessWithTimeout(tagProcess, timeout: 3.0) {
-            let data = tagPipe.fileHandleForReading.readDataToEndOfFile()
-            if let output = String(data: data, encoding: .utf8) {
-                tagCount = output.components(separatedBy: .newlines).filter { !$0.isEmpty }.count
-            }
+        if let log = git(["log", "-1", "--format=%ci|%s"], in: url)?.trimmingCharacters(in: .whitespacesAndNewlines) {
+            let parts = log.split(separator: "|", maxSplits: 1).map(String.init)
+            lastCommitDate = parts.first
+            lastCommitMessage = parts.count > 1 ? parts[1] : nil
         }
 
         let metadata = GitMetadata(
@@ -301,6 +228,15 @@ enum DeveloperExtractor {
         )
 
         return metadata.hasData ? metadata : nil
+    }
+
+    /// Runs a read-only git command in `url` with settings that would launch programs
+    /// (fsmonitor, signature verification) forced off and no optional index lock taken.
+    private static func git(_ arguments: [String], in url: URL) -> String? {
+        runCommand("/usr/bin/git", [
+            "--no-optional-locks", "-c", "core.fsmonitor=false", "-c", "log.showSignature=false",
+            "-C", url.path
+        ] + arguments)
     }
 
     // MARK: - Xcode Project Metadata Extraction
@@ -458,80 +394,50 @@ enum DeveloperExtractor {
         var sdkVersion: String?
         var fileType: String?
 
-        let fileProcess = Process()
-        fileProcess.executableURL = URL(fileURLWithPath: "/usr/bin/file")
-        fileProcess.arguments = ["-b", url.path]
-        let filePipe = Pipe()
-        fileProcess.standardOutput = filePipe
-        fileProcess.standardError = Pipe()
-
-        if runProcessWithTimeout(fileProcess, timeout: 3.0) {
-            let fileData = filePipe.fileHandleForReading.readDataToEndOfFile()
-            if let fileOutput = String(data: fileData, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) {
-                if fileOutput.contains("Mach-O") {
-                    if fileOutput.contains("universal") || fileOutput.contains("fat") {
-                        architecture = "Universal"
-                    } else if fileOutput.contains("arm64") {
-                        architecture = "arm64"
-                    } else if fileOutput.contains("x86_64") {
-                        architecture = "x86_64"
-                    }
-
-                    if fileOutput.contains("executable") {
-                        fileType = "Mach-O Executable"
-                    } else if fileOutput.contains("dynamically linked shared library") {
-                        fileType = "Dynamic Library"
-                    } else if fileOutput.contains("bundle") {
-                        fileType = "Mach-O Bundle"
-                    }
-                } else {
-                    return nil
+        if let fileOutput = runCommand("/usr/bin/file", ["-b", url.path])?.trimmingCharacters(in: .whitespacesAndNewlines) {
+            if fileOutput.contains("Mach-O") {
+                if fileOutput.contains("universal") || fileOutput.contains("fat") {
+                    architecture = "Universal"
+                } else if fileOutput.contains("arm64") {
+                    architecture = "arm64"
+                } else if fileOutput.contains("x86_64") {
+                    architecture = "x86_64"
                 }
+
+                if fileOutput.contains("executable") {
+                    fileType = "Mach-O Executable"
+                } else if fileOutput.contains("dynamically linked shared library") {
+                    fileType = "Dynamic Library"
+                } else if fileOutput.contains("bundle") {
+                    fileType = "Mach-O Bundle"
+                }
+            } else {
+                return nil
             }
         }
 
-        let codesignProcess = Process()
-        codesignProcess.executableURL = URL(fileURLWithPath: "/usr/bin/codesign")
-        codesignProcess.arguments = ["-dv", url.path]
-        let codesignPipe = Pipe()
-        let codesignErrorPipe = Pipe()
-        codesignProcess.standardOutput = codesignPipe
-        codesignProcess.standardError = codesignErrorPipe
+        // codesign reports signing details on stderr.
+        if let signingOutput = runCommand("/usr/bin/codesign", ["-dv", url.path], includeStandardError: true) {
+            isCodeSigned = !signingOutput.contains("not signed")
 
-        if runProcessWithTimeout(codesignProcess, timeout: 3.0) {
-            let errorData = codesignErrorPipe.fileHandleForReading.readDataToEndOfFile()
-            if let errorOutput = String(data: errorData, encoding: .utf8) {
-                isCodeSigned = !errorOutput.contains("not signed")
-
-                if let authorityRange = errorOutput.range(of: #"Authority=([^\n]+)"#, options: .regularExpression) {
-                    signingAuthority = String(errorOutput[authorityRange])
-                        .replacingOccurrences(of: "Authority=", with: "")
-                        .trimmingCharacters(in: .whitespaces)
-                }
+            if let authorityRange = signingOutput.range(of: #"Authority=([^\n]+)"#, options: .regularExpression) {
+                signingAuthority = String(signingOutput[authorityRange])
+                    .replacingOccurrences(of: "Authority=", with: "")
+                    .trimmingCharacters(in: .whitespaces)
             }
         } else {
             isCodeSigned = false
         }
 
-        let otoolProcess = Process()
-        otoolProcess.executableURL = URL(fileURLWithPath: "/usr/bin/otool")
-        otoolProcess.arguments = ["-l", url.path]
-        let otoolPipe = Pipe()
-        otoolProcess.standardOutput = otoolPipe
-        otoolProcess.standardError = Pipe()
+        if let otoolOutput = runCommand("/usr/bin/otool", ["-l", url.path]) {
+            if let minVersionRange = otoolOutput.range(of: #"minos\s+([\d.]+)"#, options: .regularExpression) {
+                let match = String(otoolOutput[minVersionRange])
+                minimumOS = match.components(separatedBy: .whitespaces).last
+            }
 
-        if runProcessWithTimeout(otoolProcess, timeout: 3.0) {
-            let otoolData = otoolPipe.fileHandleForReading.readDataToEndOfFile()
-            if let otoolOutput = String(data: otoolData, encoding: .utf8) {
-                if let minVersionRange = otoolOutput.range(of: #"minos\s+([\d.]+)"#, options: .regularExpression) {
-                    let match = String(otoolOutput[minVersionRange])
-                    minimumOS = match.components(separatedBy: .whitespaces).last
-                }
-
-                if let sdkRange = otoolOutput.range(of: #"sdk\s+([\d.]+)"#, options: .regularExpression) {
-                    let match = String(otoolOutput[sdkRange])
-                    sdkVersion = match.components(separatedBy: .whitespaces).last
-                }
+            if let sdkRange = otoolOutput.range(of: #"sdk\s+([\d.]+)"#, options: .regularExpression) {
+                let match = String(otoolOutput[sdkRange])
+                sdkVersion = match.components(separatedBy: .whitespaces).last
             }
         }
 
@@ -570,33 +476,10 @@ enum DeveloperExtractor {
         let category = plist["LSApplicationCategoryType"] as? String
         let copyright = plist["NSHumanReadableCopyright"] as? String
 
-        var isCodeSigned: Bool?
-        let codesignProcess = Process()
-        codesignProcess.executableURL = URL(fileURLWithPath: "/usr/bin/codesign")
-        codesignProcess.arguments = ["-dv", url.path]
-        let codesignPipe = Pipe()
-        codesignProcess.standardOutput = codesignPipe
-        codesignProcess.standardError = codesignPipe
-
-        if runProcessWithTimeout(codesignProcess, timeout: 3.0) {
-            let data = codesignPipe.fileHandleForReading.readDataToEndOfFile()
-            if let output = String(data: data, encoding: .utf8) {
-                isCodeSigned = !output.contains("not signed")
-            }
-        }
-
-        var hasEntitlements: Bool?
-        let entitlementsProcess = Process()
-        entitlementsProcess.executableURL = URL(fileURLWithPath: "/usr/bin/codesign")
-        entitlementsProcess.arguments = ["-d", "--entitlements", "-", url.path]
-        let entitlementsPipe = Pipe()
-        entitlementsProcess.standardOutput = entitlementsPipe
-        entitlementsProcess.standardError = Pipe()
-
-        if runProcessWithTimeout(entitlementsProcess, timeout: 3.0) {
-            let data = entitlementsPipe.fileHandleForReading.readDataToEndOfFile()
-            hasEntitlements = data.count > 100
-        }
+        let isCodeSigned = runCommand("/usr/bin/codesign", ["-dv", url.path], includeStandardError: true)
+            .map { !$0.contains("not signed") }
+        let hasEntitlements = runCommand("/usr/bin/codesign", ["-d", "--entitlements", "-", url.path])
+            .map { $0.utf8.count > 100 }
 
         let metadata = AppBundleMetadata(
             bundleID: bundleID,

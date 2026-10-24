@@ -14,12 +14,17 @@ import Foundation
 ///   - process: The Process to run
 ///   - timeout: Maximum time in seconds to wait for completion
 /// - Returns: true if process completed within timeout, false if timed out or failed
-func runProcessWithTimeout(_ process: Process, timeout: TimeInterval = 5.0) -> Bool {
+nonisolated func runProcessWithTimeout(
+    _ process: Process,
+    timeout: TimeInterval = 5.0,
+    afterLaunch: () -> Void = {}
+) -> Bool {
     do {
         try process.run()
     } catch {
         return false
     }
+    afterLaunch()
 
     let deadline = Date().addingTimeInterval(timeout)
 
@@ -38,20 +43,65 @@ func runProcessWithTimeout(_ process: Process, timeout: TimeInterval = 5.0) -> B
 }
 
 /// Runs a Process and returns its standard-output bytes, or nil on timeout/failure.
-/// Captures stderr to a discarded pipe so child output never blocks on a full terminal.
-/// - Note: Intended for short-lived commands whose stdout fits the OS pipe buffer
-///   (e.g. listing or streaming a single small archive member). For unbounded output,
-///   read the pipe concurrently instead of after termination.
-func runProcessCapturingOutput(_ process: Process, timeout: TimeInterval = 5.0) -> Data? {
-    let standardOutput = Pipe()
-    process.standardOutput = standardOutput
-    process.standardError = Pipe()
+/// - Parameter includeStandardError: also capture stderr (e.g. `codesign -dv` reports there);
+///   otherwise stderr is discarded.
+/// Output is drained while the command runs: a pipe holds about 64 KB, and a command that
+/// fills it blocks until someone reads, so reading only after exit stalls until the timeout.
+nonisolated func runProcessCapturingOutput(
+    _ process: Process,
+    timeout: TimeInterval = 5.0,
+    includeStandardError: Bool = false
+) -> Data? {
+    let output = Pipe()
+    process.standardOutput = output
+    process.standardError = includeStandardError ? output : FileHandle.nullDevice
 
-    guard runProcessWithTimeout(process, timeout: timeout) else {
+    final class Drain: @unchecked Sendable { var data = Data() }
+    let drain = Drain()
+    let drained = DispatchSemaphore(value: 0)
+    let succeeded = runProcessWithTimeout(process, timeout: timeout) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            drain.data = output.fileHandleForReading.readDataToEndOfFile()
+            drained.signal()
+        }
+    }
+    // A grandchild can keep the pipe open after the command exits; don't wait on it forever.
+    if process.processIdentifier != 0, drained.wait(timeout: .now() + 1) == .timedOut {
         return nil
     }
+    return succeeded ? drain.data : nil
+}
 
-    return standardOutput.fileHandleForReading.readDataToEndOfFile()
+/// Runs a command by absolute path and returns its stdout as text, or nil on failure.
+nonisolated func runCommand(
+    _ executable: String,
+    _ arguments: [String],
+    timeout: TimeInterval = 3.0,
+    includeStandardError: Bool = false
+) -> String? {
+    let process = Process()
+    process.executableURL = URL(fileURLWithPath: executable)
+    process.arguments = arguments
+    guard let data = runProcessCapturingOutput(process, timeout: timeout, includeStandardError: includeStandardError) else {
+        return nil
+    }
+    return String(data: data, encoding: .utf8)
+}
+
+// MARK: - zipinfo Summary
+
+/// Reads the totals line `zipinfo` prints last, e.g.
+/// "35 files, 4900000 bytes uncompressed, 1900000 bytes compressed:  62.2%"
+/// (singular "1 file," for one entry).
+nonisolated func zipinfoTotals(_ output: String) -> (fileCount: Int, uncompressedBytes: Int64)? {
+    for line in output.components(separatedBy: .newlines).reversed() {
+        let words = line.split(separator: " ").map(String.init)
+        guard words.count >= 5, words[1] == "file," || words[1] == "files,",
+              words[4] == "uncompressed,",
+              let count = Int(words[0]), let bytes = Int64(words[2]) else { continue }
+        return (count, bytes)
+    }
+    return nil
 }
 
 // MARK: - Bounded Header Read
@@ -64,7 +114,7 @@ func runProcessCapturingOutput(_ process: Process, timeout: TimeInterval = 5.0) 
 /// The returned `Data.count` is the number of bytes actually available (it may be less
 /// than `maxByteCount` for short files), so callers can length-check it directly.
 /// - Returns: the leading bytes, or `nil` if the file cannot be opened or read.
-func readFileHeader(of url: URL, maxByteCount: Int) -> Data? {
+nonisolated func readFileHeader(of url: URL, maxByteCount: Int) -> Data? {
     guard let handle = try? FileHandle(forReadingFrom: url) else {
         return nil
     }
@@ -80,7 +130,7 @@ func readFileHeader(of url: URL, maxByteCount: Int) -> Data? {
 
 // MARK: - Encoding Detection
 
-func detectEncoding(data: Data) -> String {
+nonisolated func detectEncoding(data: Data) -> String {
     // A byte-order mark is authoritative when present.
     if let bomEncoding = encodingFromBOM(data) {
         return bomEncoding
@@ -119,7 +169,7 @@ func detectEncoding(data: Data) -> String {
 
 /// Returns a human-readable encoding name if `data` begins with a recognized
 /// byte-order mark, otherwise nil.
-private func encodingFromBOM(_ data: Data) -> String? {
+nonisolated private func encodingFromBOM(_ data: Data) -> String? {
     let bytes = [UInt8](data.prefix(4))
     if bytes.starts(with: [0xEF, 0xBB, 0xBF]) { return "UTF-8" }
     if bytes.starts(with: [0x00, 0x00, 0xFE, 0xFF]) { return "UTF-32BE" }
@@ -131,13 +181,13 @@ private func encodingFromBOM(_ data: Data) -> String? {
 
 // MARK: - Comment Syntax for Code Analysis
 
-struct CommentSyntax {
+nonisolated struct CommentSyntax {
     let singleLine: [String]
     let multiLineStart: String?
     let multiLineEnd: String?
 }
 
-func getCommentSyntax(for language: String) -> CommentSyntax {
+nonisolated func getCommentSyntax(for language: String) -> CommentSyntax {
     switch language {
     case "C", "C++", "Objective-C", "Objective-C++", "C#", "Swift", "JavaScript", "TypeScript", "JSX", "Java", "Kotlin", "Scala", "Groovy", "Rust", "Go", "Dart", "PHP":
         return CommentSyntax(singleLine: ["//"], multiLineStart: "/*", multiLineEnd: "*/")
@@ -162,7 +212,7 @@ func getCommentSyntax(for language: String) -> CommentSyntax {
 
 // MARK: - Language Detection
 
-func languageFromExtension(_ ext: String) -> String? {
+nonisolated func languageFromExtension(_ ext: String) -> String? {
     let languageMap: [String: String] = [
         // C-family
         "c": "C", "h": "C",
@@ -209,7 +259,7 @@ func languageFromExtension(_ ext: String) -> String? {
 
 // MARK: - JSON Helpers
 
-func countJSONKeys(_ dict: [String: Any]) -> Int {
+nonisolated func countJSONKeys(_ dict: [String: Any]) -> Int {
     var count = dict.keys.count
     for value in dict.values {
         if let nestedDict = value as? [String: Any] {
@@ -225,7 +275,7 @@ func countJSONKeys(_ dict: [String: Any]) -> Int {
     return count
 }
 
-func calculateJSONDepth(_ dict: [String: Any]) -> Int {
+nonisolated func calculateJSONDepth(_ dict: [String: Any]) -> Int {
     var maxChildDepth = 0
     for value in dict.values {
         if let nestedDict = value as? [String: Any] {
