@@ -54,6 +54,9 @@ class HoverManager: ObservableObject {
             guard let self = self else { return }
             // Don't dismiss or re-evaluate while the user is editing notes
             guard !HoverWindowState.shared.isEditingNotes else { return }
+            // Releasing Option over the popup keeps it open; leaving it later dismisses it
+            // through the regular hide check.
+            guard !self.isMouseOverHoverWindow() else { return }
             // Force hide first, then check if we need to show again
             self.hoverWindow?.hide()
             self.currentFileInfo = nil

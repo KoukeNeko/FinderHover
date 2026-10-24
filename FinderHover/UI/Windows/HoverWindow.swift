@@ -212,10 +212,8 @@ class HoverWindowController: NSWindowController {
     private func unlock() {
         windowState.isLocked = false
         windowState.copiedValue = nil
-        // Only ignore mouse events if not editing notes
-        if !windowState.isEditingNotes {
-            window?.ignoresMouseEvents = true
-        }
+        // Stay clickable while the cursor is still over the popup or notes are being edited
+        updateMouseInteraction()
         // Notify HoverManager to re-check cursor position
         NotificationCenter.default.post(name: .hoverWindowUnlocked, object: nil)
     }
