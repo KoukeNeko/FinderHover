@@ -151,7 +151,8 @@ enum SystemExtractor {
 
             if components.count >= 2 {
                 if let timestampHex = Int(components[1], radix: 16) {
-                    let date = Date(timeIntervalSinceReferenceDate: TimeInterval(timestampHex))
+                    // The quarantine timestamp counts seconds since 1970, not 2001.
+                    let date = Date(timeIntervalSince1970: TimeInterval(timestampHex))
                     downloadDate = DateFormatters.formatShortDateTime(date)
                 }
             }
