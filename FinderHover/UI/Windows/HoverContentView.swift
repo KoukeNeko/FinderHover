@@ -159,6 +159,7 @@ struct HoverContentView: View {
                         .font(.system(size: fontSize))
                         .foregroundColor(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
+                        .copyable(headerDetails)
                 }
 
                 if !finderTags.isEmpty {
@@ -172,6 +173,7 @@ struct HoverContentView: View {
                             }
                         }
                     }
+                    .copyable(finderTags.joined(separator: ", "))
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -493,13 +495,17 @@ struct HoverContentView: View {
                     }
                     Spacer(minLength: 8)
                     if let changes {
-                        Text(changes).font(.system(size: fontSize)).foregroundColor(.secondary)
+                        Text(changes).font(.system(size: fontSize)).foregroundColor(.secondary).copyable(changes)
                     }
                 }
             }
             if commitDate != nil || commitMessage != nil {
-                let label = ["hover.v2.lastCommit".localized, commitDate].compactMap { $0 }.joined(separator: " · ")
-                FieldView(field: Field(label: label, value: commitMessage ?? ""), fontSize: fontSize)
+                if let commitMessage {
+                    let label = ["hover.v2.lastCommit".localized, commitDate].compactMap { $0 }.joined(separator: " · ")
+                    FieldView(field: Field(label: label, value: commitMessage), fontSize: fontSize)
+                } else {
+                    FieldView(field: Field(label: "hover.v2.lastCommit".localized, value: commitDate ?? ""), fontSize: fontSize)
+                }
             }
             if !specs.isEmpty { SpecStrip(specs: specs, valueSize: fontSize + 4, fontSize: fontSize) }
             if let remote {
@@ -528,7 +534,7 @@ struct HoverContentView: View {
             if version != nil || category != nil {
                 HeroRow(value: version,
                         unit: version != nil ? build.map { String(format: "hover.v2.build".localized, $0) } : nil,
-                        trailing: category, color: .blue, fontSize: fontSize)
+                        trailing: category, unitIsValue: true, color: .blue, fontSize: fontSize)
             }
             if let bundleID {
                 PinnedCopyField(label: "hover.appBundle.bundleID".localized, value: bundleID, fontSize: fontSize)
@@ -645,6 +651,7 @@ struct HoverContentView: View {
                     .font(.system(size: fontSize + 3, weight: .semibold))
                     .foregroundColor(.purple)
                     .fixedSize(horizontal: false, vertical: true)
+                    .copyable(host ?? source)
                 HStack(spacing: 8) {
                     Text(host == nil ? "" : remainder)
                         .font(.system(size: fontSize - 0.5))
@@ -892,9 +899,9 @@ struct HoverContentView: View {
             }
             if !volume.isEmpty || available != nil {
                 HStack(spacing: 6) {
-                    Text(volume)
+                    if !volume.isEmpty { Text(volume).copyable(volume) }
                     Spacer(minLength: 6)
-                    if let available { Text(available) }
+                    if let available { Text(available).copyable(available) }
                 }
                 .font(.system(size: fontSize - 0.5))
                 .foregroundColor(.secondary)
@@ -1097,11 +1104,10 @@ private struct PixelSize {
 
 // MARK: - Building Blocks
 
-/// Label above value. Copy is offered while the popup is locked (Option held), as before.
+/// Label above value, with a copy button while the popup is locked (Option held).
 private struct FieldView: View {
     let field: Field
     let fontSize: Double
-    @ObservedObject private var windowState = HoverWindowState.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
@@ -1115,8 +1121,6 @@ private struct FieldView: View {
                         .font(.system(size: fontSize + 0.5, weight: .medium))
                         .fixedSize(horizontal: false, vertical: true)
                     V2CopyButton(value: field.value, key: field.label + ":" + field.value, fontSize: fontSize - 1)
-                        .opacity(windowState.isLocked ? 1 : 0)
-                        .allowsHitTesting(windowState.isLocked)
                 }
             }
         }
@@ -1191,31 +1195,26 @@ private struct SpecStrip: View {
     let specs: [Spec]
     let valueSize: Double
     let fontSize: Double
-    @ObservedObject private var windowState = HoverWindowState.shared
 
     var body: some View {
         HStack(alignment: .top, spacing: 4) {
             ForEach(specs) { spec in
-                let key = "spec:" + spec.caption + ":" + spec.value
                 VStack(spacing: 2) {
                     Text(spec.value)
                         .font(.system(size: valueSize, weight: .semibold, design: .rounded))
                         .foregroundColor(spec.color)
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
-                    Text(windowState.copiedValue == key ? "hover.copy.copied".localized : spec.caption)
+                        .copyable(spec.value, key: spec.caption + ":" + spec.value)
+                    Text(spec.caption)
                         .font(.system(size: fontSize - 2, weight: .semibold))
                         .kerning(0.54)
                         .textCase(.uppercase)
-                        .foregroundColor(windowState.copiedValue == key ? .green : .secondary)
+                        .foregroundColor(.secondary)
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
                 }
                 .frame(maxWidth: .infinity)
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    if windowState.isLocked { windowState.copyToClipboard(spec.value, key: key) }
-                }
             }
         }
     }
@@ -1226,6 +1225,8 @@ private struct HeroRow: View {
     let value: String?
     var unit: String?
     var trailing: String?
+    /// The unit is data (an app's build number) rather than a caption like "lines".
+    var unitIsValue = false
     let color: Color
     let fontSize: Double
 
@@ -1238,9 +1239,10 @@ private struct HeroRow: View {
                     .copyable(value)
             }
             if let unit {
-                Text(unit)
+                let unitText = Text(unit)
                     .font(.system(size: fontSize + 1))
                     .foregroundColor(.secondary)
+                if unitIsValue { unitText.copyable(unit) } else { unitText }
             }
             Spacer(minLength: 8)
             if let trailing {
@@ -1430,38 +1432,20 @@ private struct V2CopyButton: View {
             .onTapGesture { windowState.copyToClipboard(value, key: key) }
             .onHover { isHovering = $0 }
             .help("hover.copy.copy".localized)
-    }
-}
-
-/// While the popup is locked, clicking the text copies it and briefly shows "Copied!".
-private struct CopyOnTap: ViewModifier {
-    let value: String
-    @ObservedObject private var windowState = HoverWindowState.shared
-
-    private var key: String { "text:" + value }
-
-    func body(content: Content) -> some View {
-        content
-            .overlay(alignment: .topTrailing) {
-                if windowState.copiedValue == key {
-                    Text("hover.copy.copied".localized)
-                        .font(.caption2)
-                        .foregroundColor(.green)
-                        .padding(.horizontal, 4)
-                        .background(.regularMaterial, in: Capsule())
-                        .fixedSize()
-                }
-            }
-            .contentShape(Rectangle())
-            .onTapGesture {
-                if windowState.isLocked { windowState.copyToClipboard(value, key: key) }
-            }
+            // Copy is offered only while the popup is locked with Option; the space stays
+            // reserved so values don't shift when it appears.
+            .opacity(windowState.isLocked ? 1 : 0)
+            .allowsHitTesting(windowState.isLocked)
     }
 }
 
 private extension View {
-    func copyable(_ value: String) -> some View {
-        modifier(CopyOnTap(value: value))
+    /// Adds the same copy button the fields use; it shows while the popup is locked (Option held).
+    func copyable(_ value: String, key: String? = nil) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: 4) {
+            self
+            V2CopyButton(value: value, key: key ?? "text:" + value, fontSize: AppSettings.shared.fontSize - 1)
+        }
     }
 }
 
