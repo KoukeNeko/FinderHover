@@ -54,7 +54,10 @@ struct HoverContentView: View {
         }
         .padding(.horizontal, settings.compactMode ? 12 : 16)
         .padding(.vertical, settings.compactMode ? 10 : 14)
-        .frame(minWidth: 320, maxWidth: settings.windowMaxWidth)
+        // A fixed width (the v2 card size) keeps padding even: with a flexible width the
+        // window shrank to the content's ideal width after the height was measured at the
+        // maximum, so wrapped text overflowed and the top and bottom padding were clipped.
+        .frame(width: settings.windowMaxWidth)
         .fixedSize(horizontal: false, vertical: true)
         .background(Color.clear)
         .onAppear {
