@@ -465,11 +465,11 @@ class HoverManager: ObservableObject {
 
     private func showAccessibilityAlert() {
         let alert = NSAlert()
-        alert.messageText = "Accessibility Permission Required"
-        alert.informativeText = "FinderHover needs accessibility permissions to detect files under your cursor. Please grant access in System Settings > Privacy & Security > Accessibility."
+        alert.messageText = "settings.permissions.accessibility.required".localized
+        alert.informativeText = "settings.permissions.accessibility.description".localized
         alert.alertStyle = .warning
-        alert.addButton(withTitle: "Open System Settings")
-        alert.addButton(withTitle: "Cancel")
+        alert.addButton(withTitle: "settings.permissions.openSystemSettings".localized)
+        alert.addButton(withTitle: "common.cancel".localized)
 
         if alert.runModal() == .alertFirstButtonReturn {
             if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
