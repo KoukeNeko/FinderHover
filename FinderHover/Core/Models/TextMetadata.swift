@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - Subtitle Metadata Structure
-struct SubtitleMetadata {
+nonisolated struct SubtitleMetadata {
     let format: String?           // Subtitle format (SRT, VTT, ASS, etc.)
     let encoding: String?         // Text encoding (UTF-8, etc.)
     let entryCount: Int?          // Number of subtitle entries
@@ -24,7 +24,7 @@ struct SubtitleMetadata {
 }
 
 // MARK: - Font Metadata Structure
-struct FontMetadata {
+nonisolated struct FontMetadata {
     let fontName: String?         // Full font name
     let fontFamily: String?       // Font family name
     let fontStyle: String?        // Font style (Regular, Bold, Italic, etc.)

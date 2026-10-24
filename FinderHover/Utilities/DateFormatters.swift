@@ -8,7 +8,7 @@
 import Foundation
 
 /// Provides reusable date formatters to avoid creating new instances repeatedly
-enum DateFormatters {
+nonisolated enum DateFormatters {
 
     /// Short date and short time (e.g., "11/10/25, 4:30 PM")
     /// Used for: creation date, last access date

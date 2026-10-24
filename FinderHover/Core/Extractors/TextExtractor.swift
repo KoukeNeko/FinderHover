@@ -10,7 +10,7 @@ import AppKit
 
 // MARK: - Text Metadata Extractor
 
-enum TextExtractor {
+nonisolated enum TextExtractor {
 
     // MARK: - Subtitle Metadata Extraction
 

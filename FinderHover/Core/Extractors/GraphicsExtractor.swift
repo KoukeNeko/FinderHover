@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - Graphics Metadata Extractor
 
-enum GraphicsExtractor {
+nonisolated enum GraphicsExtractor {
 
     // MARK: - Parse Limits
 

@@ -10,7 +10,7 @@ import UniformTypeIdentifiers
 
 // MARK: - System Metadata Extractor
 
-enum SystemExtractor {
+nonisolated enum SystemExtractor {
 
     // MARK: - System Metadata Extraction
 

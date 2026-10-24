@@ -11,7 +11,7 @@ import QuickLookThumbnailing
 
 // MARK: - FileInfo Structure
 
-struct FileInfo {
+nonisolated struct FileInfo {
     enum AnalysisNotice: String, Hashable {
         case largeFileProtection
 
@@ -26,16 +26,28 @@ struct FileInfo {
     struct MetadataExtractionPolicy {
         let enableLargeFileProtection: Bool
         let largeFileThresholds: Constants.LargeFileThresholds
+        /// Extractors that launch helper commands run only when their section is shown.
+        var extractGit = true
+        var extractAppBundle = true
+        var extractExecutable = true
+        var extractArchive = true
+        var extractDiskImage = true
 
         static let `default` = MetadataExtractionPolicy(
             enableLargeFileProtection: Constants.Defaults.enableLargeFileProtection,
             largeFileThresholds: Constants.Performance.largeFileThresholds
         )
 
+        @MainActor
         static func from(settings: AppSettings) -> MetadataExtractionPolicy {
             MetadataExtractionPolicy(
                 enableLargeFileProtection: settings.enableLargeFileProtection,
-                largeFileThresholds: Constants.Performance.largeFileThresholds
+                largeFileThresholds: Constants.Performance.largeFileThresholds,
+                extractGit: settings.showGit,
+                extractAppBundle: settings.showAppBundle,
+                extractExecutable: settings.showExecutable,
+                extractArchive: settings.showArchive,
+                extractDiskImage: settings.showDiskImage
             )
         }
     }
@@ -176,7 +188,7 @@ struct FileInfo {
     /// - Parameters:
     ///   - completion: Called with the generated thumbnail image, or nil if failed/cancelled
     /// - Returns: The QLThumbnailGenerator.Request that can be used to cancel the generation
-    @discardableResult
+    @MainActor @discardableResult
     func generateThumbnailAsync(completion: @escaping (NSImage?) -> Void) -> QLThumbnailGenerator.Request {
         let url = URL(fileURLWithPath: path)
         let size = CGSize(
@@ -208,10 +220,14 @@ struct FileInfo {
 
     // MARK: - Factory Method
 
+    @concurrent
     static func from(path: String) async -> FileInfo? {
         await from(path: path, policy: .default)
     }
 
+    /// Runs on the cooperative pool, never the main thread: extraction reads files and
+    /// launches helper commands that can take seconds.
+    @concurrent
     static func from(path: String, policy: MetadataExtractionPolicy) async -> FileInfo? {
         let fileManager = FileManager.default
 
@@ -302,14 +318,14 @@ struct FileInfo {
 
             // Developer metadata
             let codeMetadata = DeveloperExtractor.extractCodeMetadata(from: url)
-            let gitMetadata = DeveloperExtractor.extractGitMetadata(from: url)
+            let gitMetadata = policy.extractGit ? DeveloperExtractor.extractGitMetadata(from: url) : nil
             let xcodeProjectMetadata = DeveloperExtractor.extractXcodeProjectMetadata(
                 from: url,
                 policy: policy,
                 noticeRecorder: { analysisNotices.insert($0) }
             )
-            let executableMetadata = DeveloperExtractor.extractExecutableMetadata(from: url)
-            let appBundleMetadata = DeveloperExtractor.extractAppBundleMetadata(from: url)
+            let executableMetadata = policy.extractExecutable ? DeveloperExtractor.extractExecutableMetadata(from: url) : nil
+            let appBundleMetadata = policy.extractAppBundle ? DeveloperExtractor.extractAppBundleMetadata(from: url) : nil
             let sqliteMetadata = DeveloperExtractor.extractSQLiteMetadata(from: url)
 
             // Graphics metadata
@@ -321,8 +337,8 @@ struct FileInfo {
             )
 
             // Archive metadata
-            let archiveMetadata = ArchiveExtractor.extractArchiveMetadata(from: url)
-            let diskImageMetadata = ArchiveExtractor.extractDiskImageMetadata(from: url)
+            let archiveMetadata = policy.extractArchive ? ArchiveExtractor.extractArchiveMetadata(from: url) : nil
+            let diskImageMetadata = policy.extractDiskImage ? ArchiveExtractor.extractDiskImageMetadata(from: url) : nil
 
             // Text metadata
             let fontMetadata = TextExtractor.extractFontMetadata(from: url)

@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - Archive Metadata Structure
-struct ArchiveMetadata {
+nonisolated struct ArchiveMetadata {
     let format: String?           // ZIP, RAR, 7Z, TAR, GZ, etc.
     let fileCount: Int?           // Number of files in archive
     let uncompressedSize: Int64?  // Total uncompressed size
@@ -25,7 +25,7 @@ struct ArchiveMetadata {
 }
 
 // MARK: - Disk Image Metadata Structure
-struct DiskImageMetadata {
+nonisolated struct DiskImageMetadata {
     let format: String?           // Image format (UDIF, UDZO, UDBZ, ISO 9660, etc.)
     let totalSize: Int64?         // Total size in bytes
     let compressedSize: Int64?    // Compressed size in bytes (if applicable)
