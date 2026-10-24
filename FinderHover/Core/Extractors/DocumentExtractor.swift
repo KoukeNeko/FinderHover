@@ -223,6 +223,11 @@ nonisolated enum DocumentExtractor {
 
     /// Streams a single archive member to stdout and parses it as XML.
     private static func readArchiveMember(_ member: String, in url: URL) -> XMLDocument? {
+        // The member name comes from the file itself; unzip would treat wildcards as a
+        // pattern matching every entry and a leading "-" as an option.
+        guard !member.hasPrefix("-"), !member.contains(where: { "*?[]\\".contains($0) }) else {
+            return nil
+        }
         let process = Process()
         process.executableURL = unzipExecutable
         process.arguments = ["-p", url.path, member]

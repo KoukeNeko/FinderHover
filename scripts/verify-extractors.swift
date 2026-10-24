@@ -55,6 +55,28 @@ import Foundation
         precondition(!FileManager.default.fileExists(atPath: marker.path), "repository config ran a program")
         precondition(git?.currentBranch != nil && git?.commitCount == 1)
 
+        // The per-worktree config file is the repository's too.
+        let worktreeRepo = work.appendingPathComponent("worktree-repo")
+        let worktreeSetup = """
+        mkdir '\(worktreeRepo.path)' && cd '\(worktreeRepo.path)' && git init -q && echo x > f && git add f \
+        && git -c user.email=a@b -c user.name=a commit -qm init && echo '* filter=evil' > .gitattributes \
+        && git config extensions.worktreeConfig true \
+        && git config --worktree filter.evil.clean "sh -c 'touch \(marker.path)'; cat" && sleep 1 && touch f
+        """
+        precondition(runCommand("/bin/sh", ["-c", worktreeSetup], timeout: 30) != nil)
+        _ = DeveloperExtractor.extractGitMetadata(from: worktreeRepo)
+        precondition(!FileManager.default.fileExists(atPath: marker.path), "worktree config ran a program")
+
+        // Output beyond the cap stops the command instead of filling memory.
+        let flood = Process()
+        flood.executableURL = URL(fileURLWithPath: "/bin/sh")
+        flood.arguments = ["-c", "head -c 200000 /dev/zero"]
+        precondition(runProcessCapturingOutput(flood, maxBytes: 100_000) == nil)
+        let small = Process()
+        small.executableURL = URL(fileURLWithPath: "/bin/sh")
+        small.arguments = ["-c", "head -c 200000 /dev/zero"]
+        precondition(runProcessCapturingOutput(small)?.count == 200_000)
+
         // Extraction must leave the main thread free while it runs.
         var ticks = 0
         let ticker = Task { @MainActor in
@@ -68,6 +90,6 @@ import Foundation
         ticker.cancel()
         precondition(ticks > 3, "main thread was blocked during extraction (\(ticks) ticks)")
 
-        print("PASS: zip totals, large and encrypted zips, quarantine date, git config programs, off-main extraction.")
+        print("PASS: zip totals, large and encrypted zips, quarantine date, git and worktree config programs, output cap, off-main extraction.")
     }
 }

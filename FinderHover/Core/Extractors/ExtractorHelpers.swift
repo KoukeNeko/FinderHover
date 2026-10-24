@@ -42,7 +42,8 @@ nonisolated func runProcessWithTimeout(
     return process.terminationStatus == 0
 }
 
-/// Runs a Process and returns its standard-output bytes, or nil on timeout/failure.
+/// Runs a Process and returns its standard-output bytes, or nil on timeout/failure, or when
+/// the output exceeds `maxBytes` (the command is then stopped).
 /// - Parameter includeStandardError: also capture stderr (e.g. `codesign -dv` reports there);
 ///   otherwise stderr is discarded.
 /// Output is drained while the command runs: a pipe holds about 64 KB, and a command that
@@ -50,26 +51,40 @@ nonisolated func runProcessWithTimeout(
 nonisolated func runProcessCapturingOutput(
     _ process: Process,
     timeout: TimeInterval = 5.0,
-    includeStandardError: Bool = false
+    includeStandardError: Bool = false,
+    maxBytes: Int = 16 * 1024 * 1024
 ) -> Data? {
     let output = Pipe()
+    let reader = output.fileHandleForReading
     process.standardOutput = output
     process.standardError = includeStandardError ? output : FileHandle.nullDevice
 
-    final class Drain: @unchecked Sendable { var data = Data() }
+    final class Drain: @unchecked Sendable {
+        var data = Data()
+        var overflowed = false
+    }
     let drain = Drain()
     let drained = DispatchSemaphore(value: 0)
     let succeeded = runProcessWithTimeout(process, timeout: timeout) {
         DispatchQueue.global(qos: .userInitiated).async {
-            drain.data = output.fileHandleForReading.readDataToEndOfFile()
+            // Throwing reads end cleanly if the handle is closed below after a stuck pipe.
+            while let chunk = try? reader.read(upToCount: 64 * 1024), !chunk.isEmpty {
+                guard drain.data.count + chunk.count <= maxBytes else {
+                    drain.overflowed = true
+                    process.terminate()
+                    break
+                }
+                drain.data.append(chunk)
+            }
             drained.signal()
         }
     }
     // A grandchild can keep the pipe open after the command exits; don't wait on it forever.
     if process.processIdentifier != 0, drained.wait(timeout: .now() + 1) == .timedOut {
+        try? reader.close()
         return nil
     }
-    return succeeded ? drain.data : nil
+    return succeeded && !drain.overflowed ? drain.data : nil
 }
 
 /// Runs a command by absolute path and returns its stdout as text, or nil on failure.

@@ -178,15 +178,21 @@ nonisolated enum DeveloperExtractor {
         var hasUncommittedChanges: Bool?
         var tagCount: Int?
 
-        // The repository's own config is untrusted: it can name programs that git runs
-        // during `status` (fsmonitor, clean filters). Read it first and skip `status`
-        // when it defines any.
-        let localConfig = git(["config", "--local", "--includes", "--list"], in: url) ?? ""
-        let configKeys = localConfig.split(separator: "\n").map { $0.split(separator: "=", maxSplits: 1).first?.lowercased() ?? "" }
-        let runsPrograms = configKeys.contains { $0.hasPrefix("filter.") || $0 == "core.fsmonitor" }
-        remoteURL = localConfig.split(separator: "\n")
-            .first { $0.lowercased().hasPrefix("remote.origin.url=") }
-            .map { String($0.dropFirst("remote.origin.url=".count)) }
+        // The repository's own config (local and per-worktree files, with their includes) is
+        // untrusted: it can name programs that git runs during `status` (fsmonitor, clean
+        // filters). Skip `status` when it defines any, or when the config can't be read.
+        let config = git(["config", "--list", "--show-scope", "--includes"], in: url)
+        let entries = (config ?? "").split(separator: "\n").compactMap { line -> (scope: Substring, key: String, value: Substring)? in
+            let scoped = line.split(separator: "\t", maxSplits: 1)
+            guard scoped.count == 2 else { return nil }
+            let pair = scoped[1].split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
+            return (scoped[0], pair[0].lowercased(), pair.count > 1 ? pair[1] : "")
+        }
+        let runsPrograms = config == nil || entries.contains { entry in
+            (entry.scope == "local" || entry.scope == "worktree")
+                && (entry.key.hasPrefix("filter.") || entry.key == "core.fsmonitor")
+        }
+        remoteURL = entries.last { $0.key == "remote.origin.url" }.map { String($0.value) }
 
         if !runsPrograms, let status = git(["status", "--porcelain=v2", "--branch", "--ignore-submodules"], in: url) {
             let lines = status.split(separator: "\n")
