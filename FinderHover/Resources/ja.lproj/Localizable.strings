@@ -852,3 +852,12 @@
 "hover.v2.documentModified" = "文書更新";
 "hover.v2.frontmatter" = "%@ フロントマター";
 "hover.v2.fontSample" = "The quick brown fox jumps over the lazy dog";
+"hover.v2.colorSpace" = "カラースペース";
+"hover.v2.colorPrimaries" = "色域";
+"hover.v2.transferFunction" = "伝達関数";
+"hover.v2.albumArtist" = "アルバムアーティスト";
+"hover.v2.dataFork" = "データフォーク";
+"hover.v2.referrer" = "参照元";
+"hover.v2.availableOfTotal" = "空き %1$@ / %2$@";
+"hover.v2.noFrontmatter" = "フロントマターなし";
+"hover.v2.hidden" = "非表示";

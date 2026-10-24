@@ -187,7 +187,7 @@ struct HoverContentView: View {
         if fileInfo.isDirectory, settings.showItemCount, let count = fileInfo.itemCount {
             parts.append("\(count.formatted()) \(count == 1 ? "common.item".localized : "common.items".localized)")
         }
-        if settings.showFileSize, !(fileInfo.isDirectory && fileInfo.size == 0) {
+        if settings.showFileSize {
             parts.append(fileInfo.formattedSize)
         }
         return parts.joined(separator: " · ")
@@ -259,6 +259,11 @@ struct HoverContentView: View {
         if settings.showEXIFDimensions, let size = exif.imageSize, PixelSize(size) == nil {
             fields.add("hover.exif.dimensions", size)
         }
+        fields.add("hover.exif.colorProfile", exif.colorProfile, when: settings.showEXIFColorProfile)
+        fields.add("hover.v2.colorSpace", exif.colorSpace)
+        fields.add("hover.exif.bitDepth", exif.bitDepth.map { "\($0)-bit" }, when: settings.showEXIFBitDepth)
+        fields.add("hover.exif.hdrFormat", exif.hdrFormat, when: settings.showEXIFHDRInfo)
+        fields.add("hover.exif.hdrGainMap", exif.hasHDRGainMap.map(yesNo), when: settings.showEXIFHDRInfo)
         let diagram = dateFields.isEmpty ? exifPixelSize : nil
 
         guard camera != nil || lens != nil || !specs.isEmpty || !fields.isEmpty || diagram != nil else { return nil }
@@ -283,21 +288,27 @@ struct HoverContentView: View {
             settings.showVideoBitrate ? Spec(video.bitrate, "hover.video.bitrate") : nil
         ].compactMap { $0 }
         let tracks = [
-            video.containerFormat,
+            settings.showVideoContainerFormat ? video.containerFormat : nil,
             video.videoTracks.flatMap { $0 > 0 ? countText("hover.v2.videoTracks", $0) : nil },
             video.audioTracks.flatMap { $0 > 0 ? countText("hover.v2.audioTracks", $0) : nil },
-            video.subtitleTracks.flatMap { $0 > 0 ? countText("hover.v2.subtitleTracks", $0) : nil },
-            video.chapterCount.flatMap { $0 > 0 ? countText("hover.v2.chapters", $0) : nil },
+            settings.showVideoSubtitleTracks
+                ? video.subtitleTracks.flatMap { $0 > 0 ? countText("hover.v2.subtitleTracks", $0) : nil } : nil,
+            settings.showVideoChapters
+                ? video.chapterCount.flatMap { $0 > 0 ? countText("hover.v2.chapters", $0) : nil } : nil,
             video.attachmentCount.flatMap { $0 > 0 ? countText("hover.v2.attachments", $0) : nil }
         ].compactMap { $0 }.joined(separator: " · ")
+        var fields = FieldList()
+        fields.add("hover.v2.colorPrimaries", video.colorPrimaries)
+        fields.add("hover.v2.transferFunction", video.transferFunction)
 
-        guard duration != nil || hdr != nil || !specs.isEmpty || !tracks.isEmpty else { return nil }
+        guard duration != nil || hdr != nil || !specs.isEmpty || !tracks.isEmpty || !fields.isEmpty else { return nil }
         return AnyView(VStack(alignment: .leading, spacing: spacing) {
             if duration != nil || hdr != nil {
                 HeroRow(value: duration, trailing: hdr, color: .indigo, fontSize: fontSize)
             }
             if !specs.isEmpty { SpecStrip(specs: specs, valueSize: fontSize + 4, fontSize: fontSize) }
             if !tracks.isEmpty { CaptionLine(text: tracks, fontSize: fontSize) }
+            if !fields.isEmpty { FieldGrid(fields: fields.items, fontSize: fontSize) }
         })
     }
 
@@ -316,14 +327,17 @@ struct HoverContentView: View {
             settings.showAudioSampleRate ? Spec(audio.sampleRate, "hover.audio.samplerate") : nil,
             Spec(audio.channels, "hover.audio.channels")
         ].compactMap { $0 }
+        var fields = FieldList()
+        fields.add("hover.v2.albumArtist", audio.albumArtist)
 
-        guard title != nil || artist != nil || !albumLine.isEmpty || !specs.isEmpty else { return nil }
+        guard title != nil || artist != nil || !albumLine.isEmpty || !specs.isEmpty || !fields.isEmpty else { return nil }
         return AnyView(VStack(alignment: .leading, spacing: spacing) {
             if title != nil || artist != nil || !albumLine.isEmpty {
                 TitleBlock(title: title, titleSize: fontSize + 5, accent: artist, accentColor: .pink,
                            subtitle: albumLine.isEmpty ? nil : albumLine, fontSize: fontSize)
             }
             if !specs.isEmpty { SpecStrip(specs: specs, valueSize: fontSize + 4, fontSize: fontSize) }
+            if !fields.isEmpty { FieldGrid(fields: fields.items, fontSize: fontSize) }
         })
     }
 
@@ -389,9 +403,12 @@ struct HoverContentView: View {
     private var markdownSection: AnyView? {
         guard settings.showMarkdown, let md = fileInfo.markdownMetadata, md.hasData else { return nil }
         let title = settings.showMarkdownTitle ? md.title : nil
-        let frontmatter: String? = settings.showMarkdownFrontmatter && md.hasFrontmatter == true
-            ? String(format: "hover.v2.frontmatter".localized, md.frontmatterFormat ?? "")
-                .trimmingCharacters(in: .whitespaces)
+        let frontmatter: String? = settings.showMarkdownFrontmatter
+            ? md.hasFrontmatter.map { has in
+                has ? String(format: "hover.v2.frontmatter".localized, md.frontmatterFormat ?? "")
+                    .trimmingCharacters(in: .whitespaces)
+                    : "hover.v2.noFrontmatter".localized
+            }
             : nil
         var specs = [
             settings.showMarkdownWordCount ? Spec(md.wordCount?.formatted(), "hover.markdown.wordCount") : nil,
@@ -528,6 +545,7 @@ struct HoverContentView: View {
         var fields = FieldList()
         fields.add("hover.archive.format", archive.format, when: settings.showArchiveFormat)
         fields.add("hover.archive.compressionRatio", archive.formattedCompressionRatio, when: settings.showArchiveCompressionRatio)
+        fields.add("hover.systemMetadata.comment", archive.comment, wide: true)
 
         guard fileCount != nil || encrypted || uncompressed != nil || !fields.isEmpty else { return nil }
         return AnyView(VStack(alignment: .leading, spacing: spacing) {
@@ -613,6 +631,10 @@ struct HoverContentView: View {
         if settings.showQuarantineInfo, let quarantine = fileInfo.systemMetadata?.quarantineInfo, quarantine.isQuarantined {
             fields.add("hover.v2.downloaded", quarantineText(quarantine))
         }
+        // Safari and Chrome also record the referring page after the download URL.
+        for referrer in (fileInfo.systemMetadata?.whereFroms ?? []).dropFirst() {
+            fields.add("hover.v2.referrer", referrer, wide: true)
+        }
 
         return AnyView(VStack(alignment: .leading, spacing: spacing) {
             VStack(alignment: .leading, spacing: 3) {
@@ -630,6 +652,7 @@ struct HoverContentView: View {
                         .lineLimit(1)
                         .truncationMode(.middle)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .help(source)
                     V2CopyButton(value: source, key: "source:" + source, fontSize: fontSize)
                 }
             }
@@ -681,6 +704,7 @@ struct HoverContentView: View {
             fields.add("hover.html.charset", html.charset, when: settings.showHTMLCharset)
             fields.add("hover.html.ogTitle", html.ogTitle, when: settings.showHTMLOpenGraph, wide: true)
             fields.add("hover.html.ogDescription", html.ogDescription, when: settings.showHTMLOpenGraph, wide: true)
+            fields.add("hover.html.ogImage", html.ogImage, when: settings.showHTMLOpenGraph, wide: true)
             fields.add("hover.html.twitterCard", html.twitterCard, when: settings.showHTMLTwitterCard)
             fields.add("hover.html.keywords", html.keywords, when: settings.showHTMLKeywords, wide: true)
             fields.add("hover.html.author", html.author, when: settings.showHTMLAuthor)
@@ -739,15 +763,21 @@ struct HoverContentView: View {
             fields.add("hover.model3D.vertices", model.vertexCount?.formatted(), when: settings.showModel3DVertices)
             fields.add("hover.model3D.faces", model.faceCount?.formatted(), when: settings.showModel3DVertices)
             fields.add("hover.model3D.materials", model.materialCount?.formatted(), when: settings.showModel3DMaterials)
+            fields.add("hover.model3D.meshes", model.meshCount?.formatted())
             fields.add("hover.model3D.animations", model.animationCount.flatMap { $0 > 0 ? $0.formatted() : nil },
                        when: settings.showModel3DAnimations)
+            fields.add("hover.model3D.skeleton", model.hasSkeleton.map(yesNo))
+            fields.add("hover.model3D.boundingBox", model.boundingBox, wide: true)
         case .xcodeProject:
             guard settings.showXcodeProject, let xcode = fileInfo.xcodeProjectMetadata else { return nil }
             fields.add("hover.xcodeProject.projectName", xcode.projectName)
             fields.add("hover.xcodeProject.targets", xcode.targetCount?.formatted(), when: settings.showXcodeTargets)
             fields.add("hover.xcodeProject.swiftVersion", xcode.swiftVersion, when: settings.showXcodeSwiftVersion)
             fields.add("hover.xcodeProject.deploymentTarget", xcode.deploymentTarget, when: settings.showXcodeDeploymentTarget)
+            fields.add("hover.xcodeProject.configurations", xcode.configurationCount?.formatted())
+            fields.add("hover.xcodeProject.organization", xcode.organizationName)
             fields.add("hover.xcodeProject.hasTests", xcode.hasTests == true ? "hover.config.yes".localized : nil)
+            fields.add("hover.xcodeProject.hasUITests", xcode.hasUITests == true ? "hover.config.yes".localized : nil)
         default:
             return nil
         }
@@ -798,10 +828,18 @@ struct HoverContentView: View {
            let quarantine = system?.quarantineInfo, quarantine.isQuarantined {
             fields.add("hover.v2.quarantine", quarantineText(quarantine))
         }
-        // Allocated size only adds information when it differs (sparse or APFS-compressed files).
-        if settings.showAllocatedSize, let allocated = fileSystem?.formattedAllocatedSize,
-           allocated != fileInfo.formattedSize {
-            fields.add("hover.v2.allocated", allocated)
+        if settings.showQuarantineInfo, let quarantineURL = system?.quarantineInfo?.sourceURL,
+           !(fileInfo.systemMetadata?.whereFroms ?? []).contains(quarantineURL) {
+            fields.add("hover.systemMetadata.whereFrom", quarantineURL, wide: true)
+        }
+        fields.add("hover.v2.allocated", fileSystem?.formattedAllocatedSize, when: settings.showAllocatedSize)
+        fields.add("hover.fileSystemAdvanced.attributeModDate", fileSystem?.formattedAttributeModDate,
+                   when: settings.showAttributeModDate)
+        if settings.showResourceForkSize, let resourceFork = fileSystem?.formattedResourceForkSize {
+            fields.add("hover.fileSystemAdvanced.resourceFork", resourceFork)
+            fields.add("hover.v2.dataFork", fileSystem?.dataForkSize.map {
+                ByteCountFormatter.string(fromByteCount: $0, countStyle: .file)
+            })
         }
         fields.add("hover.systemMetadata.uti", system?.uti, when: settings.showUTI, wide: true)
         fields.add("hover.systemMetadata.comment", system?.finderComment, when: settings.showFinderComment, wide: true)
@@ -823,6 +861,7 @@ struct HoverContentView: View {
                    when: settings.showSpotlightIndexed)
         fields.add("hover.label.mode", fileInfo.formattedPermissions, when: settings.showPermissions)
         fields.add("hover.label.owner", fileInfo.owner, when: settings.showOwner)
+        fields.add("hover.v2.hidden", fileInfo.isHidden ? yesNo(true) : nil)
 
         guard !fields.isEmpty else { return nil }
         return AnyView(FieldGrid(fields: fields.items, fontSize: fontSize))
@@ -832,7 +871,10 @@ struct HoverContentView: View {
         let path = settings.showFilePath ? breadcrumb : nil
         let volumeInfo = settings.showFileSystemAdvanced && settings.showVolumeInfo ? fileInfo.fileSystemAdvancedMetadata : nil
         let volume = [volumeInfo?.volumeName, volumeInfo?.volumeFormat].compactMap { $0 }.joined(separator: " · ")
-        let available = volumeInfo?.formattedVolumeAvailable.map { String(format: "hover.v2.available".localized, $0) }
+        let available: String? = volumeInfo?.formattedVolumeAvailable.map { free in
+            volumeInfo?.formattedVolumeTotal.map { String(format: "hover.v2.availableOfTotal".localized, free, $0) }
+                ?? String(format: "hover.v2.available".localized, free)
+        }
         let usage = volumeInfo?.volumeUsagePercentage
 
         guard path != nil || !volume.isEmpty || available != nil else { return nil }
@@ -844,6 +886,7 @@ struct HoverContentView: View {
                         .foregroundColor(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .help(fileInfo.path)
                     V2CopyButton(value: fileInfo.path, key: "path:" + fileInfo.path, fontSize: fontSize - 1)
                 }
             }

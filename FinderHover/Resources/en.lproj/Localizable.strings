@@ -852,3 +852,12 @@
 "hover.v2.documentModified" = "Document modified";
 "hover.v2.frontmatter" = "%@ frontmatter";
 "hover.v2.fontSample" = "The quick brown fox jumps over the lazy dog";
+"hover.v2.colorSpace" = "Color Space";
+"hover.v2.colorPrimaries" = "Color Primaries";
+"hover.v2.transferFunction" = "Transfer Function";
+"hover.v2.albumArtist" = "Album Artist";
+"hover.v2.dataFork" = "Data Fork";
+"hover.v2.referrer" = "Referrer";
+"hover.v2.availableOfTotal" = "%@ of %@ available";
+"hover.v2.noFrontmatter" = "No frontmatter";
+"hover.v2.hidden" = "Hidden";
