@@ -495,7 +495,7 @@ struct HoverContentView: View {
                     }
                     Spacer(minLength: 8)
                     if let changes {
-                        Text(changes).font(.system(size: fontSize)).foregroundColor(.secondary).copyable(changes)
+                        Text(changes).font(.system(size: fontSize)).foregroundColor(.secondary).copyable(changes, side: .leading)
                     }
                 }
             }
@@ -901,7 +901,7 @@ struct HoverContentView: View {
                 HStack(spacing: 6) {
                     if !volume.isEmpty { Text(volume).copyable(volume) }
                     Spacer(minLength: 6)
-                    if let available { Text(available).copyable(available) }
+                    if let available { Text(available).copyable(available, side: .leading) }
                 }
                 .font(.system(size: fontSize - 0.5))
                 .foregroundColor(.secondary)
@@ -1232,25 +1232,33 @@ private struct HeroRow: View {
 
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 6) {
-            if let value {
-                Text(value)
-                    .font(.system(size: fontSize + 15, weight: .semibold, design: .rounded))
-                    .foregroundColor(color)
-                    .copyable(value)
-            }
-            if let unit {
-                let unitText = Text(unit)
-                    .font(.system(size: fontSize + 1))
-                    .foregroundColor(.secondary)
-                if unitIsValue { unitText.copyable(unit) } else { unitText }
+            if value != nil || unit != nil {
+                // The copy button follows the unit so it never pushes the unit away from the figure.
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    if let value {
+                        Text(value)
+                            .font(.system(size: fontSize + 15, weight: .semibold, design: .rounded))
+                            .foregroundColor(color)
+                    }
+                    if let unit {
+                        Text(unit)
+                            .font(.system(size: fontSize + 1))
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .copyable(copyText)
             }
             Spacer(minLength: 8)
             if let trailing {
                 Text(trailing)
                     .font(.system(size: fontSize + 0.5, weight: .medium))
-                    .copyable(trailing)
+                    .copyable(trailing, side: .leading)
             }
         }
+    }
+
+    private var copyText: String {
+        [value, unitIsValue ? unit : nil].compactMap { $0 }.joined(separator: " ")
     }
 }
 
@@ -1407,8 +1415,8 @@ private struct SizeComparison: View {
                     Text(formatted)
                         .font(.system(size: fontSize, weight: .medium, design: .rounded))
                         .lineLimit(1)
+                        .copyable(formatted, side: .leading)
                         .frame(minWidth: 60, alignment: .trailing)
-                        .copyable(formatted)
                 }
             }
         }
@@ -1440,11 +1448,17 @@ private struct V2CopyButton: View {
 }
 
 private extension View {
-    /// Adds the same copy button the fields use; it shows while the popup is locked (Option held).
-    func copyable(_ value: String, key: String? = nil) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: 4) {
-            self
-            V2CopyButton(value: value, key: key ?? "text:" + value, fontSize: AppSettings.shared.fontSize - 1)
+    /// Adds the same copy button the fields use, shown while the popup is locked (Option held).
+    /// It hangs just outside the text on `side`, taking no layout space, so centered and
+    /// right-aligned values keep their alignment and the popup never resizes on Option.
+    @ViewBuilder
+    func copyable(_ value: String, key: String? = nil, side: HorizontalEdge = .trailing) -> some View {
+        let button = V2CopyButton(value: value, key: key ?? "text:" + value, fontSize: AppSettings.shared.fontSize - 1)
+        switch side {
+        case .trailing:
+            overlay(alignment: .trailing) { button.alignmentGuide(.trailing) { $0[.leading] - 4 } }
+        case .leading:
+            overlay(alignment: .leading) { button.alignmentGuide(.leading) { $0[.trailing] + 4 } }
         }
     }
 }
