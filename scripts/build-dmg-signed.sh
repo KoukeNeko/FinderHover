@@ -203,6 +203,13 @@ print_checksums() {
     echo "   DMG: $(shasum -a 256 "${DMG_NAME}.dmg" | awk '{print $1}')"
     echo "   ZIP: $(shasum -a 256 "${APP_NAME}.app.zip" | awk '{print $1}')"
     echo ""
+    NOTES="distribution/release-notes/v${VERSION}.md"
+    if [ ! -f "$NOTES" ]; then
+        echo "⚠️  Write ${NOTES} before publishing."
+    fi
+    echo "📣 Publish (add --prerelease for a beta):"
+    echo "   gh release create v${VERSION} ${DMG_NAME}.dmg ${APP_NAME}.app.zip --title \"FinderHover ${VERSION}\" --notes-file ${NOTES}"
+    echo ""
 }
 
 main() {
