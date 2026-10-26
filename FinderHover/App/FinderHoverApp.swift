@@ -25,7 +25,9 @@ struct FinderHoverApp: App {
         Settings {
             SettingsView()
         }
-        .defaultSize(width: 1100, height: 720)
+        // Tall enough for the largest popup preview at default settings; resizable from there.
+        .defaultSize(width: 1180, height: 900)
+        .windowResizability(.contentMinSize)
     }
 }
 

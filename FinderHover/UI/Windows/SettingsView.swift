@@ -30,46 +30,35 @@ enum SettingsPage: String, CaseIterable, Identifiable {
 struct SettingsView: View {
     // Pages observe their own settings. Navigation does not need every preference update.
     private let settings = AppSettings.shared
-    @State private var selectedPage: SettingsPage = .display
+    @SceneStorage("settings.page") private var selectedPage: SettingsPage = .display
     @State private var confirmingReset = false
 
+    // The toolbar lives here, in the one view that does not observe AppSettings, so
+    // flipping a setting re-renders the page without rebuilding the toolbar.
     var body: some View {
-        VStack(spacing: 0) {
-            header
-            Divider()
-            pageContent(for: selectedPage)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-        }
-        .frame(minWidth: 960, minHeight: 640)
-        .alert("settings.resetAll".localized, isPresented: $confirmingReset) {
-            Button("common.cancel".localized, role: .cancel) {}
-            Button("settings.resetAll".localized, role: .destructive) { settings.resetToDefaults() }
-        } message: {
-            Text("settings.resetAll.message".localized)
-        }
-    }
-
-    private var header: some View {
-        ZStack {
-            Picker("", selection: $selectedPage) {
-                ForEach(SettingsPage.allCases) { page in
-                    Text(page.localizedName).tag(page)
+        pageContent(for: selectedPage)
+            .frame(minWidth: 960, maxWidth: .infinity, minHeight: 640, maxHeight: .infinity)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Picker("", selection: $selectedPage) {
+                        ForEach(SettingsPage.allCases) { page in
+                            Text(page.localizedName).tag(page)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
+                    .fixedSize()
+                }
+                ToolbarItem(placement: .primaryAction) {
+                    Button("settings.resetAll".localized) { confirmingReset = true }
                 }
             }
-            .pickerStyle(.segmented)
-            .labelsHidden()
-            .fixedSize()
-
-            HStack {
-                Spacer()
-                Button("settings.resetAll".localized) { confirmingReset = true }
-                    .buttonStyle(.borderless)
-                    .foregroundStyle(.secondary)
+            .alert("settings.resetAll".localized, isPresented: $confirmingReset) {
+                Button("common.cancel".localized, role: .cancel) {}
+                Button("settings.resetAll".localized, role: .destructive) { settings.resetToDefaults() }
+            } message: {
+                Text("settings.resetAll.message".localized)
             }
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 10)
-        .background(Color(NSColor.windowBackgroundColor))
     }
 
     @ViewBuilder

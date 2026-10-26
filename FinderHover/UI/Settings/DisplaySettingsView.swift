@@ -268,7 +268,8 @@ struct DisplaySettingsView: View {
     ]
     private static let orderID = "settings.display.order"
 
-    @State private var selectedSectionID = "settings.display.exif"
+    // Scene storage keeps the chosen section when switching pages, which rebuilds this view.
+    @SceneStorage("settings.display.section") private var selectedSectionID = "settings.display.exif"
     @State private var searchText = ""
 
     private var query: String { searchText.trimmingCharacters(in: .whitespacesAndNewlines) }
