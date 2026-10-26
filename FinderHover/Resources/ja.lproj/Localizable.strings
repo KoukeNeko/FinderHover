@@ -861,3 +861,5 @@
 "hover.v2.availableOfTotal" = "空き %1$@ / %2$@";
 "hover.v2.noFrontmatter" = "フロントマターなし";
 "hover.v2.hidden" = "非表示";
+"settings.display.off" = "オフ";
+"settings.behavior.preview.delay" = "%.1f 秒後に表示";

@@ -25,7 +25,7 @@ struct FinderHoverApp: App {
         Settings {
             SettingsView()
         }
-        .defaultSize(width: 640, height: 620)
+        .defaultSize(width: 1100, height: 720)
     }
 }
 

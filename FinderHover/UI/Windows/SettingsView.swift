@@ -2,15 +2,15 @@
 //  SettingsView.swift
 //  FinderHover
 //
-//  Settings window UI with tab navigation
+//  Settings window: a page switcher over live-preview pages
 //
 
 import SwiftUI
 
 enum SettingsPage: String, CaseIterable, Identifiable {
+    case display
     case behavior
     case appearance
-    case display
     case permissions
     case about
 
@@ -25,63 +25,51 @@ enum SettingsPage: String, CaseIterable, Identifiable {
         case .about: return "settings.tab.about".localized
         }
     }
-
-    var icon: String {
-        switch self {
-        case .behavior: return "hand.point.up.left"
-        case .appearance: return "paintbrush"
-        case .display: return "list.bullet"
-        case .permissions: return "lock.shield"
-        case .about: return "info.circle"
-        }
-    }
 }
 
 struct SettingsView: View {
     // Pages observe their own settings. Navigation does not need every preference update.
     private let settings = AppSettings.shared
-    @State private var selectedPage: SettingsPage = .behavior
+    @State private var selectedPage: SettingsPage = .display
     @State private var confirmingReset = false
 
     var body: some View {
-        windowContent
-            .frame(minWidth: 560, minHeight: 540)
-            .alert("settings.resetAll".localized, isPresented: $confirmingReset) {
-                Button("common.cancel".localized, role: .cancel) {}
-                Button("settings.resetAll".localized, role: .destructive) { settings.resetToDefaults() }
-            } message: {
-                Text("settings.resetAll.message".localized)
-            }
+        VStack(spacing: 0) {
+            header
+            Divider()
+            pageContent(for: selectedPage)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .frame(minWidth: 960, minHeight: 640)
+        .alert("settings.resetAll".localized, isPresented: $confirmingReset) {
+            Button("common.cancel".localized, role: .cancel) {}
+            Button("settings.resetAll".localized, role: .destructive) { settings.resetToDefaults() }
+        } message: {
+            Text("settings.resetAll.message".localized)
+        }
     }
 
-    private var windowContent: some View {
-        VStack(spacing: 0) {
-            TabView(selection: $selectedPage) {
+    private var header: some View {
+        ZStack {
+            Picker("", selection: $selectedPage) {
                 ForEach(SettingsPage.allCases) { page in
-                    pageContent(for: page)
-                        .padding(.top, 20)
-                        .tabItem {
-                            Label(page.localizedName, systemImage: page.icon)
-                        }
-                        .tag(page)
+                    Text(page.localizedName).tag(page)
                 }
             }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+            .fixedSize()
 
-            Divider()
-
-            HStack(spacing: 10) {
-                Label("settings.savedAutomatically".localized, systemImage: "checkmark.circle")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+            HStack {
                 Spacer()
                 Button("settings.resetAll".localized) { confirmingReset = true }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
+                    .buttonStyle(.borderless)
+                    .foregroundStyle(.secondary)
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
-            .background(Color(NSColor.windowBackgroundColor))
         }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(Color(NSColor.windowBackgroundColor))
     }
 
     @ViewBuilder

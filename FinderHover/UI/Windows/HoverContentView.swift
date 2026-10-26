@@ -977,6 +977,8 @@ struct HoverContentView: View {
     }
 
     private func loadNote() {
+        // The settings preview renders sample files that don't exist on disk.
+        guard FileManager.default.fileExists(atPath: fileInfo.path) else { return }
         // Synchronous so the existing note shows the instant the popup appears (a read is
         // a single fast getxattr); only the per-keystroke write needs to be off-main.
         do {

@@ -7,174 +7,99 @@
 
 import SwiftUI
 
-struct AppearanceSettingsView: SettingsPageView {
+struct AppearanceSettingsView: View {
     @ObservedObject var settings: AppSettings
 
-    func pageContent() -> some View {
-        VStack(spacing: 16) {
-            // Style Options Card
-            VStack(spacing: 0) {
-                HStack(alignment: .center) {
-                    HStack(alignment: .center, spacing: SettingsRowLayout.tileSpacing) {
-                        SettingsIconTile(icon: "paintbrush", tint: .purple)
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("settings.style".localized)
-                                .font(.system(size: 13, weight: .semibold))
-                            Text("settings.style.description".localized)
-                                .font(.system(size: 11))
-                                .foregroundColor(.secondary)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
+    private var isMacOSStyle: Bool { settings.uiStyle == .macOS }
+
+    /// Liquid Glass replaces blur on macOS 26 and later.
+    private var usesGlass: Bool {
+        if #available(macOS 26, *) { return settings.enableLiquidGlass }
+        return false
+    }
+
+    var body: some View {
+        HStack(spacing: 0) {
+            canvas
+            SettingsInspector {
+                InspectorLabel(titleKey: "settings.style")
+                Picker("settings.style".localized, selection: $settings.uiStyle) {
+                    ForEach(UIStyle.allCases) { style in
+                        Text(style.displayName).tag(style)
                     }
-                    Spacer()
-                    Picker("settings.style".localized, selection: $settings.uiStyle) {
-                        ForEach(UIStyle.allCases) { style in
-                            Text(style.displayName).tag(style)
-                        }
-                    }
-                    .labelsHidden()
-                    .fixedSize()
                 }
-                .padding(.horizontal, SettingsRowLayout.horizontalPadding)
-                .padding(.vertical, SettingsRowLayout.verticalPadding)
+                .pickerStyle(.segmented)
+                .labelsHidden()
 
-                Divider().padding(.leading, SettingsRowLayout.dividerLeading)
-
-                if #available(macOS 26, *) {
-                    SettingRow(
-                        title: "settings.appearance.liquidGlass".localized,
-                        description: "settings.appearance.liquidGlass.hint".localized,
-                        icon: "drop.fill",
-                        tint: .cyan
-                    ) {
-                        Toggle("", isOn: $settings.enableLiquidGlass)
-                            .labelsHidden()
-                            .toggleStyle(.switch)
+                InspectorGroup {
+                    if #available(macOS 26, *) {
+                        InspectorToggleRow(title: "settings.appearance.liquidGlass".localized, isOn: $settings.enableLiquidGlass)
                             .onChange(of: settings.enableLiquidGlass) { _, newValue in
                                 if newValue { settings.enableBlur = false }
                             }
+                        Divider()
                     }
-
-                    Divider().padding(.leading, SettingsRowLayout.dividerLeading)
-                }
-
-                SettingRow(
-                    title: "settings.appearance.blur".localized,
-                    description: "settings.appearance.blur.hint".localized,
-                    icon: "sparkles",
-                    tint: .purple
-                ) {
-                    Toggle("", isOn: $settings.enableBlur)
-                        .labelsHidden()
-                        .toggleStyle(.switch)
+                    InspectorToggleRow(title: "settings.appearance.blur".localized, isOn: $settings.enableBlur)
+                        .disabled(usesGlass)
                         .onChange(of: settings.enableBlur) { _, newValue in
-                            if newValue, #available(macOS 26, *) {
-                                settings.enableLiquidGlass = false
-                            }
+                            if newValue, #available(macOS 26, *) { settings.enableLiquidGlass = false }
                         }
+                    Divider()
+                    InspectorSliderRow(
+                        title: "settings.appearance.opacity".localized,
+                        valueText: "settings.appearance.opacity.percent".localized(Int(settings.windowOpacity * 100)),
+                        value: $settings.windowOpacity, range: 0.7...1.0, step: 0.05)
+                        .disabled(settings.enableBlur || usesGlass)
+                    Divider()
+                    InspectorToggleRow(title: "settings.appearance.compactMode".localized, isOn: $settings.compactMode)
                 }
+                .disabled(!isMacOSStyle)
 
-                Divider().padding(.leading, SettingsRowLayout.dividerLeading)
-
-                SettingRow(
-                    title: "settings.appearance.compactMode".localized,
-                    description: "settings.appearance.compactMode.hint".localized,
-                    icon: "arrow.down.right.and.arrow.up.left",
-                    tint: .gray
-                ) {
-                    Toggle("", isOn: $settings.compactMode)
-                        .labelsHidden()
-                        .toggleStyle(.switch)
+                InspectorGroup {
+                    InspectorSliderRow(
+                        title: "settings.appearance.maxWidth".localized,
+                        valueText: "settings.appearance.maxWidth.pixels".localized(Int(settings.windowMaxWidth)),
+                        value: $settings.windowMaxWidth, range: 300...600, step: 20)
+                        .disabled(!isMacOSStyle)
+                    Divider()
+                    InspectorSliderRow(
+                        title: "settings.appearance.fontSize".localized,
+                        valueText: "settings.appearance.fontSize.points".localized(settings.fontSize),
+                        value: $settings.fontSize, range: 9...14, step: 1)
                 }
             }
-            .background(Color(NSColor.controlBackgroundColor))
-            .cornerRadius(SettingsRowLayout.cardCornerRadius)
-            .padding(.horizontal, SettingsRowLayout.horizontalPadding)
-
-            // Window Dimensions Card
-            VStack(alignment: .leading, spacing: 16) {
-                // Opacity
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("settings.appearance.opacity".localized)
-                        .font(.system(size: 13, weight: .semibold))
-
-                    Text("settings.appearance.opacity.description".localized)
-                        .font(.system(size: 11))
-                        .foregroundColor(.secondary)
-
-                    HStack(spacing: 12) {
-                        Slider(value: $settings.windowOpacity, in: 0.7...1.0, step: 0.05)
-                            .accessibilityLabel("settings.appearance.opacity".localized)
-                            .frame(maxWidth: .infinity)
-                            .disabled(settings.enableBlur)
-                        Text("settings.appearance.opacity.percent".localized(Int(settings.windowOpacity * 100)))
-                            .font(.system(size: 12, design: .monospaced))
-                            .foregroundColor(.secondary)
-                            .frame(minWidth: 80, alignment: .trailing)
-                            .fixedSize()
-                    }
-
-                    if settings.enableBlur {
-                        HStack(spacing: 6) {
-                            Image(systemName: "info.circle")
-                                .font(.system(size: 11))
-                            Text("settings.appearance.opacity.hint".localized)
-                                .font(.system(size: 11))
-                        }
-                        .foregroundColor(.secondary)
-                    }
-                }
-
-                Divider()
-
-                // Maximum Width
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("settings.appearance.maxWidth".localized)
-                        .font(.system(size: 13, weight: .semibold))
-
-                    Text("settings.appearance.maxWidth.description".localized)
-                        .font(.system(size: 11))
-                        .foregroundColor(.secondary)
-
-                    HStack(spacing: 12) {
-                        Slider(value: $settings.windowMaxWidth, in: 300...600, step: 20)
-                            .accessibilityLabel("settings.appearance.maxWidth".localized)
-                            .frame(maxWidth: .infinity)
-                        Text("settings.appearance.maxWidth.pixels".localized(Int(settings.windowMaxWidth)))
-                            .font(.system(size: 12, design: .monospaced))
-                            .foregroundColor(.secondary)
-                            .frame(minWidth: 80, alignment: .trailing)
-                            .fixedSize()
-                    }
-                }
-
-                Divider()
-
-                // Font Size
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("settings.appearance.fontSize".localized)
-                        .font(.system(size: 13, weight: .semibold))
-
-                    Text("settings.appearance.fontSize.description".localized)
-                        .font(.system(size: 11))
-                        .foregroundColor(.secondary)
-
-                    HStack(spacing: 12) {
-                        Slider(value: $settings.fontSize, in: 9...14, step: 1)
-                            .accessibilityLabel("settings.appearance.fontSize".localized)
-                            .frame(maxWidth: .infinity)
-                        Text("settings.appearance.fontSize.points".localized(settings.fontSize))
-                            .font(.system(size: 12, design: .monospaced))
-                            .foregroundColor(.secondary)
-                            .frame(minWidth: 80, alignment: .trailing)
-                            .fixedSize()
-                    }
-                }
-            }
-            .padding(16)
-            .background(Color(NSColor.controlBackgroundColor))
-            .cornerRadius(10)
-            .padding(.horizontal, 20)
         }
+    }
+
+    /// The popup over a colorful desktop, so glass, blur and opacity read as they will.
+    private var canvas: some View {
+        ZStack {
+            LinearGradient(colors: [Color(red: 0.29, green: 0.37, blue: 0.56), Color(red: 0.79, green: 0.56, blue: 0.42)],
+                           startPoint: .topLeading, endPoint: .bottomTrailing)
+            RadialGradient(colors: [Color(red: 0.91, green: 0.71, blue: 0.48), .clear],
+                           center: UnitPoint(x: 0.25, y: 0.8), startRadius: 0, endRadius: 380)
+            RadialGradient(colors: [Color(red: 0.43, green: 0.56, blue: 0.84), .clear],
+                           center: UnitPoint(x: 0.8, y: 0.2), startRadius: 0, endRadius: 420)
+            ScrollView {
+                Group {
+                    if isMacOSStyle {
+                        PopupPreview(opaqueBackground: settings.enableBlur || usesGlass
+                                     ? nil
+                                     : Color(NSColor.controlBackgroundColor).opacity(settings.windowOpacity)) {
+                            HoverContentView(fileInfo: PreviewSamples.photo)
+                        }
+                    } else {
+                        WindowsStyleHoverView(fileInfo: PreviewSamples.photo)
+                            .background(Color(NSColor.controlBackgroundColor))
+                            .overlay(Rectangle().strokeBorder(Color.gray.opacity(0.4)))
+                            .shadow(color: .black.opacity(0.25), radius: 4, x: 2, y: 2)
+                            .allowsHitTesting(false)
+                    }
+                }
+                .padding(.vertical, 40)
+                .frame(maxWidth: .infinity)
+            }
+        }
+        .clipped()
     }
 }

@@ -861,3 +861,5 @@
 "hover.v2.availableOfTotal" = "%@ of %@ available";
 "hover.v2.noFrontmatter" = "No frontmatter";
 "hover.v2.hidden" = "Hidden";
+"settings.display.off" = "Off";
+"settings.behavior.preview.delay" = "Appears after %.1f s";

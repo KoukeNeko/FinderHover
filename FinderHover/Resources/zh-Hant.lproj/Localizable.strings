@@ -861,3 +861,5 @@
 "hover.v2.availableOfTotal" = "可用 %1$@，共 %2$@";
 "hover.v2.noFrontmatter" = "沒有 frontmatter";
 "hover.v2.hidden" = "隱藏檔案";
+"settings.display.off" = "關閉";
+"settings.behavior.preview.delay" = "停留 %.1f 秒後顯示";
