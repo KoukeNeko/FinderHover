@@ -2,7 +2,15 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.10.1 (Current)
+## Version 1.10.2 (Current)
+
+### 🐛 Bug Fixes
+
+- Every date in the popup now uses one format; the modified date no longer looked different from the created and last-opened dates
+
+---
+
+## Version 1.10.1
 
 ### 🌐 Website
 
