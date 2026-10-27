@@ -111,7 +111,9 @@ struct SettingsCanvas<Content: View>: View {
             }
             content
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        // Zero minimum: a tall preview must clip, not raise the window's minimum size
+        // past the screen (which pushes the toolbar off the window).
+        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
         .clipped()
     }
 }

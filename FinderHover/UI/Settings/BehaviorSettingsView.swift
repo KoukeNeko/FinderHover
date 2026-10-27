@@ -122,7 +122,7 @@ private struct BehaviorPreview: View {
             guideLabel("settings.behavior.preview.delay".localized(settings.hoverDelay))
                 .offset(x: cursor.x - 150, y: cursor.y - 9)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
     }
 
     private var finderWindow: some View {
