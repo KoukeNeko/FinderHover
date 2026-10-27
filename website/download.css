@@ -1,0 +1,71 @@
+/* Download page: one window whose toolbar switches install methods. Tokens and shared
+   controls (.cmd, .btn-action, .seg, .lights) live in style.css. */
+
+.dl { max-width: 1040px; margin: 0 auto; padding: 120px 20px 100px; }
+.dl-head { text-align: center; margin-bottom: 40px; }
+.dl-head h1 { font-size: clamp(36px, 5vw, 56px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
+.dl-head p { color: var(--color-text-secondary); font-size: 17px; margin-top: 10px; }
+
+.dl-win {
+  background: var(--surface-window); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55); overflow: hidden;
+}
+.dl-bar {
+  display: grid; grid-template-columns: 60px 1fr 60px; align-items: center; justify-items: center;
+  padding: 10px 16px; border-bottom: 1px solid var(--color-border);
+}
+.dl-bar .lights { justify-self: start; }
+
+.dl-panel { display: grid; grid-template-columns: minmax(0, 1fr) 360px; min-height: 300px; animation: dl-in 0.25s ease-out; }
+.dl-panel[hidden] { display: none; }
+@keyframes dl-in { from { opacity: 0; } }
+
+.term {
+  margin: 0; padding: 28px; font: 14px/1.85 var(--font-family-mono); color: #d7d7dc;
+  border-right: 1px solid var(--color-border); white-space: pre; overflow-x: auto;
+}
+.term code { font: inherit; color: inherit; }
+.term .p { color: #64d2ff; }
+.term .dim { color: #8a8a92; }
+.term .ok { color: #30d158; }
+.term .caret { display: inline-block; width: 8px; height: 16px; background: #d7d7dc; vertical-align: -3px; animation: blink 1.1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.dl-side { padding: 28px; display: grid; gap: 16px; align-content: center; color: var(--color-text-secondary); font-size: 15px; line-height: 1.6; text-wrap: pretty; }
+.dl-side code { font: 13px var(--font-family-mono); color: var(--color-text); }
+.dl-tag { justify-self: start; font-size: 12px; font-weight: 600; color: #30d158; background: rgba(48, 209, 88, 0.12); padding: 3px 10px; border-radius: 999px; }
+.dl-btn { justify-self: start; text-decoration: none; display: inline-block; padding: 11px 16px; }
+
+/* Drag to Applications, as in a disk image window. */
+.dl-drag {
+  display: flex; align-items: center; justify-content: center; gap: 64px; padding: 40px;
+  border-right: 1px solid var(--color-border); background: radial-gradient(520px 260px at 50% 45%, #2a2a30, transparent);
+}
+.dl-drag figure { display: grid; justify-items: center; gap: 12px; margin: 0; font-size: 14px; }
+.dl-arrow { font-size: 40px; color: var(--color-text-secondary); }
+.dl-folder { position: relative; width: 112px; height: 88px; margin-top: 12px; border-radius: 10px; background: linear-gradient(#6cb6ff, #3b8cf0); }
+.dl-folder::before { content: ""; position: absolute; left: 0; top: -11px; width: 46px; height: 18px; border-radius: 8px 8px 0 0; background: #5aa8fb; }
+
+.dl-status {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding: 12px 18px;
+  border-top: 1px solid var(--color-border); font-size: 13px; color: var(--color-text-secondary);
+}
+.dl-status ul { display: flex; flex-wrap: wrap; gap: 6px 24px; list-style: none; }
+
+@media (max-width: 760px) {
+  .dl { padding-top: 96px; }
+  .dl-bar { grid-template-columns: 1fr; padding: 10px; }
+  .dl-bar .lights, .dl-bar-spacer { display: none; }
+  .dl-bar .seg { display: flex; width: 100%; }
+  .dl-bar .seg button { flex: 1; padding: 8px 6px; font-size: 13px; }
+  .dl-panel { grid-template-columns: minmax(0, 1fr); }
+  .term, .dl-drag { border-right: 0; border-bottom: 1px solid var(--color-border); }
+  .term { padding: 20px; font-size: 12px; }
+  .dl-drag { gap: 28px; padding: 32px 20px; }
+  .dl-drag img { width: 80px; height: 80px; }
+  .dl-folder { width: 80px; height: 62px; }
+  .dl-side { padding: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dl-panel, .term .caret { animation: none; }
+}

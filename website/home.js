@@ -399,33 +399,11 @@ function setupLook() {
     [t('home.finder.size'), f.size], [label('modified'), '2026/9/3 14:02'], [label('taken'), '2026/9/2 21:33'],
   ].map(([l, v]) => `<div><span>${esc(l)}:</span> ${esc(v)}</div>`).join('');
 
-  const pill = group.querySelector('.seg-pill');
-  const buttons = [...group.querySelectorAll('button')];
-  const movePill = (btn, animate) => {
-    pill.style.transition = animate ? '' : 'none';
-    pill.style.width = `${btn.offsetWidth}px`;
-    pill.style.transform = `translateX(${btn.offsetLeft - 4}px)`;
-  };
-  const select = (btn, animate = true) => {
-    buttons.forEach((b) => b.setAttribute('aria-checked', String(b === btn)));
+  setupSegmented(group, (btn) => {
     const mode = btn.dataset.mode;
     stage.dataset.mode = mode;
     pop.className = `pop ${mode === 'windows' ? '' : mode}`;
-    movePill(btn, animate);
-  };
-  buttons.forEach((b) => b.addEventListener('click', () => select(b)));
-  group.addEventListener('keydown', (e) => {
-    const i = buttons.findIndex((b) => b.getAttribute('aria-checked') === 'true');
-    const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
-    if (!step) return;
-    const next = buttons[(i + step + buttons.length) % buttons.length];
-    next.focus();
-    select(next);
   });
-  select(buttons[0], false);
-  // Labels change width once fonts load; put the pill back without animating.
-  document.fonts?.ready.then(() => movePill(group.querySelector('[aria-checked="true"]'), false));
-  addEventListener('resize', () => movePill(group.querySelector('[aria-checked="true"]'), false));
 }
 
 // ---------------------------------------------------------------------------
@@ -521,29 +499,6 @@ function setupLiquidGlass() {
 }
 
 // ---------------------------------------------------------------------------
-// Install buttons
-// ---------------------------------------------------------------------------
-
-function setupInstall() {
-  document.querySelectorAll('[data-install]').forEach((btn) => {
-    const text = btn.querySelector('.btn-label');
-    btn.addEventListener('click', () => {
-      navigator.clipboard.writeText('brew install koukeneko/tap/finderhover').then(() => {
-        text.textContent = t('home.copied');
-        btn.classList.add('done');
-        setTimeout(() => { text.textContent = t('home.copy'); btn.classList.remove('done'); }, 1600);
-      }, () => {
-        // Clipboard access denied: select the command so ⌘C still works.
-        const range = document.createRange();
-        range.selectNodeContents(btn.closest('.cmd').querySelector('code'));
-        getSelection().removeAllRanges();
-        getSelection().addRange(range);
-      });
-    });
-  });
-}
-
-// ---------------------------------------------------------------------------
 // Motion (GSAP)
 // ---------------------------------------------------------------------------
 
@@ -593,7 +548,6 @@ function init() {
   setupTypes();
   setupCopyDemo();
   setupLook();
-  setupInstall();
   setupMotion();
 }
 

@@ -161,3 +161,65 @@ class SiteFooter extends HTMLElement {
 // ============================================
 customElements.define('site-nav', SiteNav);
 customElements.define('site-footer', SiteFooter);
+
+// ============================================
+// Shared controls (home and download pages)
+// ============================================
+
+/**
+ * Segmented control: buttons inside `group` with a `.seg-pill` that slides to the
+ * selected one. Calls onSelect(button) on click and arrow keys.
+ */
+function setupSegmented(group, onSelect) {
+    const pill = group.querySelector('.seg-pill');
+    const buttons = [...group.querySelectorAll('button')];
+    const movePill = (btn, animate) => {
+        pill.style.transition = animate ? '' : 'none';
+        pill.style.width = `${btn.offsetWidth}px`;
+        pill.style.transform = `translateX(${btn.offsetLeft - 4}px)`;
+    };
+    const select = (btn, animate = true) => {
+        buttons.forEach((b) => b.setAttribute('aria-checked', String(b === btn)));
+        movePill(btn, animate);
+        onSelect(btn);
+    };
+    buttons.forEach((b) => b.addEventListener('click', () => select(b)));
+    group.addEventListener('keydown', (e) => {
+        const i = buttons.findIndex((b) => b.getAttribute('aria-checked') === 'true');
+        const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!step) return;
+        const next = buttons[(i + step + buttons.length) % buttons.length];
+        next.focus();
+        select(next);
+    });
+    select(buttons[0], false);
+    // Labels change width once fonts load or the window resizes; put the pill back without animating.
+    const current = () => group.querySelector('[aria-checked="true"]');
+    document.fonts?.ready.then(() => movePill(current(), false));
+    addEventListener('resize', () => movePill(current(), false));
+}
+
+/** Buttons marked data-install copy the Homebrew command and say so. */
+function setupInstallButtons() {
+    const t = (key) => window.i18n.t(key);
+    document.querySelectorAll('[data-install]').forEach((btn) => {
+        const text = btn.querySelector('.btn-label');
+        btn.addEventListener('click', () => {
+            navigator.clipboard.writeText('brew install koukeneko/tap/finderhover').then(() => {
+                text.textContent = t('home.copied');
+                btn.classList.add('done');
+                setTimeout(() => { text.textContent = t('home.copy'); btn.classList.remove('done'); }, 1600);
+            }, () => {
+                // Clipboard access denied: select the command so ⌘C still works.
+                const range = document.createRange();
+                // The command shows in a .cmd box beside the button, or in the terminal of an install scope.
+                range.selectNodeContents(btn.closest('.cmd, [data-install-scope]').querySelector('code'));
+                getSelection().removeAllRanges();
+                getSelection().addRange(range);
+            });
+        });
+    });
+}
+
+if (window.i18n?.ready) setupInstallButtons();
+else document.addEventListener('i18n:ready', setupInstallButtons, { once: true });

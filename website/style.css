@@ -276,26 +276,6 @@ body {
   font-size: 19px;
 }
 
-/* Section Styles */
-.section-intro {
-  text-align: center;
-  max-width: 700px;
-  margin: 0 auto 60px;
-}
-
-.section-headline {
-  font-size: clamp(32px, 5vw, 48px);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin-bottom: 16px;
-}
-
-.section-subheadline {
-  font-size: clamp(17px, 2vw, 21px);
-  color: var(--color-text-secondary);
-  line-height: 1.5;
-}
-
 .format-tag,
 .format-info {
   display: inline-flex;
@@ -686,268 +666,6 @@ body {
 }
 
 /* ========================================
-   Download Page
-   ======================================== */
-
-.download-section {
-  padding: 0 24px 100px;
-  max-width: var(--max-width-wide);
-  margin: 0 auto;
-}
-
-.download-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
-}
-
-.download-card {
-  background: var(--color-background-secondary);
-  border-radius: 20px;
-  padding: 32px;
-  position: relative;
-  transition:
-    transform var(--transition-default),
-    box-shadow var(--transition-default);
-}
-
-.download-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
-}
-
-.download-card.recommended {
-  border: 2px solid var(--color-accent);
-}
-
-.download-badge {
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--color-action);
-  color: #fff;
-  padding: 4px 16px;
-  border-radius: 980px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.download-icon {
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 20px;
-  color: var(--color-accent);
-}
-
-.download-icon svg {
-  width: 100%;
-  height: 100%;
-}
-
-.download-card h2 {
-  font-size: 24px;
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 12px;
-}
-
-.download-desc {
-  text-align: center;
-  color: var(--color-text-secondary);
-  font-size: 15px;
-  margin-bottom: 24px;
-  line-height: 1.5;
-}
-
-.download-code {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--color-background);
-  border-radius: 12px;
-  padding: 12px 16px;
-  margin-bottom: 24px;
-  overflow: hidden;
-  min-width: 0;
-}
-
-.download-code code {
-  flex: 1;
-  font-family: var(--font-family-mono);
-  font-size: 13px;
-  color: var(--color-text);
-  overflow-x: auto;
-  white-space: nowrap;
-  min-width: 0;
-}
-
-.copy-btn {
-  background: none;
-  border: none;
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 6px;
-  transition: all var(--transition-default);
-  flex-shrink: 0;
-}
-
-.copy-btn:hover {
-  background: var(--color-background-secondary);
-  color: var(--color-accent);
-}
-
-.copy-btn.copied {
-  color: #34c759;
-}
-
-.download-btn {
-  display: block;
-  text-align: center;
-  background: var(--color-action);
-  color: #fff;
-  padding: 14px 24px;
-  border-radius: 12px;
-  text-decoration: none;
-  font-weight: 500;
-  margin-bottom: 24px;
-  transition: background var(--transition-default);
-}
-
-.download-btn:hover {
-  background: var(--color-action-hover);
-}
-
-.download-steps {
-  background: var(--color-background);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 16px;
-}
-
-.download-steps h4 {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: var(--color-text-secondary);
-}
-
-.download-steps ol {
-  margin-left: 20px;
-  font-size: 14px;
-  color: var(--color-text-secondary);
-  line-height: 1.8;
-}
-
-.download-steps code {
-  font-family: var(--font-family-mono);
-  font-size: 12px;
-  background: var(--color-background-secondary);
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
-.download-note {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--color-text-secondary);
-  padding: 12px;
-  background: rgba(255, 149, 0, 0.1);
-  border-radius: 8px;
-}
-
-.download-note svg {
-  flex-shrink: 0;
-  color: #ff9500;
-}
-
-.download-prereq {
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid var(--color-border);
-}
-
-.download-prereq p {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--color-text-secondary);
-  margin-bottom: 12px;
-  text-align: center;
-}
-
-.download-prereq .download-code {
-  margin-bottom: 12px;
-}
-
-.download-prereq .download-code code {
-  font-size: 11px;
-}
-
-.download-prereq-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  font-size: 13px;
-  color: var(--color-accent);
-  text-decoration: none;
-  transition: opacity var(--transition-default);
-}
-
-.download-prereq-link:hover {
-  opacity: 0.8;
-}
-
-/* Requirements Section */
-.requirements-section {
-  padding: 80px 24px;
-  background: var(--color-background-secondary);
-}
-
-.requirements-section .section-headline {
-  text-align: center;
-  margin-bottom: 48px;
-}
-
-.requirements-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 32px;
-  max-width: var(--max-width);
-  margin: 0 auto;
-}
-
-.requirement-item {
-  text-align: center;
-}
-
-.requirement-icon {
-  width: 48px;
-  height: 48px;
-  margin: 0 auto 16px;
-  color: var(--color-accent);
-}
-
-.requirement-icon svg {
-  width: 100%;
-  height: 100%;
-}
-
-.requirement-item h3 {
-  font-size: 17px;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-.requirement-item p {
-  font-size: 14px;
-  color: var(--color-text-secondary);
-}
-
-/* ========================================
    Documentation Page
    ======================================== */
 
@@ -1258,26 +976,6 @@ body {
 @media (max-width: 768px) {
   .page-hero {
     padding: 100px 20px 40px;
-  }
-
-  .download-section {
-    padding: 0 32px 100px;
-  }
-
-  .download-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .download-card {
-    padding: 24px 16px;
-  }
-
-  .download-code {
-    padding: 10px 12px;
-  }
-
-  .download-code code {
-    font-size: 11px;
   }
 
   .docs-container {
@@ -1633,3 +1331,43 @@ body {
     font-size: 48px;
   }
 }
+
+/* ---------- Controls shared by the home and download pages ---------- */
+.cmd {
+  display: flex; align-items: center; gap: 12px; min-width: 0; padding: 8px 8px 8px 14px;
+  background: var(--surface-raised); border: 1px solid var(--color-border); border-radius: 10px;
+}
+.cmd code { flex: 1; min-width: 0; font: 13px/1.4 var(--font-family-mono); color: var(--color-text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.btn-action {
+  flex-shrink: 0; font: 600 14px/1 var(--font-family); color: #fff; background: var(--color-action);
+  border: 0; border-radius: 7px; padding: 9px 14px; cursor: pointer; transition: transform 0.15s, background 0.2s;
+}
+.btn-action:hover { background: var(--color-action-hover); }
+.btn-action:active { transform: scale(0.97); }
+.btn-action.done { background: #248a3d; }
+.meta { font-size: 13px; color: var(--color-text-secondary); }
+.meta a, .text-link { color: var(--color-link); text-decoration: none; }
+.meta a:hover, .text-link:hover { text-decoration: underline; }
+
+/* macOS window buttons */
+.lights { display: flex; gap: 8px; }
+.lights i { width: 12px; height: 12px; border-radius: 50%; background: #ff5f57; }
+.lights i:nth-child(2) { background: #febc2e; }
+.lights i:nth-child(3) { background: #28c840; }
+
+/* Segmented control with a sliding pill (components.js: setupSegmented) */
+.seg {
+  position: relative; display: inline-flex; gap: 0; padding: 4px; border-radius: 10px;
+  background: var(--surface-raised); border: 1px solid var(--color-border); max-width: 100%; overflow-x: auto;
+}
+.seg button {
+  position: relative; z-index: 1; border: 0; background: none; color: var(--color-text-secondary); white-space: nowrap;
+  font: 500 14px var(--font-family); padding: 8px 16px; border-radius: 7px; cursor: pointer; transition: color 0.2s;
+}
+.seg button[aria-checked="true"] { color: var(--color-text); }
+.seg button:focus-visible { outline: 2px solid var(--color-link); outline-offset: -2px; }
+.seg-pill {
+  position: absolute; top: 4px; bottom: 4px; left: 4px; border-radius: 7px; background: rgba(255, 255, 255, 0.12);
+  transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.64, 1), width 0.3s cubic-bezier(0.34, 1.3, 0.64, 1);
+}
+@media (prefers-reduced-motion: reduce) { .seg-pill { transition: none; } }

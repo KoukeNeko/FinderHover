@@ -197,55 +197,33 @@
     "copyright": "© KoukeNeko · Released under the MIT License"
   },
   "download": {
-    "pageTitle": "Download",
-    "pageSubtitle": "Choose the installation method that works for you",
-    "recommended": "Recommended",
-    "homebrew": {
-      "title": "Homebrew",
-      "desc": "Install via macOS package manager, automatic Gatekeeper verification, easy updates.",
-      "stepsTitle": "Installation Steps",
-      "step1": "Open Terminal",
-      "step2": "Paste the command above and press Enter",
-      "step3": "Wait for installation to complete",
-      "step4": "Open FinderHover from Launchpad",
-      "noHomebrew": "Don't have Homebrew?",
-      "visitBrew": "Visit brew.sh to learn more"
+    "title": "Download FinderHover",
+    "subtitle": "Free and open source",
+    "tabs": {
+      "app": "Download app",
+      "source": "Build from source"
     },
-    "direct": {
-      "title": "Direct Download",
-      "desc": "Download the latest .app file from GitHub Releases.",
-      "downloadBtn": "Download FinderHover.app.zip",
-      "stepsTitle": "Installation Steps",
-      "step1": "Download and extract the .zip file",
-      "step2": "Drag FinderHover.app to Applications folder",
-      "step3": "Right-click and select \"Open\" on first launch",
-      "step4": "Click \"Open\" in the popup to bypass Gatekeeper",
-      "note": "The app is not notarized by Apple, manual approval required"
+    "recommended": "Recommended",
+    "brew": {
+      "desc": "Later, <code>brew upgrade</code> brings you the latest version.",
+      "none": "No Homebrew? Get it at brew.sh"
+    },
+    "app": {
+      "applications": "Applications",
+      "desc": "Unzip the download and drag FinderHover to Applications. The app is signed and notarized by Apple, so it opens right away.",
+      "button": "Download FinderHover.app.zip",
+      "all": "DMG and all versions"
     },
     "source": {
-      "title": "Build from Source",
-      "desc": "For developers or users who want custom features.",
-      "stepsTitle": "Build Steps",
-      "step1": "Ensure Xcode 15 or later is installed",
-      "step2": "Clone the repository",
-      "step3": "Run xcodebuild -scheme FinderHover -configuration Release",
-      "step4": "Or open the project in Xcode and press ⌘B to build"
+      "desc": "Needs Xcode 26 (macOS 26 SDK). You can also open the project in Xcode and press ⌘B.",
+      "repo": "View on GitHub"
     },
-    "requirements": {
-      "title": "System Requirements",
-      "macos": {
-        "title": "macOS Sonoma 14.0+",
-        "desc": "Requires macOS Sonoma or later (macOS 26.4 Beta 1 not supported; Beta 2+ OK)"
-      },
-      "accessibility": {
-        "title": "Accessibility Permission",
-        "desc": "Required to detect mouse position"
-      },
-      "silicon": {
-        "title": "Apple Silicon",
-        "desc": "Supports M1/M2/M3/M4 and M5 processors"
-      }
-    }
+    "req": {
+      "macos": "macOS 14 Sonoma or later",
+      "arch": "Apple Silicon and Intel",
+      "accessibility": "Needs Accessibility permission"
+    },
+    "notarized": "Signed and notarized by Apple"
   },
   "changelog": {
     "pageTitle": "Changelog",
