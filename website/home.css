@@ -87,6 +87,7 @@
 .pop {
   --sep: 0;
   position: relative; width: 380px; padding: 14px 16px; border-radius: 12px; font-size: 12px; color: var(--color-text);
+  text-align: left; /* centered sections must not center the popup's fields */
   border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
 }
 .finder-list .pop { position: absolute; z-index: 2; }
@@ -115,7 +116,7 @@
 .pop-fields span:first-child { display: block; font-size: 10px; color: var(--color-text-secondary); }
 .pop-fields .v { font-weight: 500; }
 .pop-path { color: var(--color-text-secondary); font-size: 11px; }
-.pop-volume { display: flex; justify-content: space-between; color: var(--color-text-secondary); font-size: 11px; margin-top: 6px; }
+.pop-volume { display: flex; flex-wrap: wrap; gap: 2px 12px; justify-content: space-between; color: var(--color-text-secondary); font-size: 11px; margin-top: 6px; }
 .pop-usage { height: 3px; border-radius: 2px; background: rgba(255, 255, 255, 0.1); margin-top: 6px; }
 .pop-usage i { display: block; height: 100%; width: 90%; border-radius: 2px; background: rgba(255, 255, 255, 0.45); }
 .pop-note { margin-top: 10px; padding: 6px 8px; border-radius: 6px; border: 1px solid var(--color-border); color: var(--color-text-secondary); font-size: 11px; }
