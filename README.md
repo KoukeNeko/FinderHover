@@ -31,20 +31,20 @@ Inspect file metadata instantly. No `Cmd+I` required.
 
 ## 📝 What's New
 
+### v1.10 - Redesigned popup and settings
+- **New popup:** A header, one block per file type with its key figures in color, then dates, file details, location and notes
+- **Copy anything:** Hold **Option** to copy any value in the popup
+- **Every setting works:** Each display setting now takes effect, and details that were read but never shown now appear
+- **Live-preview settings:** See the popup for a sample file while you turn its fields on or off; Behavior and Appearance preview the delay, offset, glass and blur
+- **Faster and safer:** Reading apps, disk images and large archives no longer freezes the popup; Git repositories can no longer run a program named in their settings
+- **New app icon**, and a redesigned website with the popup you can try in the browser (v1.10.1)
+
 ### v1.9.0 - Notes
 - **Notes:** Attach a personal note to any file, right in the hover popup — stored with the file (so it persists and travels with the file when copied/moved)
 - **Auto-sizing field:** 3-line minimum that grows as you type, with a focused text-field style while editing
 - **More stable:** Accessibility lookups moved off the main thread (no more UI freezes when Finder is slow), plus leaner/safer reading of large files and many fixes
 - **Fixed:** Black edge behind the Liquid Glass popup when focused
 - 🙏 **Huge thanks to [@zmlim](https://github.com/zmlim)** for designing and contributing the Notes feature ([#14](../../pull/14)) — this release is built on their work
-
-### v1.8.0 - Official Code Signing & Liquid Glass
-- **Signed & Notarized:** No more Gatekeeper bypass — app opens immediately
-- **Liquid Glass:** New visual effect option for macOS 26 (Tahoe)
-- **Universal Binary:** arm64 + x86_64 with Hardened Runtime
-
-### v1.8.1 - Bug Fix
-- **Fixed:** Shortened English download metadata labels for better alignment
 
 [View Full Changelog](CHANGELOG.md)
 
