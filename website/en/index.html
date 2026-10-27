@@ -38,728 +38,128 @@
     <meta name="twitter:image" content="https://finderhover.app.koukeneko.cafe/assets/og-image.png" />
 
     <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/home.css" />
     <script src="/components.js" defer></script>
     <script src="/i18n.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+    <script src="/home.js" defer></script>
   </head>
-  <body>
-    <!-- Navigation -->
+  <body class="home">
     <site-nav home></site-nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
-      <div class="hero-content">
-        <h1 class="hero-headline" data-i18n="hero.headline">
-          一覽無遺，<br />觸手可及。
-        </h1>
-        <p class="hero-subheadline" data-i18n="hero.subheadline">
-          FinderHover 讓你在 Finder 中輕輕一指，<br />
-          就能看見檔案的所有細節。照片的 EXIF、<br />
-          影片的編碼、程式碼的行數，通通一目了然。
-        </p>
-        <div class="hero-cta-group">
-          <button class="hero-btn-primary" onclick="copyBrew()">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-              <path
-                d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
-              />
-            </svg>
-            <span class="hero-btn-text" data-i18n="hero.copyBtn"
-              >複製安裝指令</span
-            >
-          </button>
-          <p class="hero-brew-hint">
-            <code>brew install koukeneko/tap/finderhover</code>
-          </p>
-          <div class="hero-alt-install">
-            <span data-i18n="hero.or">或</span>
-            <a
-              href="https://github.com/KoukeNeko/FinderHover/releases/latest"
-              class="hero-link"
-              data-i18n="hero.directDownload"
-              >直接下載</a
-            >
-            <span>·</span>
-            <a
-              href="https://github.com/KoukeNeko/FinderHover"
-              class="hero-link"
-              data-i18n="hero.viewOnGithub"
-              >在 GitHub 上查看</a
-            >
+    <main>
+      <!-- Hero: the first screen is a Finder window; rows show the popup -->
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="finder" id="finder">
+          <aside class="finder-side" aria-hidden="true">
+            <div class="lights"><i></i><i></i><i></i></div>
+            <h6 data-i18n="home.finder.favorites">喜好項目</h6>
+            <span class="side-item"><b></b><span data-i18n="home.finder.desktop">桌面</span></span>
+            <span class="side-item"><b></b><span data-i18n="home.finder.downloads">下載項目</span></span>
+            <span class="side-item"><b></b><span data-i18n="home.finder.documents">文件</span></span>
+            <span class="side-item on"><b></b><span data-i18n="home.finder.pictures">圖片</span></span>
+            <h6 data-i18n="home.finder.tags">標籤</h6>
+            <span class="side-item"><i style="background:#FFD60A"></i><span data-i18n="demo.type.photo">照片</span></span>
+            <span class="side-item"><i style="background:#7D7AFF"></i><span data-i18n="demo.type.video">影片</span></span>
+            <span class="side-item"><i style="background:#FF453A"></i><span data-i18n="demo.type.pdf">PDF</span></span>
+            <span class="side-item"><i style="background:#64D2FF"></i><span data-i18n="demo.type.code">程式碼</span></span>
+            <span class="side-item"><i style="background:#FF9F0A"></i><span data-i18n="demo.type.git">Git 儲存庫</span></span>
+            <span class="side-item"><i style="background:#AC8E68"></i><span data-i18n="demo.type.zip">壓縮檔</span></span>
+          </aside>
+          <div class="finder-main">
+            <header class="finder-toolbar">
+              <div class="toolbar-copy">
+                <h1 id="hero-title" data-i18n="home.headline">停一下，<span class="nw">就看見。</span></h1>
+                <p class="lede" data-i18n="home.lede">在 Finder 裡把游標停在檔案上，照片的光圈、影片的長度、程式碼的行數就浮現出來，不用打開任何東西。</p>
+              </div>
+              <div class="toolbar-actions">
+                <div class="cmd">
+                  <code>brew install koukeneko/tap/finderhover</code>
+                  <button class="btn-action" type="button" data-install><span class="btn-label" data-i18n="home.copy">複製安裝指令</span></button>
+                </div>
+                <p class="meta">
+                  <span data-i18n="home.requirement">macOS 14 Sonoma 或更新版本 · 免費、開源</span> ·
+                  <a href="https://github.com/KoukeNeko/FinderHover/releases/latest" data-i18n="home.download">下載 DMG</a>
+                </p>
+              </div>
+            </header>
+            <div class="finder-cols" aria-hidden="true">
+              <span data-i18n="home.finder.name">名稱</span><span data-i18n="home.finder.size">大小</span><span data-i18n="home.finder.kind">種類</span>
+            </div>
+            <div class="finder-list">
+              <div id="finder-rows"></div>
+              <span class="ring" id="finder-ring" aria-hidden="true"></span>
+              <svg class="fake-cursor" id="finder-cursor" viewBox="0 0 18 22" aria-hidden="true" hidden><path d="M1 1v17l4.5-4 3 7 3-1.3-3-6.8H15z"/></svg>
+              <div class="pop glass" id="finder-pop" role="tooltip" hidden></div>
+            </div>
+            <div class="finder-status" data-i18n="home.finder.status">9 個項目，可用 97.3 GB</div>
           </div>
-          <p class="hero-requirement" data-i18n="hero.requirement">
-            適用於 macOS Sonoma 14.0 或更新版本
-          </p>
         </div>
-      </div>
-      <div class="hero-image">
-        <img
-          src="https://raw.githubusercontent.com/KoukeNeko/FinderHover/main/docs/demo.gif"
-          alt="FinderHover Demo"
-        />
-      </div>
-    </section>
+      </section>
 
-    <!-- Features Section -->
-    <section id="features" class="features-section">
-      <div class="section-intro">
-        <h2 class="section-headline" data-i18n="features.headline">
-          為 macOS 精心打造
-        </h2>
-        <p class="section-subheadline" data-i18n="features.subheadline">
-          原生 Swift 開發，整合系統 API，帶來流暢體驗。
-        </p>
-      </div>
-
-      <div class="features-grid">
-        <div class="feature-item">
-          <div class="feature-icon">
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-            >
-              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-            </svg>
+      <!-- Breakdown: the popup's five parts pull apart while the section is pinned -->
+      <section class="anatomy" id="features" aria-labelledby="anatomy-title">
+        <div class="anatomy-stage">
+          <div class="anatomy-copy reveal">
+            <h2 id="anatomy-title" data-i18n="home.anatomy.headline">一個視窗，<br />五個段落</h2>
+            <p data-i18n="home.anatomy.lede">每種檔案都照同一個順序排好。</p>
           </div>
-          <h3 data-i18n="features.instant.title">即時預覽</h3>
-          <p data-i18n="features.instant.desc">
-            可調整的懸停延遲，從 0.1 秒到 2
-            秒。當你重新命名或拖曳檔案時，自動隱藏。
+          <div class="pop anatomy-pop" id="anatomy-pop"></div>
+        </div>
+      </section>
+
+      <!-- File types and their key figures -->
+      <section class="types" aria-labelledby="types-title">
+        <div class="section-copy reveal">
+          <h2 id="types-title" data-i18n="home.types.headline">120 多種格式，各有重點</h2>
+          <p data-i18n="home.types.lede">照片看光圈快門，影片看長度與編碼，程式碼看行數，Git 儲存庫看分支與提交。</p>
+        </div>
+        <div class="type-tags" id="type-tags" role="tablist" aria-labelledby="types-title"></div>
+        <div class="types-stage">
+          <div class="pop opaque" id="type-pop" role="tabpanel"></div>
+          <p class="types-side">
+            <code id="type-ext"></code>
+            <a class="text-link" href="formats.html" data-i18n="home.types.all">查看全部格式</a>
           </p>
         </div>
+      </section>
 
-        <div class="feature-item">
-          <div class="feature-icon">
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-            >
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            </svg>
-          </div>
-          <h3 data-i18n="features.privacy.title">隱私優先</h3>
-          <p data-i18n="features.privacy.desc">
-            所有處理都在本機進行，無需網路連線。使用 macOS 輔助使用 API，不使用
-            AppleScript。
-          </p>
+      <!-- Hold Option to copy -->
+      <section class="copy-demo" aria-labelledby="copy-title">
+        <div class="section-copy reveal">
+          <h2 id="copy-title" data-i18n="home.copyDemo.headline">按住 ⌥，每個值都能複製</h2>
+          <p data-i18n="home.copyDemo.lede">按住 Option 鍵時浮動視窗會固定，每個值旁邊出現複製按鈕；放開就恢復原狀。</p>
+          <button class="key" id="copy-key" type="button" aria-pressed="false"><kbd>⌥</kbd><span data-i18n="home.copyDemo.key">按住 Option</span></button>
         </div>
-
-        <div class="feature-item">
-          <div class="feature-icon">
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-            >
-              <circle cx="12" cy="12" r="3" />
-              <path
-                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
-              />
-            </svg>
-          </div>
-          <h3 data-i18n="features.customizable.title">完整自訂</h3>
-          <p data-i18n="features.customizable.desc">
-            在豐富的 macOS 風格與簡約的 Windows
-            提示風格之間選擇。調整大小、透明度和字體縮放。
-          </p>
+        <div class="copy-stage">
+          <div class="pop opaque" id="copy-pop"></div>
+          <p class="toast" id="copy-toast" role="status" aria-live="polite"></p>
         </div>
+      </section>
 
-        <div class="feature-item">
-          <div class="feature-icon">
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-            >
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-            </svg>
-          </div>
-          <h3 data-i18n="features.copy.title">快速複製</h3>
-          <p data-i18n="features.copy.desc">
-            按住 Option (⌥) 鍵鎖定視窗，點擊任何數值旁的複製按鈕即可複製到剪貼簿。
-          </p>
+      <!-- Appearance over a real photo -->
+      <section class="look" aria-labelledby="look-title">
+        <div class="section-copy reveal">
+          <h2 id="look-title" data-i18n="home.look.headline">配合你的桌面</h2>
+          <p data-i18n="home.look.lede">macOS 26 預設使用 Liquid Glass。也可以改用模糊、調整不透明度，或換成精簡的 Windows 樣式。</p>
         </div>
-      </div>
-    </section>
-
-    <!-- Metadata Section -->
-    <section id="metadata" class="metadata-section">
-      <div class="section-intro">
-        <h2 class="section-headline" data-i18n="metadata.headline">
-          支援超過 120 種格式
-        </h2>
-        <p class="section-subheadline" data-i18n="metadata.subheadline">
-          深度解析各類檔案的中繼資料，讓你不用開啟檔案就能了解一切。
-        </p>
-      </div>
-
-      <div class="marquee-container">
-        <!-- Row 1 - Photo & Video formats -->
-        <div class="marquee-row" data-direction="left" data-speed="slow">
-          <div class="marquee-content">
-            <span class="format-tag photo">.jpg</span>
-            <span class="format-tag photo">.png</span>
-            <span class="format-tag photo">.heic</span>
-            <span class="format-tag photo">.raw</span>
-            <span class="format-tag photo">.cr2</span>
-            <span class="format-tag photo">.nef</span>
-            <span class="format-tag photo">.arw</span>
-            <span class="format-tag photo">.dng</span>
-            <span class="format-tag video">.mp4</span>
-            <span class="format-tag video">.mov</span>
-            <span class="format-tag video">.mkv</span>
-            <span class="format-tag video">.webm</span>
-            <span class="format-tag audio">.mp3</span>
-            <span class="format-tag audio">.flac</span>
-            <span class="format-tag audio">.aac</span>
-            <span class="format-tag audio">.wav</span>
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="format-tag photo">.jpg</span>
-            <span class="format-tag photo">.png</span>
-            <span class="format-tag photo">.heic</span>
-            <span class="format-tag photo">.raw</span>
-            <span class="format-tag photo">.cr2</span>
-            <span class="format-tag photo">.nef</span>
-            <span class="format-tag photo">.arw</span>
-            <span class="format-tag photo">.dng</span>
-            <span class="format-tag video">.mp4</span>
-            <span class="format-tag video">.mov</span>
-            <span class="format-tag video">.mkv</span>
-            <span class="format-tag video">.webm</span>
-            <span class="format-tag audio">.mp3</span>
-            <span class="format-tag audio">.flac</span>
-            <span class="format-tag audio">.aac</span>
-            <span class="format-tag audio">.wav</span>
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="format-tag photo">.jpg</span>
-            <span class="format-tag photo">.png</span>
-            <span class="format-tag photo">.heic</span>
-            <span class="format-tag photo">.raw</span>
-            <span class="format-tag photo">.cr2</span>
-            <span class="format-tag photo">.nef</span>
-            <span class="format-tag photo">.arw</span>
-            <span class="format-tag photo">.dng</span>
-            <span class="format-tag video">.mp4</span>
-            <span class="format-tag video">.mov</span>
-            <span class="format-tag video">.mkv</span>
-            <span class="format-tag video">.webm</span>
-            <span class="format-tag audio">.mp3</span>
-            <span class="format-tag audio">.flac</span>
-            <span class="format-tag audio">.aac</span>
-            <span class="format-tag audio">.wav</span>
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="format-tag photo">.jpg</span>
-            <span class="format-tag photo">.png</span>
-            <span class="format-tag photo">.heic</span>
-            <span class="format-tag photo">.raw</span>
-            <span class="format-tag photo">.cr2</span>
-            <span class="format-tag photo">.nef</span>
-            <span class="format-tag photo">.arw</span>
-            <span class="format-tag photo">.dng</span>
-            <span class="format-tag video">.mp4</span>
-            <span class="format-tag video">.mov</span>
-            <span class="format-tag video">.mkv</span>
-            <span class="format-tag video">.webm</span>
-            <span class="format-tag audio">.mp3</span>
-            <span class="format-tag audio">.flac</span>
-            <span class="format-tag audio">.aac</span>
-            <span class="format-tag audio">.wav</span>
-          </div>
+        <div class="seg" id="look-modes" role="radiogroup" aria-labelledby="look-title">
+          <span class="seg-pill" aria-hidden="true"></span>
+          <button type="button" role="radio" data-mode="glass" data-i18n="home.look.glass">Liquid Glass</button>
+          <button type="button" role="radio" data-mode="blur" data-i18n="home.look.blur">模糊</button>
+          <button type="button" role="radio" data-mode="opaque" data-i18n="home.look.opaque">不透明</button>
+          <button type="button" role="radio" data-mode="windows" data-i18n="home.look.windows">Windows 樣式</button>
         </div>
+        <figure class="look-stage" id="look-stage">
+          <div class="pop"></div>
+          <div class="win-tip"></div>
+          <figcaption data-i18n="home.look.credit">照片：Vyacheslav Argenberg，CC BY 4.0</figcaption>
+        </figure>
+      </section>
 
-        <!-- Row 2 - Metadata info -->
-        <div class="marquee-row" data-direction="right" data-speed="medium">
-          <div class="marquee-content">
-            <span
-              class="format-info photo"
-              data-i18n="metadata.info.cameraModel"
-              >相機型號</span
-            >
-            <span class="format-info photo" data-i18n="metadata.info.lensInfo"
-              >鏡頭資訊</span
-            >
-            <span class="format-info photo">ISO</span>
-            <span class="format-info photo" data-i18n="metadata.info.aperture"
-              >光圈</span
-            >
-            <span
-              class="format-info photo"
-              data-i18n="metadata.info.shutterSpeed"
-              >快門速度</span
-            >
-            <span class="format-info photo">GPS</span>
-            <span class="format-info video" data-i18n="metadata.info.videoCodec"
-              >影片編碼</span
-            >
-            <span class="format-info video" data-i18n="metadata.info.resolution"
-              >解析度</span
-            >
-            <span class="format-info video" data-i18n="metadata.info.frameRate"
-              >幀率</span
-            >
-            <span class="format-info audio" data-i18n="metadata.info.artist"
-              >演出者</span
-            >
-            <span class="format-info audio" data-i18n="metadata.info.album"
-              >專輯</span
-            >
-            <span class="format-info audio" data-i18n="metadata.info.sampleRate"
-              >取樣率</span
-            >
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="format-info photo">相機型號</span>
-            <span class="format-info photo">鏡頭資訊</span>
-            <span class="format-info photo">ISO</span>
-            <span class="format-info photo">光圈</span>
-            <span class="format-info photo">快門速度</span>
-            <span class="format-info photo">GPS</span>
-            <span class="format-info video">影片編碼</span>
-            <span class="format-info video">解析度</span>
-            <span class="format-info video">幀率</span>
-            <span class="format-info audio">演出者</span>
-            <span class="format-info audio">專輯</span>
-            <span class="format-info audio">取樣率</span>
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="format-info photo">相機型號</span>
-            <span class="format-info photo">鏡頭資訊</span>
-            <span class="format-info photo">ISO</span>
-            <span class="format-info photo">光圈</span>
-            <span class="format-info photo">快門速度</span>
-            <span class="format-info photo">GPS</span>
-            <span class="format-info video">影片編碼</span>
-            <span class="format-info video">解析度</span>
-            <span class="format-info video">幀率</span>
-            <span class="format-info audio">演出者</span>
-            <span class="format-info audio">專輯</span>
-            <span class="format-info audio">取樣率</span>
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="format-info photo">相機型號</span>
-            <span class="format-info photo">鏡頭資訊</span>
-            <span class="format-info photo">ISO</span>
-            <span class="format-info photo">光圈</span>
-            <span class="format-info photo">快門速度</span>
-            <span class="format-info photo">GPS</span>
-            <span class="format-info video">影片編碼</span>
-            <span class="format-info video">解析度</span>
-            <span class="format-info video">幀率</span>
-            <span class="format-info audio">演出者</span>
-            <span class="format-info audio">專輯</span>
-            <span class="format-info audio">取樣率</span>
-          </div>
-        </div>
-
-        <!-- Row 3 - Code & Document formats -->
-        <div class="marquee-row" data-direction="left" data-speed="medium">
-          <div class="marquee-content">
-            <span class="format-tag code">.swift</span>
-            <span class="format-tag code">.js</span>
-            <span class="format-tag code">.ts</span>
-            <span class="format-tag code">.py</span>
-            <span class="format-tag code">.java</span>
-            <span class="format-tag code">.go</span>
-            <span class="format-tag code">.rs</span>
-            <span class="format-tag code">.cpp</span>
-            <span class="format-tag doc">.pdf</span>
-            <span class="format-tag doc">.docx</span>
-            <span class="format-tag doc">.xlsx</span>
-            <span class="format-tag doc">.pptx</span>
-            <span class="format-tag doc">.md</span>
-            <span class="format-tag doc">.pages</span>
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="format-tag code">.swift</span>
-            <span class="format-tag code">.js</span>
-            <span class="format-tag code">.ts</span>
-            <span class="format-tag code">.py</span>
-            <span class="format-tag code">.java</span>
-            <span class="format-tag code">.go</span>
-            <span class="format-tag code">.rs</span>
-            <span class="format-tag code">.cpp</span>
-            <span class="format-tag doc">.pdf</span>
-            <span class="format-tag doc">.docx</span>
-            <span class="format-tag doc">.xlsx</span>
-            <span class="format-tag doc">.pptx</span>
-            <span class="format-tag doc">.md</span>
-            <span class="format-tag doc">.pages</span>
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="format-tag code">.swift</span>
-            <span class="format-tag code">.js</span>
-            <span class="format-tag code">.ts</span>
-            <span class="format-tag code">.py</span>
-            <span class="format-tag code">.java</span>
-            <span class="format-tag code">.go</span>
-            <span class="format-tag code">.rs</span>
-            <span class="format-tag code">.cpp</span>
-            <span class="format-tag doc">.pdf</span>
-            <span class="format-tag doc">.docx</span>
-            <span class="format-tag doc">.xlsx</span>
-            <span class="format-tag doc">.pptx</span>
-            <span class="format-tag doc">.md</span>
-            <span class="format-tag doc">.pages</span>
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="format-tag code">.swift</span>
-            <span class="format-tag code">.js</span>
-            <span class="format-tag code">.ts</span>
-            <span class="format-tag code">.py</span>
-            <span class="format-tag code">.java</span>
-            <span class="format-tag code">.go</span>
-            <span class="format-tag code">.rs</span>
-            <span class="format-tag code">.cpp</span>
-            <span class="format-tag doc">.pdf</span>
-            <span class="format-tag doc">.docx</span>
-            <span class="format-tag doc">.xlsx</span>
-            <span class="format-tag doc">.pptx</span>
-            <span class="format-tag doc">.md</span>
-            <span class="format-tag doc">.pages</span>
-          </div>
-        </div>
-
-        <!-- Row 4 - More metadata -->
-        <div class="marquee-row" data-direction="right" data-speed="fast">
-          <div class="marquee-content">
-            <span class="format-info code" data-i18n="metadata.info.language"
-              >程式語言</span
-            >
-            <span class="format-info code" data-i18n="metadata.info.totalLines"
-              >總行數</span
-            >
-            <span class="format-info code" data-i18n="metadata.info.codeLines"
-              >程式碼行數</span
-            >
-            <span class="format-info doc" data-i18n="metadata.info.pdfPages"
-              >PDF 頁數</span
-            >
-            <span class="format-info doc" data-i18n="metadata.info.docTitle"
-              >文件標題</span
-            >
-            <span class="format-info doc" data-i18n="metadata.info.author"
-              >作者</span
-            >
-            <span class="format-info doc" data-i18n="metadata.info.wordCount"
-              >字數統計</span
-            >
-            <span class="format-info config" data-i18n="metadata.info.keyCount"
-              >鍵值數量</span
-            >
-            <span
-              class="format-info config"
-              data-i18n="metadata.info.nestingDepth"
-              >巢狀深度</span
-            >
-            <span
-              class="format-info design"
-              data-i18n="metadata.info.layerCount"
-              >圖層數</span
-            >
-            <span class="format-info design" data-i18n="metadata.info.colorMode"
-              >色彩模式</span
-            >
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="format-info code">程式語言</span>
-            <span class="format-info code">總行數</span>
-            <span class="format-info code">程式碼行數</span>
-            <span class="format-info doc">PDF 頁數</span>
-            <span class="format-info doc">文件標題</span>
-            <span class="format-info doc">作者</span>
-            <span class="format-info doc">字數統計</span>
-            <span class="format-info config">鍵值數量</span>
-            <span class="format-info config">巢狀深度</span>
-            <span class="format-info design">圖層數</span>
-            <span class="format-info design">色彩模式</span>
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="format-info code">程式語言</span>
-            <span class="format-info code">總行數</span>
-            <span class="format-info code">程式碼行數</span>
-            <span class="format-info doc">PDF 頁數</span>
-            <span class="format-info doc">文件標題</span>
-            <span class="format-info doc">作者</span>
-            <span class="format-info doc">字數統計</span>
-            <span class="format-info config">鍵值數量</span>
-            <span class="format-info config">巢狀深度</span>
-            <span class="format-info design">圖層數</span>
-            <span class="format-info design">色彩模式</span>
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="format-info code">程式語言</span>
-            <span class="format-info code">總行數</span>
-            <span class="format-info code">程式碼行數</span>
-            <span class="format-info doc">PDF 頁數</span>
-            <span class="format-info doc">文件標題</span>
-            <span class="format-info doc">作者</span>
-            <span class="format-info doc">字數統計</span>
-            <span class="format-info config">鍵值數量</span>
-            <span class="format-info config">巢狀深度</span>
-            <span class="format-info design">圖層數</span>
-            <span class="format-info design">色彩模式</span>
-          </div>
-        </div>
-
-        <!-- Row 5 - Config, Design & System formats -->
-        <div class="marquee-row" data-direction="left" data-speed="slow">
-          <div class="marquee-content">
-            <span class="format-tag config">.json</span>
-            <span class="format-tag config">.yaml</span>
-            <span class="format-tag config">.xml</span>
-            <span class="format-tag config">.plist</span>
-            <span class="format-tag design">.psd</span>
-            <span class="format-tag design">.svg</span>
-            <span class="format-tag design">.sketch</span>
-            <span class="format-tag design">.fig</span>
-            <span class="format-tag font">.ttf</span>
-            <span class="format-tag font">.otf</span>
-            <span class="format-tag font">.woff2</span>
-            <span class="format-tag system">.app</span>
-            <span class="format-tag system">.dmg</span>
-            <span class="format-tag archive">.zip</span>
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="format-tag config">.json</span>
-            <span class="format-tag config">.yaml</span>
-            <span class="format-tag config">.xml</span>
-            <span class="format-tag config">.plist</span>
-            <span class="format-tag design">.psd</span>
-            <span class="format-tag design">.svg</span>
-            <span class="format-tag design">.sketch</span>
-            <span class="format-tag design">.fig</span>
-            <span class="format-tag font">.ttf</span>
-            <span class="format-tag font">.otf</span>
-            <span class="format-tag font">.woff2</span>
-            <span class="format-tag system">.app</span>
-            <span class="format-tag system">.dmg</span>
-            <span class="format-tag archive">.zip</span>
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="format-tag config">.json</span>
-            <span class="format-tag config">.yaml</span>
-            <span class="format-tag config">.xml</span>
-            <span class="format-tag config">.plist</span>
-            <span class="format-tag design">.psd</span>
-            <span class="format-tag design">.svg</span>
-            <span class="format-tag design">.sketch</span>
-            <span class="format-tag design">.fig</span>
-            <span class="format-tag font">.ttf</span>
-            <span class="format-tag font">.otf</span>
-            <span class="format-tag font">.woff2</span>
-            <span class="format-tag system">.app</span>
-            <span class="format-tag system">.dmg</span>
-            <span class="format-tag archive">.zip</span>
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="format-tag config">.json</span>
-            <span class="format-tag config">.yaml</span>
-            <span class="format-tag config">.xml</span>
-            <span class="format-tag config">.plist</span>
-            <span class="format-tag design">.psd</span>
-            <span class="format-tag design">.svg</span>
-            <span class="format-tag design">.sketch</span>
-            <span class="format-tag design">.fig</span>
-            <span class="format-tag font">.ttf</span>
-            <span class="format-tag font">.otf</span>
-            <span class="format-tag font">.woff2</span>
-            <span class="format-tag system">.app</span>
-            <span class="format-tag system">.dmg</span>
-            <span class="format-tag archive">.zip</span>
-          </div>
-        </div>
-
-        <!-- Row 6 - Final metadata -->
-        <div class="marquee-row" data-direction="right" data-speed="medium">
-          <div class="marquee-content">
-            <span class="format-info font" data-i18n="metadata.info.fontName"
-              >字型名稱</span
-            >
-            <span class="format-info font" data-i18n="metadata.info.fontFamily"
-              >字型家族</span
-            >
-            <span class="format-info system">Bundle ID</span>
-            <span class="format-info system" data-i18n="metadata.info.version"
-              >版本</span
-            >
-            <span class="format-info system" data-i18n="metadata.info.codeSign"
-              >程式碼簽章</span
-            >
-            <span
-              class="format-info archive"
-              data-i18n="metadata.info.archiveFormat"
-              >壓縮格式</span
-            >
-            <span
-              class="format-info archive"
-              data-i18n="metadata.info.compressionRatio"
-              >壓縮率</span
-            >
-            <span class="format-info data" data-i18n="metadata.info.tableCount"
-              >資料表數</span
-            >
-            <span class="format-info data" data-i18n="metadata.info.indexCount"
-              >索引數</span
-            >
-            <span
-              class="format-info git"
-              data-i18n="metadata.info.currentBranch"
-              >目前分支</span
-            >
-            <span class="format-info git" data-i18n="metadata.info.commitCount"
-              >提交次數</span
-            >
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="format-info font">字型名稱</span>
-            <span class="format-info font">字型家族</span>
-            <span class="format-info system">Bundle ID</span>
-            <span class="format-info system">版本</span>
-            <span class="format-info system">程式碼簽章</span>
-            <span class="format-info archive">壓縮格式</span>
-            <span class="format-info archive">壓縮率</span>
-            <span class="format-info data">資料表數</span>
-            <span class="format-info data">索引數</span>
-            <span class="format-info git">目前分支</span>
-            <span class="format-info git">提交次數</span>
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="format-info font">字型名稱</span>
-            <span class="format-info font">字型家族</span>
-            <span class="format-info system">Bundle ID</span>
-            <span class="format-info system">版本</span>
-            <span class="format-info system">程式碼簽章</span>
-            <span class="format-info archive">壓縮格式</span>
-            <span class="format-info archive">壓縮率</span>
-            <span class="format-info data">資料表數</span>
-            <span class="format-info data">索引數</span>
-            <span class="format-info git">目前分支</span>
-            <span class="format-info git">提交次數</span>
-          </div>
-          <div class="marquee-content" aria-hidden="true">
-            <span class="format-info font">字型名稱</span>
-            <span class="format-info font">字型家族</span>
-            <span class="format-info system">Bundle ID</span>
-            <span class="format-info system">版本</span>
-            <span class="format-info system">程式碼簽章</span>
-            <span class="format-info archive">壓縮格式</span>
-            <span class="format-info archive">壓縮率</span>
-            <span class="format-info data">資料表數</span>
-            <span class="format-info data">索引數</span>
-            <span class="format-info git">目前分支</span>
-            <span class="format-info git">提交次數</span>
-          </div>
-        </div>
-      </div>
-
-      <p class="formats-cta">
-        <a href="formats.html" class="formats-link" data-i18n="metadata.viewAll"
-          >查看完整格式清單 →</a
-        >
-      </p>
-    </section>
-
-    <!-- Gallery Section -->
-    <section id="gallery" class="gallery-section">
-      <div class="section-intro">
-        <h2 class="section-headline" data-i18n="gallery.headline">實際畫面</h2>
-        <p class="section-subheadline" data-i18n="gallery.subheadline">
-          看看 FinderHover 在日常使用中的表現。
-        </p>
-      </div>
-
-      <div class="gallery-marquee">
-        <div class="gallery-track">
-          <!-- First set of images -->
-          <div class="gallery-card">
-            <img
-              src="https://github.com/user-attachments/assets/fe969256-a07d-4db6-8715-a3bb3226782b"
-              alt="螢幕截圖 1"
-              loading="lazy"
-            />
-          </div>
-          <div class="gallery-card">
-            <img
-              src="https://github.com/user-attachments/assets/f492dc51-9fd8-49f2-b854-d9fc4ac026a6"
-              alt="螢幕截圖 2"
-              loading="lazy"
-            />
-          </div>
-          <div class="gallery-card">
-            <img
-              src="https://github.com/user-attachments/assets/dc04ba05-2bcb-4308-b0cc-bd5ed2259d07"
-              alt="螢幕截圖 3"
-              loading="lazy"
-            />
-          </div>
-          <div class="gallery-card">
-            <img
-              src="https://github.com/user-attachments/assets/140accdd-6034-4b2d-b4d9-ccc55a28586c"
-              alt="螢幕截圖 4"
-              loading="lazy"
-            />
-          </div>
-          <!-- Duplicate set for seamless loop -->
-          <div class="gallery-card">
-            <img
-              src="https://github.com/user-attachments/assets/fe969256-a07d-4db6-8715-a3bb3226782b"
-              alt="螢幕截圖 1"
-              loading="lazy"
-            />
-          </div>
-          <div class="gallery-card">
-            <img
-              src="https://github.com/user-attachments/assets/f492dc51-9fd8-49f2-b854-d9fc4ac026a6"
-              alt="螢幕截圖 2"
-              loading="lazy"
-            />
-          </div>
-          <div class="gallery-card">
-            <img
-              src="https://github.com/user-attachments/assets/dc04ba05-2bcb-4308-b0cc-bd5ed2259d07"
-              alt="螢幕截圖 3"
-              loading="lazy"
-            />
-          </div>
-          <div class="gallery-card">
-            <img
-              src="https://github.com/user-attachments/assets/140accdd-6034-4b2d-b4d9-ccc55a28586c"
-              alt="螢幕截圖 4"
-              loading="lazy"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section id="faq" class="faq-section">
-      <h2 class="faq-headline" data-i18n="faq.headline">有問？有答。</h2>
+        <section id="faq" class="faq-section">
+      <h2 class="faq-headline" data-i18n="faq.headline">常見問題</h2>
       <div class="faq-list">
         <details class="faq-item" open>
           <summary data-i18n="faq.q1.question">
@@ -799,44 +199,28 @@
       </div>
     </section>
 
-    <!-- Footer -->
+      <!-- Install -->
+      <section class="install reveal" aria-labelledby="install-title">
+        <h2 id="install-title" data-i18n="home.install.headline">裝好之後，停在任何檔案上。</h2>
+        <div class="cmd">
+          <code>brew install koukeneko/tap/finderhover</code>
+          <button class="btn-action" type="button" data-install><span class="btn-label" data-i18n="home.copy">複製安裝指令</span></button>
+        </div>
+        <p class="meta">
+          <a href="https://github.com/KoukeNeko/FinderHover/releases/latest" data-i18n="home.download">下載 DMG</a> ·
+          <a href="https://github.com/KoukeNeko/FinderHover" data-i18n="home.install.github">在 GitHub 上查看</a>
+        </p>
+      </section>
+    </main>
+
     <site-footer></site-footer>
 
-    <script>
-      function copyBrew() {
-        const command = "brew install koukeneko/tap/finderhover";
-        navigator.clipboard.writeText(command).then(() => {
-          const btnText = document.querySelector(".hero-btn-text");
-          const originalText = btnText.textContent;
-          const copiedText = window.i18n
-            ? window.i18n.t("hero.copied")
-            : "已複製！";
-          btnText.textContent = copiedText;
-          setTimeout(() => {
-            btnText.textContent = originalText;
-          }, 2000);
-        });
-      }
-
-      // Smooth reveal on scroll
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px",
-      };
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-          }
-        });
-      }, observerOptions);
-
-      document
-        .querySelectorAll(".feature-item, .metadata-card")
-        .forEach((el) => {
-          observer.observe(el);
-        });
-    </script>
+    <!-- Refraction for the web Liquid Glass; only Chromium applies SVG filters to backdrops. -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <filter id="lg-refract" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.006 0.009" numOctaves="2" seed="7" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="9" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </svg>
   </body>
 </html>

@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - Code File Metadata Structure
-struct CodeMetadata {
+nonisolated struct CodeMetadata {
     let language: String?         // Programming language
     let lineCount: Int?           // Total lines
     let codeLines: Int?           // Lines of code (excluding blank and comments)
@@ -23,7 +23,7 @@ struct CodeMetadata {
 }
 
 // MARK: - Git Repository Metadata Structure
-struct GitMetadata {
+nonisolated struct GitMetadata {
     let branchCount: Int?
     let currentBranch: String?
     let commitCount: Int?
@@ -41,7 +41,7 @@ struct GitMetadata {
 }
 
 // MARK: - Xcode Project Metadata Structure
-struct XcodeProjectMetadata {
+nonisolated struct XcodeProjectMetadata {
     let projectName: String?
     let targetCount: Int?             // Number of targets
     let configurationCount: Int?      // Number of build configurations
@@ -64,7 +64,7 @@ struct XcodeProjectMetadata {
 }
 
 // MARK: - Executable Metadata Structure
-struct ExecutableMetadata {
+nonisolated struct ExecutableMetadata {
     let architecture: String?      // arm64, x86_64, Universal
     let isCodeSigned: Bool?
     let signingAuthority: String?
@@ -79,7 +79,7 @@ struct ExecutableMetadata {
 }
 
 // MARK: - App Bundle Metadata Structure
-struct AppBundleMetadata {
+nonisolated struct AppBundleMetadata {
     let bundleID: String?
     let version: String?
     let buildNumber: String?
@@ -97,7 +97,7 @@ struct AppBundleMetadata {
 }
 
 // MARK: - SQLite Metadata Structure
-struct SQLiteMetadata {
+nonisolated struct SQLiteMetadata {
     let tableCount: Int?
     let indexCount: Int?
     let triggerCount: Int?

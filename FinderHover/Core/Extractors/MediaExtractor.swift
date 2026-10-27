@@ -12,7 +12,7 @@ import AVFoundation
 
 // MARK: - Media Metadata Extractor
 
-enum MediaExtractor {
+nonisolated enum MediaExtractor {
 
     /// Matches a 4-digit year in 1900-2099. Compiled once: hoisted out of the
     /// metadata-scanning loops in extractAudioMetadata where it was previously
@@ -679,6 +679,6 @@ enum MediaExtractor {
 }
 
 // Convenience function for backward compatibility
-func fourCCToString(_ value: FourCharCode) -> String {
+nonisolated func fourCCToString(_ value: FourCharCode) -> String {
     return MediaExtractor.fourCCToString(value)
 }

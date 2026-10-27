@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - Archive Metadata Extractor
 
-enum ArchiveExtractor {
+nonisolated enum ArchiveExtractor {
 
     // MARK: - Archive Metadata Extraction
 
@@ -56,71 +56,20 @@ enum ArchiveExtractor {
         let comment: String? = nil
 
         if ext == "zip" {
-            let process = Process()
-            process.executableURL = URL(fileURLWithPath: "/usr/bin/zipinfo")
-            process.arguments = ["-t", url.path]
-
-            let pipe = Pipe()
-            process.standardOutput = pipe
-            process.standardError = Pipe()
-
-            if runProcessWithTimeout(process, timeout: 3.0) {
-                let data = pipe.fileHandleForReading.readDataToEndOfFile()
-                if let output = String(data: data, encoding: .utf8) {
-                    let lines = output.components(separatedBy: .newlines)
-                    for line in lines {
-                        if line.contains("files,") {
-                            if let countMatch = line.split(separator: " ").first,
-                               let count = Int(countMatch) {
-                                fileCount = count
-                            }
-
-                            let components = line.components(separatedBy: " ")
-                            if let uncompIndex = components.firstIndex(of: "bytes"), uncompIndex > 0,
-                               let size = Int64(components[uncompIndex - 1].replacingOccurrences(of: ",", with: "")) {
-                                uncompressedSize = size
-                            }
-                        }
-                    }
+            // One plain listing gives the totals line and, per entry, a text/binary flag
+            // that zipinfo capitalizes ("TX"/"BX") when the entry is encrypted.
+            if let output = runCommand("/usr/bin/zipinfo", [url.path], timeout: 5.0) {
+                if let totals = zipinfoTotals(output) {
+                    fileCount = totals.fileCount
+                    uncompressedSize = totals.uncompressedBytes
                 }
-            }
-
-            // Check for encryption via the verbose central-directory listing.
-            // `unzip -Z -v` prints a per-entry table; each entry has a
-            // "file security status:" line whose value is "encrypted" or
-            // "not encrypted". `unzip -Z -1` only lists names and exits 0 even
-            // on encrypted archives, so it can never reveal encryption.
-            // Match only the security-status line and exclude "not encrypted",
-            // because that string also contains the substring "encrypted".
-            let listProcess = Process()
-            listProcess.executableURL = URL(fileURLWithPath: "/usr/bin/unzip")
-            listProcess.arguments = ["-Z", "-v", url.path]
-
-            let listPipe = Pipe()
-            listProcess.standardOutput = listPipe
-            listProcess.standardError = Pipe()
-
-            if runProcessWithTimeout(listProcess, timeout: 3.0) {
-                let listData = listPipe.fileHandleForReading.readDataToEndOfFile()
-                if let listOutput = String(data: listData, encoding: .utf8) {
-                    let hasEncryptedEntry = listOutput
-                        .components(separatedBy: .newlines)
-                        .contains { line in
-                            let lowered = line.lowercased()
-                            return lowered.contains("security status:")
-                                && lowered.contains("encrypted")
-                                && !lowered.contains("not encrypted")
-                        }
-                    if hasEncryptedEntry {
-                        isEncrypted = true
-                    }
+                let entryFlags = output.components(separatedBy: .newlines).compactMap { line -> Character? in
+                    let fields = line.split(separator: " ", omittingEmptySubsequences: true)
+                    return fields.count > 4 ? fields[4].first : nil
                 }
+                isEncrypted = entryFlags.contains { $0 == "T" || $0 == "B" } ? true : nil
             }
-
         } else if doubleExt.hasPrefix("tar") || ext == "tar" || ext == "tgz" || ext == "tbz2" || ext == "txz" {
-            let process = Process()
-            process.executableURL = URL(fileURLWithPath: "/usr/bin/tar")
-
             var tarArgs = ["-t"]
             if ext == "gz" || ext == "tgz" || doubleExt.hasSuffix(".gz") {
                 tarArgs.append("-z")
@@ -131,18 +80,8 @@ enum ArchiveExtractor {
             }
             tarArgs.append(contentsOf: ["-f", url.path])
 
-            process.arguments = tarArgs
-
-            let pipe = Pipe()
-            process.standardOutput = pipe
-            process.standardError = Pipe()
-
-            if runProcessWithTimeout(process, timeout: 5.0) {
-                let data = pipe.fileHandleForReading.readDataToEndOfFile()
-                if let output = String(data: data, encoding: .utf8) {
-                    let files = output.components(separatedBy: .newlines).filter { !$0.isEmpty && !$0.hasSuffix("/") }
-                    fileCount = files.count
-                }
+            if let output = runCommand("/usr/bin/tar", tarArgs, timeout: 5.0) {
+                fileCount = output.components(separatedBy: .newlines).filter { !$0.isEmpty && !$0.hasSuffix("/") }.count
             }
         }
 
@@ -196,34 +135,23 @@ enum ArchiveExtractor {
         }
 
         // Use hdiutil to get disk image info
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
-        process.arguments = ["imageinfo", url.path]
+        if let output = runCommand("/usr/bin/hdiutil", ["imageinfo", url.path], timeout: 5.0) {
+            let lines = output.components(separatedBy: .newlines)
 
-        let pipe = Pipe()
-        process.standardOutput = pipe
-        process.standardError = Pipe()
+            for line in lines {
+                let trimmed = line.trimmingCharacters(in: .whitespaces)
 
-        if runProcessWithTimeout(process, timeout: 5.0) {
-            let data = pipe.fileHandleForReading.readDataToEndOfFile()
-            if let output = String(data: data, encoding: .utf8) {
-                let lines = output.components(separatedBy: .newlines)
-
-                for line in lines {
-                    let trimmed = line.trimmingCharacters(in: .whitespaces)
-
-                    if trimmed.hasPrefix("Format:") {
-                        format = trimmed.replacingOccurrences(of: "Format:", with: "").trimmingCharacters(in: .whitespaces)
-                    } else if trimmed.hasPrefix("Total Bytes:") {
-                        if let sizeStr = trimmed.components(separatedBy: ":").last?.trimmingCharacters(in: .whitespaces),
-                           let size = Int64(sizeStr) {
-                            totalSize = size
-                        }
-                    } else if trimmed.hasPrefix("Encrypted:") {
-                        isEncrypted = trimmed.lowercased().contains("true") || trimmed.lowercased().contains("yes")
-                    } else if trimmed.hasPrefix("Partition Type:") {
-                        partitionScheme = trimmed.replacingOccurrences(of: "Partition Type:", with: "").trimmingCharacters(in: .whitespaces)
+                if trimmed.hasPrefix("Format:") {
+                    format = trimmed.replacingOccurrences(of: "Format:", with: "").trimmingCharacters(in: .whitespaces)
+                } else if trimmed.hasPrefix("Total Bytes:") {
+                    if let sizeStr = trimmed.components(separatedBy: ":").last?.trimmingCharacters(in: .whitespaces),
+                       let size = Int64(sizeStr) {
+                        totalSize = size
                     }
+                } else if trimmed.hasPrefix("Encrypted:") {
+                    isEncrypted = trimmed.lowercased().contains("true") || trimmed.lowercased().contains("yes")
+                } else if trimmed.hasPrefix("Partition Type:") {
+                    partitionScheme = trimmed.replacingOccurrences(of: "Partition Type:", with: "").trimmingCharacters(in: .whitespaces)
                 }
             }
         }

@@ -305,22 +305,11 @@ class FinderInteraction {
             }
         }
 
-        // Try common locations
-        let commonPaths = [
-            FileManager.default.homeDirectoryForCurrentUser.path,
-            FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Desktop").path,
-            FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Documents").path,
-            FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Downloads").path,
-        ]
-
-        for basePath in commonPaths {
-            let url = URL(fileURLWithPath: basePath).appendingPathComponent(filename)
-            if FileManager.default.fileExists(atPath: url.path) {
-                return url.path
-            }
-        }
-
-        return nil
+        // Desktop icons belong to Finder's desktop, which shows exactly ~/Desktop. Guessing
+        // other folders by name could describe a different file with the same name.
+        let desktopFile = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("Desktop").appendingPathComponent(filename)
+        return FileManager.default.fileExists(atPath: desktopFile.path) ? desktopFile.path : nil
     }
 
     /// Checks (asynchronously, off main) whether a Quick Look preview is visible.

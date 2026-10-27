@@ -331,8 +331,6 @@
 "settings.display.git.tagCount" = "標籤數";
 "settings.display.git.hint" = "Git 中繼資料僅顯示於 Git 儲存庫";
 
-"settings.display.order" = "顯示順序";
-"settings.display.order.hint" = "拖曳項目以重新排序。每種檔案類型的中繼資料（照片、視訊、音訊、PDF 等）作為群組移動。";
 
 /* Settings - Permissions */
 "settings.permissions.title" = "權限";
@@ -387,40 +385,6 @@
 "settings.about.opensource" = "開放原始碼專案";
 
 /* Display Items */
-"displayItem.fileType" = "檔案類型";
-"displayItem.fileSize" = "檔案大小";
-"displayItem.itemCount" = "項目數量";
-"displayItem.creationDate" = "建立日期";
-"displayItem.modificationDate" = "修改日期";
-"displayItem.lastAccessDate" = "最後存取日期";
-"displayItem.permissions" = "權限";
-"displayItem.owner" = "擁有者";
-"displayItem.exif" = "照片資訊（EXIF）";
-"displayItem.video" = "影片資訊";
-"displayItem.audio" = "音訊資訊";
-"displayItem.pdf" = "PDF 資訊";
-"displayItem.office" = "Office 文件資訊";
-"displayItem.archive" = "壓縮檔資訊";
-"displayItem.ebook" = "電子書資訊";
-"displayItem.code" = "程式碼檔案資訊";
-"displayItem.font" = "字型資訊";
-"displayItem.diskImage" = "磁碟映像資訊";
-"displayItem.vectorGraphics" = "向量圖形資訊";
-"displayItem.subtitle" = "字幕檔資訊";
-"displayItem.html" = "HTML/網頁資訊";
-"displayItem.imageExtended" = "延伸影像資訊";
-"displayItem.markdown" = "Markdown 資訊";
-"displayItem.config" = "設定檔資訊";
-"displayItem.psd" = "PSD 資訊";
-"displayItem.executable" = "可執行檔資訊";
-"displayItem.appBundle" = "應用程式套件資訊";
-"displayItem.sqlite" = "SQLite 資料庫資訊";
-"displayItem.git" = "Git 儲存庫資訊";
-"displayItem.filePath" = "檔案路徑";
-"displayItem.fileSystemAdvanced" = "檔案系統進階資訊";
-"displayItem.model3D" = "3D 模型資訊";
-"displayItem.xcodeProject" = "Xcode 專案資訊";
-"displayItem.notes" = "備註";
 
 /* Hover Window */
 "hover.fileType.folder" = "資料夾";
@@ -701,7 +665,6 @@
 "hover.video.hdr" = "HDR";
 
 /* Display Item - System Metadata */
-"displayItem.systemMetadata" = "系統資訊";
 
 /* Common */
 "common.reset" = "重設為預設值";
@@ -812,5 +775,52 @@
 "settings.display.clearSearch" = "清除搜尋";
 "settings.display.category" = "分類";
 "settings.display.results" = "找到 %d 個分類";
-"settings.display.moveUp" = "將 %@ 上移";
-"settings.display.moveDown" = "將 %@ 下移";
+
+/* Hover Window v2 */
+"hover.v2.lastOpened" = "上次開啟";
+"hover.v2.openCount" = "%ld 次";
+"hover.v2.openCount.one" = "%ld 次";
+"hover.v2.downloadedFrom" = "下載自";
+"hover.v2.downloaded" = "下載時間";
+"hover.v2.quarantine" = "隔離";
+"hover.v2.via" = "透過 %@";
+"hover.v2.allocated" = "實際佔用";
+"hover.v2.available" = "可用 %@";
+"hover.v2.lines" = "行";
+"hover.v2.lines.one" = "行";
+"hover.v2.files" = "個檔案";
+"hover.v2.files.one" = "個檔案";
+"hover.v2.build" = "build %@";
+"hover.v2.lastCommit" = "最後提交";
+"hover.v2.uncommittedChanges" = "有未提交的變更";
+"hover.v2.noUncommittedChanges" = "沒有未提交的變更";
+"hover.v2.focal" = "焦距";
+"hover.v2.aperture" = "光圈";
+"hover.v2.shutter" = "快門";
+"hover.v2.iso" = "ISO";
+"hover.v2.videoTracks" = "%ld 視訊軌";
+"hover.v2.videoTracks.one" = "%ld 視訊軌";
+"hover.v2.audioTracks" = "%ld 音軌";
+"hover.v2.audioTracks.one" = "%ld 音軌";
+"hover.v2.subtitleTracks" = "%ld 字幕軌";
+"hover.v2.subtitleTracks.one" = "%ld 字幕軌";
+"hover.v2.chapters" = "%ld 個章節";
+"hover.v2.chapters.one" = "%ld 個章節";
+"hover.v2.attachments" = "%ld 個附件";
+"hover.v2.attachments.one" = "%ld 個附件";
+"hover.v2.archive" = "壓縮檔";
+"hover.v2.documentCreated" = "文件建立";
+"hover.v2.documentModified" = "文件修改";
+"hover.v2.frontmatter" = "%@ frontmatter";
+"hover.v2.fontSample" = "The quick brown fox jumps over the lazy dog";
+"hover.v2.colorSpace" = "色彩空間";
+"hover.v2.colorPrimaries" = "色域";
+"hover.v2.transferFunction" = "轉換函數";
+"hover.v2.albumArtist" = "專輯演出者";
+"hover.v2.dataFork" = "資料分支";
+"hover.v2.referrer" = "參照頁面";
+"hover.v2.availableOfTotal" = "可用 %1$@，共 %2$@";
+"hover.v2.noFrontmatter" = "沒有 frontmatter";
+"hover.v2.hidden" = "隱藏檔案";
+"settings.display.off" = "關閉";
+"settings.behavior.preview.delay" = "停留 %.1f 秒後顯示";

@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - Quarantine Info Structure
-struct QuarantineInfo {
+nonisolated struct QuarantineInfo {
     let isQuarantined: Bool
     let downloadDate: String?
     let sourceApp: String?
@@ -20,7 +20,7 @@ struct QuarantineInfo {
 }
 
 // MARK: - Link Info Structure
-struct LinkInfo {
+nonisolated struct LinkInfo {
     let isSymlink: Bool
     let symlinkTarget: String?
     let hardLinkCount: Int
@@ -31,7 +31,7 @@ struct LinkInfo {
 }
 
 // MARK: - Usage Stats Structure
-struct UsageStats {
+nonisolated struct UsageStats {
     let useCount: Int?
     let lastUsedDate: String?
 
@@ -41,7 +41,7 @@ struct UsageStats {
 }
 
 // MARK: - System Metadata Structure
-struct SystemMetadata {
+nonisolated struct SystemMetadata {
     let finderTags: [String]?
     let whereFroms: [String]?
     let quarantineInfo: QuarantineInfo?
@@ -70,7 +70,7 @@ struct SystemMetadata {
 }
 
 // MARK: - File System Advanced Metadata Structure
-struct FileSystemAdvancedMetadata {
+nonisolated struct FileSystemAdvancedMetadata {
     let allocatedSize: Int64?           // Actual disk blocks used
     let attributeModDate: Date?         // Attribute modification date
     let resourceForkSize: Int64?        // Resource fork size (classic Mac)

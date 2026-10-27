@@ -32,84 +32,144 @@
     "changelog": "Changelog",
     "download": "Download"
   },
-  "hero": {
-    "headline": "See everything.<br>At a glance.",
-    "subheadline": "FinderHover lets you peek at every detail<br>with just a hover in Finder. EXIF data, video codecs,<br>lines of code — all instantly visible.",
-    "copyBtn": "Copy Install Command",
-    "copied": "Copied!",
-    "or": "or",
-    "directDownload": "Direct Download",
-    "viewOnGithub": "View on GitHub",
-    "requirement": "Requires macOS Sonoma 14.0 or later"
-  },
-  "features": {
-    "headline": "Built for macOS",
-    "subheadline": "Native Swift development with system API integration for a seamless experience.",
-    "instant": {
-      "title": "Instant Preview",
-      "desc": "Adjustable hover delay from 0.1 to 2 seconds. Auto-hides when renaming or dragging files."
+  "home": {
+    "headline": "Pause. <span class=\"nw\">See everything.</span>",
+    "lede": "Rest the pointer on a file in Finder and its aperture, running time or line count appears. Nothing needs to open.",
+    "copy": "Copy install command",
+    "copied": "Copied",
+    "download": "Download DMG",
+    "requirement": "macOS 14 Sonoma or later · Free and open source",
+    "finder": {
+      "favorites": "Favorites",
+      "tags": "Tags",
+      "name": "Name",
+      "size": "Size",
+      "kind": "Kind",
+      "status": "9 items, 97.3 GB available",
+      "desktop": "Desktop",
+      "downloads": "Downloads",
+      "documents": "Documents",
+      "pictures": "Pictures"
     },
-    "privacy": {
-      "title": "Privacy First",
-      "desc": "All processing happens locally, no internet required. Uses macOS Accessibility API, not AppleScript."
+    "anatomy": {
+      "headline": "One popup,<br>five parts",
+      "lede": "Every file follows the same order.",
+      "header": [
+        "Header",
+        "Icon, name, kind and size"
+      ],
+      "type": [
+        "Type section",
+        "The key figures for this kind of file"
+      ],
+      "dates": [
+        "Dates",
+        "Created, modified, last opened and how often"
+      ],
+      "file": [
+        "File",
+        "Allocated size, type identifier, permissions"
+      ],
+      "footer": [
+        "Location and notes",
+        "Path, disk space and the note you wrote"
+      ]
     },
-    "customizable": {
-      "title": "Fully Customizable",
-      "desc": "Choose between rich macOS style or minimal Windows tooltip style. Adjust size, opacity, and font scaling."
+    "types": {
+      "headline": "120+ formats, each with its own figures",
+      "lede": "Aperture and shutter for photos, running time and codec for video, line counts for code, branches and commits for Git repositories.",
+      "all": "See all formats"
     },
-    "copy": {
-      "title": "Quick Copy",
-      "desc": "Hold Option (⌥) to lock the window, then click any copy button next to a value to copy it to the clipboard."
+    "copyDemo": {
+      "headline": "Hold ⌥ to copy any value",
+      "lede": "While you hold Option the popup stays put and every value gets a copy button. Let go and it returns to normal.",
+      "key": "Hold Option",
+      "copiedValue": "Copied: %s"
+    },
+    "look": {
+      "headline": "Match your desktop",
+      "lede": "macOS 26 uses Liquid Glass by default. You can switch to blur, set the opacity, or use the compact Windows style.",
+      "glass": "Liquid Glass",
+      "blur": "Blur",
+      "opaque": "Opaque",
+      "windows": "Windows style",
+      "credit": "Photo: Vyacheslav Argenberg, CC BY 4.0"
+    },
+    "install": {
+      "headline": "Install it, then rest on any file.",
+      "github": "View on GitHub"
     }
   },
-  "metadata": {
-    "headline": "120+ Formats Supported",
-    "subheadline": "Deep metadata parsing for all types of files, so you know everything without opening them.",
-    "viewAll": "View All Formats →",
-    "info": {
-      "cameraModel": "Camera Model",
-      "lensInfo": "Lens Info",
-      "iso": "ISO",
+  "demo": {
+    "type": {
+      "photo": "Photo",
+      "video": "Video",
+      "pdf": "PDF",
+      "code": "Code",
+      "git": "Git repository",
+      "zip": "Archive",
+      "folder": "Folder",
+      "md": "Markdown"
+    },
+    "kind": {
+      "photo": "ARW File",
+      "video": "QuickTime Movie",
+      "pdf": "PDF Document",
+      "code": "Swift Source",
+      "git": "Folder · 26 items",
+      "zip": "ZIP Archive"
+    },
+    "label": {
+      "focal": "Focal",
       "aperture": "Aperture",
-      "shutterSpeed": "Shutter Speed",
-      "gps": "GPS",
-      "videoCodec": "Video Codec",
+      "shutter": "Shutter",
+      "iso": "ISO",
+      "taken": "Taken",
+      "location": "Location",
+      "profile": "Color Profile",
+      "depth": "Bit Depth",
       "resolution": "Resolution",
-      "frameRate": "Frame Rate",
-      "artist": "Artist",
-      "album": "Album",
-      "sampleRate": "Sample Rate",
-      "language": "Language",
-      "totalLines": "Total Lines",
-      "codeLines": "Code Lines",
-      "pdfPages": "PDF Pages",
-      "docTitle": "Document Title",
-      "author": "Author",
-      "wordCount": "Word Count",
-      "keyCount": "Key Count",
-      "nestingDepth": "Nesting Depth",
-      "layerCount": "Layers",
-      "colorMode": "Color Mode",
-      "fontName": "Font Name",
-      "fontFamily": "Font Family",
-      "bundleId": "Bundle ID",
+      "fps": "Frame Rate",
+      "codec": "Codec",
+      "bitrate": "Bitrate",
+      "primaries": "Color Primaries",
+      "tracks": "Tracks",
+      "pages": "Pages",
+      "paper": "Page Size",
       "version": "Version",
-      "codeSign": "Code Signature",
-      "archiveFormat": "Archive Format",
-      "compressionRatio": "Compression Ratio",
-      "tableCount": "Tables",
-      "indexCount": "Indexes",
-      "currentBranch": "Current Branch",
-      "commitCount": "Commits"
+      "encrypted": "Encrypted",
+      "producer": "Producer",
+      "keywords": "Keywords",
+      "code": "Code",
+      "comments": "Comments",
+      "blank": "Blank",
+      "commits": "Commits",
+      "branches": "Branches",
+      "tags": "Tags",
+      "lastCommit": "Last commit",
+      "files": "Files",
+      "unpacked": "Unpacked",
+      "ratio": "Ratio",
+      "created": "Created",
+      "modified": "Modified",
+      "opened": "Last opened",
+      "allocated": "Allocated",
+      "uti": "Type ID",
+      "lines": "lines",
+      "duration": "Duration",
+      "notes": "Add a note…"
+    },
+    "value": {
+      "tracks": "1 video · 1 audio",
+      "no": "No",
+      "clean": "No uncommitted changes",
+      "times": "10 times",
+      "free": "97.3 GB of 994.7 GB available",
+      "items": "26 items"
     }
-  },
-  "gallery": {
-    "headline": "In Action",
-    "subheadline": "See FinderHover in everyday use.",
-    "screenshot": "Screenshot"
   },
   "faq": {
-    "headline": "Questions? Answers.",
+    "headline": "FAQ",
     "q1": {
       "question": "Why does it need Accessibility permission?",
       "answer": "FinderHover uses the macOS Accessibility API to detect which file your mouse is pointing at. This is the only way to track files in Finder in real-time, and all data is processed locally without being sent to any server."
@@ -132,7 +192,7 @@
     "changelog": "Changelog",
     "license": "License",
     "docs": "Documentation",
-    "copyright": "© 2025 KoukeNeko. Released under MIT License."
+    "copyright": "© KoukeNeko · Released under the MIT License"
   },
   "download": {
     "pageTitle": "Download",
@@ -394,26 +454,6 @@
   },
   "docs": {
     "pageTitle": "Documentation",
-    "pageSubtitle": "Get started with FinderHover"
-  },
-  "license": {
-    "pageTitle": "License",
-    "pageSubtitle": "MIT License",
-    "summary": {
-      "title": "Open Source Software",
-      "desc": "FinderHover is released under the MIT License, one of the most permissive open source licenses. You are free to use, copy, modify, merge, publish, distribute, sublicense, and sell this software."
-    },
-    "permissions": {
-      "commercial": "Commercial Use",
-      "modification": "Modification",
-      "distribution": "Distribution",
-      "private": "Private Use"
-    },
-    "fullLicense": "Full License Text",
-    "viewOnGithub": "View LICENSE file on GitHub"
-  },
-  "docs": {
-    "pageTitle": "Documentation",
     "pageSubtitle": "Get started with FinderHover",
     "sidebar": {
       "gettingStarted": "Getting Started",
@@ -606,5 +646,21 @@
     },
     "tip": "Tip:",
     "warning": "Note:"
+  },
+  "license": {
+    "pageTitle": "License",
+    "pageSubtitle": "MIT License",
+    "summary": {
+      "title": "Open Source Software",
+      "desc": "FinderHover is released under the MIT License, one of the most permissive open source licenses. You are free to use, copy, modify, merge, publish, distribute, sublicense, and sell this software."
+    },
+    "permissions": {
+      "commercial": "Commercial Use",
+      "modification": "Modification",
+      "distribution": "Distribution",
+      "private": "Private Use"
+    },
+    "fullLicense": "Full License Text",
+    "viewOnGithub": "View LICENSE file on GitHub"
   }
 }

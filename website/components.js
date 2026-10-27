@@ -53,7 +53,7 @@ class SiteNav extends HTMLElement {
           <div class="nav-links">
             <a href="${featuresLink}" data-i18n="nav.features">功能</a>
             <a href="${langPrefix}/formats.html" data-i18n="nav.formats">格式</a>
-            <a href="${langPrefix}/docs.html" data-i18n="nav.docs">文件</a>
+            <a href="${langPrefix}/docs.html" data-i18n="nav.docs">說明</a>
             <a href="${langPrefix}/changelog.html" data-i18n="nav.changelog">更新日誌</a>
             <div class="lang-switcher">
               <button class="lang-current" aria-label="Change language">
@@ -137,7 +137,6 @@ class SiteNav extends HTMLElement {
 // ============================================
 class SiteFooter extends HTMLElement {
     connectedCallback() {
-        const year = new Date().getFullYear();
         const langPrefix = getLangPrefix();
 
         this.innerHTML = `
@@ -149,7 +148,7 @@ class SiteFooter extends HTMLElement {
             <a href="${langPrefix}/license.html" data-i18n="footer.license">授權條款</a>
           </div>
           <p class="footer-copyright" data-i18n="footer.copyright">
-            © ${year} KoukeNeko. 依 MIT 授權條款釋出。
+            © KoukeNeko · 依 MIT 授權條款釋出
           </p>
         </div>
       </footer>

@@ -10,7 +10,7 @@ import PDFKit
 
 // MARK: - Document Metadata Extractor
 
-enum DocumentExtractor {
+nonisolated enum DocumentExtractor {
 
     // MARK: - PDF Metadata Extraction
 
@@ -223,6 +223,11 @@ enum DocumentExtractor {
 
     /// Streams a single archive member to stdout and parses it as XML.
     private static func readArchiveMember(_ member: String, in url: URL) -> XMLDocument? {
+        // The member name comes from the file itself; unzip would treat wildcards as a
+        // pattern matching every entry and a leading "-" as an option.
+        guard !member.hasPrefix("-"), !member.contains(where: { "*?[]\\".contains($0) }) else {
+            return nil
+        }
         let process = Process()
         process.executableURL = unzipExecutable
         process.arguments = ["-p", url.path, member]
@@ -302,7 +307,7 @@ enum DocumentExtractor {
             return true
         }
 
-        guard let declaredBytes = reportedUncompressedBytes(fromZipinfoSummary: summary) else {
+        guard let declaredBytes = zipinfoTotals(summary)?.uncompressedBytes else {
             return true
         }
 
@@ -312,21 +317,6 @@ enum DocumentExtractor {
             return false
         }
         return true
-    }
-
-    /// Parses the uncompressed byte count from a `zipinfo -t` summary line,
-    /// e.g. "3 files, 100037 bytes uncompressed, 100057 bytes compressed:  0.0%".
-    /// The byte count is the token two positions before "uncompressed,"
-    /// (the format is `<n> bytes uncompressed,`).
-    private static func reportedUncompressedBytes(fromZipinfoSummary summary: String) -> Int64? {
-        for line in summary.components(separatedBy: .newlines) where line.contains("uncompressed") {
-            let components = line.components(separatedBy: " ")
-            if let uncompressedIndex = components.firstIndex(of: "uncompressed,"), uncompressedIndex >= 2,
-               let bytes = Int64(components[uncompressedIndex - 2]) {
-                return bytes
-            }
-        }
-        return nil
     }
 
     private static func extractEbookMetadataViaMDItem(from url: URL) -> EbookMetadata? {

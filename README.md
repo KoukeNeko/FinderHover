@@ -8,7 +8,7 @@ Inspect file metadata instantly. No `Cmd+I` required.
 </p>
 
 <p align="center">
-  <img src="/FinderHover/Assets.xcassets/AppIcon.appiconset/Icon-256.png" alt="FinderHover Icon" width="128">
+  <img src="docs/app-icon/AppIcon.svg" alt="FinderHover Icon" width="128">
 </p>
 
 <p align="center">
@@ -121,7 +121,7 @@ Built by a developer, for developers.
 #### 🎛️ Full Control
 
 - Adjustable window size, opacity (70-100%), and font scaling
-- **Layout Editor:** Drag-to-reorder metadata fields and toggle visibility per category
+- **Layout Editor:** Toggle each metadata field per category, with a live preview of the popup
 - **Localization:** Native support for **English**, **Traditional Chinese (繁體中文)**, and **Japanese (日本語)**
 
 ---

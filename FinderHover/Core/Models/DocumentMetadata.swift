@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - PDF Metadata Structure
-struct PDFMetadata {
+nonisolated struct PDFMetadata {
     let title: String?
     let author: String?
     let subject: String?
@@ -31,7 +31,7 @@ struct PDFMetadata {
 }
 
 // MARK: - Office Document Metadata Structure
-struct OfficeMetadata {
+nonisolated struct OfficeMetadata {
     let title: String?
     let author: String?
     let subject: String?
@@ -57,7 +57,7 @@ struct OfficeMetadata {
 }
 
 // MARK: - E-book Metadata Structure
-struct EbookMetadata {
+nonisolated struct EbookMetadata {
     let title: String?            // Book title
     let author: String?           // Author(s)
     let publisher: String?        // Publisher
@@ -75,7 +75,7 @@ struct EbookMetadata {
 }
 
 // MARK: - Markdown Metadata Structure
-struct MarkdownMetadata {
+nonisolated struct MarkdownMetadata {
     let hasFrontmatter: Bool?
     let frontmatterFormat: String? // YAML, TOML, JSON
     let title: String?             // From frontmatter or first H1
@@ -93,7 +93,7 @@ struct MarkdownMetadata {
 }
 
 // MARK: - HTML Metadata Structure
-struct HTMLMetadata {
+nonisolated struct HTMLMetadata {
     let title: String?
     let description: String?
     let charset: String?
@@ -113,7 +113,7 @@ struct HTMLMetadata {
 }
 
 // MARK: - Config File Metadata Structure (JSON/YAML/TOML)
-struct ConfigMetadata {
+nonisolated struct ConfigMetadata {
     let format: String?            // JSON, YAML, TOML
     let isValid: Bool?
     let keyCount: Int?

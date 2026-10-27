@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - Vector Graphics Metadata Structure
-struct VectorGraphicsMetadata {
+nonisolated struct VectorGraphicsMetadata {
     let format: String?           // Format type (SVG, EPS, AI, etc.)
     let dimensions: String?       // Width x Height
     let viewBox: String?          // ViewBox for SVG
@@ -24,7 +24,7 @@ struct VectorGraphicsMetadata {
 }
 
 // MARK: - PSD Metadata Structure
-struct PSDMetadata {
+nonisolated struct PSDMetadata {
     let layerCount: Int?
     let colorMode: String?         // RGB, CMYK, Grayscale, etc.
     let bitDepth: Int?
@@ -39,7 +39,7 @@ struct PSDMetadata {
 }
 
 // MARK: - 3D Model Metadata Structure
-struct Model3DMetadata {
+nonisolated struct Model3DMetadata {
     let format: String?               // USDZ, OBJ, FBX, GLTF
     let vertexCount: Int?             // Number of vertices
     let faceCount: Int?               // Number of faces

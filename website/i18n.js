@@ -41,6 +41,9 @@ const i18n = {
         this.applyTranslations();
         this.updateLangSwitcher();
         document.documentElement.lang = this.currentLang;
+        // Scripted content (the home page demo) renders once strings are loaded.
+        this.ready = true;
+        document.dispatchEvent(new Event('i18n:ready'));
     },
 
     /**

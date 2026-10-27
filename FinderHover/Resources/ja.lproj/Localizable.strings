@@ -331,8 +331,6 @@
 "settings.display.git.tagCount" = "タグ数";
 "settings.display.git.hint" = "GitメタデータはGitリポジトリにのみ表示されます";
 
-"settings.display.order" = "表示順序";
-"settings.display.order.hint" = "項目をドラッグして並べ替えます。各ファイルタイプのメタデータ（写真、動画、音声、PDF など）はグループとして移動します。";
 
 /* Settings - Permissions */
 "settings.permissions.title" = "アクセス許可";
@@ -387,40 +385,6 @@
 "settings.about.opensource" = "オープンソースプロジェクト";
 
 /* Display Items */
-"displayItem.fileType" = "ファイルタイプ";
-"displayItem.fileSize" = "ファイルサイズ";
-"displayItem.itemCount" = "項目数";
-"displayItem.creationDate" = "作成日";
-"displayItem.modificationDate" = "変更日";
-"displayItem.lastAccessDate" = "最終アクセス日";
-"displayItem.permissions" = "アクセス権";
-"displayItem.owner" = "所有者";
-"displayItem.exif" = "写真情報（EXIF）";
-"displayItem.video" = "動画情報";
-"displayItem.audio" = "オーディオ情報";
-"displayItem.pdf" = "PDF情報";
-"displayItem.office" = "Office文書情報";
-"displayItem.archive" = "アーカイブ情報";
-"displayItem.ebook" = "電子書籍情報";
-"displayItem.code" = "コードファイル情報";
-"displayItem.font" = "フォント情報";
-"displayItem.diskImage" = "ディスクイメージ情報";
-"displayItem.vectorGraphics" = "ベクターグラフィックス情報";
-"displayItem.subtitle" = "字幕ファイル情報";
-"displayItem.html" = "HTML/Web情報";
-"displayItem.imageExtended" = "拡張画像情報";
-"displayItem.markdown" = "Markdown情報";
-"displayItem.config" = "設定ファイル情報";
-"displayItem.psd" = "PSD情報";
-"displayItem.executable" = "実行ファイル情報";
-"displayItem.appBundle" = "アプリバンドル情報";
-"displayItem.sqlite" = "SQLiteデータベース情報";
-"displayItem.git" = "Gitリポジトリ情報";
-"displayItem.filePath" = "ファイルパス";
-"displayItem.fileSystemAdvanced" = "ファイルシステム詳細";
-"displayItem.model3D" = "3Dモデル情報";
-"displayItem.xcodeProject" = "Xcodeプロジェクト情報";
-"displayItem.notes" = "メモ";
 
 /* Hover Window */
 "hover.fileType.folder" = "フォルダ";
@@ -701,7 +665,6 @@
 "hover.video.hdr" = "HDR";
 
 /* Display Item - System Metadata */
-"displayItem.systemMetadata" = "システム情報";
 
 /* Common */
 "common.reset" = "デフォルトに戻す";
@@ -812,5 +775,52 @@
 "settings.display.clearSearch" = "検索をクリア";
 "settings.display.category" = "カテゴリ";
 "settings.display.results" = "%d 個のカテゴリが一致";
-"settings.display.moveUp" = "%@ を上に移動";
-"settings.display.moveDown" = "%@ を下に移動";
+
+/* Hover Window v2 */
+"hover.v2.lastOpened" = "最後に開いた日";
+"hover.v2.openCount" = "%ld 回";
+"hover.v2.openCount.one" = "%ld 回";
+"hover.v2.downloadedFrom" = "ダウンロード元";
+"hover.v2.downloaded" = "ダウンロード日";
+"hover.v2.quarantine" = "検疫";
+"hover.v2.via" = "%@ 経由";
+"hover.v2.allocated" = "割り当て";
+"hover.v2.available" = "空き %@";
+"hover.v2.lines" = "行";
+"hover.v2.lines.one" = "行";
+"hover.v2.files" = "ファイル";
+"hover.v2.files.one" = "ファイル";
+"hover.v2.build" = "ビルド %@";
+"hover.v2.lastCommit" = "最終コミット";
+"hover.v2.uncommittedChanges" = "未コミットの変更あり";
+"hover.v2.noUncommittedChanges" = "未コミットの変更なし";
+"hover.v2.focal" = "焦点距離";
+"hover.v2.aperture" = "絞り";
+"hover.v2.shutter" = "シャッター";
+"hover.v2.iso" = "ISO";
+"hover.v2.videoTracks" = "映像 %ld";
+"hover.v2.videoTracks.one" = "映像 %ld";
+"hover.v2.audioTracks" = "音声 %ld";
+"hover.v2.audioTracks.one" = "音声 %ld";
+"hover.v2.subtitleTracks" = "字幕 %ld";
+"hover.v2.subtitleTracks.one" = "字幕 %ld";
+"hover.v2.chapters" = "チャプター %ld";
+"hover.v2.chapters.one" = "チャプター %ld";
+"hover.v2.attachments" = "添付 %ld";
+"hover.v2.attachments.one" = "添付 %ld";
+"hover.v2.archive" = "アーカイブ";
+"hover.v2.documentCreated" = "文書作成";
+"hover.v2.documentModified" = "文書更新";
+"hover.v2.frontmatter" = "%@ フロントマター";
+"hover.v2.fontSample" = "The quick brown fox jumps over the lazy dog";
+"hover.v2.colorSpace" = "カラースペース";
+"hover.v2.colorPrimaries" = "色域";
+"hover.v2.transferFunction" = "伝達関数";
+"hover.v2.albumArtist" = "アルバムアーティスト";
+"hover.v2.dataFork" = "データフォーク";
+"hover.v2.referrer" = "参照元";
+"hover.v2.availableOfTotal" = "空き %1$@ / %2$@";
+"hover.v2.noFrontmatter" = "フロントマターなし";
+"hover.v2.hidden" = "非表示";
+"settings.display.off" = "オフ";
+"settings.behavior.preview.delay" = "%.1f 秒後に表示";

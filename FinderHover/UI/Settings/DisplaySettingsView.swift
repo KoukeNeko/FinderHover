@@ -6,12 +6,10 @@
 //
 
 import SwiftUI
-import UniformTypeIdentifiers
 
 // MARK: - Display Settings
 struct DisplaySettingsView: View {
     @ObservedObject var settings: AppSettings
-    @State private var draggingItem: DisplayItem?
 
     // Data-driven declaration of every toggle section, in on-screen order. Each section's
     // first spec is the master toggle; detail specs pass `gatedBy:` the master key path,
@@ -254,145 +252,180 @@ struct DisplaySettingsView: View {
         ]),
     ]
 
-    @State private var selectedSectionID = "settings.display.basicInfo"
+    /// Accent per section, matching the popup's per-type accent colors.
+    private static let tints: [String: Color] = [
+        "settings.display.exif": .yellow, "settings.display.imageExtended.title": .yellow,
+        "settings.display.video": .indigo, "settings.display.audio": .pink, "settings.display.pdf": .red,
+        "settings.display.office": .blue, "settings.display.archive": .brown, "settings.display.ebook": .orange,
+        "settings.display.code": .cyan, "settings.display.font.title": .green, "settings.display.diskImage.title": .gray,
+        "settings.display.vectorGraphics.title": .purple, "settings.display.subtitle.title": .teal,
+        "settings.display.html.title": .orange, "settings.display.markdown.title": .mint,
+        "settings.display.config.title": .gray, "settings.display.psd.title": .blue,
+        "settings.display.executable.title": .gray, "settings.display.appBundle.title": .blue,
+        "settings.display.sqlite.title": .teal, "settings.display.git.title": .orange
+    ]
+    // Scene storage keeps the chosen section when switching pages, which rebuilds this view.
+    @SceneStorage("settings.display.section") private var selectedSectionID = "settings.display.exif"
     @State private var searchText = ""
-    @State private var showingOrder = false
 
-    private var visibleSections: [DisplaySection] {
-        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-        if query.isEmpty {
-            return Self.sections.filter { $0.id == selectedSectionID }
-        }
-        return Self.sections.compactMap { $0.matching(query) }
+    private var query: String { searchText.trimmingCharacters(in: .whitespacesAndNewlines) }
+
+    private var selectedSection: DisplaySection? {
+        Self.sections.first { $0.id == selectedSectionID }
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            HStack(alignment: .top, spacing: 20) {
-                Picker("settings.tab.display".localized, selection: $showingOrder) {
-                    Text("settings.display.fields".localized).tag(false)
-                    Text("settings.display.order".localized).tag(true)
-                }
-                .pickerStyle(.segmented)
-                .fixedSize()
-
-                Spacer(minLength: 0)
-
-                if !showingOrder {
-                    VStack(alignment: .trailing, spacing: 12) {
-                        HStack(spacing: 8) {
-                            Image(systemName: "magnifyingglass").foregroundStyle(.secondary)
-                            TextField("settings.display.search".localized, text: $searchText)
-                                .textFieldStyle(.plain)
-                                .accessibilityIdentifier("displaySearch")
-                            if !searchText.isEmpty {
-                                Button { searchText = "" } label: {
-                                    Image(systemName: "xmark.circle.fill")
-                                }
-                                .buttonStyle(.plain)
-                                .foregroundStyle(.secondary)
-                                .accessibilityLabel("settings.display.clearSearch".localized)
-                            }
-                        }
-                        .padding(10)
-                        .background(Color(NSColor.controlBackgroundColor), in: RoundedRectangle(cornerRadius: 8))
-
-                        if searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                            Picker("settings.display.category".localized, selection: $selectedSectionID) {
-                                ForEach(Self.sections) { section in
-                                    Text(section.titleKey.localized).tag(section.id)
-                                }
-                            }
-                            .accessibilityIdentifier("displayCategory")
-                        } else {
-                            Text("settings.display.results".localized(visibleSections.count))
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
+        HStack(spacing: 0) {
+            sidebar
+            Divider()
+            SettingsCanvas {
+                ScrollView {
+                    PopupPreview {
+                        HoverContentView(fileInfo: PreviewSamples.fileInfo(for: selectedSectionID))
                     }
-                    .frame(minWidth: 220, idealWidth: 280, maxWidth: 300)
+                    .padding(.vertical, 28)
+                    .frame(maxWidth: .infinity)
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 20)
-            .padding(.bottom, 18)
+            SettingsInspector {
+                if let section = selectedSection {
+                    inspector(for: section)
+                }
+            }
+        }
+    }
 
-            Divider()
+    // MARK: Sidebar
+
+    private var sidebar: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 6) {
+                Image(systemName: "magnifyingglass").foregroundStyle(.secondary)
+                TextField("settings.display.search".localized, text: $searchText)
+                    .textFieldStyle(.plain)
+                    .accessibilityIdentifier("displaySearch")
+                if !searchText.isEmpty {
+                    Button { searchText = "" } label: { Image(systemName: "xmark.circle.fill") }
+                        .buttonStyle(.plain)
+                        .foregroundStyle(.secondary)
+                        .accessibilityLabel("settings.display.clearSearch".localized)
+                }
+            }
+            .font(.system(size: 13))
+            .padding(.horizontal, 8)
+            .frame(height: 28)
+            .background(Color.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 7))
 
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: SettingsLayout.sectionSpacing) {
-                    if showingOrder {
-                        displayOrder
-                    } else if visibleSections.isEmpty {
-                        ContentUnavailableView.search(text: searchText)
-                            .frame(maxWidth: .infinity)
+                VStack(alignment: .leading, spacing: 2) {
+                    if query.isEmpty {
+                        ForEach(Self.sections) { section in
+                            sectionButton(section)
+                        }
                     } else {
-                        ForEach(visibleSections) { section in
-                            DisplaySectionView(settings: settings, section: section)
+                        let results = Self.sections.compactMap { $0.matching(query) }
+                        if results.isEmpty {
+                            ContentUnavailableView.search(text: query)
+                        }
+                        ForEach(results) { result in
+                            sectionButton(result)
+                            ForEach(result.rows.filter { $0.titleKey.localized.localizedStandardContains(query) }) { row in
+                                Button { selectedSectionID = result.id } label: {
+                                    Text(row.titleKey.localized)
+                                        .font(.system(size: 12))
+                                        .foregroundStyle(.secondary)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.leading, 27)
+                                        .padding(.vertical, 2)
+                                        .contentShape(Rectangle())
+                                }
+                                .buttonStyle(.plain)
+                            }
                         }
                     }
                 }
-                .padding(.vertical, 20)
             }
-            // A newly chosen category starts at its first setting, even after a long section.
-            .id(showingOrder ? "order" : selectedSectionID + searchText)
         }
-        .frame(maxWidth: SettingsRowLayout.contentMaxWidth)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .padding(10)
+        .frame(width: SettingsCanvasLayout.sidebarWidth)
+        .background(Color(NSColor.windowBackgroundColor))
     }
 
-    private var displayOrder: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            SettingsHint(textKey: "settings.display.order.hint")
-            VStack(spacing: 0) {
-                ForEach(settings.displayOrder) { item in
-                    HStack(spacing: 12) {
-                        Image(systemName: "line.3.horizontal")
-                            .foregroundStyle(.tertiary)
-                        Image(systemName: item.icon)
-                            .foregroundStyle(Color.accentColor)
-                            .frame(width: 20)
-                        Text(item.localizedName)
-                        Spacer()
-                        Button { move(item, by: -1) } label: {
-                            Image(systemName: "chevron.up")
-                        }
-                        .disabled(settings.displayOrder.first == item)
-                        .accessibilityLabel("settings.display.moveUp".localized(item.localizedName))
-                        Button { move(item, by: 1) } label: {
-                            Image(systemName: "chevron.down")
-                        }
-                        .disabled(settings.displayOrder.last == item)
-                        .accessibilityLabel("settings.display.moveDown".localized(item.localizedName))
-                    }
-                    .buttonStyle(.borderless)
-                    .font(.system(size: 13))
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    .contentShape(Rectangle())
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .onDrag {
-                        draggingItem = item
-                        return NSItemProvider(item: item.rawValue as NSString,
-                                              typeIdentifier: UTType.displayItemOrder.identifier)
-                    }
-                    .onDrop(of: [UTType.displayItemOrder], delegate: DisplayItemDropDelegate(
-                        item: item, items: $settings.displayOrder, draggingItem: $draggingItem
-                    ))
-                    if item != settings.displayOrder.last {
-                        Divider().padding(.leading, 48)
-                    }
-                }
+    private func sectionButton(_ section: DisplaySection) -> some View {
+        let id = section.id
+        let trailing = summary(of: section)
+        let isOff = trailing == "settings.display.off".localized
+        return Button { selectedSectionID = id } label: {
+            HStack(spacing: 9) {
+                Circle().fill(Self.tints[id] ?? .gray).frame(width: 8, height: 8).opacity(isOff ? 0.35 : 1)
+                Text(section.titleKey.localized)
+                    .foregroundStyle(isOff ? .secondary : .primary)
+                    .lineLimit(1)
+                Spacer(minLength: 4)
+                Text(trailing)
+                    .font(.system(size: 12, design: .rounded))
+                    .monospacedDigit()
+                    .foregroundStyle(.secondary)
             }
-            .background(Color(NSColor.controlBackgroundColor), in: RoundedRectangle(cornerRadius: 10))
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .padding(.horizontal, 20)
+            .font(.system(size: 13))
+            .padding(.horizontal, 10)
+            .frame(height: 28)
+            .background(selectedSectionID == id ? Color.accentColor.opacity(0.16) : .clear,
+                        in: RoundedRectangle(cornerRadius: 6))
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: Inspector
+
+    /// A section's first row is its master switch when every other row is gated by it.
+    private func master(of section: DisplaySection) -> DisplayToggleSpec? {
+        guard let first = section.rows.first, section.rows.count > 1,
+              section.rows.dropFirst().allSatisfy({ $0.gate == first.keyPath }) else { return nil }
+        return first
+    }
+
+    /// "6/7" fields shown, or "Off" when the section's master switch is off.
+    private func summary(of section: DisplaySection) -> String {
+        let master = master(of: section)
+        if let master, !settings[keyPath: master.keyPath] { return "settings.display.off".localized }
+        let fields = section.rows.filter { $0.id != master?.id }
+        return "\(fields.filter { settings[keyPath: $0.keyPath] }.count)/\(fields.count)"
+    }
+
+    @ViewBuilder
+    private func inspector(for section: DisplaySection) -> some View {
+        let master = master(of: section)
+        HStack(spacing: 8) {
+            Circle().fill(Self.tints[section.id] ?? .gray).frame(width: 10, height: 10)
+            Text(section.titleKey.localized).font(.system(size: 15, weight: .semibold))
+            Spacer()
+            if let master {
+                Toggle("", isOn: binding(master.keyPath))
+                    .labelsHidden()
+                    .toggleStyle(.switch)
+                    .controlSize(.small)
+                    .accessibilityLabel(master.titleKey.localized)
+            }
+        }
+        InspectorGroup {
+            let fields = section.rows.filter { $0.id != master?.id }
+            ForEach(Array(fields.enumerated()), id: \.element.id) { index, spec in
+                if index > 0 { Divider() }
+                InspectorToggleRow(title: spec.titleKey.localized, isOn: binding(spec.keyPath))
+                    .disabled(!(spec.gate.map { settings[keyPath: $0] } ?? true))
+            }
+        }
+        if let hintKey = section.hintKey {
+            Text(hintKey.localized)
+                .font(.system(size: 11))
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
-    private func move(_ item: DisplayItem, by offset: Int) {
-        guard let index = settings.displayOrder.firstIndex(of: item),
-              settings.displayOrder.indices.contains(index + offset) else { return }
-        settings.displayOrder.swapAt(index, index + offset)
+    private func binding(_ keyPath: ReferenceWritableKeyPath<AppSettings, Bool>) -> Binding<Bool> {
+        Binding(get: { settings[keyPath: keyPath] }, set: { settings[keyPath: keyPath] = $0 })
     }
 }

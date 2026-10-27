@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <img src="/FinderHover/Assets.xcassets/AppIcon.appiconset/Icon-256.png" alt="FinderHover Icon" width="128">
+  <img src="docs/app-icon/AppIcon.svg" alt="FinderHover Icon" width="128">
 </p>
 
 <p align="center">
@@ -111,7 +111,7 @@ FinderHover は、Finder が**決して表示しない**メタデータを明ら
 
 #### 🎛️ 完全なコントロール
 - ウィンドウサイズ、不透明度（70〜100%）、フォントスケールを調整可能
-- **レイアウトエディター：** メタデータフィールドをドラッグして並べ替え、カテゴリーごとに表示/非表示を切り替え
+- **レイアウトエディター：** カテゴリーごとにメタデータフィールドの表示/非表示を切り替え、ポップアップをライブプレビュー
 - **多言語対応：** **英語**、**繁体字中国語（繁體中文）**、**日本語**をネイティブにサポート
 
 ---

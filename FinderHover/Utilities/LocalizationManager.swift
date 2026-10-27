@@ -8,7 +8,7 @@
 import Foundation
 
 /// Helper class for localization
-class L {
+nonisolated class L {
     /// Get localized string
     static func string(_ key: String, comment: String = "") -> String {
         return NSLocalizedString(key, comment: comment)
@@ -22,7 +22,7 @@ class L {
 }
 
 /// Extension for easier localization access
-extension String {
+nonisolated extension String {
     /// Get localized version of this string
     var localized: String {
         return NSLocalizedString(self, comment: "")

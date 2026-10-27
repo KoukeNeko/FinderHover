@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - EXIF Data Structure
-struct EXIFData {
+nonisolated struct EXIFData {
     let camera: String?
     let lens: String?
     let focalLength: String?
@@ -35,7 +35,7 @@ struct EXIFData {
 }
 
 // MARK: - Video Metadata Structure
-struct VideoMetadata {
+nonisolated struct VideoMetadata {
     let duration: String?
     let resolution: String?
     let codec: String?
@@ -62,7 +62,7 @@ struct VideoMetadata {
 }
 
 // MARK: - Audio Metadata Structure
-struct AudioMetadata {
+nonisolated struct AudioMetadata {
     let title: String?
     let artist: String?
     let album: String?
@@ -83,7 +83,7 @@ struct AudioMetadata {
 }
 
 // MARK: - Extended Image Metadata Structure (IPTC/XMP)
-struct ImageExtendedMetadata {
+nonisolated struct ImageExtendedMetadata {
     let copyright: String?
     let creator: String?
     let keywords: String?          // Comma-separated keywords

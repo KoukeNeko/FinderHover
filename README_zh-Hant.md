@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <img src="/FinderHover/Assets.xcassets/AppIcon.appiconset/Icon-256.png" alt="FinderHover Icon" width="128">
+  <img src="docs/app-icon/AppIcon.svg" alt="FinderHover Icon" width="128">
 </p>
 
 <p align="center">
@@ -111,7 +111,7 @@ FinderHover 揭露 Finder **永遠不會顯示**的中繼資料：
 
 #### 🎛️ 完整控制
 - 可調整視窗大小、透明度（70-100%）、字體縮放
-- **版面編輯器：** 拖曳重新排序中繼資料欄位，並針對每個類別切換顯示/隱藏
+- **版面編輯器：** 針對每個類別切換中繼資料欄位的顯示/隱藏，並即時預覽浮動視窗
 - **多語系：** 原生支援**英文**、**繁體中文**、**日本語**
 
 ---
