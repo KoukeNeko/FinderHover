@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AppearanceSettingsView: View {
     @ObservedObject var settings: AppSettings
+    @State private var wallpaper: CGImage?
 
     private var isMacOSStyle: Bool { settings.uiStyle == .macOS }
 
@@ -71,15 +72,17 @@ struct AppearanceSettingsView: View {
         }
     }
 
-    /// The popup over a colorful desktop, so glass, blur and opacity read as they will.
+    /// The popup over the user's own wallpaper, so glass, blur and opacity read as they will.
     private var canvas: some View {
         ZStack {
-            LinearGradient(colors: [Color(red: 0.29, green: 0.37, blue: 0.56), Color(red: 0.79, green: 0.56, blue: 0.42)],
-                           startPoint: .topLeading, endPoint: .bottomTrailing)
-            RadialGradient(colors: [Color(red: 0.91, green: 0.71, blue: 0.48), .clear],
-                           center: UnitPoint(x: 0.25, y: 0.8), startRadius: 0, endRadius: 380)
-            RadialGradient(colors: [Color(red: 0.43, green: 0.56, blue: 0.84), .clear],
-                           center: UnitPoint(x: 0.8, y: 0.2), startRadius: 0, endRadius: 420)
+            if let wallpaper {
+                // In an overlay so the filled image cannot grow the canvas past the window.
+                Color.clear.overlay {
+                    Image(decorative: wallpaper, scale: 1).resizable().aspectRatio(contentMode: .fill)
+                }
+            } else {
+                gradientDesktop
+            }
             ScrollView {
                 Group {
                     if isMacOSStyle {
@@ -101,5 +104,33 @@ struct AppearanceSettingsView: View {
             }
         }
         .clipped()
+        .task {
+            guard let screen = NSScreen.main, let url = NSWorkspace.shared.desktopImageURL(for: screen) else { return }
+            wallpaper = await Self.downsampledImage(at: url)
+        }
+    }
+
+    /// Stand-in when the wallpaper is not a still image (a dynamic or video wallpaper).
+    private var gradientDesktop: some View {
+        ZStack {
+            LinearGradient(colors: [Color(red: 0.29, green: 0.37, blue: 0.56), Color(red: 0.79, green: 0.56, blue: 0.42)],
+                           startPoint: .topLeading, endPoint: .bottomTrailing)
+            RadialGradient(colors: [Color(red: 0.91, green: 0.71, blue: 0.48), .clear],
+                           center: UnitPoint(x: 0.25, y: 0.8), startRadius: 0, endRadius: 380)
+            RadialGradient(colors: [Color(red: 0.43, green: 0.56, blue: 0.84), .clear],
+                           center: UnitPoint(x: 0.8, y: 0.2), startRadius: 0, endRadius: 420)
+        }
+    }
+
+    /// Wallpapers are often 6K HEICs; decode a canvas-sized copy off the main thread.
+    @concurrent
+    private static func downsampledImage(at url: URL) async -> CGImage? {
+        guard let source = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
+        let options: [CFString: Any] = [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceThumbnailMaxPixelSize: 2400
+        ]
+        return CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary)
     }
 }
