@@ -156,7 +156,7 @@ nonisolated struct FileInfo {
     }
 
     var formattedModificationDate: String {
-        return DateFormatters.formatMediumDateTime(modificationDate)
+        return DateFormatters.formatShortDateTime(modificationDate)
     }
 
     var formattedLastAccessDate: String {

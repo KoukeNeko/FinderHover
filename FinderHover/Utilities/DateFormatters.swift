@@ -10,20 +10,11 @@ import Foundation
 /// Provides reusable date formatters to avoid creating new instances repeatedly
 nonisolated enum DateFormatters {
 
-    /// Short date and short time (e.g., "11/10/25, 4:30 PM")
-    /// Used for: creation date, last access date
+    /// Short date and short time (e.g., "11/10/25, 4:30 PM").
+    /// Every date-and-time the popup shows uses this one style, so they read alike.
     static let shortDateTime: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
-        formatter.timeStyle = .short
-        return formatter
-    }()
-
-    /// Medium date and short time (e.g., "Nov 10, 2025 at 4:30 PM")
-    /// Used for: modification date
-    static let mediumDateTime: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
         formatter.timeStyle = .short
         return formatter
     }()
@@ -41,17 +32,12 @@ nonisolated enum DateFormatters {
         return shortDateTime.string(from: date)
     }
 
-    /// Format a date with medium date and short time style
-    static func formatMediumDateTime(_ date: Date) -> String {
-        return mediumDateTime.string(from: date)
-    }
-
-    /// Parse EXIF date string and return formatted medium date/time
+    /// Parse EXIF date string and return it in the short date/time style
     /// - Parameter exifDateString: Date string in EXIF format ("YYYY:MM:DD HH:MM:SS")
     /// - Returns: Formatted date string, or original string if parsing fails
     static func parseAndFormatExifDate(_ exifDateString: String) -> String {
         if let date = exifParser.date(from: exifDateString) {
-            return mediumDateTime.string(from: date)
+            return shortDateTime.string(from: date)
         }
         return exifDateString
     }

@@ -34,12 +34,12 @@ nonisolated enum DocumentExtractor {
 
         var creationDate: String? = nil
         if let date = attributes?[PDFDocumentAttribute.creationDateAttribute] as? Date {
-            creationDate = DateFormatters.formatMediumDateTime(date)
+            creationDate = DateFormatters.formatShortDateTime(date)
         }
 
         var modificationDate: String? = nil
         if let date = attributes?[PDFDocumentAttribute.modificationDateAttribute] as? Date {
-            modificationDate = DateFormatters.formatMediumDateTime(date)
+            modificationDate = DateFormatters.formatShortDateTime(date)
         }
 
         let pageCount = pdfDocument.pageCount
@@ -127,12 +127,12 @@ nonisolated enum DocumentExtractor {
 
         var creationDate: String? = nil
         if let date = MDItemCopyAttribute(mdItem, kMDItemContentCreationDate) as? Date {
-            creationDate = DateFormatters.formatMediumDateTime(date)
+            creationDate = DateFormatters.formatShortDateTime(date)
         }
 
         var modificationDate: String? = nil
         if let date = MDItemCopyAttribute(mdItem, kMDItemContentModificationDate) as? Date {
-            modificationDate = DateFormatters.formatMediumDateTime(date)
+            modificationDate = DateFormatters.formatShortDateTime(date)
         }
 
         let pageCount = MDItemCopyAttribute(mdItem, kMDItemNumberOfPages) as? Int
