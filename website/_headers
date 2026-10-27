@@ -1,0 +1,10 @@
+# Cloudflare Pages response headers.
+# Styles, scripts and translations change together with the HTML but keep their
+# URLs, so browsers must revalidate them (a cheap 304 when unchanged) instead of
+# reusing a copy for hours and drawing new pages with old styles.
+/*.css
+  Cache-Control: public, max-age=0, must-revalidate
+/*.js
+  Cache-Control: public, max-age=0, must-revalidate
+/locales/*
+  Cache-Control: public, max-age=0, must-revalidate
