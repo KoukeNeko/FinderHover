@@ -140,15 +140,15 @@
   -webkit-backdrop-filter: blur(6px) saturate(170%) brightness(0.8);
   backdrop-filter: blur(6px) saturate(170%) brightness(0.8);
   border-color: transparent;
-  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.18), inset 0 10px 24px -14px rgba(255, 255, 255, 0.35),
+  box-shadow: inset 0 10px 24px -14px rgba(255, 255, 255, 0.22),
     inset 0 -12px 28px -18px rgba(255, 255, 255, 0.18), 0 24px 60px rgba(0, 0, 0, 0.4);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 /* Specular rim: bright where light hits the top-left and bottom-right edges. */
 .pop.glass::before {
-  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; padding: 1.2px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.1) 30%,
-    rgba(255, 255, 255, 0.04) 60%, rgba(255, 255, 255, 0.45));
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; padding: 1px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0.06) 30%,
+    rgba(255, 255, 255, 0.02) 60%, rgba(255, 255, 255, 0.2));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
