@@ -97,7 +97,8 @@ const i18n = {
 
     async loadTranslation(lang) {
         try {
-            const response = await fetch(`/locales/${lang}.json`);
+            // no-cache: revalidate every visit, since the CDN tells browsers to keep JSON for hours.
+            const response = await fetch(`/locales/${lang}.json`, { cache: 'no-cache' });
             if (!response.ok) throw new Error(`Failed to load translation: ${lang}`);
             this.translations = await response.json();
         } catch (error) {

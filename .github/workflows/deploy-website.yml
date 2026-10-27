@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - 'website/**'
+      - 'scripts/build-i18n.js'
+      - '.github/workflows/deploy-website.yml'
   workflow_dispatch:
 
 jobs:
@@ -17,6 +19,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # Regenerate en/ja pages and stamp asset URLs with content hashes, so a
+      # deploy never ships HTML that points at a stale cached stylesheet.
+      - name: Build localized pages
+        run: node scripts/build-i18n.js
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3

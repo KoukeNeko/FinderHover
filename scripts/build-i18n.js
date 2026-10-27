@@ -12,6 +12,7 @@
  * Usage: node scripts/build-i18n.js
  */
 
+const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 
@@ -167,6 +168,24 @@ function buildLanguage(lang) {
  * Build an XML sitemap describing every page across every language, with
  * xhtml:link alternates so Google treats them as equivalent translations.
  */
+/**
+ * Stamp local stylesheet and script URLs with a hash of their contents
+ * ("/home.css?v=1a2b3c4d") in the source pages. Cloudflare keeps CSS and JS in
+ * browsers for hours, so an unchanged URL would draw new HTML with old styles.
+ */
+function stampAssetVersions() {
+    const versionOf = (asset) => crypto.createHash('sha256')
+        .update(fs.readFileSync(path.join(WEBSITE_DIR, asset)))
+        .digest('hex').slice(0, 8);
+    for (const page of PAGES) {
+        const filePath = path.join(WEBSITE_DIR, `${page}.html`);
+        const html = fs.readFileSync(filePath, 'utf8');
+        const stamped = html.replace(/((?:href|src)="\/)([a-z0-9-]+\.(?:css|js))(?:\?v=[0-9a-f]+)?"/g,
+            (_, prefix, asset) => `${prefix}${asset}?v=${versionOf(asset)}"`);
+        if (stamped !== html) fs.writeFileSync(filePath, stamped);
+    }
+}
+
 function buildSitemap() {
     const lines = [];
     lines.push('<?xml version="1.0" encoding="UTF-8"?>');
@@ -210,6 +229,8 @@ function buildRobots() {
 }
 
 function main() {
+    console.log('Stamping asset versions ...');
+    stampAssetVersions();
     for (const lang of TARGET_LANGS) {
         console.log(`Building /${lang}/ ...`);
         buildLanguage(lang);
