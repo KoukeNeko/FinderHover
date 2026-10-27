@@ -137,6 +137,7 @@ function popupHTML(file) {
 // ---------------------------------------------------------------------------
 
 const HOVER_DELAY = 400;
+const POINTER_SETTLE = 120; // ms without movement that counts as resting
 const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function setupFinder() {
@@ -155,8 +156,9 @@ function setupFinder() {
     </button>`;
   }).join('');
 
-  let timer = 0;
-  let current = -1; // the row being waited on or shown
+  let timer = 0;     // hover delay, running while the pointer rests
+  let settle = 0;    // waits for the pointer to stop before the delay starts
+  let current = -1;  // the row under the pointer
 
   function place(rowEl, x) {
     const box = list.getBoundingClientRect();
@@ -182,26 +184,37 @@ function setupFinder() {
 
   function hide() {
     clearTimeout(timer);
+    clearTimeout(settle);
     current = -1;
     pop.hidden = true;
     ring.classList.remove('on');
     list.querySelectorAll('.row.hover').forEach((r) => r.classList.remove('hover'));
   }
 
+  /**
+   * Like the app, the hover delay counts only while the pointer rests: every move
+   * before the popup opens stops the ring, and it starts again once the pointer
+   * has been still for a moment. Once open, moves within the same row keep it.
+   */
   function arm(rowEl, x, y) {
     const index = Number(rowEl.dataset.index);
-    if (index === current) return;
-    hide();
-    // Moving within the same row keeps the wait going instead of restarting it.
-    current = index;
-    rowEl.classList.add('hover');
-    const box = list.getBoundingClientRect();
-    ring.style.left = `${x - 15}px`;
-    ring.style.top = `${y - box.top - 15}px`;
+    if (index === current && !pop.hidden) return;
+    if (index !== current) {
+      hide();
+      current = index;
+      rowEl.classList.add('hover');
+    }
+    clearTimeout(timer);
+    clearTimeout(settle);
     ring.classList.remove('on');
-    void ring.offsetWidth;
-    ring.classList.add('on');
-    timer = setTimeout(() => { ring.classList.remove('on'); show(index, rowEl, x); }, HOVER_DELAY);
+    settle = setTimeout(() => {
+      const box = list.getBoundingClientRect();
+      ring.style.left = `${x - 15}px`;
+      ring.style.top = `${y - box.top - 15}px`;
+      void ring.offsetWidth;
+      ring.classList.add('on');
+      timer = setTimeout(() => { ring.classList.remove('on'); show(index, rowEl, x); }, HOVER_DELAY);
+    }, POINTER_SETTLE);
   }
 
   const canHover = matchMedia('(hover: hover)').matches;
