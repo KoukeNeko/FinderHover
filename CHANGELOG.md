@@ -31,6 +31,7 @@ The app itself is unchanged from 1.10.0.
 - Settings pages switch from the window toolbar; the window can be resized and remembers the page and section you were on
 - The display order list is removed: the new popup has a fixed layout, so a saved order no longer applies
 - New app icon
+- 🙏 **Special thanks to [@elvisdragonmao](https://github.com/elvisdragonmao)** (Elvis Mao), who designed the new popup and settings. This release is built on their design.
 
 ### 🐛 Bug Fixes
 

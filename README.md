@@ -38,6 +38,7 @@ Inspect file metadata instantly. No `Cmd+I` required.
 - **Live-preview settings:** See the popup for a sample file while you turn its fields on or off; Behavior and Appearance preview the delay, offset, glass and blur
 - **Faster and safer:** Reading apps, disk images and large archives no longer freezes the popup; Git repositories can no longer run a program named in their settings
 - **New app icon**, and a redesigned website with the popup you can try in the browser (v1.10.1)
+- 🙏 **Huge thanks to [@elvisdragonmao](https://github.com/elvisdragonmao)** for designing the new popup and settings — this release is built on their design
 
 ### v1.9.0 - Notes
 - **Notes:** Attach a personal note to any file, right in the hover popup — stored with the file (so it persists and travels with the file when copied/moved)
@@ -273,7 +274,7 @@ Contributions are welcome! Here's how you can help:
 
 ### 🙏 Acknowledgments
 
-Thanks to everyone who has contributed — especially [@zmlim](https://github.com/zmlim), who designed and contributed the **Notes** feature ([#14](../../pull/14)) that headlines v1.9.0.
+Thanks to everyone who has contributed — especially [@zmlim](https://github.com/zmlim), who designed and contributed the **Notes** feature ([#14](../../pull/14)) that headlines v1.9.0, and to [@elvisdragonmao](https://github.com/elvisdragonmao), who designed the popup and settings of v1.10.
 
 ---
 
