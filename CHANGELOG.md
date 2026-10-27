@@ -2,7 +2,75 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.9.0 (Current)
+## Version 1.10.1 (Current)
+
+### 🌐 Website
+
+- The website is redesigned: its first screen is a Finder window, and resting the pointer on any row shows the popup
+- The popup's Liquid Glass on the website now bends what is behind its edges
+- The README shows the new popup
+
+The app itself is unchanged from 1.10.0.
+
+---
+
+## Version 1.10.0
+
+### ✨ New and Improved
+
+- The hover popup is redesigned: a header, one block per file type, dates, file details, then location and notes, separated by thin lines
+- Each file type highlights its key figures in its own color, such as camera settings, video length, page count, line count and file count
+- Image size is drawn as a frame with the megapixel count
+- Hold **Option** to copy any value in the popup
+- Every display setting now takes effect, and details that were read but never shown now appear, such as photo color profile and bit depth, video tracks and chapters, and album artist
+- Reading file details no longer freezes the popup when you hover apps, disk images or large archives
+- Settings now show the result next to the controls: pick a section, see the popup for a sample file of that type, and turn its fields on or off beside it
+- Search finds any field across all sections, and each section shows how many of its fields are on
+- Behavior shows the hover delay and how far the popup sits from the pointer over a Finder list, updating as you drag the sliders
+- Appearance shows the popup over your desktop wallpaper, so Liquid Glass, blur, opacity, width and font size look the way they will
+- Settings pages switch from the window toolbar; the window can be resized and remembers the page and section you were on
+- The display order list is removed: the new popup has a fixed layout, so a saved order no longer applies
+- New app icon
+
+### 🐛 Bug Fixes
+
+- Hovering a downloaded Git repository could make git run a program named in that repository's settings
+- Large ZIP files no longer pause for 3 seconds, and password-protected ZIP files show as encrypted again
+- Download dates were shown 31 years in the future
+- ZIP files with a single file showed no file count
+- Releasing Option with the pointer over the popup no longer closes it
+- Popup padding is now even, and long file names no longer break mid-word
+- The accessibility permission alert is now translated
+
+---
+
+## Version 1.9.2
+
+### 🐛 Bug Fixes
+
+- Dismiss the hover popup when the file-rename field or a context menu is open; the pre-display accessibility probe now bypasses its cache so it never reports a stale result
+- Restrict settings display-order drag-and-drop to an app-private type, so dragging external text onto the list no longer triggers a reorder
+- Derive the bundle version from build settings instead of a hardcoded Info.plist value
+- Manually clean the build directory before packaging, fixing the spurious xcodebuild clean failure that aborted the DMG script
+
+---
+
+## Version 1.9.1
+
+### ✨ Settings UI Redesign
+
+- Tab-based navigation at the top of the Settings window
+- Pages restyled in the System Settings visual language: colored icon tiles, section labels above cards, inset dividers
+- Content column narrowed to 640pt and the default window size shrunk to match
+- Page titles now live in the native toolbar
+
+### 🐛 Bug Fixes
+
+- Suppress the hover popup while a context menu is open
+
+---
+
+## Version 1.9.0
 
 <img width="1800" height="1169" alt="image" src="https://github.com/user-attachments/assets/260a46a5-dd24-43f0-a3a1-1a03684bdc96" />
 

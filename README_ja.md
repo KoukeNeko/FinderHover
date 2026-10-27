@@ -24,7 +24,7 @@
 ---
 
 <p align="center">
-  <img src="docs/demo.gif" alt="FinderHover デモ" width="800">
+  <img src="docs/screenshot.png" alt="Finder のリスト上に表示された FinderHover のウインドウ" width="800">
 </p>
 
 ---

@@ -406,6 +406,98 @@ function setupLook() {
 }
 
 // ---------------------------------------------------------------------------
+// Liquid Glass
+// ---------------------------------------------------------------------------
+
+const GLASS_RADIUS = 12;
+const GLASS_BEVEL = 26;   // px of rim that bends the backdrop
+const GLASS_STRENGTH = 200; // feDisplacementMap scale: the rim samples up to 100 px inward
+
+/**
+ * Displacement map for a rounded rectangle: neutral (128) in the middle, and within
+ * GLASS_BEVEL of the edge an offset along the inward normal that grows toward the rim,
+ * so the backdrop near the edge is pulled in like light through a thick lens.
+ */
+function glassMap(w, h) {
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  const img = ctx.createImageData(w, h);
+  const hx = w / 2 - GLASS_RADIUS, hy = h / 2 - GLASS_RADIUS;
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const px = x + 0.5 - w / 2, py = y + 0.5 - h / 2;
+      const qx = Math.abs(px) - hx, qy = Math.abs(py) - hy;
+      const outside = Math.hypot(Math.max(qx, 0), Math.max(qy, 0));
+      const depth = GLASS_RADIUS - outside - Math.min(Math.max(qx, qy), 0); // distance from the edge, inward
+      let r = 128, g = 128;
+      if (depth > 0 && depth < GLASS_BEVEL) {
+        let nx, ny;
+        if (qx > 0 && qy > 0) { const l = Math.hypot(qx, qy); nx = qx / l; ny = qy / l; }
+        else if (qx > qy) { nx = 1; ny = 0; } else { nx = 0; ny = 1; }
+        nx *= Math.sign(px) || 1;
+        ny *= Math.sign(py) || 1;
+        const t = 1 - depth / GLASS_BEVEL;
+        const m = t * t;
+        r = 128 - nx * m * 127;
+        g = 128 - ny * m * 127;
+      }
+      const i = (y * w + x) * 4;
+      img.data[i] = r; img.data[i + 1] = g; img.data[i + 2] = 128; img.data[i + 3] = 255;
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+  return canvas.toDataURL();
+}
+
+/** Chromium alone applies SVG filters in backdrop-filter; elsewhere the CSS fallback (blur) stays. */
+function setupLiquidGlass() {
+  // Headless Chromium has no window.chrome, so also check the brand list.
+  const chromium = !!window.chrome || !!navigator.userAgentData?.brands?.some((b) => /Chrom/.test(b.brand));
+  if (!chromium) return;
+  const defs = document.getElementById('lg-defs');
+  const NS = 'http://www.w3.org/2000/svg';
+  let next = 0;
+  const update = (el) => {
+    if (!el.classList.contains('glass')) { el.style.backdropFilter = ''; return; }
+    const w = Math.round(el.offsetWidth), h = Math.round(el.offsetHeight);
+    if (!w || !h) return;
+    const key = `${w}x${h}`;
+    if (el.dataset.glassSize === key) return;
+    el.dataset.glassSize = key;
+    el.dataset.glassId ||= `lg-${++next}`;
+    let filter = defs.querySelector(`#${el.dataset.glassId}`);
+    if (!filter) {
+      filter = document.createElementNS(NS, 'filter');
+      filter.id = el.dataset.glassId;
+      filter.setAttribute('filterUnits', 'userSpaceOnUse');
+      filter.setAttribute('color-interpolation-filters', 'sRGB');
+      filter.innerHTML = `<feImage result="map" preserveAspectRatio="none"/>
+        <feDisplacementMap in="SourceGraphic" in2="map" scale="${GLASS_STRENGTH}" xChannelSelector="R" yChannelSelector="G"/>`;
+      defs.appendChild(filter);
+    }
+    for (const [node, attrs] of [[filter, { x: 0, y: 0, width: w, height: h }], [filter.querySelector('feImage'), { x: 0, y: 0, width: w, height: h }]]) {
+      for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+    }
+    filter.querySelector('feImage').setAttribute('href', glassMap(w, h));
+    el.style.backdropFilter = `url(#${el.dataset.glassId}) blur(5px) saturate(170%) brightness(0.72)`;
+  };
+  const observer = new ResizeObserver((entries) => entries.forEach((e) => update(e.target)));
+  document.querySelectorAll('.pop').forEach((el) => {
+    observer.observe(el);
+    // The appearance switcher changes the material without changing the size.
+    new MutationObserver(() => {
+      const on = String(el.classList.contains('glass'));
+      if (on === el.dataset.glassOn) return;
+      el.dataset.glassOn = on;
+      delete el.dataset.glassSize;
+      update(el);
+    }).observe(el, { attributes: true, attributeFilter: ['class'] });
+  });
+}
+
+// ---------------------------------------------------------------------------
 // Install buttons
 // ---------------------------------------------------------------------------
 
@@ -417,7 +509,13 @@ function setupInstall() {
         text.textContent = t('home.copied');
         btn.classList.add('done');
         setTimeout(() => { text.textContent = t('home.copy'); btn.classList.remove('done'); }, 1600);
-      }, () => {});
+      }, () => {
+        // Clipboard access denied: select the command so ⌘C still works.
+        const range = document.createRange();
+        range.selectNodeContents(btn.closest('.cmd').querySelector('code'));
+        getSelection().removeAllRanges();
+        getSelection().addRange(range);
+      });
     });
   });
 }
@@ -466,8 +564,7 @@ function setupMotion() {
 }
 
 function init() {
-  // Chromium is the only engine that applies SVG filters to backdrop-filter.
-  if (window.chrome) document.documentElement.classList.add('refract');
+  setupLiquidGlass();
   setupFinder();
   setupAnatomy();
   setupTypes();
