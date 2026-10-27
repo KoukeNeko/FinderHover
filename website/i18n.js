@@ -151,7 +151,6 @@ const i18n = {
     applyTranslations() {
         this.applyMetaTranslations();
         this.applyElementTranslations();
-        this.syncMarqueeContent();
     },
 
     applyMetaTranslations() {
@@ -189,22 +188,6 @@ const i18n = {
             const key = el.getAttribute('data-i18n-title');
             const value = this.t(key);
             if (value !== key) el.title = value;
-        });
-    },
-
-    /**
-     * Duplicate the first marquee-content node across every sibling so the
-     * CSS-based infinite scroll always renders identical frames.
-     */
-    syncMarqueeContent() {
-        document.querySelectorAll('.marquee-row').forEach((row) => {
-            const contents = row.querySelectorAll('.marquee-content');
-            if (contents.length <= 1) return;
-            const source = contents[0];
-            for (let i = 1; i < contents.length; i++) {
-                const clones = Array.from(source.childNodes).map((node) => node.cloneNode(true));
-                contents[i].replaceChildren(...clones);
-            }
         });
     },
 
