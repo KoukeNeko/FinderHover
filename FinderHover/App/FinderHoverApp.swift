@@ -28,6 +28,9 @@ struct FinderHoverApp: App {
         // Tall enough for the largest popup preview at default settings; resizable from there.
         .defaultSize(width: 1180, height: 900)
         .windowResizability(.contentMinSize)
+        // One row: title on the leading side, page switcher and Reset All trailing.
+        // The default preference style stacks the title above and centers every item.
+        .windowToolbarStyle(.unified)
     }
 }
 

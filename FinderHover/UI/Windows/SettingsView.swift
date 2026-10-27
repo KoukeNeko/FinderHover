@@ -39,7 +39,7 @@ struct SettingsView: View {
         pageContent(for: selectedPage)
             .frame(minWidth: 960, maxWidth: .infinity, minHeight: 640, maxHeight: .infinity)
             .toolbar {
-                ToolbarItem(placement: .principal) {
+                ToolbarItem(placement: .primaryAction) {
                     Picker("", selection: $selectedPage) {
                         ForEach(SettingsPage.allCases) { page in
                             Text(page.localizedName).tag(page)
@@ -47,10 +47,16 @@ struct SettingsView: View {
                     }
                     .pickerStyle(.segmented)
                     .labelsHidden()
+                    .controlSize(.large)
                     .fixedSize()
                 }
                 ToolbarItem(placement: .primaryAction) {
-                    Button("settings.resetAll".localized) { confirmingReset = true }
+                    Button { confirmingReset = true } label: {
+                        Label("settings.resetAll".localized, systemImage: "arrow.counterclockwise")
+                    }
+                    .labelStyle(.iconOnly)
+                    .controlSize(.large)
+                    .help("settings.resetAll".localized)
                 }
             }
             .alert("settings.resetAll".localized, isPresented: $confirmingReset) {
