@@ -1,0 +1,35 @@
+name: Build and Check
+
+on:
+  push:
+    branches:
+      - main
+      - beta
+    paths-ignore:
+      - 'website/**'
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - 'website/**'
+      - '**.md'
+
+jobs:
+  build:
+    # The app uses the macOS 26 SDK (Liquid Glass), so it needs the macOS 26 image's Xcode.
+    runs-on: macos-26
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Debug
+        run: |
+          xcodebuild -project FinderHover.xcodeproj -scheme FinderHover -configuration Debug \
+            -derivedDataPath build/dd CODE_SIGNING_ALLOWED=NO build
+
+      - name: Every setting and field reaches the popup
+        run: ./scripts/verify-hover-coverage.sh
+
+      - name: Extractor regression checks
+        run: python3 scripts/verify-extractors.py build/dd
