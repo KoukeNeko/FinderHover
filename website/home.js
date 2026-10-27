@@ -156,7 +156,7 @@ function setupFinder() {
   }).join('');
 
   let timer = 0;
-  let current = -1;
+  let current = -1; // the row being waited on or shown
 
   function place(rowEl, x) {
     const box = list.getBoundingClientRect();
@@ -192,6 +192,8 @@ function setupFinder() {
     const index = Number(rowEl.dataset.index);
     if (index === current) return;
     hide();
+    // Moving within the same row keeps the wait going instead of restarting it.
+    current = index;
     rowEl.classList.add('hover');
     const box = list.getBoundingClientRect();
     ring.style.left = `${x - 15}px`;
@@ -217,7 +219,9 @@ function setupFinder() {
       takeOver();
       arm(rowEl, e.clientX - list.getBoundingClientRect().left, e.clientY);
     });
-    list.addEventListener('pointerleave', () => { if (userTookOver) hide(); });
+    // The popup is a sibling of the rows, so watch their shared parent:
+    // moving from a row onto the popup is not leaving.
+    list.parentElement.addEventListener('pointerleave', () => { if (userTookOver) hide(); });
   } else {
     list.addEventListener('click', (e) => {
       const rowEl = e.target.closest('.row');
