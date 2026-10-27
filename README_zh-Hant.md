@@ -241,13 +241,9 @@ FinderHover/
 
 ## 📸 螢幕截圖
 
-<p float="left">
-  <img src="https://github.com/user-attachments/assets/fe969256-a07d-4db6-8715-a3bb3226782b" width="45%" />
-  <img src="https://github.com/user-attachments/assets/f492dc51-9fd8-49f2-b854-d9fc4ac026a6" width="45%" />
-</p>
-<p float="left">
-  <img src="https://github.com/user-attachments/assets/dc04ba05-2bcb-4308-b0cc-bd5ed2259d07" width="45%" />
-  <img src="https://github.com/user-attachments/assets/140accdd-6034-4b2d-b4d9-ccc55a28586c" width="45%" />
+<p align="center">
+  <img src="docs/screenshots/popup-photo-git.jpg" alt="照片與 Git 儲存庫的浮動視窗" width="800">
+  <img src="docs/screenshots/popup-video-pdf-code.jpg" alt="影片、PDF 與 Swift 原始碼的浮動視窗" width="800">
 </p>
 
 ---
