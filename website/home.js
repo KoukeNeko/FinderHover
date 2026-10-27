@@ -417,7 +417,13 @@ function setupInstall() {
         text.textContent = t('home.copied');
         btn.classList.add('done');
         setTimeout(() => { text.textContent = t('home.copy'); btn.classList.remove('done'); }, 1600);
-      }, () => {});
+      }, () => {
+        // Clipboard access denied: select the command so ⌘C still works.
+        const range = document.createRange();
+        range.selectNodeContents(btn.closest('.cmd').querySelector('code'));
+        getSelection().removeAllRanges();
+        getSelection().addRange(range);
+      });
     });
   });
 }
