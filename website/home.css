@@ -229,7 +229,9 @@
 }
 .key kbd { font: 600 17px var(--font-family); width: 34px; height: 30px; display: grid; place-items: center; border-radius: 6px; background: rgba(255, 255, 255, 0.08); }
 .key[aria-pressed="true"] { transform: translateY(2px); border-bottom-width: 1px; border-color: var(--color-link); }
-.copy-stage { position: relative; }
+/* A centered grid item shrinks to its content, so give the stage the popup's width. */
+.copy-stage { position: relative; width: min(380px, 100%); }
+.copy-stage .pop { width: 100%; }
 .toast {
   position: absolute; left: 50%; bottom: -52px; translate: -50% 0; padding: 8px 14px; border-radius: 999px;
   background: var(--surface-raised); border: 1px solid var(--color-border); font-size: 13px; white-space: nowrap;
