@@ -72,7 +72,7 @@ struct HoverContentView: View {
 
     // MARK: Section Order
 
-    /// Groups of generic fields; each renders where its first member sits in the display order.
+    /// Groups of generic fields; each renders where its first member sits in the popup order.
     private static let genericGroups: [(id: String, items: Set<DisplayItem>)] = [
         ("dates", [.creationDate, .modificationDate, .lastAccessDate]),
         ("file", [.permissions, .owner, .systemMetadata, .fileSystemAdvanced]),
@@ -80,8 +80,7 @@ struct HoverContentView: View {
         ("notes", [.notes])
     ]
 
-    /// Header first, then the per-type blocks, then the generic groups — both following the
-    /// user's display order within their kind, so the v2 skeleton holds for any order.
+    /// Header first, then the per-type blocks, then the generic groups, each in popup order.
     private func makeSections() -> [Section] {
         var sections = [Section(id: "header", content: AnyView(header))]
 
@@ -94,14 +93,14 @@ struct HoverContentView: View {
             )))
         }
 
-        for item in settings.displayOrder {
+        for item in DisplayItem.popupOrder {
             if let content = typeSection(for: item) {
                 sections.append(Section(id: item.rawValue, content: content))
             }
         }
 
         var emitted: Set<String> = []
-        for item in settings.displayOrder {
+        for item in DisplayItem.popupOrder {
             guard let group = Self.genericGroups.first(where: { $0.items.contains(item) }),
                   !emitted.contains(group.id) else { continue }
             emitted.insert(group.id)

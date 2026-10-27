@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import UniformTypeIdentifiers
 
 // MARK: - Avatar Image View (for GitHub contributors)
 struct AvatarImageView: View {
@@ -45,44 +44,6 @@ struct AvatarImageView: View {
         } catch {
             Logger.warning("Failed to load avatar image: \(error.localizedDescription)", subsystem: .ui)
         }
-    }
-}
-
-// MARK: - Drag and Drop Delegate for Display Order
-
-extension UTType {
-    /// App-private type for reorder drags. Accepting `.text` also matched external
-    /// text drags, which carry no `draggingItem` and could reorder with stale state.
-    static let displayItemOrder = UTType(exportedAs: "dev.koukeneko.finderhover.display-item")
-}
-
-struct DisplayItemDropDelegate: DropDelegate {
-    let item: DisplayItem
-    @Binding var items: [DisplayItem]
-    @Binding var draggingItem: DisplayItem?
-
-    func performDrop(info: DropInfo) -> Bool {
-        draggingItem = nil
-        return true
-    }
-
-    func dropEntered(info: DropInfo) {
-        guard let draggingItem = draggingItem,
-              draggingItem != item,
-              let fromIndex = items.firstIndex(of: draggingItem),
-              let toIndex = items.firstIndex(of: item) else { return }
-
-        // Reordering the bound array writes through to AppSettings.displayOrder,
-        // whose didSet persists it; no manual save needed.
-        if items[toIndex] != draggingItem {
-            withAnimation(.default) {
-                items.move(fromOffsets: IndexSet(integer: fromIndex), toOffset: toIndex > fromIndex ? toIndex + 1 : toIndex)
-            }
-        }
-    }
-
-    func dropUpdated(info: DropInfo) -> DropProposal? {
-        return DropProposal(operation: .move)
     }
 }
 

@@ -45,7 +45,7 @@ enum AppLanguage: String, Codable, CaseIterable, Identifiable {
 }
 
 // MARK: - Display Item Types
-enum DisplayItem: String, Codable, CaseIterable, Identifiable {
+enum DisplayItem: String {
     case fileType = "File Type"
     case fileSize = "File Size"
     case itemCount = "Item Count"
@@ -82,13 +82,8 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
     case xcodeProject = "Xcode Project Information"
     case notes = "Notes"
 
-    var id: String { rawValue }
-
-    /// Canonical display order — the single source of truth used by
-    /// initial load, migration of saved orders, and resetToDefaults.
-    /// Add new cases here in their intended position; migration slots
-    /// them into existing users' saved orders automatically.
-    static let defaultOrder: [DisplayItem] = [
+    /// Order of the popup's sections. Add new cases here in their intended position.
+    static let popupOrder: [DisplayItem] = [
         .fileType,
         .fileSize,
         .itemCount,
@@ -125,107 +120,6 @@ enum DisplayItem: String, Codable, CaseIterable, Identifiable {
         .filePath,
         .notes
     ]
-
-    /// Returns `savedOrder` with any cases from `defaultOrder` that are
-    /// missing inserted into their canonical-relative position (right
-    /// after the nearest preceding canonical item already present).
-    /// Preserves the user's custom ordering of items they already have.
-    static func migrated(_ savedOrder: [DisplayItem]) -> [DisplayItem] {
-        var result = savedOrder
-        var lastInsertedIndex: Int? = nil
-        for item in defaultOrder {
-            if let existingIndex = result.firstIndex(of: item) {
-                lastInsertedIndex = existingIndex
-                continue
-            }
-            // Item missing from the saved order: insert it just after the
-            // most recent canonical predecessor we have placed/found.
-            let insertIndex = lastInsertedIndex.map { $0 + 1 } ?? 0
-            result.insert(item, at: insertIndex)
-            lastInsertedIndex = insertIndex
-        }
-        return result
-    }
-
-    var localizedName: String {
-        switch self {
-        case .fileType: return "displayItem.fileType".localized
-        case .fileSize: return "displayItem.fileSize".localized
-        case .itemCount: return "displayItem.itemCount".localized
-        case .creationDate: return "displayItem.creationDate".localized
-        case .modificationDate: return "displayItem.modificationDate".localized
-        case .lastAccessDate: return "displayItem.lastAccessDate".localized
-        case .permissions: return "displayItem.permissions".localized
-        case .owner: return "displayItem.owner".localized
-        case .exif: return "displayItem.exif".localized
-        case .video: return "displayItem.video".localized
-        case .audio: return "displayItem.audio".localized
-        case .pdf: return "displayItem.pdf".localized
-        case .office: return "displayItem.office".localized
-        case .archive: return "displayItem.archive".localized
-        case .ebook: return "displayItem.ebook".localized
-        case .code: return "displayItem.code".localized
-        case .font: return "displayItem.font".localized
-        case .diskImage: return "displayItem.diskImage".localized
-        case .vectorGraphics: return "displayItem.vectorGraphics".localized
-        case .subtitle: return "displayItem.subtitle".localized
-        case .html: return "displayItem.html".localized
-        case .imageExtended: return "displayItem.imageExtended".localized
-        case .markdown: return "displayItem.markdown".localized
-        case .config: return "displayItem.config".localized
-        case .psd: return "displayItem.psd".localized
-        case .executable: return "displayItem.executable".localized
-        case .appBundle: return "displayItem.appBundle".localized
-        case .sqlite: return "displayItem.sqlite".localized
-        case .git: return "displayItem.git".localized
-        case .systemMetadata: return "displayItem.systemMetadata".localized
-        case .filePath: return "displayItem.filePath".localized
-        case .fileSystemAdvanced: return "displayItem.fileSystemAdvanced".localized
-        case .model3D: return "displayItem.model3D".localized
-        case .xcodeProject: return "displayItem.xcodeProject".localized
-        case .notes: return "displayItem.notes".localized
-        }
-    }
-
-    var icon: String {
-        switch self {
-        case .fileType: return IconManager.FileSystem.doc
-        case .fileSize: return "archivebox"
-        case .itemCount: return "number"
-        case .creationDate: return IconManager.Display.calendar
-        case .modificationDate: return IconManager.Display.clock
-        case .lastAccessDate: return IconManager.Display.eye
-        case .permissions: return "lock.shield"
-        case .owner: return IconManager.Display.person
-        case .exif: return IconManager.Photo.camera
-        case .video: return IconManager.Video.video
-        case .audio: return IconManager.Audio.music
-        case .pdf: return "doc.richtext"
-        case .office: return "doc.text.fill"
-        case .archive: return "doc.zipper"
-        case .ebook: return "book.closed"
-        case .code: return "chevron.left.forwardslash.chevron.right"
-        case .font: return "textformat"
-        case .diskImage: return "opticaldiscdrive"
-        case .vectorGraphics: return "paintbrush.pointed"
-        case .subtitle: return "captions.bubble"
-        case .html: return "globe"
-        case .imageExtended: return "photo.badge.plus"
-        case .markdown: return "text.document"
-        case .config: return "gearshape.2"
-        case .psd: return "square.3.layers.3d"
-        case .executable: return "terminal"
-        case .appBundle: return "app.badge"
-        case .sqlite: return "cylinder"
-        case .git: return "arrow.triangle.branch"
-        case .systemMetadata: return "info.circle"
-        case .filePath: return IconManager.FileSystem.folder
-        case .fileSystemAdvanced: return "internaldrive"
-        case .model3D: return "cube.transparent"
-        case .xcodeProject: return "hammer"
-        case .notes: return "note.text"
-        }
-    }
 }
 
 class AppSettings: ObservableObject {
@@ -992,14 +886,6 @@ class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(showVideoContainerFormat, forKey: "showVideoContainerFormat") }
     }
 
-    // Display order
-    @Published var displayOrder: [DisplayItem] {
-        didSet {
-            if let encoded = try? JSONEncoder().encode(displayOrder) {
-                UserDefaults.standard.set(encoded, forKey: "displayOrder")
-            }
-        }
-    }
 
     // Window behavior
     @Published var followCursor: Bool {
@@ -1043,18 +929,6 @@ class AppSettings: ObservableObject {
     }
 
     private init() {
-        // Load saved display order resiliently: decode the persisted raw
-        // values element-wise so a single renamed/removed entry drops just
-        // that entry instead of discarding the user's entire saved order.
-        // Missing canonical items are then re-inserted by migration.
-        if let data = UserDefaults.standard.data(forKey: "displayOrder"),
-           let savedRawValues = try? JSONDecoder().decode([String].self, from: data) {
-            let decoded = savedRawValues.compactMap(DisplayItem.init(rawValue:))
-            self.displayOrder = DisplayItem.migrated(decoded)
-        } else {
-            self.displayOrder = DisplayItem.defaultOrder
-        }
-
         // Load values from UserDefaults
         self.hoverDelay = UserDefaults.standard.object(forKey: "hoverDelay") as? Double ?? Constants.Defaults.hoverDelay
         self.autoHideEnabled = UserDefaults.standard.object(forKey: "autoHideEnabled") as? Bool ?? Constants.Defaults.autoHideEnabled
@@ -1563,7 +1437,6 @@ class AppSettings: ObservableObject {
         // Notes
         showNotes = Constants.Defaults.showNotes
         
-        displayOrder = DisplayItem.defaultOrder
         followCursor = Constants.Defaults.followCursor
         windowOffsetX = Constants.Defaults.windowOffsetX
         windowOffsetY = Constants.Defaults.windowOffsetY

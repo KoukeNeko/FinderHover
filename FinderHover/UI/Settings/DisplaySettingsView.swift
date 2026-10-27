@@ -6,12 +6,10 @@
 //
 
 import SwiftUI
-import UniformTypeIdentifiers
 
 // MARK: - Display Settings
 struct DisplaySettingsView: View {
     @ObservedObject var settings: AppSettings
-    @State private var draggingItem: DisplayItem?
 
     // Data-driven declaration of every toggle section, in on-screen order. Each section's
     // first spec is the master toggle; detail specs pass `gatedBy:` the master key path,
@@ -266,8 +264,6 @@ struct DisplaySettingsView: View {
         "settings.display.executable.title": .gray, "settings.display.appBundle.title": .blue,
         "settings.display.sqlite.title": .teal, "settings.display.git.title": .orange
     ]
-    private static let orderID = "settings.display.order"
-
     // Scene storage keeps the chosen section when switching pages, which rebuilds this view.
     @SceneStorage("settings.display.section") private var selectedSectionID = "settings.display.exif"
     @State private var searchText = ""
@@ -292,9 +288,7 @@ struct DisplaySettingsView: View {
                 }
             }
             SettingsInspector {
-                if selectedSectionID == Self.orderID {
-                    displayOrder
-                } else if let section = selectedSection {
+                if let section = selectedSection {
                     inspector(for: section)
                 }
             }
@@ -328,9 +322,6 @@ struct DisplaySettingsView: View {
                         ForEach(Self.sections) { section in
                             sectionButton(section)
                         }
-                        Divider().padding(.vertical, 6)
-                        sidebarButton(id: Self.orderID, title: "settings.display.order".localized,
-                                      dot: nil, trailing: nil)
                     } else {
                         let results = Self.sections.compactMap { $0.matching(query) }
                         if results.isEmpty {
@@ -361,29 +352,20 @@ struct DisplaySettingsView: View {
     }
 
     private func sectionButton(_ section: DisplaySection) -> some View {
-        sidebarButton(id: section.id, title: section.titleKey.localized,
-                      dot: Self.tints[section.id] ?? .gray, trailing: summary(of: section))
-    }
-
-    private func sidebarButton(id: String, title: String, dot: Color?, trailing: String?) -> some View {
+        let id = section.id
+        let trailing = summary(of: section)
         let isOff = trailing == "settings.display.off".localized
         return Button { selectedSectionID = id } label: {
             HStack(spacing: 9) {
-                if let dot {
-                    Circle().fill(dot).frame(width: 8, height: 8).opacity(isOff ? 0.35 : 1)
-                } else {
-                    Image(systemName: "line.3.horizontal").font(.system(size: 10)).foregroundStyle(.secondary)
-                }
-                Text(title)
+                Circle().fill(Self.tints[id] ?? .gray).frame(width: 8, height: 8).opacity(isOff ? 0.35 : 1)
+                Text(section.titleKey.localized)
                     .foregroundStyle(isOff ? .secondary : .primary)
                     .lineLimit(1)
                 Spacer(minLength: 4)
-                if let trailing {
-                    Text(trailing)
-                        .font(.system(size: 12, design: .rounded))
-                        .monospacedDigit()
-                        .foregroundStyle(.secondary)
-                }
+                Text(trailing)
+                    .font(.system(size: 12, design: .rounded))
+                    .monospacedDigit()
+                    .foregroundStyle(.secondary)
             }
             .font(.system(size: 13))
             .padding(.horizontal, 10)
@@ -445,63 +427,5 @@ struct DisplaySettingsView: View {
 
     private func binding(_ keyPath: ReferenceWritableKeyPath<AppSettings, Bool>) -> Binding<Bool> {
         Binding(get: { settings[keyPath: keyPath] }, set: { settings[keyPath: keyPath] = $0 })
-    }
-
-    private var displayOrder: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("settings.display.order".localized).font(.system(size: 15, weight: .semibold))
-            Text("settings.display.order.hint".localized)
-                .font(.system(size: 11))
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-            VStack(spacing: 0) {
-                ForEach(settings.displayOrder) { item in
-                    HStack(spacing: 12) {
-                        Image(systemName: "line.3.horizontal")
-                            .foregroundStyle(.tertiary)
-                        Image(systemName: item.icon)
-                            .foregroundStyle(Color.accentColor)
-                            .frame(width: 20)
-                        Text(item.localizedName)
-                        Spacer()
-                        Button { move(item, by: -1) } label: {
-                            Image(systemName: "chevron.up")
-                        }
-                        .disabled(settings.displayOrder.first == item)
-                        .accessibilityLabel("settings.display.moveUp".localized(item.localizedName))
-                        Button { move(item, by: 1) } label: {
-                            Image(systemName: "chevron.down")
-                        }
-                        .disabled(settings.displayOrder.last == item)
-                        .accessibilityLabel("settings.display.moveDown".localized(item.localizedName))
-                    }
-                    .buttonStyle(.borderless)
-                    .font(.system(size: 13))
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    .contentShape(Rectangle())
-                    .background(Color(NSColor.controlBackgroundColor))
-                    .onDrag {
-                        draggingItem = item
-                        return NSItemProvider(item: item.rawValue as NSString,
-                                              typeIdentifier: UTType.displayItemOrder.identifier)
-                    }
-                    .onDrop(of: [UTType.displayItemOrder], delegate: DisplayItemDropDelegate(
-                        item: item, items: $settings.displayOrder, draggingItem: $draggingItem
-                    ))
-                    if item != settings.displayOrder.last {
-                        Divider().padding(.leading, 48)
-                    }
-                }
-            }
-            .background(Color(NSColor.controlBackgroundColor), in: RoundedRectangle(cornerRadius: 10))
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-        }
-    }
-
-    private func move(_ item: DisplayItem, by offset: Int) {
-        guard let index = settings.displayOrder.firstIndex(of: item),
-              settings.displayOrder.indices.contains(index + offset) else { return }
-        settings.displayOrder.swapAt(index, index + offset)
     }
 }
