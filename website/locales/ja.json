@@ -32,81 +32,141 @@
     "changelog": "更新履歴",
     "download": "ダウンロード"
   },
-  "hero": {
-    "headline": "すべてを一目で。<br>手の届くところに。",
-    "subheadline": "FinderHover を使えば、Finder でホバーするだけで<br>ファイルのすべての詳細が見えます。写真の EXIF、<br>動画のコーデック、コードの行数まで。",
-    "copyBtn": "インストールコマンドをコピー",
-    "copied": "コピーしました！",
-    "or": "または",
-    "directDownload": "直接ダウンロード",
-    "viewOnGithub": "GitHub で見る",
-    "requirement": "macOS Sonoma 14.0 以降が必要です"
-  },
-  "features": {
-    "headline": "macOS のために設計",
-    "subheadline": "Swift ネイティブ開発とシステム API の統合で、スムーズな体験を。",
-    "instant": {
-      "title": "即時プレビュー",
-      "desc": "ホバー遅延は 0.1 秒から 2 秒まで調整可能。ファイル名の変更やドラッグ時には自動で非表示に。"
+  "home": {
+    "headline": "止めるだけで、<span class=\"nw\">見える。</span>",
+    "lede": "Finder でポインタをファイルに止めると、写真の絞り、動画の長さ、コードの行数が浮かび上がります。何も開く必要はありません。",
+    "copy": "インストールコマンドをコピー",
+    "copied": "コピーしました",
+    "download": "DMG をダウンロード",
+    "requirement": "macOS 14 Sonoma 以降 · 無料・オープンソース",
+    "finder": {
+      "favorites": "よく使う項目",
+      "tags": "タグ",
+      "name": "名前",
+      "size": "サイズ",
+      "kind": "種類",
+      "status": "9 項目、97.3 GB 空き",
+      "desktop": "デスクトップ",
+      "downloads": "ダウンロード",
+      "documents": "書類",
+      "pictures": "ピクチャ"
     },
-    "privacy": {
-      "title": "プライバシー優先",
-      "desc": "すべての処理はローカルで行われ、インターネット接続は不要。AppleScript ではなく macOS アクセシビリティ API を使用。"
+    "anatomy": {
+      "headline": "ひとつのウインドウ、<br>五つの区画",
+      "lede": "どのファイルも同じ順序で並びます。",
+      "header": [
+        "ヘッダー",
+        "アイコン、名前、種類とサイズ"
+      ],
+      "type": [
+        "種類別の区画",
+        "ファイルの種類ごとの重要な数値"
+      ],
+      "dates": [
+        "日付",
+        "作成、変更、最後に開いた日と回数"
+      ],
+      "file": [
+        "ファイル",
+        "割り当てサイズ、タイプ ID、アクセス権"
+      ],
+      "footer": [
+        "場所とメモ",
+        "パス、ディスクの空き、書き留めたメモ"
+      ]
     },
-    "customizable": {
-      "title": "完全カスタマイズ",
-      "desc": "リッチな macOS スタイルとシンプルな Windows ツールチップスタイルから選択。サイズ、透明度、フォントスケールの調整も。"
+    "types": {
+      "headline": "120 以上の形式、それぞれの要点",
+      "lede": "写真は絞りとシャッター、動画は長さとコーデック、コードは行数、Git リポジトリはブランチとコミット。",
+      "all": "すべての形式を見る"
     },
-    "copy": {
-      "title": "クイックコピー",
-      "desc": "Option (⌥) キーを押したままウィンドウを固定し、値の横にあるコピーボタンをクリックしてクリップボードにコピーできます。"
+    "copyDemo": {
+      "headline": "⌥ を押したまま、どの値もコピー",
+      "lede": "Option キーを押している間はウインドウが固定され、各値の横にコピーボタンが出ます。離すと元に戻ります。",
+      "key": "Option を押したまま",
+      "copiedValue": "コピーしました：%s"
+    },
+    "look": {
+      "headline": "デスクトップに合わせて",
+      "lede": "macOS 26 では Liquid Glass が標準です。ぼかしへの切り替え、不透明度の調整、コンパクトな Windows スタイルも選べます。",
+      "glass": "Liquid Glass",
+      "blur": "ぼかし",
+      "opaque": "不透明",
+      "windows": "Windows スタイル",
+      "credit": "写真：Vyacheslav Argenberg、CC BY 4.0"
+    },
+    "install": {
+      "headline": "インストールしたら、ファイルに止めてみて。",
+      "github": "GitHub で見る"
     }
   },
-  "metadata": {
-    "headline": "120 種類以上の形式に対応",
-    "subheadline": "あらゆるファイルのメタデータを深く解析。開かなくてもすべてがわかります。",
-    "viewAll": "すべての形式を見る →",
-    "info": {
-      "cameraModel": "カメラモデル",
-      "lensInfo": "レンズ情報",
-      "iso": "ISO",
+  "demo": {
+    "type": {
+      "photo": "写真",
+      "video": "動画",
+      "pdf": "PDF",
+      "code": "コード",
+      "git": "Git リポジトリ",
+      "zip": "アーカイブ",
+      "folder": "フォルダ",
+      "md": "Markdown"
+    },
+    "kind": {
+      "photo": "ARW ファイル",
+      "video": "QuickTime ムービー",
+      "pdf": "PDF 書類",
+      "code": "Swift ソース",
+      "git": "フォルダ · 26 項目",
+      "zip": "ZIP アーカイブ"
+    },
+    "label": {
+      "focal": "焦点距離",
       "aperture": "絞り",
-      "shutterSpeed": "シャッター速度",
-      "gps": "GPS",
-      "videoCodec": "動画コーデック",
+      "shutter": "シャッター",
+      "iso": "ISO",
+      "taken": "撮影",
+      "location": "位置",
+      "profile": "カラープロファイル",
+      "depth": "ビット深度",
       "resolution": "解像度",
-      "frameRate": "フレームレート",
-      "artist": "アーティスト",
-      "album": "アルバム",
-      "sampleRate": "サンプルレート",
-      "language": "言語",
-      "totalLines": "総行数",
-      "codeLines": "コード行数",
-      "pdfPages": "PDF ページ数",
-      "docTitle": "マニュアルタイトル",
-      "author": "作者",
-      "wordCount": "文字数",
-      "keyCount": "キー数",
-      "nestingDepth": "ネスト深度",
-      "layerCount": "レイヤー数",
-      "colorMode": "カラーモード",
-      "fontName": "フォント名",
-      "fontFamily": "フォントファミリー",
-      "bundleId": "Bundle ID",
+      "fps": "フレームレート",
+      "codec": "コーデック",
+      "bitrate": "ビットレート",
+      "primaries": "色域",
+      "tracks": "トラック",
+      "pages": "ページ",
+      "paper": "用紙",
       "version": "バージョン",
-      "codeSign": "コード署名",
-      "archiveFormat": "アーカイブ形式",
-      "compressionRatio": "圧縮率",
-      "tableCount": "テーブル数",
-      "indexCount": "インデックス数",
-      "currentBranch": "現在のブランチ",
-      "commitCount": "コミット数"
+      "encrypted": "暗号化",
+      "producer": "作成ソフト",
+      "keywords": "キーワード",
+      "code": "コード",
+      "comments": "コメント",
+      "blank": "空行",
+      "commits": "コミット",
+      "branches": "ブランチ",
+      "tags": "タグ",
+      "lastCommit": "最新のコミット",
+      "files": "ファイル",
+      "unpacked": "展開後",
+      "ratio": "圧縮率",
+      "created": "作成",
+      "modified": "変更",
+      "opened": "最後に開いた日",
+      "allocated": "割り当て",
+      "uti": "タイプ ID",
+      "lines": "行",
+      "duration": "長さ",
+      "notes": "メモを入力…"
+    },
+    "value": {
+      "tracks": "動画 1 · 音声 1",
+      "no": "いいえ",
+      "clean": "未コミットの変更なし",
+      "times": "10 回",
+      "free": "空き 97.3 GB / 994.7 GB",
+      "items": "26 項目"
     }
-  },
-  "gallery": {
-    "headline": "実際の画面",
-    "subheadline": "FinderHover の日常的な使用シーンをご覧ください。",
-    "screenshot": "スクリーンショット"
   },
   "faq": {
     "headline": "よくある質問",
@@ -132,7 +192,7 @@
     "changelog": "更新履歴",
     "license": "ライセンス",
     "docs": "マニュアル",
-    "copyright": "© 2025 KoukeNeko. MIT ライセンスの下でリリース。"
+    "copyright": "© KoukeNeko · MIT ライセンスで公開"
   },
   "download": {
     "pageTitle": "ダウンロード",
@@ -394,26 +454,6 @@
   },
   "docs": {
     "pageTitle": "マニュアル",
-    "pageSubtitle": "FinderHover を使い始める"
-  },
-  "license": {
-    "pageTitle": "ライセンス",
-    "pageSubtitle": "MIT License",
-    "summary": {
-      "title": "オープンソースソフトウェア",
-      "desc": "FinderHover は MIT ライセンスの下でリリースされています。これは最も寛容なオープンソースライセンスの一つです。自由に使用、コピー、変更、マージ、公開、配布、サブライセンス、販売することができます。"
-    },
-    "permissions": {
-      "commercial": "商用利用",
-      "modification": "変更",
-      "distribution": "配布",
-      "private": "私的利用"
-    },
-    "fullLicense": "ライセンス全文",
-    "viewOnGithub": "GitHub で LICENSE ファイルを見る"
-  },
-  "docs": {
-    "pageTitle": "マニュアル",
     "pageSubtitle": "FinderHover を使い始める",
     "sidebar": {
       "gettingStarted": "はじめに",
@@ -606,5 +646,21 @@
     },
     "tip": "ヒント：",
     "warning": "注意："
+  },
+  "license": {
+    "pageTitle": "ライセンス",
+    "pageSubtitle": "MIT License",
+    "summary": {
+      "title": "オープンソースソフトウェア",
+      "desc": "FinderHover は MIT ライセンスの下でリリースされています。これは最も寛容なオープンソースライセンスの一つです。自由に使用、コピー、変更、マージ、公開、配布、サブライセンス、販売することができます。"
+    },
+    "permissions": {
+      "commercial": "商用利用",
+      "modification": "変更",
+      "distribution": "配布",
+      "private": "私的利用"
+    },
+    "fullLicense": "ライセンス全文",
+    "viewOnGithub": "GitHub で LICENSE ファイルを見る"
   }
 }

@@ -28,88 +28,148 @@
   "nav": {
     "features": "功能",
     "formats": "格式",
-    "docs": "文件",
+    "docs": "說明",
     "changelog": "更新日誌",
     "download": "下載"
   },
-  "hero": {
-    "headline": "一覽無遺，<br>觸手可及。",
-    "subheadline": "FinderHover 讓你在 Finder 中輕輕一指，<br>就能看見檔案的所有細節。照片的 EXIF、<br>影片的編碼、程式碼的行數，通通一目了然。",
-    "copyBtn": "複製安裝指令",
-    "copied": "已複製！",
-    "or": "或",
-    "directDownload": "直接下載",
-    "viewOnGithub": "在 GitHub 上查看",
-    "requirement": "適用於 macOS Sonoma 14.0 或更新版本"
-  },
-  "features": {
-    "headline": "為 macOS 精心打造",
-    "subheadline": "原生 Swift 開發，整合系統 API，帶來流暢體驗。",
-    "instant": {
-      "title": "即時預覽",
-      "desc": "可調整的懸停延遲，從 0.1 秒到 2 秒。當你重新命名或拖曳檔案時，自動隱藏。"
+  "home": {
+    "headline": "停一下，<span class=\"nw\">就看見。</span>",
+    "lede": "在 Finder 裡把游標停在檔案上，照片的光圈、影片的長度、程式碼的行數就浮現出來，不用打開任何東西。",
+    "copy": "複製安裝指令",
+    "copied": "已複製",
+    "download": "下載 DMG",
+    "requirement": "macOS 14 Sonoma 或更新版本 · 免費、開源",
+    "finder": {
+      "favorites": "喜好項目",
+      "tags": "標籤",
+      "name": "名稱",
+      "size": "大小",
+      "kind": "種類",
+      "status": "9 個項目，可用 97.3 GB",
+      "desktop": "桌面",
+      "downloads": "下載項目",
+      "documents": "文件",
+      "pictures": "圖片"
     },
-    "privacy": {
-      "title": "隱私優先",
-      "desc": "所有處理都在本機進行，無需網路連線。使用 macOS 輔助使用 API，不使用 AppleScript。"
+    "anatomy": {
+      "headline": "一個視窗，<br>五個段落",
+      "lede": "每種檔案都照同一個順序排好。",
+      "header": [
+        "標頭",
+        "圖示、名稱、種類與大小"
+      ],
+      "type": [
+        "類型區塊",
+        "依檔案類型顯示重點數字"
+      ],
+      "dates": [
+        "日期",
+        "建立、修改、上次打開與次數"
+      ],
+      "file": [
+        "檔案",
+        "實際佔用、類型識別碼、權限"
+      ],
+      "footer": [
+        "位置與備註",
+        "路徑、磁碟空間，以及你寫下的備註"
+      ]
     },
-    "customizable": {
-      "title": "完整自訂",
-      "desc": "在豐富的 macOS 風格與簡約的 Windows 提示風格之間選擇。調整大小、透明度和字體縮放。"
+    "types": {
+      "headline": "120 多種格式，各有重點",
+      "lede": "照片看光圈快門，影片看長度與編碼，程式碼看行數，Git 儲存庫看分支與提交。",
+      "all": "查看全部格式"
     },
-    "copy": {
-      "title": "快速複製",
-      "desc": "按住 Option (⌥) 鍵鎖定視窗，點擊任何數值旁的複製按鈕即可複製到剪貼簿。"
+    "copyDemo": {
+      "headline": "按住 ⌥，每個值都能複製",
+      "lede": "按住 Option 鍵時浮動視窗會固定，每個值旁邊出現複製按鈕；放開就恢復原狀。",
+      "key": "按住 Option",
+      "copiedValue": "已複製：%s"
+    },
+    "look": {
+      "headline": "配合你的桌面",
+      "lede": "macOS 26 預設使用 Liquid Glass。也可以改用模糊、調整不透明度，或換成精簡的 Windows 樣式。",
+      "glass": "Liquid Glass",
+      "blur": "模糊",
+      "opaque": "不透明",
+      "windows": "Windows 樣式",
+      "credit": "照片：Vyacheslav Argenberg，CC BY 4.0"
+    },
+    "install": {
+      "headline": "裝好之後，停在任何檔案上。",
+      "github": "在 GitHub 上查看"
     }
   },
-  "metadata": {
-    "headline": "支援超過 120 種格式",
-    "subheadline": "深度解析各類檔案的中繼資料，讓你不用開啟檔案就能了解一切。",
-    "viewAll": "查看完整格式清單 →",
-    "info": {
-      "cameraModel": "相機型號",
-      "lensInfo": "鏡頭資訊",
-      "iso": "ISO",
+  "demo": {
+    "type": {
+      "photo": "照片",
+      "video": "影片",
+      "pdf": "PDF",
+      "code": "程式碼",
+      "git": "Git 儲存庫",
+      "zip": "壓縮檔",
+      "folder": "檔案夾",
+      "md": "Markdown"
+    },
+    "kind": {
+      "photo": "ARW 檔案",
+      "video": "QuickTime 影片",
+      "pdf": "PDF 文件",
+      "code": "Swift 原始碼",
+      "git": "檔案夾 · 26 項",
+      "zip": "ZIP 封存檔"
+    },
+    "label": {
+      "focal": "焦距",
       "aperture": "光圈",
-      "shutterSpeed": "快門速度",
-      "gps": "GPS",
-      "videoCodec": "影片編碼",
+      "shutter": "快門",
+      "iso": "ISO",
+      "taken": "拍攝",
+      "location": "位置",
+      "profile": "色彩描述檔",
+      "depth": "位元深度",
       "resolution": "解析度",
-      "frameRate": "幀率",
-      "artist": "演出者",
-      "album": "專輯",
-      "sampleRate": "取樣率",
-      "language": "程式語言",
-      "totalLines": "總行數",
-      "codeLines": "程式碼行數",
-      "pdfPages": "PDF 頁數",
-      "docTitle": "文件標題",
-      "author": "作者",
-      "wordCount": "字數統計",
-      "keyCount": "鍵值數量",
-      "nestingDepth": "巢狀深度",
-      "layerCount": "圖層數",
-      "colorMode": "色彩模式",
-      "fontName": "字型名稱",
-      "fontFamily": "字型家族",
-      "bundleId": "Bundle ID",
+      "fps": "影格速率",
+      "codec": "編碼",
+      "bitrate": "位元率",
+      "primaries": "色域",
+      "tracks": "軌道",
+      "pages": "頁數",
+      "paper": "紙張",
       "version": "版本",
-      "codeSign": "程式碼簽章",
-      "archiveFormat": "壓縮格式",
-      "compressionRatio": "壓縮率",
-      "tableCount": "資料表數",
-      "indexCount": "索引數",
-      "currentBranch": "目前分支",
-      "commitCount": "提交次數"
+      "encrypted": "加密",
+      "producer": "製作程式",
+      "keywords": "關鍵字",
+      "code": "程式碼",
+      "comments": "註解",
+      "blank": "空行",
+      "commits": "提交",
+      "branches": "分支",
+      "tags": "標籤",
+      "lastCommit": "最後提交",
+      "files": "檔案",
+      "unpacked": "解壓後",
+      "ratio": "壓縮率",
+      "created": "建立",
+      "modified": "修改",
+      "opened": "上次打開",
+      "allocated": "實際佔用",
+      "uti": "類型識別碼",
+      "lines": "行",
+      "duration": "長度",
+      "notes": "輸入備註…"
+    },
+    "value": {
+      "tracks": "1 影片 · 1 音訊",
+      "no": "否",
+      "clean": "沒有未提交的變更",
+      "times": "10 次",
+      "free": "可用 97.3 GB / 994.7 GB",
+      "items": "26 項"
     }
-  },
-  "gallery": {
-    "headline": "實際畫面",
-    "subheadline": "看看 FinderHover 在日常使用中的表現。",
-    "screenshot": "螢幕截圖"
   },
   "faq": {
-    "headline": "有問？有答。",
+    "headline": "常見問題",
     "q1": {
       "question": "為什麼需要輔助使用權限？",
       "answer": "FinderHover 使用 macOS 輔助使用 API 來偵測你的滑鼠目前指向哪個檔案。這是唯一能夠即時追蹤 Finder 中檔案的方式，且所有資料都在本機處理，不會傳送到任何伺服器。"
@@ -131,8 +191,8 @@
     "github": "GitHub",
     "changelog": "更新日誌",
     "license": "授權條款",
-    "docs": "文件",
-    "copyright": "© 2025 KoukeNeko. 依 MIT 授權條款釋出。"
+    "docs": "說明",
+    "copyright": "© KoukeNeko · 依 MIT 授權條款釋出"
   },
   "download": {
     "pageTitle": "下載",
@@ -394,26 +454,6 @@
   },
   "docs": {
     "pageTitle": "使用說明",
-    "pageSubtitle": "快速上手 FinderHover"
-  },
-  "license": {
-    "pageTitle": "授權條款",
-    "pageSubtitle": "MIT License",
-    "summary": {
-      "title": "開源自由軟體",
-      "desc": "FinderHover 以 MIT 授權條款釋出，這是最寬鬆的開源授權之一。你可以自由地使用、複製、修改、合併、發布、散布、再授權及販售本軟體。"
-    },
-    "permissions": {
-      "commercial": "商業使用",
-      "modification": "修改",
-      "distribution": "散布",
-      "private": "私人使用"
-    },
-    "fullLicense": "完整授權條款",
-    "viewOnGithub": "在 GitHub 上查看 LICENSE 檔案"
-  },
-  "docs": {
-    "pageTitle": "使用說明",
     "pageSubtitle": "快速上手 FinderHover",
     "sidebar": {
       "gettingStarted": "開始使用",
@@ -606,5 +646,21 @@
     },
     "tip": "提示：",
     "warning": "注意："
+  },
+  "license": {
+    "pageTitle": "授權條款",
+    "pageSubtitle": "MIT License",
+    "summary": {
+      "title": "開源自由軟體",
+      "desc": "FinderHover 以 MIT 授權條款釋出，這是最寬鬆的開源授權之一。你可以自由地使用、複製、修改、合併、發布、散布、再授權及販售本軟體。"
+    },
+    "permissions": {
+      "commercial": "商業使用",
+      "modification": "修改",
+      "distribution": "散布",
+      "private": "私人使用"
+    },
+    "fullLicense": "完整授權條款",
+    "viewOnGithub": "在 GitHub 上查看 LICENSE 檔案"
   }
 }
