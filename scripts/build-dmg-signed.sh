@@ -207,6 +207,11 @@ print_checksums() {
     if [ ! -f "$NOTES" ]; then
         echo "⚠️  Write ${NOTES} before publishing."
     fi
+    # The website's changelog page reads CHANGELOG.md; betas are left out of it.
+    case "$VERSION" in
+        *-*) ;;
+        *) grep -q "^## Version ${VERSION}\b" CHANGELOG.md || echo "⚠️  Add ## Version ${VERSION} to CHANGELOG.md for the website." ;;
+    esac
     echo "📣 Publish (add --prerelease for a beta):"
     echo "   gh release create v${VERSION} ${DMG_NAME}.dmg ${APP_NAME}.app.zip --title \"FinderHover ${VERSION}\" --notes-file ${NOTES}"
     echo ""
