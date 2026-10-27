@@ -86,7 +86,8 @@ struct AppearanceSettingsView: View {
             ScrollView {
                 Group {
                     if isMacOSStyle {
-                        PopupPreview(opaqueBackground: settings.enableBlur || usesGlass
+                        PopupPreview(glass: usesGlass,
+                                     opaqueBackground: settings.enableBlur || usesGlass
                                      ? nil
                                      : Color(NSColor.controlBackgroundColor).opacity(settings.windowOpacity)) {
                             HoverContentView(fileInfo: PreviewSamples.photo)

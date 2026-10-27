@@ -208,21 +208,33 @@ struct InspectorSliderRow: View {
 
 /// The popup preview: the real popup content on a popup-like surface, not interactive.
 struct PopupPreview<Content: View>: View {
+    /// Liquid Glass, as the popup's NSGlassEffectView draws it. Wins over `opaqueBackground`.
+    var glass = false
     var opaqueBackground: Color?
     @ViewBuilder let content: Content
 
     var body: some View {
-        content
-            .background {
-                if let opaqueBackground {
-                    RoundedRectangle(cornerRadius: 10).fill(opaqueBackground)
-                } else {
-                    RoundedRectangle(cornerRadius: 10).fill(.regularMaterial)
-                }
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.gray.opacity(0.3)))
+        surface
             .shadow(color: .black.opacity(0.22), radius: 18, y: 10)
             .allowsHitTesting(false)
+    }
+
+    @ViewBuilder
+    private var surface: some View {
+        let shape = RoundedRectangle(cornerRadius: Constants.WindowLayout.macOSCornerRadius)
+        if glass, #available(macOS 26, *) {
+            content.glassEffect(.regular, in: shape)
+        } else {
+            content
+                .background {
+                    if let opaqueBackground {
+                        shape.fill(opaqueBackground)
+                    } else {
+                        shape.fill(.regularMaterial)
+                    }
+                }
+                .clipShape(shape)
+                .overlay(shape.strokeBorder(Color.gray.opacity(0.3)))
+        }
     }
 }
