@@ -24,7 +24,7 @@
 ---
 
 <p align="center">
-  <img src="docs/demo.gif" alt="FinderHover 示範" width="800">
+  <img src="docs/screenshot.png" alt="Finder 列表上的 FinderHover 浮動視窗" width="800">
 </p>
 
 ---

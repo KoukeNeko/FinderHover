@@ -24,7 +24,7 @@ Inspect file metadata instantly. No `Cmd+I` required.
 ---
 
 <p align="center">
-  <img src="docs/demo.gif" alt="FinderHover Demo" width="800">
+  <img src="docs/screenshot.png" alt="FinderHover popup over a Finder list" width="800">
 </p>
 
 ---
