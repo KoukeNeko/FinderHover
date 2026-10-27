@@ -192,7 +192,9 @@
 
 /* ---------- File types ---------- */
 .types, .copy-demo, .look, .install { max-width: 1120px; margin: 0 auto; padding: 120px 20px 0; }
-.type-tags { display: flex; flex-wrap: wrap; gap: 10px; margin: 40px 0 32px; }
+.types { text-align: center; }
+.types .section-copy { margin: 0 auto; }
+.type-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 40px 0 40px; }
 .type-tag {
   display: grid; gap: 4px; text-align: left; padding: 12px 16px; min-width: 148px; cursor: pointer;
   background: var(--surface-window); border: 1px solid var(--color-border); border-radius: 10px; color: var(--color-text);
@@ -205,9 +207,14 @@
 .type-name i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
 .type-fig { font-size: 13px; color: var(--color-text-secondary); }
 .type-fig strong { font: 700 22px/1.1 var(--font-rounded); color: var(--c); }
-.types-stage { display: grid; grid-template-columns: 380px 1fr; gap: 40px; align-items: end; }
-.types-side { display: grid; gap: 10px; justify-items: start; }
-.types-side code { font: 13px var(--font-family-mono); color: var(--color-text-secondary); }
+.types-stage { display: grid; grid-template-columns: 1fr 380px 1fr; gap: 56px; align-items: center; text-align: left; }
+.types-first { justify-self: end; width: 220px; }
+.types-ext { justify-self: start; width: 220px; display: grid; gap: 12px; justify-items: start; }
+.types-first h3, .types-ext h3 { font-size: 13px; font-weight: 600; color: var(--color-text-secondary); margin-bottom: 4px; }
+.types-first ul { list-style: none; margin-top: 8px; }
+.types-first li { display: flex; align-items: center; gap: 10px; padding: 9px 0; font-size: 15px; border-bottom: 1px solid var(--color-border); }
+.types-first li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--c); flex-shrink: 0; }
+.types-ext code { font: 15px/1.6 var(--font-family-mono); }
 .text-link { font-size: 15px; }
 
 /* ---------- ⌥ copy ---------- */
@@ -276,8 +283,9 @@
   .anatomy-stage { grid-template-columns: 1fr; justify-items: center; padding: 100px 0 0; gap: 32px; }
   .anatomy-copy { max-width: 640px; justify-self: stretch; }
   .anatomy-pop { grid-column: 1; }
-  .types-stage { grid-template-columns: 1fr; justify-items: center; }
-  .types-side { justify-items: center; }
+  .types-stage { grid-template-columns: 1fr; justify-items: center; gap: 32px; }
+  .types-first, .types-ext { justify-self: center; width: min(380px, 100%); }
+  .types-stage .pop { order: -1; }
 }
 @media (max-width: 899px), (prefers-reduced-motion: reduce) {
   /* No pinning here: show the parts already pulled apart, labels under each part. */

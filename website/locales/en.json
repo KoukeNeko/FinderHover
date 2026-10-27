@@ -78,7 +78,9 @@
     "types": {
       "headline": "120+ formats, each with its own figures",
       "lede": "Aperture and shutter for photos, running time and codec for video, line counts for code, branches and commits for Git repositories.",
-      "all": "See all formats"
+      "all": "See all formats",
+      "first": "Shown first",
+      "ext": "Extensions"
     },
     "copyDemo": {
       "headline": "Hold ⌥ to copy any value",
@@ -116,7 +118,7 @@
       "video": "QuickTime Movie",
       "pdf": "PDF Document",
       "code": "Swift Source",
-      "git": "Folder · 26 items",
+      "git": "Folder",
       "zip": "ZIP Archive"
     },
     "label": {

@@ -285,7 +285,11 @@ function setupTypes() {
   const tags = document.getElementById('type-tags');
   const pop = document.getElementById('type-pop');
   const ext = document.getElementById('type-ext');
+  const first = document.getElementById('type-first');
   if (!tags) return;
+  // The popup's own labels, in its order: hero, then specs, then the type's fields.
+  const shownFirst = (f) => [...new Set([f.heroLabel, ...f.specs.map(([, l]) => l), ...f.fields.map(([l]) => l)]
+    .filter(Boolean).map(label))];
   const figure = (f) => f.hero ? [f.hero, label(f.heroLabel)] : [val(f.specs[0][0]), label(f.specs[0][1])];
   tags.innerHTML = TYPE_KEYS.map((key) => {
     const [num, unit] = figure(FILES[key]);
@@ -303,6 +307,8 @@ function setupTypes() {
     void pop.offsetWidth;
     pop.classList.add('in');
     ext.textContent = TYPE_EXT[key];
+    first.style.setProperty('--c', COLORS[key]);
+    first.innerHTML = shownFirst(FILES[key]).map((l) => `<li>${esc(l)}</li>`).join('');
   };
   buttons.forEach((b) => b.addEventListener('click', () => select(b)));
   tags.addEventListener('keydown', (e) => {

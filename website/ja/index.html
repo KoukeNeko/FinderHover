@@ -116,12 +116,18 @@
           <p data-i18n="home.types.lede">照片看光圈快門，影片看長度與編碼，程式碼看行數，Git 儲存庫看分支與提交。</p>
         </div>
         <div class="type-tags" id="type-tags" role="tablist" aria-labelledby="types-title"></div>
+        <!-- One center axis: what this type shows first, its popup, its extensions. -->
         <div class="types-stage">
+          <div class="types-first">
+            <h3 data-i18n="home.types.first">先看這些</h3>
+            <ul id="type-first"></ul>
+          </div>
           <div class="pop opaque" id="type-pop" role="tabpanel"></div>
-          <p class="types-side">
+          <div class="types-ext">
+            <h3 data-i18n="home.types.ext">副檔名</h3>
             <code id="type-ext"></code>
             <a class="text-link" href="formats.html" data-i18n="home.types.all">查看全部格式</a>
-          </p>
+          </div>
         </div>
       </section>
 
