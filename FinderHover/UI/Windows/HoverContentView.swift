@@ -191,7 +191,8 @@ struct HoverContentView: View {
         if fileInfo.isDirectory, settings.showItemCount, let count = fileInfo.itemCount {
             parts.append("\(count.formatted()) \(count == 1 ? "common.item".localized : "common.items".localized)")
         }
-        if settings.showFileSize {
+        // A directory's own size is its entry list, not its contents, so skip it like Finder does.
+        if settings.showFileSize, !fileInfo.isDirectory {
             parts.append(fileInfo.formattedSize)
         }
         return parts.joined(separator: " · ")

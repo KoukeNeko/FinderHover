@@ -668,7 +668,7 @@ struct WindowsStyleHoverView: View {
                     )
                 }
 
-                if settings.showFileSize {
+                if settings.showFileSize, !fileInfo.isDirectory {
                     WindowsDetailRow(
                         label: "hover.windows.size".localized,
                         value: fileInfo.size == 0 ? "0 bytes" : fileInfo.formattedSize,
