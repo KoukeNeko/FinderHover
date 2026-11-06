@@ -2,7 +2,15 @@
 
 All notable changes to FinderHover will be documented in this file.
 
-## Version 1.10.2 (Current)
+## Version 1.10.3 (Current)
+
+### 🐛 Bug Fixes
+
+- Folders no longer show a misleading size such as "288 bytes"; like Finder, the popup now shows only the item count
+
+---
+
+## Version 1.10.2
 
 ### 🐛 Bug Fixes
 
